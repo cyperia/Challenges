@@ -1,0 +1,3705 @@
+{
+  "generic": {
+    "undefined": "undefiniert",
+    "unknown": "unbekannt",
+    "none": "Nichts",
+    "second": "Sekunde",
+    "seconds": "Sekunden",
+    "minute": "Minute",
+    "minutes": "Minuten",
+    "hour": "Stunde",
+    "hours": "Stunden",
+    "day": "Tag",
+    "days": "Tage",
+    "time": "Zeit",
+    "interval": "Intervall",
+    "chunk": "Chunk",
+    "chunks": "Chunks",
+    "block": "Block",
+    "blocks": "Blöcke",
+    "result": "Ergebnis",
+    "results": "Ergebnisse",
+    "disabled": "<red>Deaktiviert</red>",
+    "enabled": "<green>Aktiviert</green>",
+    "customize": "<gold>Anpassen</gold>",
+    "console": "<dark_red><b>Konsole</b></dark_red>",
+    "strength": "Stärke",
+    "radius": "Umkreis",
+    "damage": "Schaden",
+    "max-health": "Maximale Leben",
+    "everyone": "<dark_purple>Jeder</dark_purple>",
+    "player": "<gold>Spieler</gold>"
+  },
+  "language": {
+    "de": "Deutsch",
+    "en": "Englisch"
+  },
+  "prefix": {
+    "backpack": "{@format('*Rucksack*')}",
+    "damage": "{@format('*Schaden*')}",
+    "custom": "{@format('*Individuell*')}",
+    "challenges": "{@format('*Challenges*')}",
+    "timer": "{@format('*Timer*')}",
+    "position": "{@format('*Position*')}",
+    "quiz": "{@format('*Quiz*')}"
+  },
+  "suffix": {
+    "new": "*Neu*",
+    "new-count": "{@new} <dark_gray>(<gray>{0}</gray>)</dark_gray>",
+    "updated": "*Update*",
+    "updated-count": "{@updated} <dark_gray>(<gray>{0}</gray>)</dark_gray>",
+    "coming_soon": "*Kommt demnächst*",
+    "beta": "*Beta*",
+    "beta-count": "{@beta} <dark_gray>(<gray>{0}</gray>)</dark_gray>"
+  },
+  "title": {
+    "timer-started": [
+      " ",
+      "<dark_gray>{@symbol.arrow}</dark_gray> <gray>Timer</gray> <green>fortgesetzt</green>"
+    ],
+    "timer-paused": [
+      " ",
+      "<dark_gray>{@symbol.arrow}</dark_gray> <gray>Timer</gray> <green>pausiert</green>"
+    ],
+    "challenge-enabled": [
+      "<yellow>{0}</yellow>",
+      "<dark_green><b>{@symbol.check}</b></dark_green> <dark_gray>{@symbol.vertical}</dark_gray> <green>Aktiviert</green>"
+    ],
+    "challenge-disabled": [
+      "<yellow>{0}</yellow>",
+      "<dark_red>{@symbol.x}</dark_red> <dark_gray>{@symbol.vertical}</dark_gray> <red>Deaktiviert</red>"
+    ],
+    "challenge-value-changed": [
+      "<yellow>{0}</yellow>",
+      "<dark_gray>{@symbol.arrow}</dark_gray> <yellow>{1}</yellow>"
+    ],
+    "challenge-sub-enabled": [
+      "<yellow>{0}</yellow>",
+      "<dark_green><b>{@symbol.check}</b></dark_green> <dark_gray>{@symbol.vertical}</dark_gray> <green>Aktiviert</green> <dark_gray>{@symbol.arrow}</dark_gray> <gray>{1}</gray>"
+    ],
+    "challenge-sub-disabled": [
+      "<yellow>{0}</yellow>",
+      "<dark_red>{@symbol.x}</dark_red> <dark_gray>{@symbol.vertical}</dark_gray> <red>Deaktiviert</red> <dark_gray>{@symbol.arrow}</dark_gray> <gray>{1}</gray>"
+    ],
+    "challenge-sub-value-changed": [
+      "<yellow>{0}</yellow>",
+      "<dark_gray>{@symbol.arrow}</dark_gray> <gray>{1}</gray> <dark_gray>{@symbol.vertical}</dark_gray> <yellow>{2}</yellow>"
+    ],
+    "goal-enabled": [
+      "<yellow>{0}</yellow>",
+      "<dark_green><b>{@symbol.check}</b></dark_green> <dark_gray>{@symbol.vertical}</dark_gray> <green>Ziel gewählt</green>"
+    ],
+    "goal-disabled": [
+      "<yellow>{0}</yellow>",
+      "<dark_red>{@symbol.x}</dark_red> <dark_gray>┃</dark_gray> <red>Ziel deaktiviert</red>"
+    ]
+  },
+  "bossbar": {
+    "timer-paused": "{@format('Der Timer ist <red>pausiert</red>')}",
+    "border-size": "{@bossbar.format-arg('Border-Größe', '{0}')}"
+  },
+  "scoreboard": {
+    "leaderboard": {
+      "placement": "<gray>Dein Platz</gray> <dark_gray>{@symbol.arrow}</dark_gray> <yellow>{0}</yellow>"
+    }
+  },
+  "hotbar": {
+    "start": {
+      "label": "Challenge starten"
+    },
+    "teams": {
+      "label": "Teams"
+    }
+  },
+  "timer": {
+    "bar": {
+      "up": "{@format('*{0}*')}",
+      "down": "{@format('*{0}*')}",
+      "paused": "{@format('<gray>*Timer pausiert*</gray>')}",
+      "countdown": "{@format('<gray>Start in *{0}*</gray>')}"
+    },
+    "messages": {
+      "started": "<gray>Der Timer wurde <green>gestartet</green></gray>",
+      "paused": "<gray>Der Timer wurde <red>pausiert</red></gray>",
+      "counting-up": "<gray>Der Timer zählt nun <green>hoch</green></gray>",
+      "counting-down": "<gray>Der Timer zählt nun <red>runter</red></gray>",
+      "hidden": "<gray>Der Timer ist nun <red>versteckt</red></gray>",
+      "shown": "<gray>Der Timer ist nun <green>sichtbar</green></gray>",
+      "countdown": {
+        "started": [
+          "<gray>Der Countdown wurde <green>gestartet</green></gray>",
+          "<gray>Der Timer startet in <yellow>{0}</yellow></gray>"
+        ],
+        "notification": "<gray>Der Timer startet in <yellow>{0}</yellow></gray>",
+        "set": "<gray>Der Countdown wurde auf <yellow><b>{0}</b></yellow> gesetzt</gray>",
+        "paused": "<gray>Der Countdown wurde <red>pausiert</red></gray>",
+        "already-running": "<gray>Der Countdown <red>läuft bereits</red></gray>",
+        "not-running": "<gray>Der Countdown <red>läuft nicht</red></gray>"
+      },
+      "not-started": "<gray>Der Timer wurde noch <red>nicht gestartet</red></gray>",
+      "set": "<gray>Der Timer wurde auf <yellow><bold>{0} </bold></yellow>gesetzt</gray>",
+      "already-started": "<gray>Der Timer <red>läuft bereits</red></gray>",
+      "already-paused": "<gray>Der Timer ist <red>bereits pausiert</red></gray>",
+      "paused-reminder": [
+        "<gray>Der Timer ist noch <red>pausiert</red></gray>",
+        "<gray>Nutze <yellow>/timer resume </yellow>um ihn zu starten</gray>"
+      ]
+    }
+  },
+  "menu": {
+    "locked": {
+      "name": "*Spielbar auf {0}*",
+      "desc": [
+        "Diese Challenge ist noch in der *Beta*",
+        "und vorerst nur auf *{0}* spielbar"
+      ],
+      "title": "*Beta-Challenge*",
+      "body": "<gray>Diese Challenge ist noch in der Beta. Du kannst sie vorerst nur auf <click:open_url:'https://{0}'><hover:show_text:'{@menu.generic.tooltip.left('Öffne <yellow>{0}</yellow>')}'>*{0}*</hover></click> spielen.</gray>",
+      "request": "<gray>In besonderen Fällen, zum Beispiel als <gradient:#B429B4:#E35FD6>Content Creator</gradient>, kannst du exklusiven Zugang zur Beta-Version des Plugins für deinen eigenen Server anfragen. <click:open_url:'https://{0}'><hover:show_text:'{@menu.generic.tooltip.left('Öffne <yellow>{0}</yellow>')}'>*Melde dich dafür bei uns*</hover></click>.</gray>",
+      "join": "*Auf {0} spielen*",
+      "cancel": "*Abbrechen*"
+    },
+    "generic": {
+      "tooltip": {
+        "left": "{@format('Links-Klick', '{0}')}",
+        "left_shift": "{@format('Shift + Links', '{0}')}",
+        "right": "{@format('Rechts-Klick', '{0}')}",
+        "right_shift": "{@format('Shift + Rechts', '{0}')}"
+      },
+      "interact": {
+        "open": "Öffnen",
+        "search_select": "Im Menu anzeigen",
+        "show_list": "Ganze Liste anzeigen",
+        "copy": "Kopieren",
+        "search": "Suchen",
+        "enable": "Aktivieren",
+        "enable_goal": "Ziel wählen",
+        "disable": "Deaktivieren",
+        "add": "+{0}",
+        "subtract": "-{0}",
+        "set": "Setze auf {0}",
+        "back": "Zurück zur vorherigen Seite",
+        "back_shift": "{0} Seiten zurück gehen",
+        "back_first": "Zurück zur ersten Seite",
+        "back_menu": "Zurück zum vorherigen Menu",
+        "back_main_menu": "Zurück zum Hauptmenu",
+        "close_menu": "Menu schließen",
+        "next": "Weiter zur nächsten Seite",
+        "next_shift": "{0} Seiten weiter gehen",
+        "next_last": "Weiter zur letzten Seite",
+        "punishment": "Bestrafung ändern",
+        "transfer": "Spielen"
+      },
+      "navigate": {
+        "next": "Weiter",
+        "back": "Zurück",
+        "back_menu": "Schließen"
+      }
+    },
+    "main": {
+      "menu": "Challenges Menu"
+    },
+    "timer": {
+      "menu": "Timer",
+      "desc": [
+        "*Starte und pausiere* die Uhr",
+        "und lege *die Länge der Runde* fest"
+      ],
+      "time": {
+        "menu": "Zeit",
+        "desc": [
+          "Stelle die *Länge der Runde* ein",
+          "in *Stunden, Minuten und Sekunden*"
+        ]
+      },
+      "countdown": {
+        "menu": "Countdown",
+        "desc": [
+          "Starte den Timer nach einem *Countdown*,",
+          "in dem sich alle bereit machen können"
+        ],
+        "state": {
+          "running": "<gray>Countdown</gray> <green>läuft</green>",
+          "stopped": "<gray>Countdown ist</gray> <red>gestoppt</red>",
+          "unset": "<gray>Keine Countdown-Zeit eingestellt</gray>",
+          "timer-started": "<gray>Timer ist</gray> <green>bereits gestartet</green>"
+        },
+        "interact": {
+          "start": "Countdown <green>starten</green>",
+          "stop": "Countdown <red>stoppen</red>"
+        }
+      },
+      "state": {
+        "paused": "<gray>Timer ist</gray> <red>pausiert</red>",
+        "started": "<gray>Timer ist</gray> <green>gestartet</green>",
+        "countdown": "<gray>Countdown</gray> <gold>läuft</gold>",
+        "hidden": "<gray>Timer ist</gray> <red>versteckt</red>",
+        "shown": "<gray>Timer ist</gray> <green>sichtbar</green>",
+        "counting-up": "<gray>Timer zählt</gray> <green>hoch</green>",
+        "counting-down": "<gray>Timer zählt</gray> <red>runter</red>",
+        "time": "<gray>{0}:</gray> <yellow><b>{1}</b></yellow> <dark_gray>(<yellow>{2}</yellow>)</dark_gray>"
+      },
+      "interact": {
+        "resume": "Timer <green>fortsetzen</green>",
+        "resume-now": "Timer <green>ohne Countdown starten</green>",
+        "pause": "Timer <red>pausieren</red>",
+        "show": "Timer <green>anzeigen</green>",
+        "hide": "Timer <red>verstecken</red>",
+        "count-up": "Stattdessen <green>hochzählen</green>",
+        "count-down": "Stattdessen <red>runterzählen</red>",
+        "reset": "Zeit <red>zurücksetzen</red>"
+      },
+      "unit": {
+        "days": "Tage",
+        "hours": "Stunden",
+        "minutes": "Minuten",
+        "seconds": "Sekunden"
+      }
+    },
+    "goal": {
+      "menu": "Ziele",
+      "desc": [
+        "Lege fest, was erreicht werden",
+        "muss, um *die Runde zu gewinnen*"
+      ],
+      "killed-by": "Getötet von <yellow>{0}</yellow>",
+      "collected-by": "Gesammelt von <yellow>{0}</yellow>",
+      "died-by": "So gestorben: <yellow>{0}</yellow>",
+      "earned-by": "Erreicht von <yellow>{0}</yellow>"
+    },
+    "challenges": {
+      "menu": "Challenges",
+      "desc": [
+        "Zusätzliche Regeln, die dir das",
+        "*Überleben deutlich erschweren*"
+      ]
+    },
+    "settings": {
+      "menu": "Einstellungen",
+      "desc": [
+        "Passe Regeln für *den ganzen Server* an,",
+        "die das Spielen *leichter oder schwerer* machen"
+      ]
+    },
+    "custom": {
+      "menu": "Individuelle Challenges",
+      "menu-short": "Individuell",
+      "desc": [
+        "Baue eigene Challenges aus beliebigen",
+        "*Auslösern und Aktionen* zusammen"
+      ],
+      "info": {
+        "selected": "{@info-format('Eingestellt', '{0}')}",
+        "trigger": "{@info-format('Auslöser', '{0}')}",
+        "action": "{@info-format('Aktion', '{0}')}"
+      },
+      "interact": {
+        "create": "Neue Challenge erstellen",
+        "edit": "Diese Challenge bearbeiten",
+        "rename": "Namen über den Chat ändern",
+        "material": "Anzeigeitem auswählen",
+        "trigger": "Auslöser auswählen",
+        "action": "Aktion auswählen",
+        "select": "Diese Option auswählen",
+        "unselect": "Diese Option entfernen",
+        "save": "Challenge speichern",
+        "delete": "Challenge löschen",
+        "finish": "Auswahl bestätigen"
+      },
+      "edit": {
+        "menu": "Info"
+      },
+      "view": {
+        "label": "Challenges ansehen",
+        "desc": [
+          "Sieh dir deine gebauten Challenges",
+          "an und *schalte sie an und aus*"
+        ],
+        "empty": [
+          " ",
+          "<gray>Es sind derzeit keine Custom Challenges geladen.</gray>",
+          "<gray>Du vermisst deine Challenges? <yellow>/db load customs</yellow></gray>",
+          "<gray>Du hast Probleme beim Speichern?</gray>",
+          "<gray>Speichere vorm verlassen manuell <yellow>/db save customs</yellow></gray>",
+          " "
+        ]
+      },
+      "create": {
+        "label": "Neue Challenge erstellen",
+        "desc": [
+          "Beginne eine *neue Challenge* ohne",
+          "Auslöser und Aktion"
+        ]
+      },
+      "rename": {
+        "label": "Name",
+        "desc": [
+          "Der Name, mit dem die Challenge",
+          "gelistet wird, maximal *{0}* Zeichen"
+        ],
+        "chat": [
+          "<gray>Schreibe den Namen der Challenge in den Chat</gray>",
+          "<gray>Du kannst Farben mit <yellow>&</yellow> benutzen</gray>",
+          "<gray><click:run_command:/cancelinput>Klicke hier um die<red> Eingabe abzubrechen</red></click></gray>"
+        ]
+      },
+      "material": {
+        "menu": "Anzeige Item",
+        "desc": [
+          "Das *Item*, mit dem die Challenge",
+          "gelistet wird"
+        ]
+      },
+      "trigger": {
+        "menu": "Auslöser",
+        "desc": [
+          "Stelle ein, *was passieren muss*,",
+          "damit die Aktion ausgeführt wird"
+        ]
+      },
+      "action": {
+        "menu": "Aktion",
+        "desc": [
+          "Stelle ein, *was passieren soll*,",
+          "wenn der Auslöser erfüllt ist"
+        ]
+      },
+      "save": {
+        "label": "Speichern",
+        "desc": [
+          "*Sichere* die Challenge und",
+          "füge sie deiner Liste hinzu"
+        ],
+        "done": "<gray>Challenge wurde lokal</gray> <green>gespeichert</green>",
+        "done-db": [
+          "<gray>Um in <yellow>Datenbank</yellow> zu speichern benutze <yellow>/db save customs</yellow></gray>",
+          "<gray><red>Achtung:</red> Alte Einstellungen werden dabei überschrieben!</gray>"
+        ],
+        "no-changes": "<gray>Du hast an der Challenge <red>keine Änderungen</red> gemacht</gray>",
+        "missing-settings": "<gray>Du musst einen <red>Auslöser und Aktion</red> auswählen</gray>"
+      },
+      "delete": {
+        "label": "Löschen",
+        "desc": [
+          "*Achtung:* diese Aktion kann",
+          "nicht rückgängig gemacht werden"
+        ],
+        "done": "<gray>Die Challenge <yellow>{0}</yellow> wurde <red>gelöscht</red></gray>",
+        "new": "<gray>Die Challenge existiert <red>noch nicht</red></gray>"
+      },
+      "finish": {
+        "label": "Fertig"
+      }
+    },
+    "teams": {
+      "menu": "Teams",
+      "desc": [
+        "Teile alle Spieler in Teams auf,",
+        "die *zusammen gewinnen und verlieren*"
+      ],
+      "coming_soon": "<gray>*Teams* befinden sich derzeit noch <red>in Entwicklung</red></gray>"
+    },
+    "search": {
+      "menu": "Suche",
+      "desc": [
+        "Suche nach *Challenges*, *Einstellungen*,",
+        "*Zielen* und anderen Funktionen *per Suchbegriff*"
+      ],
+      "title": "{@title-format('*Challenges Suche*')}",
+      "results": {
+        "count": "<green><b>{0}</b></green> <gray>{1}</gray>",
+        "count_shown": "<green><b>{0}</b></green> <gray>{1}</gray> <dark_gray>(<green>{2}</green> <gray>angezeigt</gray>)</dark_gray>",
+        "none": "<red>Keine Ergebnisse</red>",
+        "min_chars": "<gray>Gebe mindestens <yellow>{0}</yellow> Zeichen ein</gray>"
+      },
+      "entry": {
+        "type": "Art: {0}"
+      },
+      "search": "*Suchen*",
+      "close": "*Schließen*"
+    }
+  },
+  "category": {
+    "generic": {
+      "desc": {
+        "most-points": [
+          "Der Spieler mit den *meisten Punkten*",
+          "*gewinnt*, wenn der Timer *abläuft*"
+        ]
+      },
+      "info": {
+        "count": "{@info-format('Aktiviert', '<green>{0}</green><dark_gray>/</dark_gray>{1}')}",
+        "changed": "{@info-format('Geändert', '<green>{3}</green><dark_gray>/</dark_gray>{1}')}",
+        "current": "{@info-format('Aktuell', '{2}')}"
+      }
+    },
+    "misc_challenge": {
+      "menu": "Sonstige",
+      "desc": [
+        "Challenges, die *keiner Kategorie*",
+        "zugeordnet werden können"
+      ]
+    },
+    "randomizer": {
+      "menu": "Randomizer",
+      "desc": [
+        "Erlebe ein komplett",
+        "*durcheinandergebrachtes* Spiel"
+      ]
+    },
+    "limited_time": {
+      "menu": "Limitierte Zeit",
+      "desc": [
+        "Du wirst bei verschiedenen",
+        "Faktoren *zeitlich eingeschränkt*"
+      ]
+    },
+    "force": {
+      "menu": "Zwischenziele",
+      "name": "*{@menu} (Force)*",
+      "desc": [
+        "Du musst *bestimmte Zwischenziele*",
+        "erfüllen, sonst stirbst du"
+      ]
+    },
+    "world": {
+      "menu": "Welteinfluss",
+      "desc": [
+        "Die Welt wird nicht mehr",
+        "*wiedererkennbar* sein"
+      ]
+    },
+    "damage": {
+      "menu": "Schaden",
+      "desc": [
+        "Du wirst auf *verschiedenste*",
+        "Arten *Schaden* nehmen"
+      ]
+    },
+    "effect": {
+      "menu": "Effekte",
+      "desc": [
+        "Erlebe verrückte *Effekte*"
+      ]
+    },
+    "inventory": {
+      "menu": "Inventar",
+      "desc": [
+        "Dein *Inventar* wird *verdreht*"
+      ]
+    },
+    "movement": {
+      "menu": "Bewegung",
+      "desc": [
+        "Du wirst in deinen *Bewegungen*",
+        "*eingeschränkt*"
+      ]
+    },
+    "entities": {
+      "menu": "Entities",
+      "desc": [
+        "Entities werden *verändert*"
+      ]
+    },
+    "extra_world": {
+      "menu": "Extra Welt",
+      "desc": [
+        "Challenges, die in einer",
+        "*anderen Welt* spielen"
+      ]
+    },
+    "world_generator": {
+      "menu": "Weltgenerator",
+      "desc": [
+        "Challenges, die verändern, wie",
+        "die *Welt generiert* wird"
+      ]
+    },
+    "misc_goal": {
+      "menu": "Sonstige Ziele",
+      "desc": [
+        "Ziele, die *keiner Kategorie*",
+        "zugeordnet werden können"
+      ]
+    },
+    "kill_entity": {
+      "menu": "Entity töten",
+      "desc": [
+        "Töte *bestimmte Entities*,",
+        "um zu gewinnen"
+      ]
+    },
+    "score_points": {
+      "menu": "Punkte sammeln",
+      "desc": [
+        "Erziele die *meisten Punkte* in",
+        "einem *bestimmten Bereich*",
+        " ",
+        "{@generic.desc.most-points}"
+      ]
+    },
+    "fastest_time": {
+      "menu": "Schnellste Zeit",
+      "desc": [
+        "Der *schnellste Spieler*, der das Ziel",
+        "erreicht *gewinnt* die Challenge"
+      ]
+    },
+    "force_battle": {
+      "menu": "Force Battles",
+      "desc": [
+        "Erfülle die *vorgegebenen Zwischenziele*,",
+        "um Punkte zu erhalten.",
+        " ",
+        "{@generic.desc.most-points}"
+      ]
+    },
+    "misc_settings": {
+      "menu": "Sonstige",
+      "name": "*Sonstige Einstellungen*",
+      "desc": [
+        "Einstellungen, die *keiner Kategorie*",
+        "zugeordnet werden konnten"
+      ]
+    },
+    "misc_custom": {
+      "menu": "Eigene Challenges",
+      "desc": [
+        "Challenges, die *du selbst*",
+        "*erstellt* hast"
+      ]
+    },
+    "damage_rule": {
+      "menu": "Schaden",
+      "desc": [
+        "Grenze ein wodurch *alle Spieler*",
+        "*Schaden* bekommen können"
+      ]
+    },
+    "material_rule": {
+      "menu": "Items & Blöcke",
+      "desc": [
+        "Stelle ein mit welchen *Items und Blöcken*",
+        "während der Challenge *interagiert werden können*"
+      ]
+    },
+    "messages": {
+      "menu": "Anzeigen",
+      "desc": [
+        "Stelle ein zu welchen Ereignissen",
+        "*Nachrichten im Chat* oder welche",
+        "*Infos angezeigt* werden sollen"
+      ]
+    },
+    "difficulty": {
+      "menu": "Schwierigkeit",
+      "desc": [
+        "Einstellungen, die die *Schwierigkeit*",
+        "des Spiels für alle Spieler *verändern*"
+      ]
+    },
+    "utility": {
+      "menu": "Nützliches",
+      "desc": [
+        "Einstellungen, die das Spiel",
+        "*einfacher* bzw. *angenehmer* machen"
+      ]
+    },
+    "limiting": {
+      "menu": "Einschränkungen",
+      "desc": [
+        "Einstellungen, die die *Freiheit* und",
+        "*Möglichkeiten* der Spieler *einschränken*"
+      ]
+    },
+    "players": {
+      "menu": "Spieler",
+      "name": "*Spielerinteraktionen*",
+      "desc": [
+        "Einstellungen, die die *Interaktionen*",
+        "*zwischen Spielern* verändern"
+      ]
+    },
+    "consequence": {
+      "menu": "Konsequenzen",
+      "desc": [
+        "Einstellungen, die die *Strafen ändern*",
+        "wenn ein Spieler *eine Challenge* nicht",
+        "schafft bzw. *gegen sie verstößt*"
+      ]
+    }
+  },
+  "search": {
+    "category": {
+      "menu": "*Menu*",
+      "category": "*Kategorie*",
+      "sub_setting": "*Einstellung*"
+    }
+  },
+  "challenge": {
+    "difficulty": {
+      "name": "*Schwierigkeit*",
+      "desc": [
+        "Ändert die *Schwierigkeit*",
+        "(*Difficulty*) des Spiels"
+      ],
+      "command-set": "<gray>Schwierigkeit auf {0} geändert</gray>",
+      "command-current": "<gray>Die derzeitige Schwierigkeit ist {0}</gray>"
+    },
+    "regeneration": {
+      "name": "*Regeneration*",
+      "desc": [
+        "Stellt ein, *ob* und",
+        "*wie* man *regeneriert*"
+      ],
+      "not_natural": "<gold>Nicht natürlich</gold>"
+    },
+    "one-life": {
+      "name": "*Einer stirbt = Alle sterben*",
+      "desc": [
+        "*Jeder* stirbt, wenn *einer stirbt*"
+      ]
+    },
+    "respawn": {
+      "name": "*Respawn*",
+      "desc": [
+        "Wenn du *stirbst*, wirst du nicht zu einem *Zuschauer*"
+      ]
+    },
+    "split-health": {
+      "name": "*Geteilte Herzen*",
+      "desc": [
+        "Stellt ein, ob sich *alle*",
+        "*Spieler* eine *Gesundheit teilen*"
+      ]
+    },
+    "damage-display": {
+      "name": "*Schaden im Chat*",
+      "desc": [
+        "Es wird im Chat angezeigt,",
+        "wenn jemand *Schaden* bekommt"
+      ],
+      "message": "<yellow>{0}</yellow> <gray>nahm {1} Schaden durch</gray> <yellow>{2}</yellow>"
+    },
+    "language": {
+      "name": "*Sprache*",
+      "desc": [
+        "Ändert die *Sprache* des Plugins"
+      ],
+      "command-disabled": "<gray>Diese Funktion ist derzeit <red>deaktiviert</red></gray>",
+      "command-unknown": "<gray>Diese Sprache <dark_gray>(<yellow>{0}</yellow>)</dark_gray> wird <red>nicht unterstützt</red></gray>",
+      "command-current": "<gray>Die derzeitige Sprache ist <yellow>{0}</yellow></gray>",
+      "command-changing": "<gray>Die Sprache wird geändert...</gray>",
+      "command-changed": "<gray>Die Sprache wurde auf <yellow>{0}</yellow> <dark_gray>(<yellow>{1}</yellow>)</dark_gray> gesetzt</gray>"
+    },
+    "pregame-movement": {
+      "name": "*Bewegen vor dem Start*",
+      "desc": [
+        "Du kannst dich *bewegen*,",
+        "bevor der Timer *gestartet* wurde"
+      ],
+      "title": [
+        "<red>Warte..</red>",
+        "<dark_gray>{@symbol.arrow}</dark_gray> <gray>Der Timer ist pausiert..</gray>"
+      ],
+      "title_countdown": [
+        "<red>Warte..</red>",
+        "<dark_gray>{@symbol.arrow}</dark_gray> <gray>Start in <dark_red><b>{0}</b></dark_red></gray>"
+      ]
+    },
+    "death-message": {
+      "name": "*Todesnachrichten*",
+      "desc": [
+        "Schaltet *Todesnachrichten* ein/aus"
+      ],
+      "vanilla": "<yellow>Vanilla</yellow>",
+      "message": "<yellow>{0} </yellow><gray>ist gestorben</gray>",
+      "message-cause": "<yellow>{0} </yellow><gray>ist durch </gray><yellow>{1} </yellow><gray>gestorben</gray>"
+    },
+    "advancement-message": {
+      "name": "*Advancement Nachrichten*",
+      "desc": [
+        "Schaltet *Nachrichten im Chat* ein/aus",
+        "wenn ein Spieler ein *Advancement* erreicht"
+      ]
+    },
+    "health-display": {
+      "name": "*Herzen in der Tablist*",
+      "desc": [
+        "Die *Herzen* aller Spieler",
+        "werden in der *Tablist* angezeigt"
+      ]
+    },
+    "position": {
+      "name": "<gray>*Positionen*</gray>",
+      "desc": [
+        "<gray>Erlaubt es dir *Positionen*</gray>",
+        "<gray>mit */pos*  zu *markieren*</gray>"
+      ],
+      "entry": "<yellow>{4} </yellow><dark_gray>- </dark_gray><gray>{0}, {1}, {2} </gray><dark_gray>(</dark_gray><yellow>{3}</yellow><dark_gray>) </dark_gray><dark_gray>┃ </dark_gray><yellow>{5}m</yellow>",
+      "disabled": "<gray>Positionen sind <red>deaktiviert</red></gray>",
+      "other-world": "<gray>Diese Position befindet sich in einer anderen Welt <dark_gray>(</dark_gray><yellow>{0}</yellow><dark_gray>)</dark_gray></gray>",
+      "not-exists": "<gray>Die Position <yellow>{0} </yellow>existiert <red>nicht</red></gray>",
+      "already-exists": "<gray>Die Position <yellow>{0} </yellow>existiert <red>bereits</red></gray>",
+      "created": "<yellow>{5} </yellow><gray>hat </gray><yellow>{4} </yellow><gray>{0}, {1}, {2} </gray><dark_gray>(</dark_gray><yellow>{3}</yellow><dark_gray>) </dark_gray><gray>erstellt</gray>",
+      "deleted": "<yellow>{5} </yellow><gray>hat </gray><yellow>{4} </yellow><gray>{0}, {1}, {2} </gray><dark_gray>(</dark_gray><yellow>{3}</yellow><dark_gray>) </dark_gray><gray>gelöscht</gray>",
+      "none": [
+        "<gray>Es sind keine <yellow>Positionen </yellow>in dieser Welt gesetzt</gray>",
+        "<gray>Erstelle eine mit <yellow>/{0}</yellow></gray>"
+      ],
+      "none-global": [
+        "<gray>Es sind keine <yellow>Positionen </yellow>gesetzt</gray>",
+        "<gray>Erstelle eine mit <yellow>/{0}</yellow></gray>"
+      ]
+    },
+    "death-position": {
+      "name": "*Todesposition*",
+      "desc": [
+        "Wenn du stirbst, wird mit */pos* ",
+        "eine *Position an deinem Todespunkt* erstellt"
+      ]
+    },
+    "glow": {
+      "name": "*Playerglow*",
+      "desc": [
+        "*Spieler* sind durch die *Wand* sichtbar"
+      ]
+    },
+    "locator-bar": {
+      "name": "*Ortungsleiste*",
+      "desc": [
+        "Zeigt die *Richtung* der anderen",
+        "*Spieler* über der *Hotbar* an"
+      ]
+    },
+    "no-hunger": {
+      "name": "*Kein Hunger*",
+      "desc": [
+        "Du bekommst keinen *Hunger*"
+      ]
+    },
+    "no-item-damage": {
+      "name": "*Kein Itemschaden*",
+      "desc": [
+        "*Items* sind *unzerstörbar*"
+      ]
+    },
+    "mob-griefing": {
+      "name": "*Kein Mob-Griefing*",
+      "desc": [
+        "Monster können *nichts zerstören*"
+      ]
+    },
+    "keep-inventory": {
+      "name": "*Keep Inventory*",
+      "desc": [
+        "Du verlierst keine *Items*,",
+        "wenn du *stirbst*"
+      ]
+    },
+    "backpack": {
+      "name": "*Rucksack*",
+      "desc": [
+        "Erlaubt es dir, *deinen Backpack* oder den",
+        "*Team Backpack* mit */backpack* zu öffnen"
+      ],
+      "settings": {
+        "player": "<green>Pro Spieler</green>",
+        "shared": "<dark_purple>Gemeinsam</dark_purple>"
+      },
+      "disabled": "<gray>Rucksäcke sind derzeit</gray> <red>deaktiviert</red>",
+      "opened": "<gray>Du hast den {0} geöffnet</gray>",
+      "player-name": "<gold>Spieler Rucksack</gold>",
+      "shared-name": "<dark_purple>Team Rucksack</dark_purple>",
+      "inventory-player": "{@menu.title-format('{@player-name}')}"
+    },
+    "enderchest-command": {
+      "name": "<gray>*Enderchest-Befehl*</gray>",
+      "desc": [
+        "<gray>Wenn du */ec* ausführst, öffnet</gray>",
+        "<gray>sich deine *Enderchest*</gray>"
+      ],
+      "opened": "<gray>Du hast deine <dark_purple>Enderchest </dark_purple>geöffnet</gray>"
+    },
+    "timber": {
+      "name": "*Timber*",
+      "desc": [
+        "Du kannst einen *Baum* zerstören,",
+        "indem du *einen Block* des Baumes abbaust"
+      ],
+      "settings": {
+        "logs": "<gold>Baumstämme</gold>",
+        "logs-leaves": "<gold>Baumstämme</gold> <gray>und</gray> <dark_green>Blätter</dark_green>"
+      }
+    },
+    "pvp": {
+      "name": "*PvP*",
+      "desc": [
+        "Du kannst anderen Spielern *Schaden*",
+        "*direkt zufügen* und umgekehrt"
+      ]
+    },
+    "no-hit-delay": {
+      "name": "*Kein Hit-Delay*",
+      "desc": [
+        "Nachdem du *Schaden* genommen hast,",
+        "kannst du *sofort* wieder Schaden *bekommen*"
+      ]
+    },
+    "top-command": {
+      "name": "<gray>*Top-Befehl*</gray>",
+      "desc": [
+        "<gray>Mit */top* kannst du dich</gray>",
+        "<gray>zur *Oberfläche* oder in</gray>",
+        "<gray>die *Overworld* teleportieren</gray>"
+      ],
+      "overworld": "<gray>Du wurdest zur <yellow>Overworld </yellow>teleportiert</gray>",
+      "surface": "<gray>Du wurdest zur <yellow>Oberfläche </yellow>teleportiert</gray>"
+    },
+    "max-health": {
+      "name": "*Maximale Herzen*",
+      "desc": [
+        "Stellt ein, *wie viele*",
+        "*Herzen* man hat"
+      ]
+    },
+    "damage-multiplier": {
+      "name": "*Schadensmultiplikator*",
+      "desc": [
+        "Schaden, den du nimmst wird *multipliziert*"
+      ]
+    },
+    "challenge_penalty": {
+      "menu": "Bestrafung",
+      "name": "*Challenge Bestrafung*",
+      "desc": [
+        "Wähle aus was mit einem Spieler",
+        "*passieren* soll wenn er *eine Challenge*",
+        "*nicht schafft* bzw. *gegen diese verstößt*",
+        " ",
+        "Diese Einstellung gilt *<b>NICHT</b>* für *alle Challenges*"
+      ],
+      "sub": {
+        "insta_kill": {
+          "name": "*Sofortiger Tod*",
+          "desc": [
+            "Der Spieler *stirbt sofort*",
+            "wenn er *eine Challenge* nicht schafft",
+            "Das ist die *Standardbestrafung* der *meisten Challenges*"
+          ]
+        },
+        "max_health": {
+          "name": "*Maximale Herzen reduzieren*",
+          "desc": [
+            "Die *maximale Gesundheit* des Spielers",
+            "wird um den gesetzten *Betrag reduziert*"
+          ]
+        },
+        "damage": {
+          "name": "*Schaden zufügen*",
+          "desc": [
+            "Der Spieler bekommt erfährt",
+            "den *gesetzten Schaden*"
+          ]
+        }
+      }
+    },
+    "cut-clean": {
+      "name": "*{@menu}*",
+      "desc": [
+        "Verschiedene *Einstellungen*, die",
+        "das *Farmen* von Items *einfacher* machen"
+      ],
+      "menu": "CutClean",
+      "sub": {
+        "iron": {
+          "name": "*Eisen*",
+          "desc": "*Eisenerz* wird direkt zu *Eisenbarren*"
+        },
+        "gold": {
+          "name": "*Gold*",
+          "desc": "*Golderz* wird direkt zu *Goldbarren*"
+        },
+        "coal": {
+          "name": "*Kohle*",
+          "desc": "*Kohleerz* wird direkt zu *Fackeln*"
+        },
+        "flint": {
+          "name": "*Kies*",
+          "desc": "*Kies* wird direkt zu *Feuerstein*"
+        },
+        "vein": {
+          "name": "*Erzvenen*",
+          "desc": "*Erzvenen* werden direkt *komplett abgebaut*"
+        },
+        "inventory": {
+          "name": "*Direkt ins Inventar*",
+          "desc": [
+            "*Items* werden, *anstatt gedroppt* zu werden,",
+            "*direkt* ins *Inventar* hinzugefügt"
+          ]
+        },
+        "food": {
+          "name": "*Gebratenes Essen*",
+          "desc": "*Rohes Fleisch* wird direkt zu *gebratenem Fleisch*"
+        }
+      }
+    },
+    "fortress-spawn": {
+      "name": "*Festungs Spawn*",
+      "desc": [
+        "Wenn du in den *Nether* gehst,",
+        "spawnst du immer in einer *Festung*"
+      ],
+      "not-found": "<gray>Es konnte <red>keine Festung </red>gefunden werden</gray>"
+    },
+    "bastion-spawn": {
+      "name": "*Bastions Spawn*",
+      "desc": [
+        "Wenn du in den *Nether* gehst,",
+        "spawnst du immer in einer *Bastion*"
+      ],
+      "not-found": "<gray>Es konnte <red>keine Bastion </red>gefunden werden</gray>"
+    },
+    "no-offhand": {
+      "name": "*Keine Offhand*",
+      "desc": [
+        "Die *zweite Hand* wird geblockt"
+      ]
+    },
+    "immediate-respawn": {
+      "name": "*Kein Todesbildschirm*",
+      "desc": [
+        "Wenn du stirbst, *respawnst* du *automatisch,*",
+        "ohne den *Death Screen* zu sehen"
+      ]
+    },
+    "slot-limit": {
+      "name": "*Inventar Slots*",
+      "desc": [
+        "Stellt ein, wie viele *Inventar*",
+        "*Slots* nutzbar sind"
+      ],
+      "settings": "{0} <gray>von max.</gray> <yellow>{1}</yellow> <gray>Slots</gray>"
+    },
+    "old-pvp": {
+      "name": "*1.8 PvP*",
+      "desc": [
+        "Das *alte 1.8 PvP System* wird genutzt",
+        "Es gibt keinen *Attack Cooldown*"
+      ]
+    },
+    "totem-save-death": {
+      "name": "*Challenge Totem*",
+      "desc": [
+        "Wenn du durch eine Challenge *sofort*",
+        "*sterben würdest*, können *Totems* dich retten"
+      ]
+    },
+    "soup": {
+      "name": "*Suppen Heilung*",
+      "desc": [
+        "Wenn du eine *Pilzsuppe* benutzt,",
+        "wirst du um *4 Herzen* geheilt"
+      ]
+    },
+    "hardcore-hearts": {
+      "name": "*Hardcore Herzen*",
+      "desc": [
+        "Die *Herzen* werden im *Hardcore-Stil* angezeigt",
+        "Um die Änderung zu sehen, *musst* du *rejoinen*"
+      ]
+    },
+    "random-challenge": {
+      "name": "*Intervall = Zufällige Challenge*",
+      "catalog-name": "*1 Min = Zufällige Challenge*",
+      "desc": [
+        "In einem *gesetzten Intervall*",
+        "wird eine *zufällige Challenge* aktiviert"
+      ],
+      "challenge-enabled": [
+        "<gray>Die Challenge {0} wurde <green>aktiviert</green></gray>",
+        "<gray>{1}</gray>"
+      ],
+      "bossbar-waiting": "{@bossbar.format('Warten auf neue Challenge..')}",
+      "bossbar-current": "{@bossbar.format('Challenge {0}')}"
+    },
+    "randomized-hp": {
+      "name": "*Zufällige Mob-Leben*",
+      "desc": [
+        "Die *Leben* aller *Mobs*",
+        "sind *zufällig*"
+      ]
+    },
+    "block-randomizer": {
+      "name": "*Block Randomizer*",
+      "desc": [
+        "Jeder *Block* droppt das, was ein *anderer Block* droppt"
+      ],
+      "pairing": "Droppt wie *{0}*",
+      "menu": "Block Randomizer"
+    },
+    "block-item-randomizer": {
+      "name": "*Block Item Randomizer*",
+      "desc": [
+        "Jeder *Block* droppt *zufällige Items*"
+      ],
+      "pairing": "Droppt *{0}*",
+      "menu": "Block Item Randomizer"
+    },
+    "crafting-randomizer": {
+      "name": "*Crafting Randomizer*",
+      "desc": [
+        "Jedes *Rezept* gibt dir das Ergebnis eines *anderen Rezepts*"
+      ],
+      "pairing": "Gibt *{0}*",
+      "menu": "Crafting Randomizer"
+    },
+    "hotbar-randomizer": {
+      "name": "*Intervall = Zufällige Hotbar*",
+      "desc": [
+        "Alle *paar Minuten* erhält jeder Spieler *zufällige Items*"
+      ]
+    },
+    "entity-loot-randomizer": {
+      "name": "*Entity Loot Randomizer*",
+      "desc": [
+        "Alle Mob Drops sind *zufällig vertauscht*."
+      ],
+      "pairing": "Droppt den Loot von *{0}*",
+      "menu": "Entity Loot Randomizer"
+    },
+    "mob-randomizer": {
+      "name": "*Mob Randomizer*",
+      "desc": [
+        "*Jeder Mob* wird zufällig durch",
+        "einen *anderen Mob* ersetzt"
+      ],
+      "pairing": "Spawnt als *{0}*",
+      "menu": "Mob Randomizer"
+    },
+    "random-dropping": {
+      "name": "*Intervall = Item droppen*",
+      "desc": [
+        "Alle paar Sekunden wird ein *zufälliges*",
+        "*Item* aus deinem Inventar *gedroppt*"
+      ]
+    },
+    "random-item-removing": {
+      "name": "*Intervall = Item verlieren*",
+      "desc": [
+        "Alle paar Sekunden wird ein *zufälliges*",
+        "*Item* aus deinem Inventar *gelöscht*"
+      ]
+    },
+    "random-swapping": {
+      "name": "*Intervall = Items tauschen*",
+      "desc": [
+        "Alle paar Sekunden wird ein",
+        "*zufälliges Item* aus deinem Inventar",
+        "mit einem anderem *getauscht*"
+      ]
+    },
+    "random-item": {
+      "name": "*Intervall = Zufälliges Item*",
+      "desc": [
+        "*Jeder Spieler* erhält alle paar",
+        "*Sekunden* ein *zufälliges Item*"
+      ]
+    },
+    "random-event": {
+      "name": "*Intervall = Zufälliges Event*",
+      "desc": [
+        "Alle *paar Minuten* wird eines von",
+        "*mehreren zufälligen Events* aktiviert"
+      ],
+      "entities": "<gray>Wo kommt ihr denn her?</gray>",
+      "fly": "<gray>Ich glaube ich kann fliegen..</gray>",
+      "hole": "<gray>Du bist aber ganz schön tief gefallen</gray>",
+      "ores": "<gray>Gibt es hier keine Erze?</gray>",
+      "sickness": "<gray>Bist du etwa krank?</gray>",
+      "speed": "<gray>Sonic? Bist du es?</gray>",
+      "webs": "<gray>Liegen die schon lange hier?</gray>"
+    },
+    "mob-damage-teleport": {
+      "name": "*Mob schlagen = Platztausch*",
+      "desc": [
+        "Jedes mal, wenn du einen *Mob schlägst*,",
+        "tauschst du mit einem *zufälligem Mob* die Position"
+      ]
+    },
+    "force-height": {
+      "name": "*Force Height*",
+      "desc": [
+        "Alle *paar Minuten* musst du auf",
+        "eine *bestimmte Höhe* oder du stirbst"
+      ],
+      "bossbar-instruction": "{@bossbar.format-arg('Höhe <yellow>{0}</yellow>', '<green>{1}</green>')}",
+      "bossbar-waiting": "{@bossbar.format('Warten auf nächste Höhe..')}",
+      "fail": "<yellow>{0} </yellow><gray>war auf der </gray><red>falschen Höhe </red><dark_gray>(</dark_gray><yellow>{1}</yellow><dark_gray>)</dark_gray>",
+      "success": "<gray>Alle Spieler waren auf der <green>richtigen Höhe</green></gray>"
+    },
+    "force-block": {
+      "name": "*Force Block*",
+      "desc": [
+        "Alle *paar Minuten* musst du auf",
+        "einen *bestimmten Block* oder du stirbst"
+      ],
+      "bossbar-instruction": "{@bossbar.format-arg('Block <yellow>{0}</yellow>', '<green>{1}</green>')}",
+      "bossbar-waiting": "{@bossbar.format('Warten auf nächsten Block..')}",
+      "fail": "<yellow>{0} </yellow><gray>war auf dem </gray><red>falschen Block </red><dark_gray>(</dark_gray><yellow>{1}</yellow><dark_gray>)</dark_gray>",
+      "success": "<gray>Alle Spieler waren auf dem <green>richtigen Block</green></gray>"
+    },
+    "force-mob": {
+      "name": "*Force Mob*",
+      "desc": [
+        "Alle *paar Minuten* musst du",
+        "ein *bestimmtes Entity* killen oder du stirbst"
+      ],
+      "bossbar-instruction": "{@bossbar.format-arg('Mob <yellow>{0}</yellow>', '<green>{1}</green>')}",
+      "bossbar-waiting": "{@bossbar.format('Warten auf nächsten Mob..')}",
+      "fail": "<gray>Das Mob <yellow>{0} </yellow>wurde <red>nicht getötet</red></gray>",
+      "success": "<yellow>{0} </yellow><gray>hat das Mob </gray><yellow>{1} </yellow><green>getötet</green>"
+    },
+    "force-item": {
+      "name": "*Force Item*",
+      "desc": [
+        "Alle *paar Minuten* musst du",
+        "ein *bestimmtes Item* finden oder du stirbst"
+      ],
+      "bossbar-instruction": "{@bossbar.format-arg('Item <yellow>{0}</yellow>', '<green>{1}</green>')}",
+      "bossbar-waiting": "{@bossbar.format('Warten auf nächstes Item..')}",
+      "fail": "<gray>Das Item <yellow>{0}</yellow> wurde <red>nicht gefunden</red></gray>",
+      "success": "<gray><yellow>{0}</yellow> hat das Item <yellow>{1}</yellow> <green>gefunden</green></gray>"
+    },
+    "force-biome": {
+      "name": "*Force Biome*",
+      "desc": [
+        "Alle *paar Minuten* musst du in",
+        "ein *bestimmtes Biom* oder du stirbst",
+        "Je *seltener* das Biom ist, desto *mehr Zeit* hast du"
+      ],
+      "bossbar-instruction": "{@bossbar.format-arg('Biom <yellow>{0}</yellow>', '<green>{1}</green>')}",
+      "bossbar-waiting": "{@bossbar.format('Warten auf nächstes Biom..')}",
+      "fail": "<gray>Das Biom <yellow>{0} </yellow>wurde <red>nicht gefunden</red></gray>",
+      "success": "<yellow>{0} </yellow><gray>hat das Biom </gray><yellow>{1} </yellow><green>gefunden</green>"
+    },
+    "hydra": {
+      "name": "*Mob töten = Zwei neue Mobs*",
+      "desc": [
+        "Wenn du einen *Mob* tötest,",
+        "spawnen *zwei* neue"
+      ]
+    },
+    "hydra-plus": {
+      "name": "*Mob töten = Doppelt so viele*",
+      "desc": [
+        "Wenn du einen *Mob* tötest,",
+        "spawnen *doppelt* so viele",
+        "wie beim *vorherigen* mal",
+        " ",
+        "Maximum beträgt *512* Mobs gleichzeitig"
+      ]
+    },
+    "duped-spawning": {
+      "name": "*Mobs spawnen doppelt*",
+      "desc": [
+        "Wenn ein Monster *spawnt*,",
+        "spawnt es *zweimal*"
+      ]
+    },
+    "jump-entity": {
+      "name": "*Sprung = Zufälliges Entity*",
+      "desc": [
+        "Wenn du *springst*, *spawnt* ein",
+        "zufälliges *Entity*"
+      ]
+    },
+    "invisible-mobs": {
+      "name": "*Unsichtbare Mobs*",
+      "desc": [
+        "Alle *Mobs* haben einen",
+        "*Unsichtbarkeits* Effekt"
+      ]
+    },
+    "stone-sight": {
+      "name": "*Mob ansehen = Versteinert*",
+      "desc": [
+        "*Mobs*, denen du in die *Augen*",
+        "*schaust*, werden zu *Stein*"
+      ]
+    },
+    "mob-sight-damage": {
+      "name": "*Mob ansehen = Schaden*",
+      "desc": [
+        "Wenn du einen *Mob* in die *Augen*",
+        "*schaust*, erleidest du *Schaden*"
+      ]
+    },
+    "all-mobs-to-death-position": {
+      "name": "*Töten = Artgenossen kommen*",
+      "desc": [
+        "Wenn ein *Mob* von einem Spieler",
+        "*getötet* wird, werden *alle* anderen",
+        "Monster vom *selben Typen* zum",
+        "*Todespunkt* teleportiert"
+      ]
+    },
+    "respawn-end": {
+      "name": "*Mob töten = Respawnt im End*",
+      "desc": [
+        "Mobs, die *getötet werden*,",
+        "respawnen im *End*"
+      ],
+      "bossbar": "{@bossbar.format-arg('<dark_purple>Respawnte Mobs im End</dark_purple>', '<yellow>{0}</yellow>')}"
+    },
+    "mob-transformation": {
+      "name": "*Schlag = Wird zum Vorgänger*",
+      "desc": [
+        "Wenn du einen Mob schlägst, *verwandelt* sich",
+        "dieser in den *letzen Mob*, den du *geschlagen* hast"
+      ],
+      "bossbar": "{@bossbar.format-arg('Letzter Mob', '<green>{0}</green>')}"
+    },
+    "block-mobs": {
+      "name": "*Abbauen = Mob droppt Block*",
+      "desc": [
+        "Aus jedem abgebautem Block, *spawnt ein Mob*,",
+        "dass *getötet* werden muss, um den Block *zu erhalten*"
+      ]
+    },
+    "damage-per-block": {
+      "name": "*Laufen = Schaden*",
+      "desc": [
+        "Du bekommst *Schaden* durch",
+        "jeden *Block*, den du gehst"
+      ]
+    },
+    "sneak-damage": {
+      "name": "*Schleichen = Schaden*",
+      "desc": [
+        "Du *erleidest* den gesetzten",
+        "*Schaden*, wenn du *schleichst*"
+      ],
+      "failed": "<yellow>{0} </yellow><gray>ist geschlichen</gray>"
+    },
+    "jump-damage": {
+      "name": "*Sprung = Schaden*",
+      "desc": [
+        "Du *erleidest* den gesetzen",
+        "*Schaden*, wenn du *springst*"
+      ],
+      "failed": "<yellow>{0} </yellow><gray>ist gesprungen</gray>"
+    },
+    "block-break-damage": {
+      "name": "*Block abbauen = Schaden*",
+      "desc": [
+        "Wenn du einen *Block abbaust*,",
+        "*erleidest* du die gesetze Anzahl *schaden*"
+      ]
+    },
+    "block-place-damage": {
+      "name": "*Block setzen = Schaden*",
+      "desc": [
+        "Wenn du einen *Block plazierst*,",
+        "*erleidest* du die gesetze Anzahl *schaden*"
+      ]
+    },
+    "advancement-damage": {
+      "name": "*Advancement = Schaden*",
+      "desc": [
+        "Du bekommst für jedes neue *Advancement*",
+        "die gesetze Anzahl *Schaden*"
+      ]
+    },
+    "damage-item": {
+      "name": "*Item anfassen = Schaden*",
+      "desc": [
+        "Wenn du ein *Item aufhebst* oder es",
+        "in deinem Inventar *anklickst* erleidest",
+        "du *0,5 {@symbol.heart}* multipliziert mit der Anzahl der Items"
+      ]
+    },
+    "water-allergy": {
+      "name": "*Wasser = Schaden*",
+      "desc": [
+        "Wenn du in *Wasser* bist,",
+        "*erleidest* du den gesetzen Schaden"
+      ]
+    },
+    "death-on-fall": {
+      "name": "*Fallschaden = Tod*",
+      "desc": [
+        "Wenn du *Fallschaden* erleidest,",
+        "*stirbst* du sofort"
+      ]
+    },
+    "reversed-damage": {
+      "name": "*Austeilen = Einstecken*",
+      "desc": [
+        "Wenn du Entities *schlägst* oder *abschießt*,",
+        "bekommst du den *gleichen Schaden*"
+      ]
+    },
+    "freeze": {
+      "name": "*Schaden = Einfrieren*",
+      "desc": [
+        "Für *jedes Herz*, das du *Schaden* erleidest, kannst",
+        "du dich für eine bestimmte Zeit *nicht bewegen*"
+      ]
+    },
+    "delay-damage": {
+      "name": "*Schaden = Verzögert*",
+      "desc": [
+        "Der *Schaden* von allen *Spielern* wird",
+        "zusammenaddiert und *erst nach* einer",
+        "*bestimmten Zeit* hinzugefügt"
+      ]
+    },
+    "chunk-effect": {
+      "name": "*Neuer Chunk = Zufallseffekt*",
+      "desc": [
+        "In *jedem Chunk* bekommst du",
+        "einen *zufälligen Effekt*"
+      ]
+    },
+    "block-effect": {
+      "name": "*Neuer Block = Zufallseffekt*",
+      "desc": [
+        "Auf *jedem Block* bekommst du",
+        "einen *zufälligen Effekt*"
+      ]
+    },
+    "entity-effect": {
+      "name": "*Mobs Haben Zufällige Effekte*",
+      "desc": [
+        "*Jedes Mob* hat einen zufälligen",
+        "Effekt auf *höchster Stufe*"
+      ]
+    },
+    "random-effect": {
+      "name": "*Intervall = Zufallseffekt*",
+      "desc": [
+        "Du bekommst in einem gesetzen *Intervall*",
+        "einen *zufälligen Trank Effekt*"
+      ],
+      "menu": "Random Effekte",
+      "sub": {
+        "time": {
+          "name": "*Intervall*",
+          "desc": [
+            "Das *Intervall*, in dem man",
+            "einen *Effekt* erhält"
+          ]
+        },
+        "length": {
+          "name": "*Länge*",
+          "desc": [
+            "Die *Länge*, die der",
+            "*Effekt* anhält"
+          ]
+        },
+        "amplifier": {
+          "name": "*Stärke*",
+          "desc": [
+            "Die *Stärke*, die der",
+            "*Effekt* hat"
+          ]
+        }
+      }
+    },
+    "permanent-effect-on-damage": {
+      "name": "*Schaden = Dauereffekt*",
+      "desc": [
+        "Du bekommst immer, wenn du *Schaden*",
+        "erleidest, einen *zufälligen Effekt*"
+      ],
+      "new-effect": "<gray>Effekt <yellow>{0} </yellow><dark_gray>➔ </dark_gray><yellow>{1}</yellow></gray>",
+      "settings-desc": {
+        "everyone": "<gray>Alle erhalten den Effekt</gray>",
+        "player": "<gray>Nur der aktive Spieler erhält den Effekt</gray>"
+      }
+    },
+    "infection": {
+      "name": "*Mob in der Nähe = Infektion*",
+      "desc": [
+        "Du musst *2 Blöcke* Abstand von allen ",
+        "*Mobs* halten oder du wirst *krank*"
+      ]
+    },
+    "surface-hole": {
+      "name": "*Boden hinter dir = Void*",
+      "desc": [
+        "<gray>Hinter dir *verschwindet* der</gray>",
+        "*Boden* bis ins *Void*"
+      ]
+    },
+    "bedrock-walls": {
+      "name": "*Bedrock-Wände*",
+      "desc": [
+        "Hinter dir *spawnen* riesige",
+        "*Wände* aus *Bedrock*"
+      ]
+    },
+    "bedrock-path": {
+      "name": "*Bedrock-Pfad*",
+      "desc": [
+        "*Unter dir* entsteht die",
+        "ganze Zeit *Bedrock*"
+      ]
+    },
+    "floor-is-lava": {
+      "name": "*Der Boden ist Lava*",
+      "desc": [
+        "Alle *Blöcke* unter dir verwandeln sich",
+        "erst zu *Magma* und dann zu *Lava*"
+      ]
+    },
+    "chunk-deconstruction": {
+      "name": "*Dein Chunk = Bröckelt ab*",
+      "desc": [
+        "*Chunks*, in denen sich Spieler befinden,",
+        "*bauen* sich von *oben* aus ab"
+      ]
+    },
+    "all-blocks-disappear": {
+      "name": "*Block abbauen = Chunkweit weg*",
+      "desc": [
+        "Bei verschiedenen *Interaktionen*",
+        "verschwinden alle *Blöcke* im *Chunk*",
+        "eines *bestimmten Types*"
+      ],
+      "menu": "Blöcke entfernen",
+      "sub": {
+        "break": {
+          "name": "*Beim abbauen*",
+          "desc": [
+            "Wenn du einen Block *abbaust*, werden",
+            "*alle Blöcke* des *selben Types zerstört*"
+          ]
+        },
+        "place": {
+          "name": "*Beim platzieren*",
+          "desc": [
+            "Wenn du einen Block *platzierst*, werden",
+            "*alle Blöcke* des *selben Types zerstört*"
+          ]
+        }
+      }
+    },
+    "anvil-rain": {
+      "name": "*{@menu}*",
+      "desc": [
+        "Vom *Himmel* fallen *Ambosse*"
+      ],
+      "menu": "Amboss Regen",
+      "sub": {
+        "time": {
+          "name": "*Intervall*",
+          "desc": [
+            "Das *Intervall*, in",
+            "dem *Ambosse* spawnen"
+          ]
+        },
+        "range": {
+          "name": "*Umkreis*",
+          "desc": [
+            "Die *Reichweite*, in",
+            "der *Ambosse* spawnen"
+          ]
+        },
+        "count": {
+          "name": "*Anzahl*",
+          "desc": [
+            "Die *Anzahl*, an *Ambossen*,",
+            "die in einem *Chunk* spawnen"
+          ]
+        },
+        "damage": {
+          "name": "*Schaden*",
+          "desc": [
+            "Der *Schaden*, den",
+            "die *Ambosse* machen"
+          ]
+        }
+      }
+    },
+    "tsunami": {
+      "name": "*Tsunami*",
+      "desc": [
+        "In einem *gesetztem Intervall*",
+        "*steigt* das *Wasser* in der *Overworld*",
+        "und die *Lava* in im *Nether*",
+        " ",
+        "Sollte mit wenigen Personen gespielt werden!"
+      ],
+      "bossbar-lava": "{@bossbar.format-arg('Lavahöhe', '<red>{0}</red>')}",
+      "bossbar-water": "{@bossbar.format-arg('Wasserhöhe', '<blue>{0}</blue>')}"
+    },
+    "repeat-in-chunk": {
+      "name": "*Bauen/Abbauen = Jeder Chunk*",
+      "desc": [
+        "Blöcke die *platziert oder zerstört* werden,",
+        "werden in *jedem Chunk* platziert / zerstört"
+      ]
+    },
+    "snake": {
+      "name": "*Snake*",
+      "desc": [
+        "*Jeder Spieler* zieht eine",
+        "tödliche Linie hinter sich her"
+      ],
+      "failed": "<yellow>{0} </yellow><gray>ist über die </gray><blue>Linie </blue><gray>getreten</gray>"
+    },
+    "blocks-fly": {
+      "name": "*Betretener Block = Fliegt hoch*",
+      "desc": [
+        "*Blöcke*, auf denen du *gelaufen* bist,",
+        "fliegen nach *einer Sekunde* in die *Luft*"
+      ]
+    },
+    "blocks-disappear-time": {
+      "name": "*Block setzen = Weg nach Zeit*",
+      "desc": [
+        "Blöcke, die du *platzierst*, *verschwinden*",
+        "nach ein *paar Sekunden* wieder"
+      ]
+    },
+    "loop": {
+      "name": "*Aktion = Loop bis Schleichen*",
+      "desc": [
+        "Verschiedene Aktionen *wiederholen* sich",
+        "unendlich oft, bis ein Spieler *schleicht*"
+      ],
+      "cleared": "<yellow>{0} </yellow><gray>Loops abgebrochen</gray>"
+    },
+    "ice-floor": {
+      "name": "*Eisboden*",
+      "desc": [
+        "Unter dir wird *Luft* zu einem",
+        "*3x3* Boden aus *Eis*"
+      ],
+      "bossbar": "{@bossbar.format-arg('<white>Eisboden</white>', '{0}')}"
+    },
+    "level-border": {
+      "name": "*Level = Weltgrenze*",
+      "desc": [
+        "Die *Border-Größe* passt sich dem *Spieler*",
+        "mit den *meisten Leveln* an."
+      ]
+    },
+    "level-block": {
+      "name": "*Level = Block*",
+      "desc": [
+        "Laufen und bauen nur auf *freigeschalteten Blöcken*.",
+        "Ein neuer Block kostet beim Betreten *ein Level*."
+      ]
+    },
+    "chunk-deletion": {
+      "name": "*Dein Chunk = Wird gelöscht*",
+      "desc": [
+        "*Chunks*, in denen sich *Spieler* befinden,",
+        "werden nach gegebener *Zeit* komplett *gelöscht*"
+      ],
+      "bossbar": "{@bossbar.format-arg('Zeit übrig im Chunk', '<light_purple>{0}</light_purple>')}"
+    },
+    "void-world": {
+      "name": "*Void-Welt*",
+      "desc": [
+        "Die *Oberwelt* und der *Nether* sind",
+        "komplett *leer*. Nur *Festungen* und",
+        "*Netherfestungen* werden noch generiert"
+      ]
+    },
+    "structure-void-world": {
+      "name": "*Void-Welt mit Strukturen*",
+      "desc": [
+        "*Jede Dimension* ist komplett *leer*,",
+        "aber *alle Strukturen* generieren",
+        "noch dort, wo sie in Vanilla wären."
+      ]
+    },
+    "stronghold-world": {
+      "name": "*Stronghold-Welt*",
+      "desc": [
+        "*Oberwelt* und *Nether* sind massiver *Stein*",
+        "mit einem *endlosen Stronghold* darin,",
+        "im *End* schwebt er in der *Leere*"
+      ]
+    },
+    "obsidian-world": {
+      "name": "*Alles ist Obsidian*",
+      "desc": [
+        "Jeder Block in *jeder Dimension*",
+        "ist *Obsidian*. Nur *Flüssigkeiten*,",
+        "*Portale* und *Spawner* bleiben erhalten"
+      ]
+    },
+    "line-world": {
+      "name": "*2D-Welt*",
+      "desc": [
+        "Die ganze Welt ist nur *einen Block*",
+        "breit. Neben der *Linie* ist das *Void*,",
+        "und sie führt *durch den Stronghold*"
+      ]
+    },
+    "grid-world": {
+      "name": "*Gitterwelt*",
+      "desc": [
+        "Von der Welt bleibt nur ein *Gitter* aus",
+        "Stäben alle *5 Blöcke*. Rund *90 %* der",
+        "Blöcke sind weg, *Spawner* und *Portale* bleiben"
+      ]
+    },
+    "all-blocks-same": {
+      "name": "*Alles ein Block*",
+      "desc": [
+        "In einem *festen Intervall* wird die gesamte",
+        "Welt zu einem *zufälligen Block*. Nur *Luft*,",
+        "*Wasser*, *Lava*, *Spawner* und *Portale* bleiben"
+      ],
+      "bossbar": "{@bossbar.format-arg('Block <yellow>{0}</yellow>', '<green>{1}</green>')}",
+      "bossbar-waiting": "{@bossbar.format('Warten auf nächsten Block..')}",
+      "menu": "Alles ein Block",
+      "sub": {
+        "time": {
+          "name": "*Intervall*",
+          "desc": [
+            "Das *Intervall*, in dem",
+            "sich der *Block* ändert"
+          ]
+        },
+        "bossbar": {
+          "name": "*Bossbar*",
+          "desc": [
+            "Zeigt eine *Bossbar* mit dem aktuellen",
+            "Block und der Zeit bis zum nächsten"
+          ]
+        }
+      }
+    },
+    "step-off-block": {
+      "name": "*Block verlassen = Block weg*",
+      "desc": [
+        "Wechselst du auf einen *anderen Block*,",
+        "verschwindet der alte aus der *ganzen Welt*",
+        "und kann *nie wieder* gesetzt werden.",
+        "*Obsidian*, *Grundgestein* und *Portalrahmen* bleiben"
+      ],
+      "removed": "<yellow>{0}</yellow><gray> hat </gray><yellow>{1}</yellow><gray> verlassen, der Block ist jetzt für immer weg</gray>"
+    },
+    "step-off-lava": {
+      "name": "*Block verlassen = Lava*",
+      "desc": [
+        "Wechselst du auf einen *anderen Block*,",
+        "wird der alte in der ganzen Welt zu *Lava*.",
+        "*Setzen* kannst du ihn trotzdem wieder.",
+        "*Obsidian*, *Grundgestein* und *Portalrahmen* bleiben"
+      ],
+      "turned": "<yellow>{0}</yellow><gray> hat </gray><yellow>{1}</yellow><gray> verlassen, jetzt ist alles davon Lava</gray>"
+    },
+    "no-water": {
+      "name": "*Kein Wasser*",
+      "desc": [
+        "Es gibt *kein natürliches Wasser* mehr,",
+        "was du selbst ausschüttest, bleibt aber"
+      ]
+    },
+    "chunk-mob-battle": {
+      "name": "*Neuer Chunk = Mob-Kampf*",
+      "desc": [
+        "Jeder *neue Chunk* sperrt dich mit einem",
+        "*zufälligen Mob* ein. *Töte ihn*, um rauszukommen"
+      ],
+      "menu": "Mob-Kampf",
+      "sub": {
+        "wither": {
+          "name": "*Wither*",
+          "desc": "Der *Wither* kann der Mob sein, mit dem du eingesperrt wirst"
+        },
+        "warden": {
+          "name": "*Warden*",
+          "desc": "Der *Warden* kann der Mob sein, mit dem du eingesperrt wirst"
+        }
+      }
+    },
+    "chunk-random-block": {
+      "name": "*Neuer Chunk = Zufälliger Block*",
+      "desc": [
+        "Jeder *Chunk*, den du betrittst, wird",
+        "zu einem *zufälligen Block*"
+      ],
+      "menu": "Zufälliger Block",
+      "sub": {
+        "new": {
+          "desc": [
+            "Der Chunk wird zu einem",
+            "*zufälligen Block*, sobald ihn",
+            "zum *ersten Mal* irgendjemand betritt"
+          ]
+        },
+        "new_personal": {
+          "desc": [
+            "Der Chunk wird zu einem",
+            "*zufälligen Block*, wenn ein Spieler",
+            "ihn zum *ersten Mal* betritt,",
+            "für *jeden Spieler einzeln*"
+          ]
+        },
+        "every": {
+          "desc": [
+            "Der Chunk wird *bei jedem Betreten*",
+            "zu einem *zufälligen Block*"
+          ]
+        },
+        "solid_blocks": {
+          "name": "*Nur feste Blöcke*",
+          "desc": [
+            "Der zufällige Block ist immer",
+            "ein *fester* Block"
+          ]
+        },
+        "non_solid": {
+          "name": "*Nicht-feste Blöcke*",
+          "desc": [
+            "Der zufällige Block kann auch eine",
+            "*Flüssigkeit* oder ein *nicht-fester*",
+            "Block wie Glas oder Laub sein"
+          ]
+        },
+        "odd_blocks": {
+          "name": "*Seltsame Blöcke*",
+          "desc": [
+            "Der zufällige Block kann auch",
+            "etwas Seltsames wie *Spinnennetz*,",
+            "*Schleim*, *Teppich* oder ein",
+            "*ausgetrockneter Ghast* sein"
+          ]
+        },
+        "fragile_blocks": {
+          "name": "*Alle Blöcke*",
+          "desc": [
+            "Der zufällige Block kann *alles* sein,",
+            "auch *Fackeln*, *Blumen* oder *Sand*.",
+            "Berührt man einen, kann der ganze",
+            "Chunk *zerfallen* oder *herunterfallen*"
+          ]
+        },
+        "replace_liquids": {
+          "name": "*Flüssigkeiten ersetzen*",
+          "desc": [
+            "*Wasser* und *Lava* werden",
+            "auch ersetzt"
+          ]
+        },
+        "protect_interactions": {
+          "name": "*Unverwandelte Chunks schützen*",
+          "desc": [
+            "Spieler können in",
+            "unverwandelten Chunks nicht",
+            "*abbauen*, *bauen* oder *Eimer*",
+            "benutzen, und Explosionen lassen",
+            "sie stehen"
+          ]
+        }
+      }
+    },
+    "permanent-item": {
+      "name": "*Items bleiben für immer*",
+      "desc": [
+        "*Items* können nicht gedroppt",
+        "oder *weggelegt* werden"
+      ]
+    },
+    "no-duped-items": {
+      "name": "*Keine Doppelten Items*",
+      "desc": [
+        "Wenn *2 Spieler* das gleiche *Item* im",
+        "Inventar haben, *sterben* beide"
+      ],
+      "failed": "<yellow>{0} </yellow><gray>und </gray><yellow>{1} </yellow><gray>hatten beide </gray><yellow>{2} </yellow><gray>im Inventar</gray>"
+    },
+    "damage-inv-clear": {
+      "name": "*Schaden = Inventar Leeren*",
+      "desc": [
+        "Die *Inventare* aller Spieler werden *geleert*,",
+        "wenn ein *Spieler* Schaden erleidet"
+      ]
+    },
+    "uncraft-items": {
+      "name": "*Intervall = Items entcraften*",
+      "desc": [
+        "Alle *Items* in deinem Inventar *craften*",
+        "sich alle paar Sekunden *zurück*"
+      ]
+    },
+    "missing-items": {
+      "name": "*Intervall = Item erraten*",
+      "desc": [
+        "Alle paar Minuten *verschwindet* ein *Item* aus",
+        "deinem *Inventar* und du musst *erraten*, welches"
+      ],
+      "inventory": "{@menu.title-format('Welches Item fehlt?')}",
+      "open": "<click:run_command:/openmissingitems><hover:show_text:'{@menu.generic.tooltip.left('{@menu.generic.interact.open}')}'><dark_gray>[</dark_gray><green>GUI öffnen</green><dark_gray>]</dark_gray></hover></click>",
+      "start": "<gray>Eines deiner Items <red>fehlt</red>! {@open}</gray>",
+      "interact": {
+        "guess": "Dieses Item wählen"
+      },
+      "bossbar": {
+        "waiting": "{@bossbar.format('Warte auf das nächste Item..')}",
+        "guessing": "{@bossbar.format-arg('Zeit zum Raten', '<red>{0}</red>')}"
+      },
+      "command": {
+        "none": "<gray>Es gibt aktuell <red>kein Item</red> zu erraten</gray>"
+      },
+      "time-up": "<gray>Die Zeit ist <red>um</red>! Das fehlende Item war <yellow>{0}</yellow></gray>",
+      "guess": {
+        "right": "<yellow>{0}</yellow> <gray>ist das <green>richtige</green> Item!</gray>",
+        "wrong": "<yellow>{0}</yellow> <gray>ist <red>falsch</red> geraten, das fehlende Item war <yellow>{1}</yellow></gray>"
+      }
+    },
+    "pickup-launch": {
+      "name": "*Aufheben = Hochgeschleudert*",
+      "desc": [
+        "Wenn du ein *Item aufhebst*,",
+        "wirst du *in die Luft* geschleudert"
+      ]
+    },
+    "block-chunk-item-remove": {
+      "name": "*Bewegung = Item Entfernt*",
+      "desc": [
+        "Es wird für jeden *Block* / *Chunk*,",
+        "den du dich *fortbewegst*, ein Item",
+        "aus deinem Inventar *gelöscht*"
+      ],
+      "block": "<gold>Block</gold>",
+      "chunk": "<gold>Chunk</gold>"
+    },
+    "traffic-light": {
+      "name": "*Ampel*",
+      "desc": [
+        "Die *Ampel* schaltet alle paar Minuten um",
+        "Wenn du bei *rot* gehst, stirbst du"
+      ],
+      "fail": "<yellow>{0} </yellow><gray>ist über </gray><red>rot </red><gray>gegangen</gray>"
+    },
+    "hunger-block": {
+      "name": "*Laufen = Hunger*",
+      "desc": [
+        "Du bekommst *Hunger* durch",
+        "jeden *Block*, den du gehst"
+      ]
+    },
+    "only-down": {
+      "name": "*Nach oben = Tod*",
+      "desc": [
+        "Wenn du *einen Block* nach",
+        "*oben* gehst, *stirbst* du"
+      ],
+      "failed": "<yellow>{0} </yellow><gray>ist einen Block nach oben gegangen</gray>"
+    },
+    "only-dirt": {
+      "name": "*Dirt verlassen = Tod*",
+      "desc": [
+        "Wenn du nicht auf *Erde*",
+        "stehst, *stirbst* du"
+      ],
+      "failed": "<yellow>{0} </yellow><gray>stand nicht auf Erde</gray>"
+    },
+    "higher-jumps": {
+      "name": "*Höhere Sprünge*",
+      "desc": [
+        "*Umso öfter* du springst,",
+        "*desto höher* springst du"
+      ]
+    },
+    "always-running": {
+      "name": "*Immer rennen*",
+      "desc": [
+        "Du kannst *nicht aufhören*, vorwärts zu laufen"
+      ]
+    },
+    "dont-stop-running": {
+      "name": "*Zu lange stehen = Tod*",
+      "desc": [
+        "Du darfst nur eine bestimmte Zeit",
+        "*stehen bleiben* bevor du *stirbst*"
+      ],
+      "bossbar": "{@bossbar.format-arg('Bewege dich in', '<yellow>{0}</yellow>')}",
+      "stopped-moving": "<yellow>{0} </yellow><gray>hat sich zu lange nicht bewegt</gray>"
+    },
+    "no-mouse-move": {
+      "name": "*Umsehen = Schaden*",
+      "desc": [
+        "Wenn du deinen *Blick bewegst*,",
+        "erleidest du den *gesetzen Schaden*"
+      ],
+      "failed": "<yellow>{0} </yellow><gray>hat seine Maus bewegt</gray>"
+    },
+    "five-hundred-blocks": {
+      "name": "*500 Blöcke = Zufälliger Stack*",
+      "desc": [
+        "*Alle* 500 Blöcke, die du *läufst*,",
+        "bekommst du *64* eines *zufälliges Items*.",
+        "Es droppen *keine Items* von",
+        "*Blöcken* und *Entities* mehr."
+      ],
+      "bossbar": "{@bossbar.format-arg('<white>Blöcke Gelaufen</white>', '{0} <dark_gray>/</dark_gray> {1}')}",
+      "settings-desc": "<gray>Blöcke zu laufen: {0}</gray>"
+    },
+    "max-biome-time": {
+      "name": "*Maximale Biom Zeit*",
+      "desc": [
+        "Die *Zeit*, die du in jedem *Biom*",
+        "sein darfst, ist *begrenzt*"
+      ],
+      "bossbar": "{@bossbar.format-arg('Zeit übrig in <yellow>{0}</yellow>', '<green>{1}</green>')}"
+    },
+    "max-height-time": {
+      "name": "*Maximale Höhen Zeit*",
+      "desc": [
+        "Die *Zeit*, die du auf jeder *Höhe*",
+        "sein darfst, ist *begrenzt*"
+      ],
+      "bossbar": "{@bossbar.format-arg('Zeit übrig auf <yellow>{0}</yellow>', '<green>{1}</green>')}"
+    },
+    "water-mlg": {
+      "name": "*Intervall = Water MLG*",
+      "desc": [
+        "Du musst *immer wieder*",
+        "einen *Water MLG* absolvieren"
+      ]
+    },
+    "jump-and-run": {
+      "name": "*Intervall = Jump and Run*",
+      "desc": [
+        "In einem gesetzten *Intervall* muss ein",
+        "*zufälliger Spieler* ein *Jump and Run* absolvieren",
+        "Schafft er es *nicht*, *stirbt* er"
+      ],
+      "actionbar": "{@actionbar.format-arg('<b><gradient:#FFFF55:#FFAA00>Jump & Run</gradient></b>', 'Sprünge: <green>{0}</green> <gray>/</gray> <yellow>{1}</yellow>')}",
+      "countdown": "<gray>Nächstes {@name} in <yellow>{0} Sekunden</yellow></gray>",
+      "countdown-one": "<gray>Nächstes {@name} in <yellow>einer Sekunde</yellow></gray>",
+      "finished": "<yellow>{0}</yellow> <gray>hat das</gray> {@name} <green>geschafft</green>"
+    },
+    "one-durability": {
+      "name": "*Eine Haltbarkeit*",
+      "desc": [
+        "*Items* gehen nach *einer* Benutzung *kaputt*"
+      ]
+    },
+    "no-trading": {
+      "name": "*Kein Handeln*",
+      "desc": [
+        "Du kannst *nicht* mit",
+        "Villager *handeln*"
+      ]
+    },
+    "no-exp": {
+      "name": "*XP aufheben = Tod*",
+      "desc": [
+        "Wenn du *XP* aufsammelst, stirbst du"
+      ],
+      "picked-up": "<yellow>{0} </yellow><gray>hat </gray><red>XP </red><gray>aufgesammelt</gray>"
+    },
+    "food-once": {
+      "name": "*Jedes Essen nur einmal*",
+      "desc": [
+        "Du kannst jedes *Essen*",
+        "nur einmal *essen*"
+      ],
+      "failed": "<yellow>{0} </yellow><gray>ist an </gray><yellow>{1} </yellow><gray>erstickt</gray>",
+      "new-food": "<yellow>Du </yellow><gray>hast </gray><yellow>{1} </yellow><gray>gegessen</gray>",
+      "new-food-team": "<yellow>{0} </yellow><gray>hat </gray><yellow>{1} </yellow><gray>gegessen</gray>"
+    },
+    "consume-launch": {
+      "name": "*Essen = Hochgeschleudert*",
+      "desc": [
+        "Wenn du ein *Item isst*,",
+        "wirst du *in die Luft* geschleudert"
+      ]
+    },
+    "low-drop-rate": {
+      "name": "*Niedrige Dropchance*",
+      "desc": [
+        "Die *Dropchance* jedes *Blockes* wird auf die",
+        "angegebene *Prozentzahl* gesetzt"
+      ],
+      "settings-desc": "<gray>Chance: {0}</gray>"
+    },
+    "ender-games": {
+      "name": "*Intervall = Tausch mit Mob*",
+      "desc": [
+        "Alle *paar Minuten* wirst du",
+        "mit einem *zufälligem Entity* aus",
+        "einem *200 Block* Radius *getauscht*"
+      ],
+      "teleport": "<gray>Du wurdest mit <yellow>{0}</yellow> getauscht</gray>"
+    },
+    "invert-health": {
+      "name": "*Intervall = Herzen umgedreht*",
+      "desc": [
+        "Alle paar Minuten werden deine *Herzen invertiert*.",
+        "Wenn du *8 Herzen* hast,",
+        "hast du danach *2 Herzen* und umgekehrt."
+      ],
+      "inverted": "<gray>Deine Herzen wurden <red>invertiert</red></gray>"
+    },
+    "no-shared-advancements": {
+      "name": "*Doppeltes Advancement = Tod*",
+      "desc": [
+        "Spieler dürfen *nicht* die *gleichen Advancements*",
+        "abschließen, sonst *stirbt* der *Spieler*"
+      ],
+      "collected": "<yellow>{0}</yellow> <gray>hat das <red>bereits gesammelte</red> Advancement</gray> <yellow>{1}</yellow> <gray>abgeschlossen</gray>"
+    },
+    "quiz": {
+      "name": "*Intervall = Quizfrage*",
+      "desc": [
+        "Alle *paar Minuten* muss ein *zufälliger*",
+        "*Spieler* eine *Quizfrage* beantworten"
+      ],
+      "bossbar": {
+        "waiting": "{@bossbar.format('Warten auf nächste Frage..')}",
+        "question": "{@bossbar.format-arg('Zeit übrig für Frage', '<red>{0}</red>')}",
+        "question-other": "{@bossbar.format-arg('Frage für <yellow>{1}</yellow>', '<green>{0}</green>')}"
+      },
+      "command": {
+        "none": "<gray>Du musst derzeit <red>keiner Frage</red> antworten</gray>"
+      },
+      "time-up": "<gray>Die Zeit ist <red>abgelaufen</red>!</gray>",
+      "cancelled": "<gray>Die Frage wurde <red>abgebrochen</red>!</gray>",
+      "question": {
+        "format": [
+          " ",
+          "{0}",
+          "<gray>Klicke die richtige Antwort im Chat an!</gray>",
+          " ",
+          "{1}",
+          " "
+        ],
+        "option": "<dark_gray>{@symbol.dart}</dark_gray> <click:run_command:/guess {0}><hover:show_text:'{@menu.generic.tooltip.left('Mit <yellow>/guess {0}</yellow> antworten')}'><yellow>{1}</yellow></hover></click>",
+        "far-be": "<gray>Wie weit bist du <yellow>{0}</yellow>?</gray>",
+        "often-be": "<gray>Wie oft bist du <yellow>{0}</yellow>?</gray>",
+        "often-have": "<gray>Wie oft hast du <yellow>{1}</yellow> {0}?</gray>",
+        "damage-have": "<gray>Wie viel Schaden hast du <yellow>{1}</yellow> {0}?</gray>",
+        "damage-taken-have": "<gray>Wie viel Schaden hast du durch <yellow>{1}</yellow> {0}?</gray>",
+        "most": "<gray>Was hast du von diesen {1} am meisten <yellow>{0}</yellow>?</gray>"
+      },
+      "answer": {
+        "right": "<yellow>{0}</yellow> <gray>ist die</gray> <green>richtige</green> <gray>Antwort!</gray>",
+        "right-other": "<yellow>{0}</yellow> <gray>hat die Frage</gray> <green>richtig</green> <gray>beantwortet</gray>",
+        "wrong": "<yellow>{0}</yellow> <gray>ist eine</gray> <red>falsche</red> <gray>Antwort!</gray>",
+        "wrong-other": "<yellow>{0}</yellow> <gray>hat die Frage</gray> <red>falsch beantwortet</red>",
+        "solution": "<gray>Die richtige Antwort lautete: <yellow>{0}</yellow></gray>",
+        "solutions": "<gray>Die richtigen Antworten lauteten: <yellow>{0}</yellow></gray>"
+      },
+      "verb": {
+        "traveled": "gelaufen",
+        "jumped": "gesprungen",
+        "sneaked": "geschlichen",
+        "killed": "getötet",
+        "damaged": "zugefügt",
+        "broken": "abgebaut",
+        "placed": "platziert",
+        "dropped": "gedropped",
+        "suffered": "erlitten"
+      }
+    },
+    "goal-ender-dragon": {
+      "name": "*Enderdrache*",
+      "desc": [
+        "Töte den *Enderdrachen* um zu gewinnen"
+      ]
+    },
+    "goal-wither": {
+      "name": "*Wither*",
+      "desc": [
+        "Töte einen *Wither* um zu gewinnen"
+      ]
+    },
+    "goal-elder-guardian": {
+      "name": "*Elder Guardian*",
+      "desc": [
+        "Töte einen *Großen Wächter* um zu gewinnen"
+      ]
+    },
+    "goal-warden": {
+      "name": "*Warden*",
+      "desc": [
+        "Töte einen *Warden* um zu gewinnen"
+      ]
+    },
+    "goal-wither-waves": {
+      "name": "*Wither-Wellen*",
+      "desc": [
+        "In einem gesetzten *Intervall* spawnen am",
+        "Weltspawn *Wither*, jede Welle einer mehr",
+        "Töte alle, um zu gewinnen"
+      ],
+      "bossbar": "{@bossbar.format-arg('Welle <yellow>{0}</yellow>', '<green>{1}</green>')}",
+      "bossbar-tracker": "{@bossbar.format-arg('Wither <gold>{0}</gold> <yellow>{1}m</yellow>', 'Welle <yellow>{2}</yellow> in <green>{3}</green>')}",
+      "spawned": "<gray>Welle </gray><yellow>{0}</yellow><gray> ist am Weltspawn erschienen, die Schwierigkeit ist jetzt </gray>{1}"
+    },
+    "goal-all-bosses": {
+      "name": "*Alle Bosse*",
+      "desc": [
+        "Es müssen *alle Bosse* einmal",
+        "*getötet* werden, um zu *gewinnen*",
+        " ",
+        "<dark_gray>(</dark_gray>{@goal-ender-dragon.name}, {@goal-wither.name}, {@goal-elder-guardian.name}<dark_gray>)</dark_gray>"
+      ],
+      "bossbar": "{@bossbar.format-arg('Alle Bosse', '<green>{0}</green> <gray>/</gray> <yellow>{1}</yellow>')}"
+    },
+    "goal-all-bosses-new": {
+      "name": "*Alle Bosse (+ Warden)*",
+      "desc": [
+        "Es müssen *alle Bosse* einmal",
+        "*getötet* werden, um zu *gewinnen*",
+        " ",
+        "<dark_gray>(</dark_gray>{@goal-ender-dragon.name}, {@goal-wither.name}, {@goal-elder-guardian.name}, {@goal-warden.name}<dark_gray>)</dark_gray>"
+      ],
+      "bossbar": "{@goal-all-bosses.bossbar}"
+    },
+    "iron-golem": {
+      "name": "*Eisengolem*",
+      "desc": [
+        "Töte einen *Eisengolem* um zu gewinnen"
+      ]
+    },
+    "snow-golem": {
+      "name": "*Schneegolem*",
+      "desc": [
+        "Töte einen *Schneegolem*, um zu gewinnen"
+      ]
+    },
+    "all-mobs": {
+      "name": "*Alle Mobs*",
+      "desc": [
+        "Es müssen *alle Mobs* einmal",
+        "*getötet* werden, um zu *gewinnen*"
+      ],
+      "bossbar": "{@bossbar.format-arg('Alle Mobs', '<green>{0}</green> <gray>/</gray> <yellow>{1}</yellow>')}"
+    },
+    "all-monster": {
+      "name": "*Alle Monster*",
+      "desc": [
+        "Es müssen *alle Monster* einmal",
+        "*getötet* werden, um zu *gewinnen*"
+      ],
+      "bossbar": "{@bossbar.format-arg('Alle Monster', '<green>{0}</green> <gray>/</gray> <yellow>{1}</yellow>')}"
+    },
+    "most-deaths": {
+      "name": "*Meiste Todesarten*",
+      "desc": [
+        "Wer die meisten *verschiedenen Tode*",
+        "sammelt, *gewinnt*"
+      ],
+      "collected": "<gray>Todesgrund <yellow>{0} </yellow>wurde registriert</gray> {@generic.goal-link}"
+    },
+    "most-items": {
+      "name": "*Meiste verschiedene Items*",
+      "desc": [
+        "Wer die meisten *verschiedenen Items*",
+        "findet, *gewinnt*"
+      ]
+    },
+    "mine-most-blocks": {
+      "name": "*Meiste abgebaute Blöcke*",
+      "desc": [
+        "Wer die *meisten Blöcke* abbaut, gewinnt"
+      ]
+    },
+    "most-xp": {
+      "name": "*Meiste XP*",
+      "desc": [
+        "Wer die meiste *XP sammelt*, gewinnt"
+      ]
+    },
+    "most-emeralds": {
+      "name": "*Meisten Emeralds*",
+      "desc": [
+        "Der Spieler mit den *meisten*",
+        "*Emeralds* gewinnt"
+      ]
+    },
+    "most-ores": {
+      "name": "*Meiste Erze*",
+      "desc": [
+        "Der Spieler, der am *meisten Erze*",
+        "*abgebaut* hat, gewinnt"
+      ]
+    },
+    "eat-most": {
+      "name": "*Am meisten gegessen*",
+      "desc": [
+        "Der Spieler, der am *meisten isst*, gewinnt"
+      ]
+    },
+    "first-one-to-die": {
+      "name": "*Erster Tod*",
+      "desc": [
+        "Wer als *erstes stirbt*, gewinnt"
+      ]
+    },
+    "collect-wood": {
+      "name": "*Holzarten sammeln*",
+      "desc": [
+        "Wer als *erstes* alle *Holzarten*, die",
+        "*eingestellt* sind, gesammelt hat, gewinnt"
+      ],
+      "item-collected": "<gray>Holzart <yellow>{0}</yellow> wurde registriert</gray> {@generic.goal-link}",
+      "settings": {
+        "overworld": "<green>Overworld",
+        "nether": "<red>Nether</red>",
+        "both": "{@overworld} <gray>&</gray> {@nether}"
+      }
+    },
+    "finish-raid": {
+      "name": "*Raid Gewinnen*",
+      "desc": [
+        "Der erste Spieler, der einen *Raid*",
+        "*abschließt*, gewinnt"
+      ]
+    },
+    "all-advancements": {
+      "name": "*Alle Advancements*",
+      "desc": [
+        "Der Spieler, der als erstes *alle*",
+        "Errungenschaften *erhalten hat*, gewinnt"
+      ],
+      "bossbar": "<gray>Advancements </gray><dark_gray>» </dark_gray><yellow>{0}</yellow>"
+    },
+    "max-height": {
+      "name": "*Maximale Höhe*",
+      "desc": [
+        "Der Spieler, der als *erstes* die",
+        "Höhe *{0}* erreicht hat, gewinnt"
+      ]
+    },
+    "min-height": {
+      "name": "*Minimale Höhe*",
+      "desc": [
+        "Der Spieler, der als *erstes* die",
+        "Höhe *{0}* erreicht hat, gewinnt"
+      ]
+    },
+    "race": {
+      "name": "*Wettrennen*",
+      "desc": [
+        "Der Spieler, der als *erstes* an",
+        "einer *zufälligen* Position ist, gewinnt"
+      ],
+      "settings-desc": "<gray>Reichweite: {0}</gray>",
+      "reached": "<yellow>{0}</yellow> <gray>hat das <green>Ziel erreicht</green>!</gray>",
+      "bossbar": {
+        "distance": "{@bossbar.format-arg('<white>Ziel</white>', 'X: {0} <dark_gray>/</dark_gray> Z: {1} <dark_gray>{@symbol.circle}</dark_gray> <yellow>{2} Blöcke</yellow>')}",
+        "dimension": "{@bossbar.format-arg('<white>Ziel</white>', 'X: {0} <dark_gray>/</dark_gray> Z: {1}')}"
+      }
+    },
+    "find-elytra": {
+      "name": "*Elytra Finden*",
+      "desc": [
+        "Der Spieler, der als *erstes*",
+        "eine *Elytra findet*, gewinnt"
+      ]
+    },
+    "eat-cake": {
+      "name": "*Kuchen Essen*",
+      "desc": [
+        "Der Spieler, der als *erstes*",
+        "einen *Kuchen isst*, gewinnt"
+      ]
+    },
+    "collect-horse-armor": {
+      "name": "*Sammle Pferderüstungen*",
+      "desc": [
+        "Der Spieler, der als *erstes*",
+        "*alle Pferderüstungen* hat, gewinnt"
+      ]
+    },
+    "collect-ice": {
+      "name": "*Sammle Eisblöcke*",
+      "desc": [
+        "Der Spieler, der als *erstes*",
+        "*alle Eisblöcke* und Schnee hat, gewinnt"
+      ]
+    },
+    "collect-swords": {
+      "name": "*Sammle Schwerter*",
+      "desc": [
+        "Der Spieler, der als *erstes*",
+        "*alle Schwerter* hat, gewinnt"
+      ]
+    },
+    "collect-workstations": {
+      "name": "*Sammle Arbeitsblöcke*",
+      "desc": [
+        "Der Spieler, der als *erstes*",
+        "*alle Villager Arbeitsblöcke* hat, gewinnt"
+      ]
+    },
+    "get-full-health": {
+      "name": "*Regeneriere Volle Leben*",
+      "desc": [
+        "Der erste Spieler, der wieder *volle Leben*",
+        "regeneriert, gewinnt"
+      ],
+      "settings-desc": "<gray>Start: {0}</gray>"
+    },
+    "force-battles": {
+      "bossbar": "{@bossbar.format-arg('{0}', '{1}')}",
+      "no-jokers-left": "<gray>Du hast <red>keine Joker mehr</red> übrig</gray>",
+      "sub": {
+        "goal-jokers": {
+          "name": "*Anzahl der Joker*",
+          "desc": [
+            "Die *Anzahl* der *Joker*,",
+            "die jeder Spieler hat um das",
+            "aktuelle Ziel zu *überspringen*"
+          ]
+        },
+        "scoreboard": {
+          "name": "*Scoreboard anzeigen*",
+          "desc": [
+            "Ob das *Scoreboard* angezeigt,",
+            "mit der *aktuellen Bestenliste*",
+            "angezeigt werden soll"
+          ]
+        },
+        "duped-targets": {
+          "name": "*Doppelte Ziele*",
+          "desc": [
+            "Ob Ziele *mehrfach vorkommen* können"
+          ]
+        }
+      },
+      "target": {
+        "item": {
+          "found": "<gray>Du hast <yellow>{0} </yellow>gefunden!</gray>",
+          "new": "<gray>Item zu suchen: <yellow>{0}</yellow></gray>",
+          "display": "<gray>Item:</gray> <yellow>{0}</yellow>"
+        },
+        "mob": {
+          "found": "<gray>Du hast <yellow>{0}</yellow> besiegt!</gray>",
+          "new": "<gray>Mob zu suchen: <yellow>{0}</yellow></gray>",
+          "display": "<gray>Mob:</gray> <yellow>{0}</yellow>"
+        },
+        "advancement": {
+          "found": "<gray>Du hast <yellow>{0} </yellow>erzielt!</gray>",
+          "new": "<gray>Nächstes Advancement: <yellow>{0}</yellow></gray>",
+          "display": "<gray>Advancement:</gray> <yellow>{0}</yellow>"
+        },
+        "block": {
+          "found": "<gray>Du hast <yellow>{0} </yellow>gefunden!</gray>",
+          "new": "<gray>Block zu suchen: <yellow>{0}</yellow></gray>",
+          "display": "<gray>Block:</gray> <yellow>{0}</yellow>"
+        },
+        "height": {
+          "display": "<gray>Höhe:</gray> <yellow>{0}</yellow>",
+          "new": "<gray>Höhe zu erreichen: <yellow>{0}</yellow></gray>",
+          "found": "<gray>Du hast die Höhe <yellow>{0} </yellow>erreicht!</gray>"
+        },
+        "biome": {
+          "display": "<gray>Biom:</gray> <yellow>{0}</yellow>",
+          "new": "<gray>Biom zu finden: <yellow>{0}</yellow></gray>",
+          "found": "<gray>Du hast das Biom <yellow>{0} </yellow>gefunden!</gray>"
+        },
+        "damage": {
+          "display": "<gray>Schaden:</gray> {0}",
+          "new": "<gray>Schaden zu nehmen: {0}</gray>",
+          "found": "<gray>Du hast {0} Schaden genommen!</gray>"
+        },
+        "position": {
+          "display": "<gray>Position:</gray> <yellow>{0}</yellow>",
+          "coords": "<yellow>X: {0}</yellow> <dark_gray>{@symbol.dot}</dark_gray> <yellow>Z: {1}</yellow>",
+          "new": "<gray>Position zu erreichen: <yellow>{0}</yellow></gray>",
+          "found": "<gray>Du hast die Position <yellow>{0} </yellow>erreicht!</gray>"
+        }
+      },
+      "joker": "<red>Joker</red>"
+    },
+    "force-item-battle": {
+      "name": "*{@menu}*",
+      "desc": [
+        "Jeder Spieler bekommt ein *zufälliges Item*,",
+        "das er finden muss.",
+        "Wer am Ende die *meisten Items* hat, gewinnt"
+      ],
+      "menu": "Force Item Battle",
+      "sub": {
+        "give-item": {
+          "name": "*Item geben*",
+          "desc": [
+            "Wenn ein Spieler ein Item *skippt*,",
+            "wird dieses in sein *Inventar hinzugefügt*"
+          ]
+        }
+      },
+      "leaderboard": "<dark_gray>➜ </dark_gray><gray>Force Item Battle Leaderboard</gray>"
+    },
+    "force-mob-battle": {
+      "name": "*{@menu}*",
+      "desc": [
+        "Jeder Spieler bekommt ein *zufälliges Mob*,",
+        "das er töten muss."
+      ],
+      "menu": "Force Mob Battle",
+      "leaderboard": "<dark_gray>➜ </dark_gray><gray>Force Mob Battle Leaderboard</gray>"
+    },
+    "force-advancement-battle": {
+      "name": "*{@menu}*",
+      "desc": [
+        "Jeder Spieler bekommt ein *zufälliges*",
+        "*Advancement*, welches er erreichen muss."
+      ],
+      "menu": "Force Advancement Battle",
+      "leaderboard": "<dark_gray>➜ </dark_gray><gray>Force Advancement Battle Leaderboard</gray>"
+    },
+    "force-block-battle": {
+      "name": "*{@menu}*",
+      "desc": [
+        "Jeder Spieler bekommt einen *zufälligen*",
+        "*Block*, auf welchem er stehen muss"
+      ],
+      "menu": "Force Block Battle",
+      "sub": {
+        "give-block": {
+          "name": "*Block geben*",
+          "desc": [
+            "Wenn ein Spieler einen Block *skippt*,",
+            "wird dieser in sein *Inventar hinzugefügt*"
+          ]
+        }
+      },
+      "leaderboard": "<dark_gray>➜ </dark_gray><gray>Force Block Battle Leaderboard</gray>"
+    },
+    "force-biome-battle": {
+      "name": "*{@menu}*",
+      "desc": [
+        "Jeder Spieler bekommt ein *zufälliges Biom*,",
+        "das er betreten muss"
+      ],
+      "menu": "Force Biome Battle",
+      "leaderboard": "<dark_gray>➜ </dark_gray><gray>Force Biome Battle Leaderboard</gray>"
+    },
+    "force-damage-battle": {
+      "name": "*{@menu}*",
+      "desc": [
+        "Jeder Spieler bekommt eine *zufällige Anzahl Schaden*,",
+        "die er *erhalten* muss"
+      ],
+      "menu": "Force Damage Battle",
+      "leaderboard": "<dark_gray>➜ </dark_gray><gray>Force Damage Battle Leaderboard</gray>"
+    },
+    "force-height-battle": {
+      "name": "*{@menu}*",
+      "desc": [
+        "Jeder Spieler bekommt eine *zufällige Höhe*,",
+        "auf der er sich befinden muss."
+      ],
+      "menu": "Force Height Battle",
+      "leaderboard": "<dark_gray>➜ </dark_gray><gray>Force Height Battle Leaderboard</gray>"
+    },
+    "force-position-battle": {
+      "name": "*{@menu}*",
+      "desc": [
+        "Jeder Spieler bekommt eine *zufällige Position*,",
+        "die er erreichen muss."
+      ],
+      "menu": "Force Position Battle",
+      "leaderboard": "<dark_gray>➜ </dark_gray><gray>Force Position Battle Leaderboard</gray>",
+      "sub": {
+        "radius": {
+          "name": "*Radius*",
+          "desc": [
+            "Der *maximale Radius*, in dem sich die",
+            "Positionen befinden können"
+          ]
+        }
+      }
+    },
+    "extreme-force-battle": {
+      "name": "*{@menu}*",
+      "desc": [
+        "Jeder Spieler bekommt ein *zufälliges Ziel*,",
+        "welches er erreichen muss"
+      ],
+      "menu": "Extreme Force Battle",
+      "leaderboard": "<dark_gray>➜ </dark_gray><gray>Extreme Force Battle Leaderboard</gray>"
+    },
+    "last-man-standing": {
+      "name": "*Last Man Standing*",
+      "desc": [
+        "Wer *am Ende* noch *lebt*, gewinnt"
+      ]
+    },
+    "collect-all-items": {
+      "name": "<gray>*Alle Items*</gray>",
+      "desc": [
+        "<gray>Finde *alle Items*, die es *in Minecraft gibt*</gray>"
+      ],
+      "bossbar-current": "{@bossbar.format-arg('{0}', '{1} <dark_gray>/</dark_gray> {2}')}",
+      "bossbar-finished": "{@bossbar.format('<green>Alle Items gefunden</green>')}",
+      "skipped": "<gray>Item <yellow>{0} </yellow>geskippt</gray>",
+      "already-finished": "<gray>Es wurden bereits alle Items gefunden</gray>",
+      "found": "<gray>Das Item <yellow>{0} </yellow>wurde von <yellow>{1} </yellow>registriert</gray> {@generic.goal-link}"
+    },
+    "damage-teleport": {
+      "name": "*Schaden = Zufälliger Teleport*",
+      "desc": [
+        "Du wirst *zufällig teleportiert*,",
+        "wenn du *Schaden* erleidest"
+      ]
+    },
+    "zero-hearts": {
+      "name": "*Null Herzen*",
+      "desc": [
+        "Nach einer *Schutzzeit* musst du",
+        "dauerhaft Absorption bekommen"
+      ],
+      "bossbar": "{@bossbar.format-arg('Schutzzeit', '<green>{0}</green>')}",
+      "failed": "<yellow>{0} </yellow><gray>hat die </gray><red>Absorption</red><gray> verloren!</gray>"
+    },
+    "damage-random-item": {
+      "name": "*Schaden = Zufälliges Item*",
+      "desc": [
+        "Bei jedem *Schaden* bekommst",
+        "du einen *zufälligen Item-Stack*"
+      ]
+    },
+    "damage-random-mob": {
+      "name": "*Schaden = Zufälliger Mob*",
+      "desc": [
+        "Es spawnt ein *zufälliger Mob* bei dir,",
+        "wenn du *Schaden* erleidest"
+      ]
+    },
+    "damage-border": {
+      "name": "*Schaden = Weltgrenze*",
+      "desc": [
+        "Die *Border* ist anfangs *winzig* und",
+        "*wächst*, wenn du *Schaden* erleidest"
+      ],
+      "modifier": "<gray>Wachstum pro Schadenspunkt: {0}</gray>"
+    },
+    "level-random-item": {
+      "name": "*Level = Zufälliges Item*",
+      "desc": [
+        "Bei jedem *Level Up* bekommst",
+        "du einen *zufälligen Item-Stack*"
+      ]
+    },
+    "advancement-random-item": {
+      "name": "*Advancement = Zufälliges Item*",
+      "desc": [
+        "Für jedes *Advancement* bekommst",
+        "du einen *zufälligen Item-Stack*"
+      ]
+    },
+    "interval-warden": {
+      "name": "*Intervall = Warden*",
+      "catalog-name": "*30 Sek = Warden*",
+      "desc": [
+        "In einem gesetzten *Intervall* gräbt sich bei",
+        "jedem Spieler ein *Warden* aus dem Boden"
+      ]
+    },
+    "interval-random-mob": {
+      "name": "*Intervall = Zufälliger Mob*",
+      "desc": [
+        "In einem gesetzten *Intervall* spawnt bei",
+        "jedem Spieler ein *zufälliger Mob*"
+      ]
+    },
+    "interval-border": {
+      "name": "*Intervall = Weltgrenze*",
+      "desc": [
+        "Die *Border* wird in einem",
+        "gesetzten *Intervall* kleiner"
+      ]
+    },
+    "interval-clear-inventory": {
+      "name": "*Intervall = Inventar Leeren*",
+      "desc": [
+        "Die *Inventare* aller Spieler werden in",
+        "einem gesetzten *Intervall* *geleert*"
+      ]
+    },
+    "craft-random-mob": {
+      "name": "*Craften = Zufälliger Mob*",
+      "desc": [
+        "Wenn du etwas *craftest*, spawnt",
+        "ein *zufälliger Mob* bei dir"
+      ]
+    },
+    "chunk-random-mob": {
+      "name": "*Neuer Chunk = Zufälliger Mob*",
+      "desc": [
+        "In jedem *neuen Chunk*, den du betrittst,",
+        "spawnt ein *zufälliger Mob* bei dir"
+      ]
+    },
+    "break-random-mob": {
+      "name": "*Block abbauen = Zufälliger Mob*",
+      "desc": [
+        "Es spawnt ein *zufälliger Mob* bei dir,",
+        "wenn du einen *Block abbaust*"
+      ]
+    },
+    "place-random-mob": {
+      "name": "*Block setzen = Zufälliger Mob*",
+      "desc": [
+        "Es spawnt ein *zufälliger Mob* bei dir,",
+        "wenn du einen *Block platzierst*"
+      ]
+    },
+    "no-eating": {
+      "name": "*Kein Essen*",
+      "desc": [
+        "Du kannst *nichts essen*"
+      ]
+    },
+    "damage-rule": {
+      "desc-format": [
+        "Stellt ein, ob du Schaden durch",
+        "{0} bekommen kannst",
+        " ",
+        "Dazu zählt: *{1}*"
+      ],
+      "none": {
+        "name": "*Genereller Schaden*",
+        "desc": [
+          "Stellt ein, ob du Schaden bekommen kannst",
+          "Du kannst *weiterhin* durch *Challenges* sterben"
+        ]
+      },
+      "fire": {
+        "name": "*Feuer Schaden*",
+        "desc": "{@desc-format('*Lava* und *Feuer*', '{0}')}"
+      },
+      "attack": {
+        "name": "*Angriff Schaden*",
+        "desc": "{@desc-format('*Nahkampfangriffe von Kreaturen*', '{0}')}"
+      },
+      "projectile": {
+        "name": "*Projektil Schaden*",
+        "desc": "{@desc-format('*Projektile*', '{0}')}"
+      },
+      "fall": {
+        "name": "*Fallschaden*",
+        "desc": "{@desc-format('*Fallschaden*', '{0}')}"
+      },
+      "explosion": {
+        "name": "*Explosions Schaden*",
+        "desc": "{@desc-format('*Explosionen*', '{0}')}"
+      },
+      "drowning": {
+        "name": "*Ertrink Schaden*",
+        "desc": "{@desc-format('*Ertrinken*', '{0}')}"
+      },
+      "block": {
+        "name": "*Block Schaden*",
+        "desc": "{@desc-format('*Blöcke*', '{0}')}"
+      },
+      "magic": {
+        "name": "*Magie Schaden*",
+        "desc": "{@desc-format('*Gift*, *Wither* oder andere *Tränke*', '{0}')}"
+      },
+      "freeze": {
+        "name": "*Frost Schaden*",
+        "desc": "{@desc-format('*Frost*', '{0}')}"
+      }
+    },
+    "material-rule": {
+      "desc-format": [
+        "Stellt ein, ob *{0}*",
+        "benutzt werden kann",
+        " ",
+        "Dazu zählt: *{1}*"
+      ],
+      "armor": {
+        "name": "*Rüstung*",
+        "desc": "{@desc-format('Rüstung', '{0}')}"
+      },
+      "golden_apple": {
+        "name": "*Goldener Apfel*",
+        "desc": "{@desc-format('Goldener Apfel', '{0}')}"
+      },
+      "crafting_table": {
+        "name": "*Werkbank*",
+        "desc": "{@desc-format('Werkbank', '{0}')}"
+      },
+      "chest": {
+        "name": "*Truhe*",
+        "desc": "{@desc-format('Truhe', '{0}')}"
+      },
+      "furnace": {
+        "name": "*Ofen*",
+        "desc": "{@desc-format('Ofen', '{0}')}"
+      },
+      "enchant": {
+        "name": "*Verzauberungstisch*",
+        "desc": "{@desc-format('Verzauberungstisch', '{0}')}"
+      },
+      "anvil": {
+        "name": "*Amboss*",
+        "desc": "{@desc-format('Amboss', '{0}')}"
+      },
+      "brewing_stand": {
+        "name": "*Braustand*",
+        "desc": "{@desc-format('Braustand', '{0}')}"
+      },
+      "bow": {
+        "name": "*Bogen*",
+        "desc": "{@desc-format('Bogen', '{0}')}"
+      },
+      "throwable": {
+        "name": "*Wurfprojektile*",
+        "desc": "{@desc-format('Wurfprojektile', '{0}')}"
+      },
+      "flint_and_steel": {
+        "name": "*Feuerzeug*",
+        "desc": "{@desc-format('Feuerzeug', '{0}')}"
+      },
+      "bucket": {
+        "name": "*Eimer*",
+        "desc": "{@desc-format('Eimer', '{0}')}"
+      },
+      "sword": {
+        "name": "*Schwert*",
+        "desc": "{@desc-format('Schwert', '{0}')}"
+      },
+      "pickaxe": {
+        "name": "*Spitzhacke*",
+        "desc": "{@desc-format('Spitzhacke', '{0}')}"
+      },
+      "elytra": {
+        "name": "*Elytra*",
+        "desc": "{@desc-format('Elytra', '{0}')}"
+      },
+      "shield": {
+        "name": "*Schild*",
+        "desc": "{@desc-format('Schild', '{0}')}"
+      },
+      "totem": {
+        "name": "*Totem*",
+        "desc": "{@desc-format('Totem', '{0}')}"
+      },
+      "ender_pearl": {
+        "name": "*Enderperle*",
+        "desc": "{@desc-format('Enderperle', '{0}')}"
+      }
+    },
+    "generic": {
+      "disabled": "<gray>Diese Challenge ist derzeit <red>deaktiviert</red></gray>",
+      "item-collected": "<gray>Item <yellow>{0} </yellow>wurde registriert</gray> {@generic.goal-link}",
+      "items-to-collect": "<gray>Items zu sammeln </gray><dark_gray>» </dark_gray><yellow>{0}</yellow>",
+      "mob-killed": "<yellow>{0} </yellow><gray>wurde besiegt </gray><dark_gray>(</dark_gray><yellow>{1} </yellow><gray>/ </gray><yellow>{2}</yellow><dark_gray>)</dark_gray> {@generic.goal-link}",
+      "goal-link": "<click:run_command:/goal><hover:show_text:'{@menu.generic.tooltip.left('{@menu.generic.interact.show_list}')}'><dark_gray>[</dark_gray><yellow>Liste</yellow><dark_gray>]</dark_gray></hover></click>",
+      "height-reached": "<yellow>{0} </yellow><gray>hat Höhe </gray><yellow>{1} </yellow><gray>erreicht!</gray>",
+      "points": "<yellow>{0} </yellow><gray>Punkte</gray>",
+      "bossbar-height": "{@bossbar.format-arg('<white>Ziel</white>', 'Y: {0}')}",
+      "leaderboard-entry": "{0} <dark_gray>» </dark_gray><yellow>{1} </yellow><dark_gray>┃ </dark_gray><yellow>{2}</yellow>"
+    }
+  },
+  "custom": {
+    "trigger": {
+      "interval": {
+        "name": "*Intervall*",
+        "desc": [
+          "Die Aktion wird *regelmäßig*",
+          "im gewählten Intervall *ausgeführt*"
+        ]
+      },
+      "jump": {
+        "name": "*Spieler springt*",
+        "desc": [
+          "Die Aktion wird *jedes Mal* ausgeführt,",
+          "wenn ein Spieler *springt*"
+        ]
+      },
+      "sneak": {
+        "name": "*Spieler schleicht*",
+        "desc": [
+          "Die Aktion wird *jedes Mal* ausgeführt,",
+          "wenn ein Spieler *anfängt zu schleichen*"
+        ]
+      },
+      "move_block": {
+        "name": "*Spieler läuft einen Block*",
+        "desc": [
+          "Die Aktion wird *jedes Mal* ausgeführt,",
+          "wenn ein Spieler *einen Block wechselt*"
+        ]
+      },
+      "death": {
+        "name": "*Entity stirbt*",
+        "desc": [
+          "Die Aktion wird *jedes Mal* ausgeführt,",
+          "wenn eine *Kreatur stirbt*"
+        ]
+      },
+      "damage": {
+        "name": "*Entity erleidet Schaden*",
+        "desc": [
+          "Die Aktion wird *jedes Mal* ausgeführt,",
+          "wenn eine *Kreatur Schaden erleidet*"
+        ]
+      },
+      "damage_by_player": {
+        "name": "*Entity bekommt Schaden von Spieler*",
+        "desc": [
+          "Die Aktion wird *jedes Mal* ausgeführt,",
+          "wenn eine *Kreatur Schaden von einem Spieler* erleidet"
+        ]
+      },
+      "block_place": {
+        "name": "*Block platziert*",
+        "desc": [
+          "Die Aktion wird *jedes Mal* ausgeführt,",
+          "wenn ein Spieler einen *Block platziert*"
+        ]
+      },
+      "block_break": {
+        "name": "*Block zerstört*",
+        "desc": [
+          "Die Aktion wird *jedes Mal* ausgeführt,",
+          "wenn ein Spieler einen *Block abbaut*"
+        ]
+      },
+      "new_chunk": {
+        "name": "*Spieler betritt Chunk*",
+        "desc": [
+          "Die Aktion wird ausgeführt, wenn ein Spieler einen *Chunk betritt*,",
+          "jedes Mal, beim *ersten Mal* insgesamt oder beim *ersten Mal* pro Spieler"
+        ]
+      },
+      "consume_item": {
+        "name": "*Item konsumieren*",
+        "desc": [
+          "Die Aktion wird *jedes Mal* ausgeführt,",
+          "wenn ein Spieler ein *essbares Item konsumiert*"
+        ]
+      },
+      "pickup_item": {
+        "name": "*Item aufheben*",
+        "desc": [
+          "Die Aktion wird für *jedes* anklicken oder aufheben ausgeführt"
+        ]
+      },
+      "drop_item": {
+        "name": "*Spieler droppt Item*",
+        "desc": [
+          "Die Aktion wird *jedes Mal* ausgeführt,",
+          "wenn ein Spieler ein *Item droppt*"
+        ]
+      },
+      "advancement": {
+        "name": "*Spieler erhält Errungenschaft*",
+        "desc": [
+          "Die Aktion wird *jedes Mal* ausgeführt,",
+          "wenn ein Spieler eine neue *Errungenschaft* erhält"
+        ]
+      },
+      "hunger": {
+        "name": "*Spieler verliert Sättigung*",
+        "desc": [
+          "Die Aktion wird *jedes Mal* ausgeführt,",
+          "wenn ein Spieler *Sättigung verliert* bzw. *Hunger bekommt*"
+        ]
+      },
+      "move_down": {
+        "name": "*Block nach unten bewegen*",
+        "desc": [
+          "Die Aktion wird *jedes Mal* ausgeführt,",
+          "wenn ein Spieler *einen Block nach unten* geht"
+        ]
+      },
+      "move_up": {
+        "name": "*Block nach oben bewegen*",
+        "desc": [
+          "Die Aktion wird *jedes Mal* ausgeführt,",
+          "wenn ein Spieler *einen Block nach oben* geht"
+        ]
+      },
+      "move_camera": {
+        "name": "*Kamera bewegen*",
+        "desc": [
+          "Die Aktion wird *jedes Mal* ausgeführt,",
+          "wenn ein Spieler *seinen Kopf dreht*"
+        ]
+      },
+      "stands_on_specific_block": {
+        "name": "*Spieler ist auf bestimmten Block*",
+        "desc": [
+          "Die Aktion wird *jedes Mal* ausgeführt,",
+          "wenn ein Spieler sich einen *ganzen Block bewegt*",
+          "und auf einem *bestimmten Block* steht"
+        ]
+      },
+      "stands_not_on_specific_block": {
+        "name": "*Spieler ist nicht auf bestimmten Block*",
+        "desc": [
+          "Die Aktion wird *jedes Mal* ausgeführt,",
+          "wenn ein Spieler sich einen *ganzen Block bewegt*",
+          "und *nicht* auf einem *bestimmten Block* steht"
+        ]
+      },
+      "gain_xp": {
+        "name": "*Spieler bekommt XP*",
+        "desc": [
+          "Die Aktion wird *jedes Mal* ausgeführt,",
+          "wenn ein Spieler *XP bekommt*"
+        ]
+      },
+      "level_up": {
+        "name": "*Spieler levelt auf*",
+        "desc": [
+          "Die Aktion wird *jedes Mal* ausgeführt,",
+          "wenn ein Spieler *ein Level aufsteigt*"
+        ]
+      },
+      "item_craft": {
+        "name": "*Spieler craftet Item*",
+        "desc": [
+          "Die Aktion wird *jedes Mal* ausgeführt,",
+          "wenn ein Spieler ein *Item herstellt*"
+        ]
+      },
+      "in_liquid": {
+        "name": "*Spieler in Flüssigkeit*",
+        "desc": [
+          "Die Aktion wird *jedes Mal* ausgeführt,",
+          "wenn ein Spieler eine *Flüssigkeit* betritt"
+        ]
+      },
+      "get_item": {
+        "name": "*Item bekommen*",
+        "desc": "Aktion wird für *jedes* anklicken oder aufheben ausgeführt"
+      }
+    },
+    "setting": {
+      "damage_cause": {
+        "any": {
+          "name": "*Jeglicher Grund*"
+        },
+        "name": "Schadens Art"
+      },
+      "interval": {
+        "second": {
+          "name": "*Jede Sekunde*"
+        },
+        "seconds": {
+          "name": "*Alle {0} Sekunden*"
+        },
+        "minutes": {
+          "name": "*Alle {0} Minuten*"
+        }
+      },
+      "target_entity": {
+        "console": {
+          "name": "*Konsole*",
+          "desc": [
+            "Die Aktion wird für die *Serverkonsole* ausgeführt",
+            "<i>Wenn die Aktion nur für Kreaturen ausgeführt werden kann,</i>",
+            "<i>wird nicht passieren</i>"
+          ]
+        },
+        "current": {
+          "name": "*Auslösende Kreatur*",
+          "desc": [
+            "Die Aktion wird für *die Kreatur* ausgeführt,",
+            "die den *Auslöser* ausgeführt hat"
+          ]
+        },
+        "current_player": {
+          "name": "*Auslösender Spieler*",
+          "desc": [
+            "Die Aktion wird für *den Spieler* ausgeführt,",
+            "der den *Auslöser* ausgeführt hat",
+            "<i>Wenn die auslösende Kreatur kein Spieler ist,</i>",
+            "<i>wird nicht passieren</i>"
+          ]
+        },
+        "random_player": {
+          "name": "*Zufälliger Spieler*",
+          "desc": [
+            "Die Aktion wird für einen *zufällig*",
+            "ausgewählten *Spieler* ausgeführt"
+          ]
+        },
+        "every_player": {
+          "name": "*Alle Spieler*",
+          "desc": [
+            "Die Aktion wird für *alle Spieler* ausgeführt"
+          ]
+        },
+        "every_mob": {
+          "name": "*Jeder Kreatur*",
+          "desc": [
+            "Die Aktion wird für *alle Kreaturen*",
+            "(inklusive *Spieler*) ausgeführt"
+          ]
+        },
+        "every_mob_except_current": {
+          "name": "*Alle Kreaturen außer Auslösendes*",
+          "desc": [
+            "Die Aktion wird für *alle Kreaturen*",
+            "(inklusive *Spieler*) ausgeführt,",
+            "außer der *auslösenden Kreatur*"
+          ]
+        },
+        "every_mob_except_players": {
+          "name": "*Alle Kreaturen außer Spieler*",
+          "desc": [
+            "Die Aktion wird für *alle Kreaturen*",
+            "aber keine *Spieler* ausgeführt"
+          ]
+        }
+      },
+      "block": {
+        "any": {
+          "name": "*Jeglicher Block*"
+        },
+        "random": {
+          "name": "*Zufälliger Block*"
+        },
+        "random_solid": {
+          "name": "*Zufälliger fester Block*"
+        },
+        "random_odd": {
+          "name": "*Zufälliger seltsamer Block*"
+        },
+        "random_fragile": {
+          "name": "*Komplett zufälliger Block*"
+        },
+        "name": "Block"
+      },
+      "chunk": {
+        "name": "Chunk",
+        "new": {
+          "name": "*Nur neue Chunks*",
+          "desc": [
+            "Die Aktion wird beim *ersten Betreten*",
+            "eines Chunks ausgeführt"
+          ]
+        },
+        "new_personal": {
+          "name": "*Neue Chunks für jeden Spieler*",
+          "desc": [
+            "Die Aktion wird ausgeführt, wenn *dieser Spieler*",
+            "einen Chunk zum *ersten Mal* betritt"
+          ]
+        },
+        "every": {
+          "name": "*Jeder Chunk*",
+          "desc": [
+            "Die Aktion wird *jedes Mal* ausgeführt,",
+            "wenn ein Spieler einen anderen Chunk betritt"
+          ]
+        }
+      },
+      "liquids": {
+        "name": "Flüssigkeiten",
+        "replace": {
+          "name": "*Flüssigkeiten ersetzen*"
+        },
+        "keep": {
+          "name": "*Flüssigkeiten erhalten*"
+        }
+      },
+      "item": {
+        "any": {
+          "name": "*Jedes Item*"
+        },
+        "name": "Item"
+      },
+      "structure": {
+        "random": {
+          "name": "*Zufällige Struktur*"
+        },
+        "name": "Struktur"
+      },
+      "entity_type": {
+        "any": {
+          "name": "*Jegliche Kreatur*"
+        },
+        "player": {
+          "name": "*Spieler*"
+        },
+        "name": "Entity Typ"
+      },
+      "target": {
+        "name": "Ziel Entity"
+      },
+      "liquid": {
+        "water": {
+          "name": "*Wasser*"
+        },
+        "lava": {
+          "name": "*Lava*"
+        },
+        "name": "Flüssigkeit"
+      },
+      "time": {
+        "name": "Zeit"
+      },
+      "amount": {
+        "name": "Anzahl"
+      },
+      "value": {
+        "name": "Werte Editor"
+      },
+      "health_offset": {
+        "name": "Veränderung"
+      },
+      "length": {
+        "name": "Länge"
+      },
+      "amplifier": {
+        "name": "Stärke"
+      },
+      "change": {
+        "name": "Veränderung"
+      },
+      "swap_targets": {
+        "name": "Tausch Ziele"
+      },
+      "command": {
+        "name": "Befehl"
+      },
+      "potion_type": {
+        "name": "Effekt"
+      },
+      "strength": {
+        "name": "Stärke"
+      }
+    },
+    "action": {
+      "cancel": {
+        "name": "*Auslöser abbrechen*",
+        "desc": [
+          "Verhindert, dass der Auslöser ausgeführt wird.",
+          "Nicht abrechenbare Auslöser: *Springen*, *Sneaken*, *Töten*",
+          "*Advancement*, *Auf Leveln*, *In Flüssigkeit*"
+        ]
+      },
+      "command": {
+        "name": "<gray>*Befehl ausführen*</gray>",
+        "desc": [
+          "<gray>Lasse Spieler einen Command ausführen lassen</gray>",
+          "<gray>Die Commands werden für Spieler mit */execute as* von</gray>",
+          "<gray>der Konsole ausgeführt.</gray>",
+          "<gray>Erlaubte Commands werden in der Config eingestellt.</gray>",
+          "<gray>Der Spieler braucht *keine Rechte* auf den Command haben.</gray>",
+          "<gray>Spieler können *keine Plugin Commands* ausführen.</gray>"
+        ],
+        "chat-info": [
+          "<gray>Schreibe den Command den der Spieler ausführen soll <yellow>ohne / </yellow>in den Chat</gray>",
+          "<gray>Erlaubte Commands: <yellow>{0}</yellow></gray>",
+          "<red>Weitere Commands können in der Config erlaubt werden</red>"
+        ],
+        "not-allowed": "<gray>Der Command <yellow>{0} </yellow>ist in der Config nicht als erlaubter Command angegeben</gray>"
+      },
+      "kill": {
+        "name": "*Töten*",
+        "desc": [
+          "Töte *Kreaturen* oder *Spieler*"
+        ]
+      },
+      "punish": {
+        "name": "*Challenge Bestrafung*",
+        "desc": [
+          "Füge Spielern die in den Einstellungen",
+          "ausgewählte *Challenge Bestrafung* hinzu"
+        ]
+      },
+      "damage": {
+        "name": "*Schaden*",
+        "desc": [
+          "Füge *Kreaturen* oder *Spielern* Schaden zu"
+        ]
+      },
+      "heal": {
+        "name": "*Heilen*",
+        "desc": [
+          "Heile *Kreaturen* oder *Spieler*"
+        ]
+      },
+      "hunger": {
+        "name": "*Hunger*",
+        "desc": [
+          "Füge *Spielern* Hunger hinzu"
+        ]
+      },
+      "max_health": {
+        "name": "*Maximale Leben*",
+        "desc": [
+          "Verändere die Maximalen Leben von Spielern",
+          "Wird mit einem */gamestate reset* zurückgesetzt"
+        ],
+        "sub": {
+          "offset": {
+            "label": "Veränderung",
+            "name": "*{@label}*",
+            "desc": [
+              "Wähle aus wie viele Herzen *addiert*",
+              "oder *subtrahiert* werden sollen"
+            ]
+          }
+        }
+      },
+      "spawn_entity": {
+        "name": "*Kreatur spawnen*",
+        "desc": [
+          "Spawne eine Kreatur einer *bestimmten Art*"
+        ]
+      },
+      "random_mob": {
+        "name": "*Zufällige Kreatur*",
+        "desc": [
+          "Spawne eine *zufälliges Kreatur*"
+        ]
+      },
+      "random_item": {
+        "name": "*Zufälliges Item*",
+        "desc": [
+          "Gib Spielern einen *zufälligen Item-Stack*"
+        ],
+        "sub": {
+          "single_item": {
+            "label": "Einzelnes Item",
+            "name": "*{@label}*",
+            "desc": [
+              "Gib *ein einzelnes Item* statt",
+              "einer *zufälligen Stackgröße*"
+            ]
+          }
+        }
+      },
+      "uncraft_inventory": {
+        "name": "*Inventar zurück craften*",
+        "desc": [
+          "Lasse das *Inventar von Spielern* zurück craften"
+        ]
+      },
+      "boost_in_air": {
+        "name": "*In Luft schleudern*",
+        "desc": [
+          "Schleudere *Kreaturen* oder *Spieler* in die Luft"
+        ],
+        "sub": {
+          "strength": {
+            "label": "Stärke",
+            "name": "*{@label}*",
+            "desc": [
+              "Die Stärke des *Boosts*",
+              "Je höher die Zahl, desto *stärker* der Boost"
+            ]
+          }
+        }
+      },
+      "potion_effect": {
+        "name": "*Trank Effekt*",
+        "desc": [
+          "Gebe *Kreaturen* oder *Spielern* einen Trank Effekt"
+        ],
+        "sub": {
+          "length": {
+            "label": "Dauer",
+            "name": "*{@label}*",
+            "desc": [
+              "Die Dauer des *Trank Effekts*"
+            ]
+          },
+          "amplifier": {
+            "label": "Stärke",
+            "name": "*{@label}*",
+            "desc": [
+              "Die Stärke des *Trank Effekts*",
+              "Je höher die Zahl, desto *stärker* der Effekt"
+            ]
+          }
+        }
+      },
+      "permanent_effect": {
+        "name": "*Permanenter Effekt*",
+        "desc": [
+          "Füge *Spielern* einen permanenten Effekt hinzu",
+          "Die Aktion nutzt die Einstellungen",
+          "von der *Permanenten Effekt Challenge*"
+        ]
+      },
+      "random_effect": {
+        "name": "*Zufälliger Trank Effekt*",
+        "desc": [
+          "Gebe *Kreaturen* oder *Spielern* einen *zufälligen Trank* Effekt"
+        ]
+      },
+      "clear_inventory": {
+        "name": "*Inventar leeren*",
+        "desc": [
+          "Leere das *Inventar von Spielern* komplett"
+        ]
+      },
+      "drop_random_item": {
+        "name": "*Zufälliges Item droppen*",
+        "desc": [
+          "Lasse *Spieler* ein *zufälliges Item* aus",
+          "ihrem Inventar auf *den Boden* fallen"
+        ]
+      },
+      "remove_random_item": {
+        "name": "*Zufälliges Item entfernen*",
+        "desc": [
+          "Entferne ein *zufälliges Item* aus dem Inventar von Spielern"
+        ]
+      },
+      "swap_random_item": {
+        "name": "*Items tauschen*",
+        "desc": [
+          "Tausche zwei *zufälliges Items* im dem Inventar von Spielern"
+        ]
+      },
+      "freeze": {
+        "name": "*Einfrieren*",
+        "desc": [
+          "Friere Mobs *zeitweise* ein",
+          "Die Aktion nutzt die Einstellungen",
+          "von der *Freeze On Damage Challenge*"
+        ]
+      },
+      "invert_health": {
+        "name": "*Herzen invertieren*",
+        "desc": [
+          "Invertiere die Herzen eines *Spielers*",
+          "Wenn du *8 Herzen* hast,",
+          "hast du danach *2 Herzen* und umgekehrt"
+        ]
+      },
+      "water_mlg": {
+        "name": "*Water MLG*",
+        "desc": [
+          "Alle Spieler müssen einen Water MLG machen"
+        ]
+      },
+      "win": {
+        "name": "*Gewinnen*",
+        "desc": [
+          "Die Challenge wird von *bestimmten Spielern* gewonnen"
+        ]
+      },
+      "random_hotbar": {
+        "name": "*Zufällige Hotbar*",
+        "desc": [
+          "Das Inventar wird *geleert* und der *Spieler*",
+          "bekommt *zufällige Items* in die HotBar"
+        ]
+      },
+      "modify_border": {
+        "name": "*World Border verändern*",
+        "desc": [
+          "Mache die World Border *größer* oder *kleiner*"
+        ],
+        "sub": {
+          "change": {
+            "label": "Veränderung",
+            "name": "*{@label}*",
+            "desc": [
+              "Wähle aus wie viele Blöcke die *World Border*",
+              "*vergrößert* oder *verkleinert* werden soll"
+            ]
+          }
+        }
+      },
+      "chunk_to_block": {
+        "name": "*Chunk wird zu einem Block*",
+        "desc": [
+          "Der ganze *Chunk*, in dem der Auslöser war,",
+          "wird zu einem einzigen *Block*"
+        ]
+      },
+      "swap_mobs": {
+        "name": "*Kreaturen tauschen*",
+        "desc": [
+          "Tausche eine Kreatur mit einer *zufälligen*",
+          "anderen Kreatur aus *der gleichen Welt*"
+        ]
+      },
+      "place_structure": {
+        "name": "*Struktur platzieren*",
+        "desc": [
+          "Platziere eine *Struktur an der Position* von Spielern"
+        ]
+      },
+      "jnr": {
+        "name": "*Jump and Run*",
+        "desc": [
+          "Ein *zufälliger* Spieler muss ein *Jump And Run*",
+          "absolvieren oder er *stirbt*"
+        ]
+      }
+    },
+    "chars-exceeded": "<gray>Du hast die Maximale Anzahl von <yellow>{0} Zeichen </yellow>überschritten</gray>"
+  },
+  "command": {
+    "syntax": "<gray>Bitte nutze</gray> <yellow>/{0}</yellow>",
+    "skip-timer": {
+      "none": "<gray>Es ist <red>keine Challenge</red> aktiviert, dessen Timer übersprungen werden könnte</gray>",
+      "done": "<gray>Die Timer folgender Challenges wurden übersprungen: {0}</gray>"
+    },
+    "cancel-input": {
+      "none": "<gray>Es gibt keine Chateingabe, die du abbrechen könntest</gray>",
+      "done": "<gray>Die Chateingabe wurde <red>abgebrochen</red></gray>"
+    },
+    "player-only": "<gray>Dazu musst du ein Spieler sein!</gray>",
+    "no-permission": "<gray>Dazu hast du <red>keine </red>Rechte</gray>",
+    "reset": {
+      "confirm": "<gray>Bestätige den Reset mit <yellow>/{0}</yellow></gray>",
+      "not-fresh": [
+        "<gray>Der Server kann <red>nicht resettet </red>werden</gray>",
+        "<gray>Die Challenge wurde <red>noch nicht </red>gestartet</gray>"
+      ],
+      "custom-challenges": "<gray>Die <yellow>lokalen </yellow>Challenges wurden <green>erfolgreich zurückgesetzt</green></gray>",
+      "config": "<gray>Die <yellow>lokalen </yellow>Einstellungen wurden <green>erfolgreich zurückgesetzt</green></gray>"
+    },
+    "feature-disabled": "<gray>Diese Funktion ist derzeit <red>deaktiviert</red></gray>",
+    "database": {
+      "no-connection": "<gray>Es gibt <red>keine </red>Datenbankverbindung</gray>",
+      "config-loaded": "<gray>Deine Einstellungen wurden <green>erfolgreich geladen</green></gray>",
+      "config-saved": "<gray>Deine Einstellungen wurden <green>erfolgreich gespeichert</green></gray>",
+      "config-reset": "<gray>Deine Einstellungen wurden <green>erfolgreich zurückgesetzt</green></gray>",
+      "customs-loaded": "<gray>Deine Challenges wurden <green>erfolgreich geladen</green></gray>",
+      "customs-saved": "<gray>Deine Challenges wurden <green>erfolgreich gespeichert</green></gray>",
+      "customs-reset": "<gray>Deine Challenges wurden <green>erfolgreich zurückgesetzt</green></gray>"
+    },
+    "search": {
+      "open": "<gray>Das Suchmenü wurde geöffnet</gray>",
+      "query": "<gray>Das Suchmenü für <yellow>{0}</yellow> wird geöffnet..</gray>"
+    },
+    "no-target": "<gray>Es wurde <red>kein </red>Spieler gefunden</gray>",
+    "heal": {
+      "done": "<gray>Du wurdest <green>geheilt</green></gray>",
+      "done-others": "<gray>Du hast <yellow>{0} Spieler </yellow><green>geheilt</green></gray>"
+    },
+    "gamemode": {
+      "done": "<gray>Du wurdest in den Gamemode <yellow>{0} </yellow>gesetzt</gray>",
+      "done-others": "<gray>Du hast <yellow>{1} Spieler </yellow>in den Gamemode <yellow>{0} </yellow>gesetzt</gray>"
+    },
+    "village": {
+      "searching": "<gray>Es wird nach einem Dorf gesucht..</gray>",
+      "done": "<gray>Du wurdest in ein Dorf <green>teleportiert</green></gray>",
+      "none": "<gray>Es wurde <red>kein neues </red>Dorf gefunden</gray>"
+    },
+    "weather": {
+      "clear": "<gray>Wetter zu <yellow>klar </yellow>geändert</gray>",
+      "rain": "<gray>Wetter zu <yellow>regnerisch </yellow>geändert</gray>",
+      "thunder": "<gray>Wetter zu <yellow>stürmisch </yellow>geändert</gray>"
+    },
+    "invsee": {
+      "open": "<gray>Inventar von <yellow>{0} </yellow>geöffnet</gray>"
+    },
+    "time": {
+      "done": "<gray>Die Zeit wurde auf <yellow>{0} </yellow>Ticks <dark_gray>(</dark_gray>ca. <yellow>{1}</yellow><dark_gray>) </dark_gray>geändert</gray>",
+      "done-exact": "<gray>Die Zeit wurde auf <yellow>{0} </yellow><dark_gray>(</dark_gray><yellow>{1} </yellow>Ticks<dark_gray>) </dark_gray>geändert</gray>",
+      "query": [
+        "<dark_gray>» </dark_gray><gray>Derzeitige Ingamezeiten</gray>",
+        "<gray>Spielzeit <yellow>{0} </yellow>Ticks <dark_gray>(</dark_gray>Tag <yellow>{1}</yellow><dark_gray>)</dark_gray></gray>",
+        "<gray>Tageszeit <yellow>{2} </yellow>Ticks <dark_gray>(</dark_gray>ca. <yellow>{3}</yellow><dark_gray>)</dark_gray></gray>"
+      ],
+      "noon": "Mittag",
+      "night": "Nacht",
+      "midnight": "Mitternacht",
+      "day": "Tag"
+    },
+    "fly": {
+      "enabled": "<gray>Du kannst <green>nun fliegen</green></gray>",
+      "disabled": "<gray>Du kannst nun <red>nicht mehr </red>fliegen</gray>",
+      "done-others": "<gray>Du hast <yellow>Fly </yellow>für <yellow>{0} </yellow>Spieler verändert</gray>"
+    },
+    "feed": {
+      "done": "<gray>Dein Hunger wurde <green>gestillt</green></gray>",
+      "done-others": "<gray>Du hast den Hunger von <yellow>{0} </yellow>Spieler *gestillt*</gray>"
+    },
+    "gamestate": {
+      "reloaded": "<gray>Der Gamestate wurde <green>neu geladen</green></gray>",
+      "reset": "<gray>Der Gamestate wurde <green>zurückgesetzt</green></gray>"
+    },
+    "world": {
+      "done": "<gray>Du wirst in die Welt <yellow>{0} </yellow>teleportiert</gray>"
+    },
+    "back": {
+      "none": "<gray>Du hast dich noch <red>nicht </red>teleportiert</gray>",
+      "done": "<gray>Du wurdest <yellow>{0} </yellow>Position zurück teleportiert</gray>",
+      "done-multiple": "<gray>Du wurdest <yellow>{0} </yellow>Positionen zurück teleportiert</gray>"
+    },
+    "result": {
+      "none": "<gray>Es ist aktuell <red>kein </red>Force-Battle aktiviert</gray>"
+    },
+    "god-mode": {
+      "enabled": "<gray>Du bist nun im <green>God-Mode</green></gray>",
+      "disabled": "<gray>Du bist nun <red>nicht mehr im God-Mode</red></gray>",
+      "done-others": "<yellow>{0} </yellow><gray>Spieler sind jetzt im </gray><yellow>God-Mode</yellow>"
+    },
+    "goal": {
+      "none": "<gray>Es ist <red>kein</red> Ziel aktiviert</gray>",
+      "no-checklist": "<gray>Das Ziel {0} hat <red>keine weiteren Informationen</red></gray>"
+    },
+    "randomizer": {
+      "none": "<gray>Es ist <red>kein</red> Randomizer aktiviert</gray>",
+      "no-match": "<gray>Kein Randomizer verändert etwas namens <yellow>{0}</yellow></gray>",
+      "obtain": {
+        "header": "<gray>So bekommst du</gray> <yellow>{0}</yellow>",
+        "craft": "<gray>{0}{1}</gray><yellow>{2}</yellow> <gray>← craften</gray>",
+        "craft-recipe-of": "<gray>{0}{1}</gray><yellow>{2}</yellow> <gray>← das Rezept von</gray> <yellow>{3}</yellow> <gray>craften</gray>",
+        "smelt": "<gray>{0}{1}</gray><yellow>{2}</yellow> <gray>← schmelzen</gray>",
+        "break": "<gray>{0}{1}</gray><yellow>{2}</yellow> <gray>←</gray> <yellow>{3}</yellow> <gray>abbauen</gray>",
+        "kill": "<gray>{0}{1}</gray><yellow>{2}</yellow> <gray>←</gray> <yellow>{3}</yellow> <gray>töten</gray>",
+        "kill-instead": "<gray>{0}{1}</gray><yellow>{2}</yellow> <gray>←</gray> <yellow>{3}</yellow> <gray>töten, spawnt statt</gray> <yellow>{4}</yellow>",
+        "shown": "<gray>{0}{1}</gray><yellow>{2}</yellow> <gray>(siehe oben)</gray>",
+        "none": "<gray>Es gibt keinen bekannten Weg zu</gray> <yellow>{0}</yellow>"
+      }
+    }
+  },
+  "server": {
+    "messages-replaced": "<gray>Dieses Update hat <yellow>{0}</yellow> Texte ersetzt, die du eventuell angepasst hast. Deine Fassungen liegen in <yellow>{1}</yellow></gray>",
+    "unsupported-version": "<red>Challenges <yellow>{0}</yellow> ist für Minecraft <yellow>{1}</yellow> gemacht und funktioniert auf <yellow>{2}</yellow> eventuell nicht richtig</red>",
+    "reset": {
+      "restart": [
+        "<dark_gray><strikethrough>                               </strikethrough></dark_gray>",
+        " ",
+        "<dark_gray>» </dark_gray><red>Serverreset</red>",
+        " ",
+        "<gray>Reset durch </gray><dark_red><bold>{0}</bold></dark_red>",
+        "<gray>Der Server startet nun </gray><red>neu</red>",
+        " ",
+        "<dark_gray><strikethrough>                               </strikethrough></dark_gray>"
+      ],
+      "stop": [
+        "<dark_gray><strikethrough>                               </strikethrough></dark_gray>",
+        " ",
+        "<dark_gray>» </dark_gray><red>Serverreset</red>",
+        " ",
+        "<gray>Reset durch </gray><dark_red><bold>{0}</bold></dark_red>",
+        "<gray>Der Server wird nun </gray><red>gestoppt</red>",
+        " ",
+        "<dark_gray><strikethrough>                               </strikethrough></dark_gray>"
+      ]
+    },
+    "update-available": [
+      " ",
+      "<gray>Ein neues Update ist verfügbar!</gray>",
+      "<gray>Download: <click:open_url:'https://{0}'><hover:show_text:'{@menu.generic.tooltip.left('Öffne <yellow>{0}</yellow>')}'><yellow>{0}</yellow></hover></click></gray>",
+      " "
+    ],
+    "config": {
+      "outdated": [
+        "<gray>Deine Plugin Config ist <red>veraltet </red>(<red>{1} </red>\\< <green>{0}</green>)</gray>",
+        "<gray>Du kannst die alte Config löschen oder die fehlenden Einstellungen manuell hinzufügen</gray>"
+      ],
+      "missing": "<gray>Folgende Einstellungen fehlen in der Config: <yellow>{0}</yellow></gray>",
+      "none-missing": [
+        "<red>Es fehlen keine Einstellungen in der Config.</red>",
+        "<red>Du kannst die Version ohne Bedenken selbst auf </red><red><bold>{0} </bold></red><red>stellen.</red>"
+      ]
+    },
+    "not-op": [
+      "<gray>Um dieses Plugin zu nutzen, musst du die Berechtigung haben. Gib dir die Berechtigung in der Serverkonsole mit: <yellow>/op \\<name></yellow></gray>"
+    ],
+    "join": "<gray><yellow>{0}</yellow> hat den Server <green>betreten</green></gray>",
+    "quit": "<gray><yellow>{0}</yellow> hat den Server <red>verlassen</red></gray>",
+    "cheats-detected": [
+      "<yellow>{0} </yellow><gray>hat </gray><red>gecheated</red>",
+      "<gray>Es können <red>keine weiteren </red>Statistiken gesammelt werden</gray>"
+    ],
+    "cheats-already-detected": [
+      "<gray>Auf diesem Server wurde <red>gecheated</red></gray>",
+      "<gray>Es können <red>keine weiteren </red>Statistiken gesammelt werden</gray>"
+    ],
+    "auto-reset": {
+      "after-goal": "<gray>Der Server wird in <yellow>{0}</yellow> Sekunden <red>zurückgesetzt</red></gray>",
+      "after-empty": "<gray>Es spielt niemand mehr. Der Server wird in <yellow>{0}</yellow> Sekunden <red>zurückgesetzt</red></gray>",
+      "after-empty-cancelled": "<gray>Es spielt wieder jemand. Der Run geht weiter</gray>"
+    },
+    "late-join-spectator": [
+      "<gray>Es läuft bereits ein <yellow>Run</yellow></gray>",
+      "<gray>Du bist als <yellow>Zuschauer</yellow> beigetreten und kannst dabei zusehen</gray>"
+    ],
+    "language-autodetect": "<gray>Die Sprache wurde automatisch auf <yellow>{0}</yellow> {@arg-format.brackets('{1}')} gesetzt</gray>"
+  },
+  "challenge-end": {
+    "timer-hit-zero": [
+      " ",
+      "<red>Die Challenge ist vorbei!</red>",
+      "<gray>Seed:</gray> <hover:show_text:'{@menu.generic.tooltip.left('{@menu.generic.interact.copy}')}'><click:copy_to_clipboard:{2}><yellow><b>{2}</b></yellow></click></hover>",
+      " "
+    ],
+    "timer-hit-zero-winner": [
+      " ",
+      "<red>Die Challenge ist vorbei!</red>",
+      "<gray>Gewinner: </gray><yellow><b>{1}</b></yellow>",
+      "<gray>Seed:</gray> <hover:show_text:'{@menu.generic.tooltip.left('{@menu.generic.interact.copy}')}'><click:copy_to_clipboard:{2}><yellow><b>{2}</b></yellow></click></hover>",
+      " "
+    ],
+    "goal-reached": [
+      " ",
+      "<gray>Die Challenge wurde beendet!</gray>",
+      "<gray>Zeit benötigt: </gray><green><b>{0}</b></green>",
+      "<gray>Seed:</gray> <hover:show_text:'{@menu.generic.tooltip.left('{@menu.generic.interact.copy}')}'><click:copy_to_clipboard:{2}><yellow><b>{2}</b></yellow></click></hover>",
+      " "
+    ],
+    "goal-reached-winner": [
+      " ",
+      "<gray>Die Challenge wurde beendet!</gray>",
+      "<gray>Gewinner:</gray> <yellow><b>{1}</b></yellow>",
+      "<gray>Zeit benötigt:</gray> <green><b>{0}</b></green>",
+      "<gray>Seed:</gray> <hover:show_text:'{@menu.generic.tooltip.left('{@menu.generic.interact.copy}')}'><click:copy_to_clipboard:{2}><yellow><b>{2}</b></yellow></click></hover>",
+      " "
+    ],
+    "goal-failed": [
+      " ",
+      "<red>Die Challenge ist vorbei!</red> <gold>#FeelsBadMan {@symbol.cross}</gold>",
+      "<gray>Zeit verschwendet:</gray> <green><b>{0}</b></green>",
+      "<gray>Seed:</gray> <hover:show_text:'{@menu.generic.tooltip.left('{@menu.generic.interact.copy}')}'><click:copy_to_clipboard:{2}><yellow><b>{2}</b></yellow></click></hover>",
+      " "
+    ]
+  },
+  "translatable": {
+    "damage-cause": {
+      "kill": "Kill",
+      "world_border": "Weltbarriere",
+      "contact": "Kontakt",
+      "entity_attack": "Angriff",
+      "entity_sweep_attack": "Schwungangriff",
+      "projectile": "Projektil",
+      "suffocation": "Ersticken",
+      "fall": "Fall",
+      "fire": "Feuer",
+      "fire_tick": "Verbrennen",
+      "melting": "Schmelzen",
+      "lava": "Lava",
+      "drowning": "Ertrinken",
+      "block_explosion": "Blockexplosion",
+      "entity_explosion": "Kreaturexplosion",
+      "void": "Leere",
+      "lightning": "Blitzeinschlag",
+      "suicide": "Selbstmord",
+      "starvation": "Verhungern",
+      "poison": "Gift",
+      "magic": "Magie",
+      "wither": "Wither",
+      "falling_block": "Fallender Block",
+      "thorns": "Dornen",
+      "dragon_breath": "Drachenatem",
+      "fly_into_wall": "kinetische Energie",
+      "hot_floor": "Heißen Boden",
+      "campfire": "Lagerfeuer",
+      "cramming": "Überfüllung",
+      "dryout": "Austrocknen",
+      "freeze": "Erfrieren",
+      "sonic_boom": "Schallknall",
+      "custom": "unbekannte Ursache"
+    }
+  }
+}

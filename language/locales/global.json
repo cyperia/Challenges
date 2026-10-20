@@ -1,0 +1,1502 @@
+{
+  "symbol": {
+    "arrow-back": "«",
+    "arrow": "»",
+    "chevron": "›",
+    "chevron-back": "‹",
+    "dart": "→",
+    "vertical": "┃",
+    "cross": "✞",
+    "check": "✔",
+    "x": "✘",
+    "heart": "❤",
+    "dot": "•",
+    "circle": "●",
+    "altert": "⚠",
+    "flag": "⚐",
+    "infinity": "∞",
+    "lock": "🔒",
+    "plus-minus": "±",
+    "square": "■"
+  },
+  "arg-format": {
+    "delimiter": "<dark_gray>, </dark_gray>",
+    "delimiter_big": "<dark_gray> {@symbol.dot} </dark_gray>",
+    "delimiter_space": "<gray> </gray>",
+    "brackets": "<dark_gray>(<gray>{0}</gray>)</dark_gray>",
+    "brackets_arg": "<gray>{0}</gray> {@brackets('{1}')}",
+    "remaining": " <gray><i>+{0}</i></gray>",
+    "hp-short": "<yellow>{0}</yellow> <gray>HP</gray>",
+    "hp": "{@hp-short} <dark_gray>(<red>{1} {@symbol.heart}</red>)</dark_gray>",
+    "hearts": "<red>{0} {@symbol.heart}</red>",
+    "damage-cause": "<yellow>{0}</yellow>",
+    "damage-cause-source": "<yellow>{0}</yellow> <dark_gray>(<gray>{1}</gray>)</dark_gray>",
+    "time": "<yellow>{0}</yellow> <gray>{1}</gray>",
+    "time-range": "{@time} <dark_gray>{@symbol.plus-minus}</dark_gray> {@time('{2}', '{3}')}",
+    "radius": "<yellow>{0}</yellow> <gray>{1}</gray>",
+    "percent": "<yellow>{0}%</yellow>"
+  },
+  "prefix": {
+    "format": "<dark_gray><b>{@symbol.vertical}</b> {0} {@symbol.vertical}</dark_gray> ",
+    "challenges": {
+      "*colorize*": "<gradient:#5B3FE4:#8A3FCF>{0}</gradient>"
+    },
+    "timer": {
+      "*colorize*": "<dark_purple>{0}</dark_purple>"
+    },
+    "backpack": {
+      "*colorize*": "<green>{0}</green>"
+    },
+    "position": {
+      "*colorize*": "<blue>{0}</blue>"
+    },
+    "damage": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "custom": {
+      "*colorize*": "<aqua>{0}</aqua>"
+    },
+    "quiz": {
+      "*colorize*": "<yellow>{0}</yellow>"
+    }
+  },
+  "actionbar": {
+    "format": "<dark_gray>{@symbol.dot}</dark_gray> <gray>{0}</gray> <dark_gray>{@symbol.dot}</dark_gray>",
+    "format-arg": "<dark_gray>{@symbol.dot}</dark_gray> <gray>{0}</gray> <dark_gray>{@symbol.vertical}</dark_gray> <gray>{1}</gray> <dark_gray>{@symbol.dot}</dark_gray>"
+  },
+  "bossbar": {
+    "format": "<dark_gray>{@symbol.arrow}</dark_gray> <gray>{0}</gray>",
+    "format-arg": "{@format} <dark_gray>{@symbol.vertical}</dark_gray> <gray>{1}</gray>"
+  },
+  "scoreboard": {
+    "title-format": "<dark_gray>{@symbol.arrow}</dark_gray> <white><b>{0}</b></white>",
+    "title": "{@title-format('Challenges')}",
+    "leaderboard": {
+      "entry": "<yellow>{0}</yellow> <dark_gray>{@symbol.vertical}</dark_gray> <gray>{1}</gray> <dark_gray>{@symbol.arrow}</dark_gray> <yellow>{2}</yellow>",
+      "entry-detail": "{@entry} <dark_gray>{@symbol.vertical}</dark_gray> <gray>{3}</gray>"
+    }
+  },
+  "hotbar": {
+    "format": "{0} <dark_gray>{@symbol.vertical}</dark_gray> <yellow>{1}</yellow>",
+    "timer": {
+      "*colorize*": "<dark_purple>{0}</dark_purple>",
+      "name": "{@format('*{@menu.timer.menu}*', '/timer')}"
+    },
+    "challenges": {
+      "*colorize*": "<red>{0}</red>",
+      "name": "{@format('*{@menu.challenges.menu}*', '/challenges')}"
+    },
+    "start": {
+      "*colorize*": "<green>{0}</green>",
+      "name": "{@format('*{@label}*', '/start')}"
+    },
+    "teams": {
+      "*colorize*": "<color:#5983ba>{0}</color>",
+      "name": "{@format('*{@label}*', '{@suffix.coming_soon}')}"
+    }
+  },
+  "suffix": {
+    "selected": "<dark_green><b>{@symbol.check}</b></dark_green>",
+    "unselected": "<dark_red><b>{@symbol.x}</b></dark_red>",
+    "new.*colorize*": "<b><gradient:#0BC418:#5CFC60>{0}!</gradient></b>",
+    "new-count.*colorize*": "{@new.*colorize*}",
+    "updated.*colorize*": "<b><gradient:#FFEE00:#C7FC4A>{0}!</gradient></b>",
+    "updated-count.*colorize*": "{@updated.*colorize*}",
+    "beta.*colorize*": "<b><gradient:#9B8CFF:#5B3FE4>{0}</gradient></b>",
+    "beta-count.*colorize*": "{@beta.*colorize*}",
+    "coming_soon.*colorize*": "<red>{0}</red>"
+  },
+  "timer": {
+    "bar": {
+      "up.*colorize*": "<gradient:#5B3FE4:#8A3FCF:{1}><b>{0}</b></gradient>",
+      "down.*colorize*": "<gradient:#55FFFF:#0088CC:{1}><b>{0}</b></gradient>",
+      "paused.*colorize*": "<gradient:#FF5555:#AA0000:{1}><b>{0}</b></gradient>",
+      "countdown.*colorize*": "<gradient:#FF5555:#AA0000:{1}><b>{0}</b></gradient>",
+      "format": "{@actionbar.format}"
+    },
+    "time": {
+      "format": {
+        "seconds": "{mm}:{ss}",
+        "minutes": "{mm}:{ss}",
+        "hours": "{hh}:{mm}:{ss}",
+        "day": "{d} {@generic.day} {hh}:{mm}:{ss}",
+        "days": "{d} {@generic.days} {hh}:{mm}:{ss}"
+      }
+    }
+  },
+  "command": {
+    "invsee": {
+      "title": "{@menu.title-format}"
+    }
+  },
+  "menu": {
+    "locked": {
+      "*colorize*": "<color:#9B8CFF>{0}</color>",
+      "title": {
+        "*colorize*": "<b><gradient:#9B8CFF:#5B3FE4>{0}</gradient></b>"
+      },
+      "join": {
+        "*colorize*": "<green>{0}</green>"
+      },
+      "cancel": {
+        "*colorize*": "<red>{0}</red>"
+      }
+    },
+    "generic": {
+      "format": {
+        "name": "<dark_gray>{@symbol.arrow}</dark_gray> <gray>{0}</gray>",
+        "name_hotbar": "<dark_gray>{@symbol.dot}</dark_gray> {0} <dark_gray>{@symbol.dot}</dark_gray>",
+        "desc": [
+          " ",
+          "<gray>{0}</gray>"
+        ],
+        "state": [
+          " ",
+          "<gray>{0}</gray>"
+        ],
+        "tooltip": [
+          " ",
+          "{0}"
+        ],
+        "suffix": " <dark_gray>{@symbol.vertical}</dark_gray> <gray>{0}</gray>",
+        "suffix_delimiter": "{@arg-format.delimiter_space}"
+      },
+      "tooltip": {
+        "format": "<gray>{0}</gray> <dark_gray>{@symbol.vertical}</dark_gray> <gray>{1}</gray>"
+      }
+    },
+    "title-prefix": "<dark_gray>{@symbol.arrow}</dark_gray> ",
+    "title-delimiter": " <dark_gray>{@symbol.vertical}</dark_gray> ",
+    "title-colored": "<blue>{0}</blue>",
+    "title-format": "{@title-prefix}{@title-colored('{0}')}",
+    "title-format-page": "{@title-format('{0}')}{@title-delimiter}{@title-colored('{1}')}",
+    "title-name-format-sub": "{@title-colored('{0}')}{@title-delimiter}{@title-colored('{1}')}",
+    "goal": {
+      "*colorize*": "<color:#f252d8>{0}</color>",
+      "name": "*{@menu}*",
+      "state": "{@category.generic.info.current}",
+      "entry": "<yellow>{0}</yellow>"
+    },
+    "timer": {
+      "*colorize*": "<gold>{0}</gold>",
+      "name": "*{@menu}*",
+      "time.name": "*{@menu}*",
+      "countdown.name": "*{@menu}*"
+    },
+    "challenges": {
+      "*colorize*": "<red>{0}</red>",
+      "name": "*{@menu}*",
+      "state": "{@category.generic.info.count}"
+    },
+    "settings": {
+      "*colorize*": "<yellow>{0}</yellow>",
+      "name": "*{@menu}*",
+      "state": "{@category.generic.info.changed}"
+    },
+    "custom": {
+      "*colorize*": "<aqua>{0}</aqua>",
+      "name": "*{@menu}*",
+      "state": "{@category.generic.info.count}",
+      "info-format": "<gray>{0} <dark_gray>{@symbol.circle}</dark_gray> <yellow>{1}</yellow></gray>",
+      "view": {
+        "*colorize*": "<gold>{0}</gold>",
+        "name": "*{@label}*"
+      },
+      "create": {
+        "*colorize*": "<green>{0}</green>",
+        "name": "*{@label}*"
+      },
+      "rename": {
+        "*colorize*": "<gold>{0}</gold>",
+        "name": "*{@label}*"
+      },
+      "material": {
+        "*colorize*": "<gold>{0}</gold>",
+        "name": "*{@menu}*"
+      },
+      "trigger": {
+        "*colorize*": "<red>{0}</red>",
+        "name": "*{@menu}*"
+      },
+      "action": {
+        "*colorize*": "<aqua>{0}</aqua>",
+        "name": "*{@menu}*"
+      },
+      "save": {
+        "*colorize*": "<green>{0}</green>",
+        "name": "*{@label}*"
+      },
+      "delete": {
+        "*colorize*": "<red>{0}</red>",
+        "name": "*{@label}*"
+      },
+      "finish": {
+        "*colorize*": "<green>{0}</green>",
+        "name": "*{@label}*"
+      }
+    },
+    "teams": {
+      "*colorize*": "<color:#5983ba>{0}</color>",
+      "name": "*{@menu}*"
+    },
+    "search": {
+      "*colorize*": "<color:#1d92e0>{0}</color>",
+      "title.*colorize*": "<b><gradient:#4747d1:#5555ff>{0}</gradient></b>",
+      "name": "*{@menu}*",
+      "search.*colorize*": "<green><i>{0}</i></green>",
+      "close.*colorize*": "<red>{0}</red>"
+    },
+    "randomizer": {
+      "entry": "<yellow>{0}</yellow>"
+    }
+  },
+  "search": {
+    "category": {
+      "menu.*colorize*": "<color:#eddc1a>{0}</color>",
+      "category.*colorize*": "<color:#1f7bd1>{0}</color>",
+      "sub_setting.*colorize*": "<color:#ffef63>{0}</color>"
+    }
+  },
+  "category": {
+    "info-format": "<gray>{0} <dark_gray>{@symbol.circle}</dark_gray> {1}</gray>",
+    "misc_challenge": {
+      "*colorize*": "<blue>{0}</blue>",
+      "name": "*{@menu}*",
+      "info": "{@generic.info.count}"
+    },
+    "randomizer": {
+      "*colorize*": "<color:#ff5100>{0}</color>",
+      "name": "*{@menu}*",
+      "info": "{@generic.info.count}"
+    },
+    "limited_time": {
+      "*colorize*": "<yellow>{0}</yellow>",
+      "name": "*{@menu}*",
+      "info": "{@generic.info.count}"
+    },
+    "force": {
+      "*colorize*": "<dark_aqua>{0}</dark_aqua>",
+      "name": "*{@menu}*",
+      "info": "{@generic.info.count}"
+    },
+    "world": {
+      "*colorize*": "<dark_red>{0}</dark_red>",
+      "name": "*{@menu}*",
+      "info": "{@generic.info.count}"
+    },
+    "damage": {
+      "*colorize*": "<red>{0}</red>",
+      "name": "*{@menu}*",
+      "info": "{@generic.info.count}"
+    },
+    "effect": {
+      "*colorize*": "<dark_purple>{0}</dark_purple>",
+      "name": "*{@menu}*",
+      "info": "{@generic.info.count}"
+    },
+    "inventory": {
+      "*colorize*": "<gold>{0}</gold>",
+      "name": "*{@menu}*",
+      "info": "{@generic.info.count}"
+    },
+    "movement": {
+      "*colorize*": "<green>{0}</green>",
+      "name": "*{@menu}*",
+      "info": "{@generic.info.count}"
+    },
+    "entities": {
+      "*colorize*": "<color:#ff91fa>{0}</color>",
+      "name": "*{@menu}*",
+      "info": "{@generic.info.count}"
+    },
+    "extra_world": {
+      "*colorize*": "<dark_green>{0}</dark_green>",
+      "name": "*{@menu}*",
+      "info": "{@generic.info.count}"
+    },
+    "world_generator": {
+      "*colorize*": "<dark_purple>{0}</dark_purple>",
+      "name": "*{@menu}*",
+      "info": "{@generic.info.count}"
+    },
+    "misc_goal": {
+      "*colorize*": "<blue>{0}</blue>",
+      "name": "*{@menu}*",
+      "info": "{@generic.info.current}"
+    },
+    "kill_entity": {
+      "*colorize*": "<red>{0}</red>",
+      "name": "*{@menu}*",
+      "info": "{@generic.info.current}"
+    },
+    "score_points": {
+      "*colorize*": "<yellow>{0}</yellow>",
+      "name": "*{@menu}*",
+      "info": "{@generic.info.current}"
+    },
+    "fastest_time": {
+      "*colorize*": "<gold>{0}</gold>",
+      "name": "*{@menu}*",
+      "info": "{@generic.info.current}"
+    },
+    "force_battle": {
+      "*colorize*": "<aqua>{0}</aqua>",
+      "name": "*{@menu}*",
+      "info": "{@generic.info.current}"
+    },
+    "misc_settings": {
+      "*colorize*": "<blue>{0}</blue>",
+      "name": "*{@menu}*",
+      "info": "{@generic.info.count}"
+    },
+    "misc_custom": {
+      "*colorize*": "<blue>{0}</blue>",
+      "name": "*{@menu}*",
+      "info": "{@generic.info.count}"
+    },
+    "material_rule": {
+      "*colorize*": "<dark_red>{0}</dark_red>",
+      "name": "*{@menu}*",
+      "info": "{@generic.info.count}"
+    },
+    "damage_rule": {
+      "*colorize*": "<aqua>{0}</aqua>",
+      "name": "*{@menu}*",
+      "info": "{@generic.info.count}"
+    },
+    "messages": {
+      "*colorize*": "<light_purple>{0}</light_purple>",
+      "name": "*{@menu}*",
+      "info": "{@generic.info.count}"
+    },
+    "difficulty": {
+      "*colorize*": "<color:#16fa79>{0}</color>",
+      "name": "*{@menu}*",
+      "info": "{@generic.info.changed}"
+    },
+    "utility": {
+      "*colorize*": "<color:#9c20e8>{0}</color>",
+      "name": "*{@menu}*",
+      "info": "{@generic.info.count}"
+    },
+    "limiting": {
+      "*colorize*": "<color:#ed312b>{0}</color>",
+      "name": "*{@menu}*",
+      "info": "{@generic.info.changed}"
+    },
+    "players": {
+      "*colorize*": "<color:#34a0e3>{0}</color>",
+      "name": "*{@menu}*",
+      "info": "{@generic.info.count}"
+    },
+    "consequence": {
+      "*colorize*": "<color:#d13d58>{0}</color>",
+      "name": "*{@menu}*",
+      "info": "{@generic.info.changed}"
+    }
+  },
+  "challenge": {
+    "settings-modifier-value": "<yellow>{0}</yellow>",
+    "settings-modifier-multiplier": "<yellow>{0}x</yellow>",
+    "settings-modifier-time": "<gray>{@generic.time}: {0}</gray>",
+    "settings-modifier-interval": "<gray>{@generic.interval}: {0}</gray>",
+    "difficulty": {
+      "*colorize*": "<color:#a6cf13>{0}</color>"
+    },
+    "regeneration": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "one-life": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "respawn": {
+      "*colorize*": "<dark_red>{0}</dark_red>"
+    },
+    "split-health": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "damage-display": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "language": {
+      "*colorize*": "<green>{0}</green>"
+    },
+    "pregame-movement": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "death-message": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "advancement-message": {
+      "*colorize*": "<green>{0}</green>"
+    },
+    "health-display": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "position": {
+      "*colorize*": "<blue>{0}</blue>"
+    },
+    "death-position": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "glow": {
+      "*colorize*": "<white>{0}</white>"
+    },
+    "locator-bar": {
+      "*colorize*": "<aqua>{0}</aqua>"
+    },
+    "no-hunger": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "no-item-damage": {
+      "*colorize*": "<dark_purple>{0}</dark_purple>"
+    },
+    "mob-griefing": {
+      "*colorize*": "<dark_purple>{0}</dark_purple>"
+    },
+    "keep-inventory": {
+      "*colorize*": "<dark_purple>{0}</dark_purple>"
+    },
+    "backpack": {
+      "*colorize*": "<gold>{0}</gold>",
+      "inventory-shared": "{@menu.title-format('{@shared-name}')}"
+    },
+    "enderchest-command": {
+      "*colorize*": "<dark_purple>{0}</dark_purple>"
+    },
+    "timber": {
+      "*colorize*": "<aqua>{0}</aqua>"
+    },
+    "pvp": {
+      "*colorize*": "<blue>{0}</blue>"
+    },
+    "no-hit-delay": {
+      "*colorize*": "<white>{0}</white>"
+    },
+    "top-command": {
+      "*colorize*": "<light_purple>{0}</light_purple>"
+    },
+    "max-health": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "damage-multiplier": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "challenge_penalty": {
+      "*colorize*": "<color:#9921ad>{0}</color>",
+      "sub": {
+        "insta_kill.*colorize*": "<color:#b03131>{0}</color>",
+        "damage.*colorize*": "<color:#f0b93a>{0}</color>",
+        "max_health.*colorize*": "<color:#f72d41>{0}</color>"
+      }
+    },
+    "cut-clean": {
+      "*colorize*": "<blue>{0}</blue>",
+      "sub": {
+        "iron": {
+          "*colorize*": "<color:#d5d9db>{0}</color>"
+        },
+        "gold": {
+          "*colorize*": "<color:#fbdb61>{0}</color>"
+        },
+        "coal": {
+          "*colorize*": "<color:#4c4c4c>{0}</color>"
+        },
+        "flint": {
+          "*colorize*": "<color:#8c8c8c>{0}</color>"
+        },
+        "vein": {
+          "*colorize*": "<yellow>{0}</yellow>"
+        },
+        "inventory": {
+          "*colorize*": "<gold>{0}</gold>"
+        }
+      }
+    },
+    "fortress-spawn": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "bastion-spawn": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "no-offhand": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "immediate-respawn": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "slot-limit": {
+      "*colorize*": "<dark_red>{0}</dark_red>"
+    },
+    "old-pvp": {
+      "*colorize*": "<aqua>{0}</aqua>"
+    },
+    "totem-save-death": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "soup": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "hardcore-hearts": {
+      "*colorize*": "<color:#FF1313>{0}</color>"
+    },
+    "random-challenge": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "randomized-hp": {
+      "*colorize*": "<dark_red>{0}</dark_red>"
+    },
+    "block-randomizer": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "block-item-randomizer": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "crafting-randomizer": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "hotbar-randomizer": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "entity-loot-randomizer": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "mob-randomizer": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "random-dropping": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "random-item-removing": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "random-swapping": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "random-item": {
+      "*colorize*": "<aqua>{0}</aqua>"
+    },
+    "random-event": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "mob-damage-teleport": {
+      "*colorize*": "<dark_purple>{0}</dark_purple>"
+    },
+    "force-height": {
+      "*colorize*": "<yellow>{0}</yellow>"
+    },
+    "force-block": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "force-mob": {
+      "*colorize*": "<aqua>{0}</aqua>"
+    },
+    "force-item": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "force-biome": {
+      "*colorize*": "<green>{0}</green>"
+    },
+    "hydra": {
+      "*colorize*": "<dark_purple>{0}</dark_purple>"
+    },
+    "hydra-plus": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "duped-spawning": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "jump-entity": {
+      "*colorize*": "<dark_green>{0}</dark_green>"
+    },
+    "invisible-mobs": {
+      "*colorize*": "<white>{0}</white>"
+    },
+    "stone-sight": {
+      "*colorize*": "<white>{0}</white>"
+    },
+    "mob-sight-damage": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "all-mobs-to-death-position": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "respawn-end": {
+      "*colorize*": "<dark_purple>{0}</dark_purple>"
+    },
+    "mob-transformation": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "block-mobs": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "damage-per-block": {
+      "*colorize*": "<dark_red>{0}</dark_red>"
+    },
+    "sneak-damage": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "jump-damage": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "block-break-damage": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "block-place-damage": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "advancement-damage": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "damage-item": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "water-allergy": {
+      "*colorize*": "<blue>{0}</blue>"
+    },
+    "death-on-fall": {
+      "*colorize*": "<white>{0}</white>"
+    },
+    "reversed-damage": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "freeze": {
+      "*colorize*": "<aqua>{0}</aqua>"
+    },
+    "delay-damage": {
+      "*colorize*": "<dark_red>{0}</dark_red>"
+    },
+    "chunk-effect": {
+      "*colorize*": "<dark_aqua>{0}</dark_aqua>"
+    },
+    "block-effect": {
+      "*colorize*": "<dark_aqua>{0}</dark_aqua>"
+    },
+    "entity-effect": {
+      "*colorize*": "<dark_purple>{0}</dark_purple>"
+    },
+    "random-effect": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "permanent-effect-on-damage": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "infection": {
+      "*colorize*": "<green>{0}</green>"
+    },
+    "surface-hole": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "bedrock-walls": {
+      "*colorize*": "<color:#6c6e73>{0}</color>"
+    },
+    "bedrock-path": {
+      "*colorize*": "<color:#6c6e73>{0}</color>"
+    },
+    "floor-is-lava": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "chunk-deconstruction": {
+      "*colorize*": "<aqua>{0}</aqua>"
+    },
+    "all-blocks-disappear": {
+      "*colorize*": "<red>{0}</red>",
+      "sub": {
+        "break": {
+          "*colorize*": "<dark_aqua>{0}</dark_aqua>"
+        },
+        "place": {
+          "*colorize*": "<aqua>{0}</aqua>"
+        }
+      }
+    },
+    "anvil-rain": {
+      "*colorize*": "<red>{0}</red>",
+      "sub": {
+        "time": {
+          "*colorize*": "<gold>{0}</gold>"
+        },
+        "range": {
+          "*colorize*": "<blue>{0}</blue>"
+        },
+        "count": {
+          "*colorize*": "<red>{0}</red>"
+        },
+        "damage": {
+          "*colorize*": "<red>{0}</red>"
+        }
+      }
+    },
+    "tsunami": {
+      "*colorize*": "<blue>{0}</blue>"
+    },
+    "repeat-in-chunk": {
+      "*colorize*": "<dark_green>{0}</dark_green>"
+    },
+    "snake": {
+      "*colorize*": "<blue>{0}</blue>"
+    },
+    "blocks-fly": {
+      "*colorize*": "<white>{0}</white>"
+    },
+    "blocks-disappear-time": {
+      "*colorize*": "<white>{0}</white>"
+    },
+    "loop": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "ice-floor": {
+      "*colorize*": "<aqua>{0}</aqua>"
+    },
+    "level-border": {
+      "*colorize*": "<yellow>{0}</yellow>"
+    },
+    "level-block": {
+      "*colorize*": "<green>{0}</green>"
+    },
+    "chunk-deletion": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "void-world": {
+      "*colorize*": "<dark_purple>{0}</dark_purple>"
+    },
+    "structure-void-world": {
+      "*colorize*": "<dark_purple>{0}</dark_purple>"
+    },
+    "stronghold-world": {
+      "*colorize*": "<dark_green>{0}</dark_green>"
+    },
+    "obsidian-world": {
+      "*colorize*": "<dark_purple>{0}</dark_purple>"
+    },
+    "line-world": {
+      "*colorize*": "<dark_aqua>{0}</dark_aqua>"
+    },
+    "grid-world": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "all-blocks-same": {
+      "*colorize*": "<aqua>{0}</aqua>"
+    },
+    "step-off-block": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "step-off-lava": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "no-water": {
+      "*colorize*": "<blue>{0}</blue>"
+    },
+    "chunk-mob-battle": {
+      "*colorize*": "<color:#ff91fa>{0}</color>",
+      "sub": {
+        "wither": {
+          "*colorize*": "<dark_gray>{0}</dark_gray>"
+        },
+        "warden": {
+          "*colorize*": "<dark_aqua>{0}</dark_aqua>"
+        }
+      }
+    },
+    "chunk-random-block": {
+      "*colorize*": "<light_purple>{0}</light_purple>",
+      "sub": {
+        "new": {
+          "*colorize*": "<dark_green>{0}</dark_green>"
+        },
+        "new_personal": {
+          "*colorize*": "<aqua>{0}</aqua>"
+        },
+        "every": {
+          "*colorize*": "<green>{0}</green>"
+        },
+        "solid_blocks": {
+          "*colorize*": "<gray>{0}</gray>"
+        },
+        "non_solid": {
+          "*colorize*": "<gold>{0}</gold>"
+        },
+        "odd_blocks": {
+          "*colorize*": "<gray>{0}</gray>"
+        },
+        "fragile_blocks": {
+          "*colorize*": "<red>{0}</red>"
+        },
+        "replace_liquids": {
+          "*colorize*": "<blue>{0}</blue>"
+        },
+        "protect_interactions": {
+          "*colorize*": "<red>{0}</red>"
+        }
+      }
+    },
+    "permanent-item": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "no-duped-items": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "damage-inv-clear": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "uncraft-items": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "missing-items": {
+      "*colorize*": "<blue>{0}</blue>"
+    },
+    "pickup-launch": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "block-chunk-item-remove": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "traffic-light": {
+      "*colorize*": "<red>{0}</red>",
+      "bossbar": {
+        "green": "<!shadow><dark_gray><b>{@symbol.vertical}</b></dark_gray>  <shadow:#57f76f:0.5><color:#57f76f>{@symbol.circle}</color></shadow>  <!shadow><color:#33363D>{@symbol.circle}  {@symbol.circle}</color>  <dark_gray><b>{@symbol.vertical}</b></dark_gray>",
+        "yellow": "<!shadow><dark_gray><b>{@symbol.vertical}</b></dark_gray>  <color:#33363D>{@symbol.circle}</color>  <shadow:#e3ff75:0.5><color:#e3ff75>{@symbol.circle}</color></shadow>  <!shadow><color:#33363D>{@symbol.circle}</color>  <dark_gray><b>{@symbol.vertical}</b></dark_gray>",
+        "red": "<!shadow><dark_gray><b>{@symbol.vertical}</b></dark_gray>  <color:#33363D>{@symbol.circle}  {@symbol.circle}</color>  <shadow:#FF3B30:0.5><color:#FF6B5E>{@symbol.circle}</color></shadow>  <!shadow><dark_gray><b>{@symbol.vertical}</b></dark_gray>"
+      }
+    },
+    "hunger-block": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "only-down": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "only-dirt": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "higher-jumps": {
+      "*colorize*": "<green>{0}</green>"
+    },
+    "always-running": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "dont-stop-running": {
+      "*colorize*": "<blue>{0}</blue>"
+    },
+    "no-mouse-move": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "five-hundred-blocks": {
+      "*colorize*": "<dark_purple>{0}</dark_purple>"
+    },
+    "max-biome-time": {
+      "*colorize*": "<dark_green>{0}</dark_green>"
+    },
+    "max-height-time": {
+      "*colorize*": "<blue>{0}</blue>"
+    },
+    "water-mlg": {
+      "*colorize*": "<aqua>{0}</aqua>"
+    },
+    "jump-and-run": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "one-durability": {
+      "*colorize*": "<dark_red>{0}</dark_red>"
+    },
+    "no-trading": {
+      "*colorize*": "<dark_green>{0}</dark_green>"
+    },
+    "no-exp": {
+      "*colorize*": "<green>{0}</green>"
+    },
+    "food-once": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "consume-launch": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "low-drop-rate": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "ender-games": {
+      "*colorize*": "<dark_purple>{0}</dark_purple>"
+    },
+    "invert-health": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "no-shared-advancements": {
+      "*colorize*": "<dark_green>{0}</dark_green>"
+    },
+    "quiz": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "goal-ender-dragon": {
+      "*colorize*": "<gradient:#6600ff:#8F87D9>{0}</gradient>"
+    },
+    "goal-wither": {
+      "*colorize*": "<gradient:#CFD2F2:#8F87D9>{0}</gradient>"
+    },
+    "goal-elder-guardian": {
+      "*colorize*": "<gradient:#69A592:#AFD7CA>{0}</gradient>"
+    },
+    "goal-warden": {
+      "*colorize*": "<gradient:#296674:#24454C>{0}</gradient>"
+    },
+    "goal-wither-waves": {
+      "*colorize*": "<gradient:#8F87D9:#3B3355>{0}</gradient>"
+    },
+    "goal-all-bosses": {
+      "*colorize*": "<aqua>{0}</aqua>"
+    },
+    "goal-all-bosses-new": {
+      "*colorize*": "<dark_purple>{0}</dark_purple>"
+    },
+    "iron-golem": {
+      "*colorize*": "<aqua>{0}</aqua>"
+    },
+    "snow-golem": {
+      "*colorize*": "<aqua>{0}</aqua>"
+    },
+    "all-mobs": {
+      "*colorize*": "<aqua>{0}</aqua>"
+    },
+    "all-monster": {
+      "*colorize*": "<aqua>{0}</aqua>"
+    },
+    "most-deaths": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "most-items": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "mine-most-blocks": {
+      "*colorize*": "<yellow>{0}</yellow>"
+    },
+    "most-xp": {
+      "*colorize*": "<green>{0}</green>"
+    },
+    "most-emeralds": {
+      "*colorize*": "<dark_green>{0}</dark_green>"
+    },
+    "most-ores": {
+      "*colorize*": "<blue>{0}</blue>"
+    },
+    "eat-most": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "first-one-to-die": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "collect-wood": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "finish-raid": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "all-advancements": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "max-height": {
+      "*colorize*": "<white>{0}</white>"
+    },
+    "min-height": {
+      "*colorize*": "<white>{0}</white>"
+    },
+    "race": {
+      "*colorize*": "<dark_purple>{0}</dark_purple>"
+    },
+    "find-elytra": {
+      "*colorize*": "<white>{0}</white>"
+    },
+    "eat-cake": {
+      "*colorize*": "<white>{0}</white>"
+    },
+    "collect-horse-armor": {
+      "*colorize*": "<aqua>{0}</aqua>"
+    },
+    "collect-ice": {
+      "*colorize*": "<aqua>{0}</aqua>"
+    },
+    "collect-swords": {
+      "*colorize*": "<blue>{0}</blue>"
+    },
+    "collect-workstations": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "get-full-health": {
+      "*colorize*": "<green>{0}</green>"
+    },
+    "force-battles": {
+      "sub": {
+        "goal-jokers": {
+          "*colorize*": "<dark_red>{0}</dark_red>"
+        },
+        "scoreboard": {
+          "*colorize*": "<gold>{0}</gold>"
+        },
+        "duped-targets": {
+          "*colorize*": "<red>{0}</red>"
+        }
+      }
+    },
+    "force-item-battle": {
+      "*colorize*": "<dark_purple>{0}</dark_purple>",
+      "sub": {
+        "give-item": {
+          "*colorize*": "<dark_purple>{0}</dark_purple>"
+        }
+      }
+    },
+    "force-mob-battle": {
+      "*colorize*": "<aqua>{0}</aqua>"
+    },
+    "force-advancement-battle": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "force-block-battle": {
+      "*colorize*": "<green>{0}</green>",
+      "sub": {
+        "give-block": {
+          "*colorize*": "<aqua>{0}</aqua>"
+        }
+      }
+    },
+    "force-biome-battle": {
+      "*colorize*": "<dark_green>{0}</dark_green>"
+    },
+    "force-damage-battle": {
+      "*colorize*": "<dark_aqua>{0}</dark_aqua>"
+    },
+    "force-height-battle": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "force-position-battle": {
+      "*colorize*": "<green>{0}</green>"
+    },
+    "extreme-force-battle": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "last-man-standing": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "collect-all-items": {
+      "*colorize*": "<dark_green>{0}</dark_green>"
+    },
+    "damage-teleport": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "zero-hearts": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "damage-random-item": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "damage-random-mob": {
+      "*colorize*": "<color:#ff91fa>{0}</color>"
+    },
+    "damage-border": {
+      "*colorize*": "<dark_red>{0}</dark_red>"
+    },
+    "level-random-item": {
+      "*colorize*": "<green>{0}</green>"
+    },
+    "advancement-random-item": {
+      "*colorize*": "<yellow>{0}</yellow>"
+    },
+    "interval-warden": {
+      "*colorize*": "<dark_aqua>{0}</dark_aqua>"
+    },
+    "interval-random-mob": {
+      "*colorize*": "<color:#ff91fa>{0}</color>"
+    },
+    "interval-border": {
+      "*colorize*": "<dark_red>{0}</dark_red>"
+    },
+    "interval-clear-inventory": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "craft-random-mob": {
+      "*colorize*": "<color:#ff91fa>{0}</color>"
+    },
+    "chunk-random-mob": {
+      "*colorize*": "<color:#ff91fa>{0}</color>"
+    },
+    "break-random-mob": {
+      "*colorize*": "<color:#ff91fa>{0}</color>"
+    },
+    "place-random-mob": {
+      "*colorize*": "<color:#ff91fa>{0}</color>"
+    },
+    "no-eating": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "damage-rule": {
+      "none": {
+        "*colorize*": "<green>{0}</green>"
+      },
+      "fire": {
+        "*colorize*": "<red>{0}</red>"
+      },
+      "attack": {
+        "*colorize*": "<dark_aqua>{0}</dark_aqua>"
+      },
+      "projectile": {
+        "*colorize*": "<dark_purple>{0}</dark_purple>"
+      },
+      "fall": {
+        "*colorize*": "<white>{0}</white>"
+      },
+      "explosion": {
+        "*colorize*": "<dark_red>{0}</dark_red>"
+      },
+      "drowning": {
+        "*colorize*": "<blue>{0}</blue>"
+      },
+      "block": {
+        "*colorize*": "<yellow>{0}</yellow>"
+      },
+      "magic": {
+        "*colorize*": "<dark_purple>{0}</dark_purple>"
+      },
+      "freeze": {
+        "*colorize*": "<aqua>{0}</aqua>"
+      }
+    },
+    "material-rule": {
+      "armor": {
+        "*colorize*": "<red>{0}</red>"
+      },
+      "golden_apple": {
+        "*colorize*": "<yellow>{0}</yellow>"
+      },
+      "crafting_table": {
+        "*colorize*": "<gold>{0}</gold>"
+      },
+      "chest": {
+        "*colorize*": "<gold>{0}</gold>"
+      },
+      "furnace": {
+        "*colorize*": "<red>{0}</red>"
+      },
+      "enchant": {
+        "*colorize*": "<dark_purple>{0}</dark_purple>"
+      },
+      "anvil": {
+        "*colorize*": "<color:#686868>{0}</color>"
+      },
+      "brewing_stand": {
+        "*colorize*": "<dark_aqua>{0}</dark_aqua>"
+      },
+      "bow": {
+        "*colorize*": "<red>{0}</red>"
+      },
+      "throwable": {
+        "*colorize*": "<white>{0}</white>"
+      },
+      "flint_and_steel": {
+        "*colorize*": "<red>{0}</red>"
+      },
+      "bucket": {
+        "*colorize*": "<blue>{0}</blue>"
+      },
+      "sword": {
+        "*colorize*": "<red>{0}</red>"
+      },
+      "pickaxe": {
+        "*colorize*": "<dark_green>{0}</dark_green>"
+      },
+      "elytra": {
+        "*colorize*": "<light_purple>{0}</light_purple>"
+      },
+      "shield": {
+        "*colorize*": "<color:#69583D>{0}</color>"
+      },
+      "totem": {
+        "*colorize*": "<yellow>{0}</yellow>"
+      },
+      "ender_pearl": {
+        "*colorize*": "<dark_purple>{0}</dark_purple>"
+      }
+    },
+    "settings-modifier-strength": "<gray>{@generic.strength}: {0}</gray>",
+    "settings-modifier-radius": "<gray>{@generic.radius}: {0}</gray>",
+    "settings-modifier-damage": "<gray>{@generic.damage}: {0}</gray>",
+    "settings-modifier-max-health": "<gray>{@generic.max-health}: {0}</gray>"
+  },
+  "custom": {
+    "trigger": {
+      "interval": {
+        "*colorize*": "<gold>{0}</gold>"
+      },
+      "jump": {
+        "*colorize*": "<green>{0}</green>"
+      },
+      "sneak": {
+        "*colorize*": "<green>{0}</green>"
+      },
+      "move_block": {
+        "*colorize*": "<gold>{0}</gold>"
+      },
+      "death": {
+        "*colorize*": "<red>{0}</red>"
+      },
+      "damage": {
+        "*colorize*": "<red>{0}</red>"
+      },
+      "damage_by_player": {
+        "*colorize*": "<red>{0}</red>"
+      },
+      "block_place": {
+        "*colorize*": "<dark_green>{0}</dark_green>"
+      },
+      "block_break": {
+        "*colorize*": "<red>{0}</red>"
+      },
+      "new_chunk": {
+        "*colorize*": "<green>{0}</green>"
+      },
+      "consume_item": {
+        "*colorize*": "<dark_green>{0}</dark_green>"
+      },
+      "pickup_item": {
+        "*colorize*": "<aqua>{0}</aqua>"
+      },
+      "drop_item": {
+        "*colorize*": "<blue>{0}</blue>"
+      },
+      "advancement": {
+        "*colorize*": "<red>{0}</red>"
+      },
+      "hunger": {
+        "*colorize*": "<dark_green>{0}</dark_green>"
+      },
+      "move_down": {
+        "*colorize*": "<color:#73484e>{0}</color>"
+      },
+      "move_up": {
+        "*colorize*": "<light_purple>{0}</light_purple>"
+      },
+      "move_camera": {
+        "*colorize*": "<gold>{0}</gold>"
+      },
+      "stands_on_specific_block": {
+        "*colorize*": "<blue>{0}</blue>"
+      },
+      "stands_not_on_specific_block": {
+        "*colorize*": "<yellow>{0}</yellow>"
+      },
+      "gain_xp": {
+        "*colorize*": "<green>{0}</green>"
+      },
+      "level_up": {
+        "*colorize*": "<dark_purple>{0}</dark_purple>"
+      },
+      "item_craft": {
+        "*colorize*": "<gold>{0}</gold>"
+      },
+      "in_liquid": {
+        "*colorize*": "<blue>{0}</blue>"
+      },
+      "get_item": {
+        "*colorize*": "<aqua>{0}</aqua>"
+      }
+    },
+    "action": {
+      "cancel": {
+        "*colorize*": "<dark_red>{0}</dark_red>"
+      },
+      "command": {
+        "*colorize*": "<dark_red>{0}</dark_red>"
+      },
+      "kill": {
+        "*colorize*": "<dark_red>{0}</dark_red>"
+      },
+      "punish": {
+        "*colorize*": "<color:#9921ad>{0}</color>"
+      },
+      "damage": {
+        "*colorize*": "<red>{0}</red>"
+      },
+      "heal": {
+        "*colorize*": "<green>{0}</green>"
+      },
+      "hunger": {
+        "*colorize*": "<gold>{0}</gold>"
+      },
+      "max_health": {
+        "*colorize*": "<red>{0}</red>"
+      },
+      "spawn_entity": {
+        "*colorize*": "<dark_aqua>{0}</dark_aqua>"
+      },
+      "random_mob": {
+        "*colorize*": "<gold>{0}</gold>"
+      },
+      "random_item": {
+        "*colorize*": "<aqua>{0}</aqua>"
+      },
+      "uncraft_inventory": {
+        "*colorize*": "<yellow>{0}</yellow>"
+      },
+      "boost_in_air": {
+        "*colorize*": "<white>{0}</white>"
+      },
+      "potion_effect": {
+        "*colorize*": "<light_purple>{0}</light_purple>"
+      },
+      "permanent_effect": {
+        "*colorize*": "<gold>{0}</gold>"
+      },
+      "random_effect": {
+        "*colorize*": "<light_purple>{0}</light_purple>"
+      },
+      "clear_inventory": {
+        "*colorize*": "<red>{0}</red>"
+      },
+      "drop_random_item": {
+        "*colorize*": "<green>{0}</green>"
+      },
+      "remove_random_item": {
+        "*colorize*": "<red>{0}</red>"
+      },
+      "swap_random_item": {
+        "*colorize*": "<gold>{0}</gold>"
+      },
+      "freeze": {
+        "*colorize*": "<aqua>{0}</aqua>"
+      },
+      "invert_health": {
+        "*colorize*": "<red>{0}</red>"
+      },
+      "water_mlg": {
+        "*colorize*": "<blue>{0}</blue>"
+      },
+      "win": {
+        "*colorize*": "<gold>{0}</gold>"
+      },
+      "random_hotbar": {
+        "*colorize*": "<yellow>{0}</yellow>"
+      },
+      "modify_border": {
+        "*colorize*": "<aqua>{0}</aqua>"
+      },
+      "chunk_to_block": {
+        "*colorize*": "<light_purple>{0}</light_purple>"
+      },
+      "swap_mobs": {
+        "*colorize*": "<dark_purple>{0}</dark_purple>"
+      },
+      "place_structure": {
+        "*colorize*": "<green>{0}</green>"
+      },
+      "jnr": {
+        "*colorize*": "<gold>{0}</gold>"
+      }
+    },
+    "setting": {
+      "interval": {
+        "*colorize*": "<yellow>{0}</yellow>"
+      },
+      "material": {
+        "format": {
+          "*colorize*": "<gold>{0}</gold>",
+          "name": "*{0}*"
+        }
+      },
+      "damage_cause": {
+        "any": {
+          "*colorize*": "<dark_green>{0}</dark_green>"
+        }
+      },
+      "entity_type": {
+        "any": {
+          "*colorize*": "<dark_green>{0}</dark_green>"
+        },
+        "player": {
+          "*colorize*": "<green>{0}</green>"
+        },
+        "format": {
+          "*colorize*": "<aqua>{0}</aqua>",
+          "name": "*{0}*"
+        }
+      },
+      "block": {
+        "any": {
+          "*colorize*": "<dark_green>{0}</dark_green>"
+        },
+        "random": {
+          "*colorize*": "<dark_green>{0}</dark_green>"
+        },
+        "random_solid": {
+          "*colorize*": "<dark_green>{0}</dark_green>"
+        },
+        "random_odd": {
+          "*colorize*": "<dark_green>{0}</dark_green>"
+        },
+        "random_fragile": {
+          "*colorize*": "<dark_green>{0}</dark_green>"
+        }
+      },
+      "chunk": {
+        "new": {
+          "*colorize*": "<dark_green>{0}</dark_green>"
+        },
+        "new_personal": {
+          "*colorize*": "<aqua>{0}</aqua>"
+        },
+        "every": {
+          "*colorize*": "<green>{0}</green>"
+        }
+      },
+      "liquids": {
+        "replace": {
+          "*colorize*": "<dark_green>{0}</dark_green>"
+        },
+        "keep": {
+          "*colorize*": "<blue>{0}</blue>"
+        }
+      },
+      "liquid": {
+        "water": {
+          "*colorize*": "<blue>{0}</blue>"
+        },
+        "lava": {
+          "*colorize*": "<red>{0}</red>"
+        },
+        "powder_snow": {
+          "*colorize*": "<white>{0}</white>"
+        }
+      },
+      "target_entity": {
+        "console": {
+          "*colorize*": "<dark_red>{0}</dark_red>"
+        },
+        "current": {
+          "*colorize*": "<light_purple>{0}</light_purple>"
+        },
+        "current_player": {
+          "*colorize*": "<green>{0}</green>"
+        },
+        "random_player": {
+          "*colorize*": "<dark_purple>{0}</dark_purple>"
+        },
+        "every_player": {
+          "*colorize*": "<red>{0}</red>"
+        },
+        "every_mob": {
+          "*colorize*": "<dark_red>{0}</dark_red>"
+        },
+        "every_mob_except_current": {
+          "*colorize*": "<aqua>{0}</aqua>"
+        },
+        "every_mob_except_players": {
+          "*colorize*": "<aqua>{0}</aqua>"
+        }
+      },
+      "structure": {
+        "format": {
+          "*colorize*": "<aqua>{0}</aqua>",
+          "name": "*{0}*"
+        },
+        "random": {
+          "*colorize*": "<dark_purple>{0}</dark_purple>"
+        }
+      }
+    }
+  }
+}

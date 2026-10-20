@@ -1,0 +1,75 @@
+[versions]
+
+java = "25"
+
+# minecraft
+spigot = "26.1.2-R0.1-SNAPSHOT"
+paper = "26.3.build.+"
+
+protocol-lib = "5.4.0"
+
+# utilities
+slf4j = "1.7.32"
+gson = "2.13.2"
+
+# annotations, compile time processing
+lombok = "1.18.38"
+jetbrains-annotations = "26.1.0"
+
+# database
+mongodb = "5.6.5"
+
+# cloudnet
+cloudnet4 = "4.0.0-RC16"
+# spawnery
+spawnery = "0.5.0"
+cloudnet3 = "3.4.5-RELEASE"
+cloudnet2 = "2.1.17"
+
+# plugins
+shadow = "8.3.11"
+
+# tests
+junit-bom = "5.14.4"
+mockito = "5.21.0"
+
+
+[libraries]
+
+# minecraft
+spigot-api = { group = "org.spigotmc", name = "spigot-api", version.ref = "spigot" }
+paper-api = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper" }
+
+protocol-lib = { group = "net.dmulloy2", name = "ProtocolLib", version.ref = "protocol-lib" }
+
+# utilities
+slf4j-api = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+
+# annotations, compile time processing
+lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
+jetbrains-annotations = { group = "org.jetbrains", name = "annotations", version.ref = "jetbrains-annotations" }
+
+# database
+mongodb-driver = { group = "org.mongodb", name = "mongodb-driver-sync", version.ref = "mongodb" }
+
+# cloudnet
+cloudnet4-driver = { group = "eu.cloudnetservice.cloudnet", name = "driver-api", version.ref = "cloudnet4" }
+cloudnet4-bridge = { group = "eu.cloudnetservice.cloudnet", name = "bridge-api", version.ref = "cloudnet4" }
+cloudnet4-wrapper = { group = "eu.cloudnetservice.cloudnet", name = "wrapper-jvm-api", version.ref = "cloudnet4" }
+cloudnet3-driver = { group = "de.dytanic.cloudnet", name = "cloudnet-driver", version.ref = "cloudnet3" }
+cloudnet3-bridge = { group = "de.dytanic.cloudnet", name = "cloudnet-bridge", version.ref = "cloudnet3" }
+cloudnet2-bridge = { group = "de.dytanic.cloudnet", name = "cloudnet-api-bridge", version.ref = "cloudnet2" }
+# spawnery
+spawnery-api = { group = "cloud.spawnery", name = "spawnery-api", version.ref = "spawnery" }
+
+# tests
+junit-bom = { group = "org.junit", name = "junit-bom", version.ref = "junit-bom" }
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter" }
+junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher" }
+mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
+
+
+[plugins]
+
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }

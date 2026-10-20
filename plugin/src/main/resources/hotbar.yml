@@ -1,0 +1,45 @@
+# The hotbar players in survival or adventure get while the timer is paused.
+# Material names can be looked up here: https://jd.papermc.io/paper/org/bukkit/Material.html
+
+# Every item that can appear in a layout. Setting enabled to false removes an item from all layouts.
+#   timer       opens /timer        requires challenges.timer.manage
+#   challenges  opens /challenges   requires challenges.gui
+#   start       runs /start         requires challenges.timer
+#   teams       runs its command    only before a run, and only with force until the team setting exists
+# Items added by other plugins can be listed and disabled here as well, by their id.
+# PLAYER_HEAD renders the head of the player holding the item.
+items:
+  timer:
+    enabled: true
+    material: CLOCK
+  challenges:
+    enabled: true
+    material: BOOK
+  start:
+    enabled: true
+    material: LIME_DYE
+  teams:
+    enabled: true
+    material: WHITE_BED
+    # Show the item even while team selection is turned off
+    force: false
+
+# Where each item goes, as item: slot (0-8).
+# A player gets the layout showing most of the items available to them. Between layouts showing equally
+# many, the one listing the fewest unavailable items wins, so a layout written for exactly one combination
+# beats a larger one with holes. Remaining ties go to the layout listed first.
+layouts:
+  default:
+    timer: 3
+    challenges: 4
+    start: 5
+  teams:
+    timer: 3
+    challenges: 4
+    start: 5
+    teams: 7
+  settings-only:
+    challenges: 4
+  settings-teams:
+    challenges: 4
+    teams: 7

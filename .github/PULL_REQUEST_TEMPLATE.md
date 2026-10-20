@@ -3,7 +3,7 @@
 
 This pull request includes:
 
-- [ ] new release (master branch)
+- [ ] new release (main branch)
 - [ ] new feature (development branch)
 - [ ] bug fix (development branch)
 

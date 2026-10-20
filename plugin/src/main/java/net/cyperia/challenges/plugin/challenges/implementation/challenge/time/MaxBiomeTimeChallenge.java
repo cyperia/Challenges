@@ -1,0 +1,83 @@
+package net.cyperia.challenges.plugin.challenges.implementation.challenge.time;
+
+import net.cyperia.challenges.plugin.ChallengeAPI;
+import net.cyperia.challenges.plugin.challenges.type.ValueUnit;
+import net.cyperia.challenges.plugin.challenges.type.abstraction.SettingModifier;
+import net.cyperia.challenges.plugin.challenges.type.helper.ChallengeHelper;
+import net.cyperia.challenges.plugin.management.scheduler.task.ScheduledTask;
+import net.kyori.adventure.bossbar.BossBar;
+import org.bukkit.block.Biome;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.jetbrains.annotations.NotNull;
+
+public class MaxBiomeTimeChallenge extends SettingModifier {
+
+  public MaxBiomeTimeChallenge() {
+    super(3, 20);
+    setValueUnit(ValueUnit.MINUTES);
+    setUsesGlobalPunish(true);
+  }
+
+  @Override
+  protected void onEnable() {
+    bossbar.setContent((bossbar, player) -> {
+      int currentTime = getCurrentTime(player);
+      int maxTime = (getValue() * 60);
+      bossbar.setTitle(getChallengeMessageKey("bossbar"), getBiome(player), ChallengeAPI.formatTime(maxTime - currentTime));
+      bossbar.setColor(BossBar.Color.GREEN);
+      bossbar.setProgress(1 - ((float) currentTime / maxTime));
+    });
+    bossbar.show();
+  }
+
+  @Override
+  protected void onDisable() {
+    bossbar.hide();
+  }
+
+  @Override
+  protected void onValueChange() {
+    bossbar.update();
+  }
+
+  @EventHandler
+  public void onPlayerMove(@NotNull PlayerMoveEvent event) {
+    if (!shouldExecuteEffect(event.getPlayer())) return;
+    if (event.getTo() == null) return;
+    if (event.getFrom().getBlock().getBiome() == event.getTo().getBlock().getBiome()) return;
+    bossbar.update(event.getPlayer());
+  }
+
+  @ScheduledTask(ticks = 20)
+  public void onSecond() {
+    broadcastAudience(this::updateBiomeTime);
+  }
+
+  private void updateBiomeTime(@NotNull Player player) {
+    if (ignorePlayer(player)) {
+      bossbar.update(player);
+      return;
+    }
+
+    Biome biome = player.getLocation().getBlock().getBiome();
+    int time = getCurrentTime(player) + 1;
+    if (time > getValue() * 60) {
+      ChallengeHelper.punish(player);
+    }
+    if (time < getValue() * 60) {
+      getPlayerData(player).set(biome.name(), time);
+    }
+    bossbar.update(player);
+  }
+
+  private int getCurrentTime(@NotNull Player player) {
+    return getPlayerData(player).getInt(getBiome(player).name(), 0);
+  }
+
+  private Biome getBiome(@NotNull Player player) {
+    return player.getLocation().getBlock().getBiome();
+  }
+
+}

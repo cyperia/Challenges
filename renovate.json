@@ -1,8 +1,0 @@
-{
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "labels": ["type: dependencies"],
-  "extends": ["config:recommended", ":dependencyDashboard"],
-  "baseBranches": ["development"],
-  "prHourlyLimit": 50,
-  "prConcurrentLimit": 10
-}

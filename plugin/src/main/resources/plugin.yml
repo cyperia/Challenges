@@ -1,23 +1,27 @@
 name: Challenges
-version: 2.3.3
-author: CodingArea
+version: ${version}
+author: cyperia
 authors:
   - anweisen
-  - KxmischesDomi
+  - DomiIRL
 database: true
-website: coding-area.net
+website: cyperia.net
+# Kept below the supported version: an older server still loads the plugin, so it can tell
+# joining players which version it needs (require.version below)
 api-version: 1.14
-main: net.codingarea.challenges.plugin.Challenges
+main: net.cyperia.challenges.plugin.Challenges
 load: POSTWORLD
 softdepend:
   - CloudNet-Bridge
+  - SpawneryAgent
+  - ProtocolLib
 description: |
   This plugin provides you with lots of challenges for beating minecraft or competing against your friends.
-  You can find more information on our discord: https://discord.gg/74Ay5zF.
+  You can find more information on our discord: https://discord.cyperia.net.
 
 require:
-  spigot: true
-  version: 1.14
+  paper: true
+  version: 26.3
 
 commands:
   help:
@@ -55,22 +59,17 @@ commands:
     usage: "/pause"
     description: "Pauses the timer"
     permission: "challenges.timer"
-  stats:
-    usage: "/stats [player]"
-    description: "Allows you to see statistics of you/other players"
-  leaderboard:
-    usage: "/leaderboard"
-    description: "Show the leaderboard for every statistic"
-    aliases:
-      - lb
   search:
-    usage: "/search <item>"
-    description: "Shows you from which block the given item will be dropped through eg. block randomizer"
-    permission: "challenges.search"
-  searchloot:
-    usage: "/searchloot <entity>"
-    description: "Shows you which entity drops the loot of the given entity through entity loot randomizer"
-    permission: "challenges.searchloot"
+    usage: "/search [query]"
+    description: "Opens the search menu, optionally with a query already entered"
+    permission: "challenges.gui"
+  randomizer:
+    usage: "/randomizer [query]"
+    description: "Shows what the enabled randomizers turn each block, recipe and mob into, optionally searched"
+    permission: "challenges.randomizer"
+  goal:
+    usage: "/goal"
+    description: "Lists every entry of the current goal and who got it"
   position:
     usage: "/pos [name]"
     description: "Allows you to save locations"
@@ -135,21 +134,20 @@ commands:
     usage: "/gm <gamemode> [player]"
     aliases:
       - "gm"
-    permission: "challenges.gamemode"
   gmc:
     usage: "/gmc [player]"
     description: "Sets your or other players' gamemode to creative, shortcut for /gamemode creative [player]"
-    permission: "challenges.gamemode"
+    permission: "challenges.gamemode.creative"
   gms:
     usage: "/gms [player]"
     description: "Sets your or other players' gamemode to survival, shortcut for /gamemode survival [player]"
-    permission: "challenges.gamemode"
+    permission: "challenges.gamemode.survival"
   gma:
     usage: "/gma [player]"
-    permission: "challenges.gamemode"
+    permission: "challenges.gamemode.adventure"
   gmsp:
     usage: "/gmsp [player]"
-    permission: "challenges.gamemode"
+    permission: "challenges.gamemode.spectator"
   weather:
     usage: "/weather <clear/sun/rain/thunder>"
     description: "Changes the weather"
@@ -215,9 +213,12 @@ commands:
     usage: "/result"
     description: "Shows the result of the current force battle (if enabled)"
     permission: "challenges.result"
+  guess:
+    usage: "/guess <answer>"
+    description: "Used to guess at quiz challenge"
   skiptimer:
-    usage: "/skiptimer"
-    description: "Skips all activated timers"
+    usage: "/skiptimer [challenge]"
+    description: "Skips the timers of all activated challenges, or of one"
     permission: "challenges.skiptimer"
   godmode:
     usage: "/godmode [player]"
@@ -225,3 +226,16 @@ commands:
     permission: "challenges.godmode"
     aliases:
       - "god"
+  setlanguage:
+    usage: "/setlanguage [language]"
+    description: "Changes the language"
+    permission: "challenges.setlanguage"
+    aliases:
+      - "setlang"
+      - "language"
+  cancelinput:
+    usage: "/cancelinput"
+    description: "Cancels the current chat input"
+  teams:
+    usage: "/teams"
+    description: "Join or create a team"

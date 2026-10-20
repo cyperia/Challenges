@@ -6,14 +6,14 @@
 #  ╚█████╔╝ ██║  ██║ ██║  ██║ ███████╗ ███████╗ ███████╗ ██║ ╚███║ ╚██████╔╝ ███████╗ ██████╔╝
 #   ╚════╝  ╚═╝  ╚═╝ ╚═╝  ╚═╝ ╚══════╝ ╚══════╝ ╚══════╝ ╚═╝  ╚══╝  ╚═════╝  ╚══════╝ ╚═════╝
 #
-# This plugin was made by the CodingArea team
+# This plugin was made by the Cyperia team
 # - anweisen | Angelo - https://github.com/anweisen
-# - KxmischesDomi | Dominik - https://github.com/kxmischesdomi
+# - DomiIRL | Dominik - https://github.com/DomiIRL
 #
-# Visit our website / minecraft server (coding-area.net) or join our discord server (https://discord.gg/v6zzCk8)
+# Visit our website / minecraft server (cyperia.net) or join our discord server (https://discord.cyperia.net)
 #
 # You can find the source code at
-# https://github.com/anweisen/Challenges
+# https://github.com/cyperia/Challenges
 #
 # Download plugin at
 # https://www.spigotmc.org/resources/80548
@@ -22,27 +22,35 @@
 # The config-version is even with the version of the default config.
 # You will be notified, when this version is older than the of the default in the plugin jar.
 # We recommend regenerating the config to get access to new features / settings.
-config-version: "2.3.3"
+config-version: "3.0"
+
+# Tells every joining player when the server runs another Minecraft version than this release is made for.
+# The warning in the console is always shown.
+unsupported-version-chat-warning: true
+
+# The colors of the timer in the action bar, a gradient from the first color to the last.
+# Colors are hex codes (#5B3FE4) or names (gold).
+timer-colors:
+  counting-up: ["#5B3FE4", "#8A3FCF"]
+  counting-down: ["#55FFFF", "#0088CC"]
+  paused: ["#FF5555", "#AA0000"]
+  countdown: ["#FF5555", "#AA0000"]
 
 # Currently supported by default
 # - en (English)
 # - de (German / Deutsch)
 language: "de"
 
-# Makes text from the plugin appear in the 'small caps' font
-# Example: ᴛʜɪs ɪs sᴍᴀʟʟ ᴄᴀᴘs
-small-caps: false
+# Whether the plugin should pull newer/missing translations from https://github.com/cyperia/Challenges
+# on every load. Defaults to off so the plugin doesn't make outbound HTTP calls without consent.
+language-online-update: false
 
+# How the timer-colors gradient moves through the action bar
 timer:
-  stopped-message: "§8• §7Timer §c§lpaused §8•"
-  count-up-message: "§8• §7Time: §a§l{time} §8•"
-  count-down-message: "§8• §7Time: §c§l{time} §8•"
-  format:
-    seconds: "{mm}:{ss}"
-    minutes: "{mm}:{ss}"
-    hours: "{hh}:{mm}:{ss}"
-    day: "{d} day {hh}:{mm}:{ss}"
-    days: "{d} days {hh}:{mm}:{ss}"
+  gradient:
+    enabled: true
+    duration: 60 # duration of one gradient cycle in ticks (20 ticks = 1 second)
+    direction: LTR # either 'LTR' (left to right) or 'RTL' (right to left)
 
 # When the worlds are reset using /reset, the given seed will be used, if enabled, to generate the new worlds
 # When a seed is written in the reset command, the seed of the command will be taken
@@ -72,14 +80,12 @@ custom-challenge-settings:
   # Commands MUST be in lowercase
   allowed-commands-to-execute: [ "give", "item", "fill", "setblock", "summon", "kill", "worldborder", "time", "weather", "teleport", "tp", "difficulty", "playsound", "xp" ]
 
-# This will change the item design in the challenges menu
-design:
-  empty-line-above: true
-  empty-line-underneath: true
-
 # Toggles join and quit messages
 # These can be edited in the corresponding language file
 join-quit-messages: true
+
+# Shows every player the plugin credits when they join - the same lines /help prints
+plugin-info-on-join: true
 
 # Send players a permission info message when they join the server when noone with the permission 'challenges.gui' has joined before
 permission-info: true
@@ -87,11 +93,20 @@ permission-info: true
 # Players with the permission 'challenges.gui' will get a message if the timer is paused when they join
 timer-is-paused-info: true
 
-# New challenges will be displayed first in the setting menu.
-display-new-in-front: false
+# Whether to display new/updated challenges at the front of the setting menu
+# and whether to add a suffix to their name indicating their update.
+challenge-updates:
+  new:
+    in-front: true
+    suffix: true
+  updated:
+    in-front: false
+    suffix: true
 
-# New challenges will have a suffix in their title
-new-suffix: true
+animate-main-menu: true
+
+# If enabled, particles will be displayed around all players while the timer is paused
+play-paused-particles: true
 
 # If activated players need the permission "challenges.manage" to manage settings in the gui
 # To manage the timer in the gui, players will always need the permission "challenges.timer"
@@ -122,13 +137,33 @@ enable-fresh-reset: true
 # Restores all settings and disables all challenges on reset when activated
 restore-defaults-on-reset: false
 
-# This will pause the timer / reset the world if the last one leaves the server and the timer was started before
+# The timer stops counting while nobody is online and continues when someone joins again, without being paused.
+# reset-on-last-leave resets the world instead when the last one leaves and the timer was started before
 pause-on-last-leave: true
 reset-on-last-leave: false
 restore-defaults-on-last-leave: false
 
 # The timer will automatically be started when the first player joined the server
 start-on-first-join: false
+
+# Players joining while the timer is already running are put into spectator mode, so nobody can
+# drop into a run that is halfway through. The players who count as part of the run are the ones
+# who were online at the moment the timer was started - they keep playing when they reconnect,
+# everyone else spectates until the next reset.
+spectate-on-late-join: false
+
+# Resets the server on its own, exactly like /reset would.
+# Set a value to -1 to disable that trigger.
+# Note that the server only comes back up by itself if 'restart-on-reset' is enabled.
+auto-reset:
+  # Seconds to wait after the goal was reached before resetting, so the players can still see the
+  # final time. Joining or leaving does not cancel this.
+  after-goal-seconds: -1
+  # Seconds without anyone playing before the server is reset. Cancelled as soon as someone plays
+  # again. Spectators and creative players do not count, following 'ignore-players', so a spectator
+  # left behind does not keep an abandoned run alive.
+  # 'reset-on-last-leave' is the immediate version of this and takes precedence if enabled.
+  after-empty-seconds: -1
 
 # If you enable this the start command defined in the spigot.yml will be executed,
 # otherwise the server will be stopped if the reset command was executed.
@@ -144,11 +179,13 @@ drop-items-on-end: false
 
 # We currently support: (API Versions)
 # - cloudnet (Always latest cloudnet version)
+# - cloudnet4 (4.0)
 # - cloudnet3 (3.3)
 # - cloudnet2 (2.1.17)
+# - spawnery (needs the SpawneryAgent plugin on the server)
+# - custom (provided by another plugin)
 cloud-support:
   type: none
-  name-rank-colors: true
   set-ingame: false
   start-new-service: false # This will only be available if set-ingame is enabled as well
   reset-to-lobby: false # When the timer was stared once and is paused again, the gamestate will be set back to LOBBY, this will only be used if start-new-service is enabled as well
@@ -156,18 +193,6 @@ cloud-support:
 # This will require a database connection
 save-player-configs: false
 save-player-custom_challenges: false
-save-player-stats: false
-no-stats-after-cheating: false
-
-# A mode that is used for development or testing purposes.
-# - Will NOT add any other challenges or features.
-# - Will show debug messages in console.
-# - Will download languages from github development branch (https://github.com/anweisen/Challenges/tree/development).
-dev-mode: false
-
-# Set a path to a json language file on your computer to use the translations out of this file.
-# Useful when developing with the plugin
-# direct-language-file: C:\PathToWorkDic\Challenges\language\files\de.json
 
 database:
   # Available database types:
