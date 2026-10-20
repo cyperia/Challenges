@@ -1,0 +1,8 @@
+name: ChallengesCatalog
+version: ${version}
+authors:
+  - anweisen
+  - DomiIRL
+website: cyperia.net
+api-version: 1.14
+main: net.cyperia.challenges.catalog.plugin.CatalogPlugin

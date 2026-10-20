@@ -1,0 +1,1922 @@
+{
+  "package": "net.cyperia.challenges.plugin.challenges.implementation",
+  "challenges": [
+    {
+      "id": "difficulty",
+      "key": "difficulty",
+      "category": "difficulty",
+      "icon": "GLISTERING_MELON_SLICE",
+      "class": "setting.DifficultySetting",
+      "command": "difficulty"
+    },
+    {
+      "id": "damagemultiplier",
+      "key": "damage-multiplier",
+      "category": "difficulty",
+      "icon": "STONE_SWORD",
+      "class": "setting.DamageMultiplierModifier"
+    },
+    {
+      "id": "maxhealth",
+      "key": "max-health",
+      "category": "difficulty",
+      "icon": "RED_DYE",
+      "class": "setting.MaxHealthSetting"
+    },
+    {
+      "id": "splithealth",
+      "key": "split-health",
+      "category": "difficulty",
+      "icon": "TIPPED_ARROW",
+      "color": "#FF0000",
+      "class": "setting.SplitHealthSetting"
+    },
+    {
+      "id": "regeneration",
+      "key": "regeneration",
+      "category": "difficulty",
+      "icon": "POTION",
+      "color": "#FF0000",
+      "class": "setting.RegenerationSetting"
+    },
+    {
+      "id": "penalty",
+      "key": "challenge_penalty",
+      "category": "consequence",
+      "icon": "END_CRYSTAL",
+      "class": "setting.ChallengePenaltySetting",
+      "since": "3.0"
+    },
+    {
+      "id": "totemsavedeath",
+      "key": "totem-save-death",
+      "category": "consequence",
+      "icon": "TOTEM_OF_UNDYING",
+      "class": "setting.TotemSaveDeathSetting",
+      "since": "2.0"
+    },
+    {
+      "id": "respawn",
+      "key": "respawn",
+      "category": "consequence",
+      "icon": "RED_BED",
+      "class": "setting.RespawnSetting"
+    },
+    {
+      "id": "oneteamlife",
+      "key": "one-life",
+      "category": "consequence",
+      "icon": "FIRE_CHARGE",
+      "class": "setting.OneTeamLifeSetting"
+    },
+    {
+      "id": "deathmessage",
+      "key": "death-message",
+      "category": "messages",
+      "icon": "BOW",
+      "class": "setting.DeathMessageSetting",
+      "updated": "3.0"
+    },
+    {
+      "id": "advancementmessage",
+      "key": "advancement-message",
+      "category": "messages",
+      "icon": "KNOWLEDGE_BOOK",
+      "class": "setting.AdvancementMessageSetting",
+      "since": "3.0"
+    },
+    {
+      "id": "damagedisplay",
+      "key": "damage-display",
+      "category": "messages",
+      "icon": "COMMAND_BLOCK",
+      "class": "setting.DamageDisplaySetting",
+      "updated": "3.0"
+    },
+    {
+      "id": "healthdisplay",
+      "key": "health-display",
+      "category": "messages",
+      "icon": "RED_STAINED_GLASS",
+      "class": "setting.HealthDisplaySetting",
+      "since": "2.0"
+    },
+    {
+      "id": "position",
+      "key": "position",
+      "category": "utility",
+      "icon": "BLUE_BANNER",
+      "class": "setting.PositionSetting",
+      "command": "position"
+    },
+    {
+      "id": "deathposition",
+      "key": "death-position",
+      "category": "utility",
+      "icon": "MUSIC_DISC_11",
+      "class": "setting.DeathPositionSetting",
+      "since": "2.0"
+    },
+    {
+      "id": "topcommand",
+      "key": "top-command",
+      "category": "utility",
+      "icon": "MAGENTA_GLAZED_TERRACOTTA",
+      "class": "setting.TopCommandSetting",
+      "command": "top"
+    },
+    {
+      "id": "backpack",
+      "key": "backpack",
+      "category": "utility",
+      "icon": "CHEST",
+      "class": "setting.BackpackSetting",
+      "command": "backpack"
+    },
+    {
+      "id": "enderchestcommand",
+      "key": "enderchest-command",
+      "category": "utility",
+      "icon": "ENDER_CHEST",
+      "class": "setting.EnderChestCommandSetting",
+      "command": "enderchest",
+      "since": "2.0"
+    },
+    {
+      "id": "timber",
+      "key": "timber",
+      "category": "utility",
+      "icon": "DIAMOND_AXE",
+      "class": "setting.TimberSetting",
+      "updated": "3.0"
+    },
+    {
+      "id": "cutclean",
+      "key": "cut-clean",
+      "category": "utility",
+      "icon": "IRON_AXE",
+      "class": "setting.CutCleanSetting",
+      "since": "2.0"
+    },
+    {
+      "id": "fortressspawn",
+      "key": "fortress-spawn",
+      "category": "utility",
+      "icon": "NETHER_BRICK_STAIRS",
+      "class": "setting.FortressSpawnSetting",
+      "since": "2.0"
+    },
+    {
+      "id": "bastionspawn",
+      "key": "bastion-spawn",
+      "category": "utility",
+      "icon": "POLISHED_BLACKSTONE_BRICKS",
+      "class": "setting.BastionSpawnSetting",
+      "since": "2.0"
+    },
+    {
+      "id": "language",
+      "key": "language",
+      "category": "misc_settings",
+      "icon": "KNOWLEDGE_BOOK",
+      "class": "setting.LanguageSetting",
+      "command": "setlanguage"
+    },
+    {
+      "id": "pregamemovement",
+      "key": "pregame-movement",
+      "category": "misc_settings",
+      "icon": "PISTON",
+      "class": "setting.PregameMovementSetting",
+      "updated": "3.0"
+    },
+    {
+      "id": "keepinventory",
+      "key": "keep-inventory",
+      "category": "misc_settings",
+      "icon": "ENDER_EYE",
+      "class": "setting.KeepInventorySetting"
+    },
+    {
+      "id": "nohunger",
+      "key": "no-hunger",
+      "category": "misc_settings",
+      "icon": "BREAD",
+      "class": "setting.NoHungerSetting"
+    },
+    {
+      "id": "noitemdamage",
+      "key": "no-item-damage",
+      "category": "misc_settings",
+      "icon": "ANVIL",
+      "class": "setting.NoItemDamageSetting"
+    },
+    {
+      "id": "mobgriefing",
+      "key": "mob-griefing",
+      "category": "misc_settings",
+      "icon": "CREEPER_HEAD",
+      "class": "setting.MobGriefingSetting"
+    },
+    {
+      "id": "soup",
+      "key": "soup",
+      "category": "misc_settings",
+      "icon": "MUSHROOM_STEW",
+      "class": "setting.SoupSetting"
+    },
+    {
+      "id": "immediaterespawn",
+      "key": "immediate-respawn",
+      "category": "misc_settings",
+      "icon": "GOLDEN_APPLE",
+      "class": "setting.ImmediateRespawnSetting",
+      "since": "2.0"
+    },
+    {
+      "id": "nohitdelay",
+      "key": "no-hit-delay",
+      "category": "misc_settings",
+      "icon": "FEATHER",
+      "class": "setting.NoHitDelaySetting"
+    },
+    {
+      "id": "hardcorehearts",
+      "key": "hardcore-hearts",
+      "category": "misc_settings",
+      "icon": "RED_CANDLE",
+      "class": "setting.HardcoreHeartsSetting",
+      "requires": "ProtocolLib",
+      "since": "3.0"
+    },
+    {
+      "id": "playerglow",
+      "key": "glow",
+      "category": "players",
+      "icon": "GLASS_BOTTLE",
+      "class": "setting.PlayerGlowSetting"
+    },
+    {
+      "id": "locatorbar",
+      "key": "locator-bar",
+      "category": "players",
+      "icon": "RECOVERY_COMPASS",
+      "class": "setting.LocatorBarSetting",
+      "since": "3.0"
+    },
+    {
+      "id": "pvp",
+      "key": "pvp",
+      "category": "players",
+      "icon": "STONE_SWORD",
+      "class": "setting.PvPSetting"
+    },
+    {
+      "id": "oldpvp",
+      "key": "old-pvp",
+      "category": "players",
+      "icon": "IRON_SWORD",
+      "class": "setting.OldPvPSetting",
+      "since": "2.0"
+    },
+    {
+      "id": "nooffhand",
+      "key": "no-offhand",
+      "category": "limiting",
+      "icon": "SHIELD",
+      "class": "setting.NoOffhandSetting",
+      "since": "2.0"
+    },
+    {
+      "id": "slotlimit",
+      "key": "slot-limit",
+      "category": "limiting",
+      "icon": "BARRIER",
+      "class": "setting.SlotLimitSetting",
+      "since": "2.0"
+    },
+    {
+      "id": "blockrandomizer",
+      "key": "block-randomizer",
+      "category": "randomizer",
+      "icon": "MINECART",
+      "class": "challenge.randomizer.BlockRandomizerChallenge"
+    },
+    {
+      "id": "blockitemrandomizer",
+      "key": "block-item-randomizer",
+      "category": "randomizer",
+      "icon": "TNT_MINECART",
+      "class": "challenge.randomizer.BlockItemRandomizerChallenge",
+      "since": "3.0"
+    },
+    {
+      "id": "craftingrandomizer",
+      "key": "crafting-randomizer",
+      "category": "randomizer",
+      "icon": "CHEST_MINECART",
+      "class": "challenge.randomizer.CraftingRandomizerChallenge"
+    },
+    {
+      "id": "entitylootrandomizer",
+      "key": "entity-loot-randomizer",
+      "category": "randomizer",
+      "icon": "FURNACE_MINECART",
+      "class": "challenge.randomizer.EntityLootRandomizerChallenge",
+      "since": "2.2.0"
+    },
+    {
+      "id": "mobrandomizer",
+      "key": "mob-randomizer",
+      "category": "randomizer",
+      "icon": "COMMAND_BLOCK_MINECART",
+      "class": "challenge.randomizer.MobRandomizerChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "randomizedhp",
+      "key": "randomized-hp",
+      "category": "randomizer",
+      "icon": "POTION",
+      "color": "#FF0000",
+      "class": "challenge.randomizer.RandomizedHPChallenge"
+    },
+    {
+      "id": "random",
+      "key": "random-challenge",
+      "category": "randomizer",
+      "icon": "REDSTONE",
+      "class": "challenge.randomizer.RandomChallengeChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "randomevent",
+      "key": "random-event",
+      "category": "randomizer",
+      "icon": "CLOCK",
+      "class": "challenge.randomizer.RandomEventChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "randomitem",
+      "key": "random-item",
+      "category": "randomizer",
+      "icon": "BEACON",
+      "class": "challenge.randomizer.RandomItemChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "preset-damage-random-item",
+      "key": "damage-random-item",
+      "category": "randomizer",
+      "icon": "BEACON",
+      "preset": {
+        "trigger": "damage",
+        "triggerSettings": {"entity_type": "PLAYER", "damage_cause": "any"},
+        "action": "random_item",
+        "actionSettings": {"target_entity": "current_player"}
+      },
+      "since": "3.0"
+    },
+    {
+      "id": "preset-level-random-item",
+      "key": "level-random-item",
+      "category": "randomizer",
+      "icon": "EXPERIENCE_BOTTLE",
+      "preset": {
+        "trigger": "level_up",
+        "triggerSettings": {},
+        "action": "random_item",
+        "actionSettings": {"target_entity": "current_player"}
+      },
+      "since": "3.0"
+    },
+    {
+      "id": "preset-advancement-random-item",
+      "key": "advancement-random-item",
+      "category": "randomizer",
+      "icon": "KNOWLEDGE_BOOK",
+      "preset": {
+        "trigger": "advancement",
+        "triggerSettings": {},
+        "action": "random_item",
+        "actionSettings": {"target_entity": "current_player"}
+      },
+      "since": "3.0"
+    },
+    {
+      "id": "hotbarrandomizer",
+      "key": "hotbar-randomizer",
+      "category": "randomizer",
+      "icon": "HOPPER_MINECART",
+      "class": "challenge.randomizer.HotBarRandomizerChallenge",
+      "since": "2.1.2"
+    },
+    {
+      "id": "randomitemdropping",
+      "key": "random-dropping",
+      "category": "randomizer",
+      "icon": "DISPENSER",
+      "class": "challenge.randomizer.RandomItemDroppingChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "randomitemremoving",
+      "key": "random-item-removing",
+      "category": "randomizer",
+      "icon": "DROPPER",
+      "class": "challenge.randomizer.RandomItemRemovingChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "randomitemswapping",
+      "key": "random-swapping",
+      "category": "randomizer",
+      "icon": "HOPPER",
+      "class": "challenge.randomizer.RandomItemSwappingChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "randomteleportonhit",
+      "key": "mob-damage-teleport",
+      "category": "randomizer",
+      "icon": "ENDER_CHEST",
+      "class": "challenge.randomizer.RandomTeleportOnHitChallenge",
+      "since": "2.1.3"
+    },
+    {
+      "id": "forceheight",
+      "key": "force-height",
+      "category": "force",
+      "icon": "IRON_BOOTS",
+      "class": "challenge.force.ForceHeightChallenge",
+      "excludeFromRandom": true
+    },
+    {
+      "id": "forceblock",
+      "key": "force-block",
+      "category": "force",
+      "icon": "GOLDEN_BOOTS",
+      "class": "challenge.force.ForceBlockChallenge",
+      "excludeFromRandom": true
+    },
+    {
+      "id": "forcemob",
+      "key": "force-mob",
+      "category": "force",
+      "icon": "DIAMOND_BOOTS",
+      "class": "challenge.force.ForceMobChallenge",
+      "excludeFromRandom": true
+    },
+    {
+      "id": "forceitem",
+      "key": "force-item",
+      "category": "force",
+      "icon": "LEATHER_BOOTS",
+      "class": "challenge.force.ForceItemChallenge",
+      "excludeFromRandom": true,
+      "since": "2.0"
+    },
+    {
+      "id": "forcebiome",
+      "key": "force-biome",
+      "category": "force",
+      "icon": "CHAINMAIL_BOOTS",
+      "class": "challenge.force.ForceBiomeChallenge",
+      "excludeFromRandom": true,
+      "since": "2.0"
+    },
+    {
+      "id": "chunkmobbattle",
+      "key": "chunk-mob-battle",
+      "category": "entities",
+      "icon": "IRON_BARS",
+      "class": "challenge.entities.ChunkMobBattleChallenge",
+      "excludeFromRandom": true,
+      "beta": true
+    },
+    {
+      "id": "preset-chunk-random-mob",
+      "key": "chunk-random-mob",
+      "category": "entities",
+      "icon": "SPAWNER",
+      "preset": {
+        "trigger": "new_chunk",
+        "triggerSettings": {"chunk": "new"},
+        "action": "random_mob",
+        "actionSettings": {"target_entity": "current_player"}
+      },
+      "since": "3.0"
+    },
+    {
+      "id": "blockmobs",
+      "key": "block-mobs",
+      "category": "entities",
+      "icon": "BRICKS",
+      "class": "challenge.entities.BlockMobsChallenge",
+      "since": "2.1.3"
+    },
+    {
+      "id": "preset-break-random-mob",
+      "key": "break-random-mob",
+      "category": "entities",
+      "icon": "IRON_PICKAXE",
+      "preset": {
+        "trigger": "block_break",
+        "triggerSettings": {"block": "any"},
+        "action": "random_mob",
+        "actionSettings": {"target_entity": "current_player"}
+      },
+      "since": "3.0"
+    },
+    {
+      "id": "preset-place-random-mob",
+      "key": "place-random-mob",
+      "category": "entities",
+      "icon": "BRICKS",
+      "preset": {
+        "trigger": "block_place",
+        "triggerSettings": {"block": "any"},
+        "action": "random_mob",
+        "actionSettings": {"target_entity": "current_player"}
+      },
+      "since": "3.0"
+    },
+    {
+      "id": "preset-craft-random-mob",
+      "key": "craft-random-mob",
+      "category": "entities",
+      "icon": "CRAFTING_TABLE",
+      "preset": {
+        "trigger": "item_craft",
+        "triggerSettings": {},
+        "action": "random_mob",
+        "actionSettings": {"target_entity": "current_player"}
+      },
+      "since": "3.0"
+    },
+    {
+      "id": "newentityonjump",
+      "key": "jump-entity",
+      "category": "entities",
+      "icon": "LEATHER_BOOTS",
+      "color": "#008000",
+      "class": "challenge.entities.NewEntityOnJumpChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "preset-damage-random-mob",
+      "key": "damage-random-mob",
+      "category": "entities",
+      "icon": "BLAZE_SPAWN_EGG",
+      "preset": {
+        "trigger": "damage",
+        "triggerSettings": {"entity_type": "PLAYER", "damage_cause": "any"},
+        "action": "random_mob",
+        "actionSettings": {"target_entity": "current"}
+      },
+      "since": "3.0"
+    },
+    {
+      "id": "preset-interval-random-mob",
+      "key": "interval-random-mob",
+      "category": "entities",
+      "icon": "ZOMBIE_SPAWN_EGG",
+      "preset": {
+        "trigger": "interval",
+        "triggerSettings": {"time": "${value}"},
+        "action": "random_mob",
+        "actionSettings": {"target_entity": "every_player"},
+        "value": {"unit": "INTERVAL_SECONDS", "min": 1, "max": 60, "default": 10}
+      },
+      "since": "3.0"
+    },
+    {
+      "id": "hydranormal",
+      "key": "hydra",
+      "category": "entities",
+      "icon": "WITCH_SPAWN_EGG",
+      "class": "challenge.entities.HydraNormalChallenge"
+    },
+    {
+      "id": "hydraplus",
+      "key": "hydra-plus",
+      "category": "entities",
+      "icon": "BAT_SPAWN_EGG",
+      "class": "challenge.entities.HydraPlusChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "intervalwarden",
+      "key": "interval-warden",
+      "category": "entities",
+      "icon": "SCULK_SHRIEKER",
+      "class": "challenge.entities.IntervalWardenChallenge",
+      "beta": true
+    },
+    {
+      "id": "dupedspawning",
+      "key": "duped-spawning",
+      "category": "entities",
+      "icon": "ELDER_GUARDIAN_SPAWN_EGG",
+      "class": "challenge.entities.DupedSpawningChallenge"
+    },
+    {
+      "id": "mobsrespawninend",
+      "key": "respawn-end",
+      "category": "entities",
+      "icon": "ENDER_EYE",
+      "class": "challenge.entities.MobsRespawnInEndChallenge",
+      "since": "2.1.2"
+    },
+    {
+      "id": "allmobstodeathpoint",
+      "key": "all-mobs-to-death-position",
+      "category": "entities",
+      "icon": "SPAWNER",
+      "class": "challenge.entities.AllMobsToDeathPoint",
+      "since": "2.0"
+    },
+    {
+      "id": "mobtransformation",
+      "key": "mob-transformation",
+      "category": "entities",
+      "icon": "STONE_SWORD",
+      "class": "challenge.entities.MobTransformationChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "invisiblemobs",
+      "key": "invisible-mobs",
+      "category": "entities",
+      "icon": "POTION",
+      "color": "#FFFFFF",
+      "class": "challenge.entities.InvisibleMobsChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "stonesight",
+      "key": "stone-sight",
+      "category": "entities",
+      "icon": "COBBLESTONE",
+      "class": "challenge.entities.StoneSightChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "mobsightdamage",
+      "key": "mob-sight-damage",
+      "category": "entities",
+      "icon": "SPIDER_EYE",
+      "class": "challenge.entities.MobSightDamageChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "damageperblock",
+      "key": "damage-per-block",
+      "category": "damage",
+      "icon": "LEATHER_BOOTS",
+      "color": "#FF0000",
+      "class": "challenge.damage.DamagePerBlockChallenge"
+    },
+    {
+      "id": "sneakdamage",
+      "key": "sneak-damage",
+      "category": "damage",
+      "icon": "LEATHER_BOOTS",
+      "color": "#FFFF00",
+      "class": "challenge.damage.SneakDamageChallenge"
+    },
+    {
+      "id": "jumpdamage",
+      "key": "jump-damage",
+      "category": "damage",
+      "icon": "LEATHER_BOOTS",
+      "color": "#FFA500",
+      "class": "challenge.damage.JumpDamageChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "blockbreakdamage",
+      "key": "block-break-damage",
+      "category": "damage",
+      "icon": "GOLDEN_PICKAXE",
+      "class": "challenge.damage.BlockBreakDamageChallenge"
+    },
+    {
+      "id": "blockplacedamage",
+      "key": "block-place-damage",
+      "category": "damage",
+      "icon": "GOLD_BLOCK",
+      "class": "challenge.damage.BlockPlaceDamageChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "damageperitem",
+      "key": "damage-item",
+      "category": "damage",
+      "icon": "SHEARS",
+      "class": "challenge.damage.DamagePerItemChallenge"
+    },
+    {
+      "id": "advancementdamage",
+      "key": "advancement-damage",
+      "category": "damage",
+      "icon": "BOOK",
+      "class": "challenge.damage.AdvancementDamageChallenge"
+    },
+    {
+      "id": "waterallergy",
+      "key": "water-allergy",
+      "category": "damage",
+      "icon": "CYAN_GLAZED_TERRACOTTA",
+      "class": "challenge.damage.WaterAllergyChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "deathonfall",
+      "key": "death-on-fall",
+      "category": "damage",
+      "icon": "FEATHER",
+      "class": "challenge.damage.DeathOnFallChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "reverseddamage",
+      "key": "reversed-damage",
+      "category": "damage",
+      "icon": "GOLDEN_SWORD",
+      "class": "challenge.damage.ReversedDamageChallenge"
+    },
+    {
+      "id": "freeze",
+      "key": "freeze",
+      "category": "damage",
+      "icon": "BLUE_ICE",
+      "class": "challenge.damage.FreezeChallenge",
+      "since": "2.0.2"
+    },
+    {
+      "id": "delaydamage",
+      "key": "delay-damage",
+      "category": "damage",
+      "icon": "REDSTONE",
+      "class": "challenge.damage.DelayDamageChallenge",
+      "since": "2.3.2"
+    },
+    {
+      "id": "randompotioneffect",
+      "key": "random-effect",
+      "category": "effect",
+      "icon": "BREWING_STAND",
+      "class": "challenge.effect.RandomPotionEffectChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "chunkrandomeffect",
+      "key": "chunk-effect",
+      "category": "effect",
+      "icon": "CAULDRON",
+      "class": "challenge.effect.ChunkRandomEffectChallenge",
+      "since": "2.1.1"
+    },
+    {
+      "id": "blockeffect",
+      "key": "block-effect",
+      "category": "effect",
+      "icon": "CARVED_PUMPKIN",
+      "class": "challenge.effect.BlockEffectChallenge",
+      "since": "2.1.2"
+    },
+    {
+      "id": "permanenteffectondamage",
+      "key": "permanent-effect-on-damage",
+      "category": "effect",
+      "icon": "MAGMA_CREAM",
+      "class": "challenge.effect.PermanentEffectOnDamageChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "entityrandomeffect",
+      "key": "entity-effect",
+      "category": "effect",
+      "icon": "PHANTOM_MEMBRANE",
+      "class": "challenge.effect.EntityRandomEffectChallenge",
+      "since": "2.1.2"
+    },
+    {
+      "id": "infection",
+      "key": "infection",
+      "category": "effect",
+      "icon": "SLIME_BALL",
+      "class": "challenge.effect.InfectionChallenge"
+    },
+    {
+      "id": "levelborder",
+      "key": "level-border",
+      "category": "world",
+      "icon": "ENCHANTING_TABLE",
+      "class": "challenge.world.LevelBorderChallenge",
+      "excludeFromRandom": true,
+      "since": "2.2.3"
+    },
+    {
+      "id": "levelblock",
+      "key": "level-block",
+      "category": "world",
+      "icon": "EXPERIENCE_BOTTLE",
+      "class": "challenge.world.LevelBlockChallenge",
+      "excludeFromRandom": true,
+      "beta": true
+    },
+    {
+      "id": "damageborder",
+      "key": "damage-border",
+      "category": "world",
+      "icon": "MAGENTA_GLAZED_TERRACOTTA",
+      "class": "challenge.world.DamageBorderChallenge",
+      "excludeFromRandom": true,
+      "beta": true
+    },
+    {
+      "id": "chunkrandomblock",
+      "key": "chunk-random-block",
+      "category": "world",
+      "icon": "PURPUR_BLOCK",
+      "class": "challenge.world.ChunkRandomBlockChallenge",
+      "beta": true
+    },
+    {
+      "id": "allblockssame",
+      "key": "all-blocks-same",
+      "category": "world",
+      "icon": "WHITE_CONCRETE",
+      "class": "challenge.world.AllBlocksSameChallenge",
+      "beta": true
+    },
+    {
+      "id": "stepoffblock",
+      "key": "step-off-block",
+      "category": "world",
+      "icon": "CRACKED_STONE_BRICKS",
+      "class": "challenge.world.StepOffBlockChallenge",
+      "beta": true
+    },
+    {
+      "id": "stepofflava",
+      "key": "step-off-lava",
+      "category": "world",
+      "icon": "POINTED_DRIPSTONE",
+      "class": "challenge.world.StepOffLavaChallenge",
+      "beta": true
+    },
+    {
+      "id": "nowater",
+      "key": "no-water",
+      "category": "world",
+      "icon": "SPONGE",
+      "class": "challenge.world.NoWaterChallenge",
+      "beta": true
+    },
+    {
+      "id": "chunkdeconstruction",
+      "key": "chunk-deconstruction",
+      "category": "world",
+      "icon": "DIAMOND_PICKAXE",
+      "class": "challenge.world.ChunkDeconstructionChallenge"
+    },
+    {
+      "id": "chunkdeletion",
+      "key": "chunk-deletion",
+      "category": "world",
+      "icon": "GOLDEN_PICKAXE",
+      "class": "challenge.world.ChunkDeletionChallenge"
+    },
+    {
+      "id": "repeatinchunk",
+      "key": "repeat-in-chunk",
+      "category": "world",
+      "icon": "GRASS_BLOCK",
+      "class": "challenge.world.RepeatInChunkChallenge",
+      "since": "2.1.1"
+    },
+    {
+      "id": "allblocksdisappear",
+      "key": "all-blocks-disappear",
+      "category": "world",
+      "icon": "TNT",
+      "class": "challenge.world.AllBlocksDisappearChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "blocksdisappearaftertime",
+      "key": "blocks-disappear-time",
+      "category": "world",
+      "icon": "STRING",
+      "class": "challenge.world.BlocksDisappearAfterTimeChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "preset-interval-border",
+      "key": "interval-border",
+      "category": "world",
+      "icon": "PURPLE_GLAZED_TERRACOTTA",
+      "preset": {
+        "trigger": "interval",
+        "triggerSettings": {"time": "${value}"},
+        "action": "modify_border",
+        "actionSettings": {"change": "-1"},
+        "value": {"unit": "INTERVAL_MINUTES", "min": 1, "max": 10, "default": 1}
+      },
+      "since": "3.0"
+    },
+    {
+      "id": "surfacehole",
+      "key": "surface-hole",
+      "category": "world",
+      "icon": "BARRIER",
+      "class": "challenge.world.SurfaceHoleChallenge"
+    },
+    {
+      "id": "bedrockwall",
+      "key": "bedrock-walls",
+      "category": "world",
+      "icon": "BEDROCK",
+      "class": "challenge.world.BedrockWallChallenge"
+    },
+    {
+      "id": "bedrockpath",
+      "key": "bedrock-path",
+      "category": "world",
+      "icon": "LEATHER_BOOTS",
+      "color": "#808080",
+      "class": "challenge.world.BedrockPathChallenge"
+    },
+    {
+      "id": "snake",
+      "key": "snake",
+      "category": "world",
+      "icon": "BLUE_TERRACOTTA",
+      "class": "challenge.world.SnakeChallenge"
+    },
+    {
+      "id": "floorislava",
+      "key": "floor-is-lava",
+      "category": "world",
+      "icon": "MAGMA_BLOCK",
+      "class": "challenge.world.FloorIsLavaChallenge"
+    },
+    {
+      "id": "icefloor",
+      "key": "ice-floor",
+      "category": "world",
+      "icon": "PACKED_ICE",
+      "class": "challenge.world.IceFloorChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "blockflyinair",
+      "key": "blocks-fly",
+      "category": "world",
+      "icon": "FERN",
+      "class": "challenge.world.BlockFlyInAirChallenge",
+      "since": "2.1.1"
+    },
+    {
+      "id": "anvilrain",
+      "key": "anvil-rain",
+      "category": "world",
+      "icon": "ANVIL",
+      "class": "challenge.world.AnvilRainChallenge"
+    },
+    {
+      "id": "tsunami",
+      "key": "tsunami",
+      "category": "world",
+      "icon": "ICE",
+      "class": "challenge.world.TsunamiChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "voidworld",
+      "key": "void-world",
+      "category": "world_generator",
+      "icon": "STRUCTURE_VOID",
+      "class": "challenge.world.VoidWorldChallenge",
+      "since": "3.0",
+      "excludeFromRandom": true
+    },
+    {
+      "id": "structurevoidworld",
+      "key": "structure-void-world",
+      "category": "world_generator",
+      "icon": "STRUCTURE_BLOCK",
+      "class": "challenge.world.StructureVoidWorldChallenge",
+      "excludeFromRandom": true,
+      "beta": true
+    },
+    {
+      "id": "strongholdworld",
+      "key": "stronghold-world",
+      "category": "world_generator",
+      "icon": "END_PORTAL_FRAME",
+      "class": "challenge.world.StrongholdWorldChallenge",
+      "excludeFromRandom": true,
+      "beta": true
+    },
+    {
+      "id": "obsidianworld",
+      "key": "obsidian-world",
+      "category": "world_generator",
+      "icon": "OBSIDIAN",
+      "class": "challenge.world.ObsidianWorldChallenge",
+      "excludeFromRandom": true,
+      "beta": true
+    },
+    {
+      "id": "lineworld",
+      "key": "line-world",
+      "category": "world_generator",
+      "icon": "END_ROD",
+      "class": "challenge.world.LineWorldChallenge",
+      "excludeFromRandom": true,
+      "beta": true
+    },
+    {
+      "id": "gridworld",
+      "key": "grid-world",
+      "category": "world_generator",
+      "icon": "IRON_BARS",
+      "class": "challenge.world.GridWorldChallenge",
+      "excludeFromRandom": true,
+      "beta": true
+    },
+    {
+      "id": "loop",
+      "key": "loop",
+      "category": "world",
+      "icon": "LEAD",
+      "class": "challenge.world.LoopChallenge",
+      "since": "2.0.2"
+    },
+    {
+      "id": "permanentitem",
+      "key": "permanent-item",
+      "category": "inventory",
+      "icon": "VINE",
+      "class": "challenge.inventory.PermanentItemChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "nodupeditems",
+      "key": "no-duped-items",
+      "category": "inventory",
+      "icon": "OBSERVER",
+      "class": "challenge.inventory.NoDupedItemsChallenge",
+      "excludeFromRandom": true,
+      "since": "2.0"
+    },
+    {
+      "id": "missingitems",
+      "key": "missing-items",
+      "category": "inventory",
+      "icon": "FISHING_ROD",
+      "class": "challenge.inventory.MissingItemsChallenge",
+      "command": "openmissingitems",
+      "since": "2.0",
+      "updated": "3.0"
+    },
+    {
+      "id": "movementitemremoving",
+      "key": "block-chunk-item-remove",
+      "category": "inventory",
+      "icon": "DETECTOR_RAIL",
+      "class": "challenge.inventory.MovementItemRemovingChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "damageinventoryclear",
+      "key": "damage-inv-clear",
+      "category": "inventory",
+      "icon": "CHEST",
+      "class": "challenge.inventory.DamageInventoryClearChallenge"
+    },
+    {
+      "id": "preset-interval-clear-inventory",
+      "key": "interval-clear-inventory",
+      "category": "inventory",
+      "icon": "TRAPPED_CHEST",
+      "preset": {
+        "trigger": "interval",
+        "triggerSettings": {"time": "${value}"},
+        "action": "clear_inventory",
+        "actionSettings": {"target_entity": "every_player"},
+        "value": {"unit": "INTERVAL_MINUTES", "min": 1, "max": 10, "default": 5}
+      },
+      "since": "3.0"
+    },
+    {
+      "id": "pickupitemlaunch",
+      "key": "pickup-launch",
+      "category": "inventory",
+      "icon": "BOW",
+      "class": "challenge.inventory.PickupItemLaunchChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "alwaysrunning",
+      "key": "always-running",
+      "category": "movement",
+      "icon": "CARROT_ON_A_STICK",
+      "class": "challenge.movement.AlwaysRunningChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "dontstoprunning",
+      "key": "dont-stop-running",
+      "category": "movement",
+      "icon": "SADDLE",
+      "class": "challenge.movement.DontStopRunningChallenge",
+      "since": "2.0.2"
+    },
+    {
+      "id": "trafficlight",
+      "key": "traffic-light",
+      "category": "movement",
+      "icon": "LIME_STAINED_GLASS",
+      "class": "challenge.movement.TrafficLightChallenge",
+      "since": "1.3"
+    },
+    {
+      "id": "onlydown",
+      "key": "only-down",
+      "category": "movement",
+      "icon": "ACACIA_SLAB",
+      "class": "challenge.movement.OnlyDownChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "onlydirt",
+      "key": "only-dirt",
+      "category": "movement",
+      "icon": "DIRT",
+      "class": "challenge.movement.OnlyDirtChallenge",
+      "excludeFromRandom": true
+    },
+    {
+      "id": "higherjumps",
+      "key": "higher-jumps",
+      "category": "movement",
+      "icon": "RABBIT_FOOT",
+      "class": "challenge.movement.HigherJumpsChallenge"
+    },
+    {
+      "id": "hungerperblock",
+      "key": "hunger-block",
+      "category": "movement",
+      "icon": "ROTTEN_FLESH",
+      "class": "challenge.movement.HungerPerBlockChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "fivehundredblocks",
+      "key": "five-hundred-blocks",
+      "category": "movement",
+      "icon": "OAK_SIGN",
+      "class": "challenge.movement.FiveHundredBlocksChallenge",
+      "since": "2.1.0"
+    },
+    {
+      "id": "movemousedamage",
+      "key": "no-mouse-move",
+      "category": "movement",
+      "icon": "COMPASS",
+      "class": "challenge.movement.MoveMouseDamage",
+      "since": "2.0"
+    },
+    {
+      "id": "maxbiometime",
+      "key": "max-biome-time",
+      "category": "limited_time",
+      "icon": "SPRUCE_SAPLING",
+      "class": "challenge.time.MaxBiomeTimeChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "maxheighttime",
+      "key": "max-height-time",
+      "category": "limited_time",
+      "icon": "PARROT_SPAWN_EGG",
+      "class": "challenge.time.MaxHeightTimeChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "watermlg",
+      "key": "water-mlg",
+      "category": "extra_world",
+      "icon": "WATER_BUCKET",
+      "class": "challenge.extraworld.WaterMLGChallenge"
+    },
+    {
+      "id": "jumpandrun",
+      "key": "jump-and-run",
+      "category": "extra_world",
+      "icon": "ACACIA_STAIRS",
+      "class": "challenge.extraworld.JumpAndRunChallenge"
+    },
+    {
+      "id": "preset-no-eating",
+      "key": "no-eating",
+      "category": "misc_challenge",
+      "icon": "COOKED_BEEF",
+      "preset": {
+        "trigger": "consume_item",
+        "triggerSettings": {"item": "any"},
+        "action": "cancel",
+        "actionSettings": {}
+      },
+      "since": "3.0"
+    },
+    {
+      "id": "foodonce",
+      "key": "food-once",
+      "category": "misc_challenge",
+      "icon": "COOKED_BEEF",
+      "class": "challenge.miscellaneous.FoodOnceChallenge"
+    },
+    {
+      "id": "foodlaunch",
+      "key": "consume-launch",
+      "category": "misc_challenge",
+      "icon": "CAKE",
+      "class": "challenge.miscellaneous.FoodLaunchChallenge",
+      "since": "2.0.2"
+    },
+    {
+      "id": "notrading",
+      "key": "no-trading",
+      "category": "misc_challenge",
+      "icon": "EMERALD",
+      "class": "challenge.miscellaneous.NoTradingChallenge"
+    },
+    {
+      "id": "noexp",
+      "key": "no-exp",
+      "category": "misc_challenge",
+      "icon": "EXPERIENCE_BOTTLE",
+      "class": "challenge.miscellaneous.NoExpChallenge"
+    },
+    {
+      "id": "nosharedadvancements",
+      "key": "no-shared-advancements",
+      "category": "misc_challenge",
+      "icon": "KNOWLEDGE_BOOK",
+      "class": "challenge.miscellaneous.NoSharedAdvancementsChallenge",
+      "since": "2.2.0"
+    },
+    {
+      "id": "onedurability",
+      "key": "one-durability",
+      "category": "misc_challenge",
+      "icon": "WOODEN_HOE",
+      "class": "challenge.miscellaneous.OneDurabilityChallenge"
+    },
+    {
+      "id": "lowdroprate",
+      "key": "low-drop-rate",
+      "category": "misc_challenge",
+      "icon": "WOODEN_AXE",
+      "class": "challenge.miscellaneous.LowDropRateChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "uncraftitems",
+      "key": "uncraft-items",
+      "category": "misc_challenge",
+      "icon": "CRAFTING_TABLE",
+      "class": "challenge.inventory.UncraftItemsChallenge",
+      "since": "2.0.2"
+    },
+    {
+      "id": "endergames",
+      "key": "ender-games",
+      "category": "misc_challenge",
+      "icon": "ENDER_PEARL",
+      "class": "challenge.miscellaneous.EnderGamesChallenge",
+      "since": "2.0"
+    },
+    {
+      "id": "inverthealth",
+      "key": "invert-health",
+      "category": "misc_challenge",
+      "icon": "POPPY",
+      "class": "challenge.miscellaneous.InvertHealthChallenge",
+      "excludeFromRandom": true,
+      "since": "2.0"
+    },
+    {
+      "id": "quiz",
+      "key": "quiz",
+      "category": "misc_challenge",
+      "icon": "WRITABLE_BOOK",
+      "class": "challenge.quiz.QuizChallenge",
+      "command": "guess",
+      "since": "3.0"
+    },
+    {
+      "id": "damageteleport",
+      "key": "damage-teleport",
+      "category": "misc_challenge",
+      "icon": "SHULKER_SHELL",
+      "class": "challenge.DamageTeleportChallenge",
+      "since": "2.0.2",
+      "registered": false
+    },
+    {
+      "id": "zerohearts",
+      "key": "zero-hearts",
+      "category": "misc_challenge",
+      "icon": "ENCHANTED_GOLDEN_APPLE",
+      "class": "challenge.ZeroHeartsChallenge",
+      "since": "2.0",
+      "registered": false
+    },
+    {
+      "id": "killenderdragon",
+      "key": "goal-ender-dragon",
+      "category": "kill_entity",
+      "icon": "DRAGON_EGG",
+      "class": "goal.KillEnderDragonGoal"
+    },
+    {
+      "id": "killwither",
+      "key": "goal-wither",
+      "category": "kill_entity",
+      "icon": "NETHER_STAR",
+      "class": "goal.KillWitherGoal"
+    },
+    {
+      "id": "killelderguardian",
+      "key": "goal-elder-guardian",
+      "category": "kill_entity",
+      "icon": "PRISMARINE_SHARD",
+      "class": "goal.KillElderGuardianGoal",
+      "since": "2.0"
+    },
+    {
+      "id": "killwarden",
+      "key": "goal-warden",
+      "category": "kill_entity",
+      "icon": "ECHO_SHARD",
+      "class": "goal.KillWardenGoal",
+      "since": "2.2.0"
+    },
+    {
+      "id": "witherwaves",
+      "key": "goal-wither-waves",
+      "category": "kill_entity",
+      "icon": "WITHER_SKELETON_SKULL",
+      "class": "goal.WitherWavesGoal",
+      "beta": true
+    },
+    {
+      "id": "killallbosses",
+      "key": "goal-all-bosses",
+      "category": "kill_entity",
+      "icon": "DIAMOND_SWORD",
+      "class": "goal.KillAllBossesGoal",
+      "since": "2.0"
+    },
+    {
+      "id": "killallbossesnew",
+      "key": "goal-all-bosses-new",
+      "category": "kill_entity",
+      "icon": "NETHERITE_SWORD",
+      "class": "goal.KillAllBossesNewGoal",
+      "since": "2.2.0"
+    },
+    {
+      "id": "killirongolem",
+      "key": "iron-golem",
+      "category": "kill_entity",
+      "icon": "IRON_INGOT",
+      "class": "goal.KillIronGolemGoal",
+      "since": "2.0"
+    },
+    {
+      "id": "killsnowgolem",
+      "key": "snow-golem",
+      "category": "kill_entity",
+      "icon": "SNOWBALL",
+      "class": "goal.KillSnowGolemGoal",
+      "since": "2.0"
+    },
+    {
+      "id": "killallmobs",
+      "key": "all-mobs",
+      "category": "kill_entity",
+      "icon": "ZOMBIE_HEAD",
+      "class": "goal.KillAllMobsGoal",
+      "since": "2.1.3"
+    },
+    {
+      "id": "killallmonster",
+      "key": "all-monster",
+      "category": "kill_entity",
+      "icon": "ARROW",
+      "class": "goal.KillAllMonsterGoal",
+      "since": "2.1.3"
+    },
+    {
+      "id": "collectmostitems",
+      "key": "most-items",
+      "category": "score_points",
+      "icon": "STICK",
+      "class": "goal.CollectMostItemsGoal"
+    },
+    {
+      "id": "minemostblocks",
+      "key": "mine-most-blocks",
+      "category": "score_points",
+      "icon": "GOLDEN_PICKAXE",
+      "class": "goal.MineMostBlocksGoal"
+    },
+    {
+      "id": "mostores",
+      "key": "most-ores",
+      "category": "score_points",
+      "icon": "COAL_ORE",
+      "class": "goal.MostOresGoal",
+      "since": "2.1.1"
+    },
+    {
+      "id": "mostemeralds",
+      "key": "most-emeralds",
+      "category": "score_points",
+      "icon": "EMERALD",
+      "class": "goal.MostEmeraldsGoal",
+      "since": "2.0.2"
+    },
+    {
+      "id": "collectmostexp",
+      "key": "most-xp",
+      "category": "score_points",
+      "icon": "EXPERIENCE_BOTTLE",
+      "class": "goal.CollectMostExpGoal",
+      "since": "2.0"
+    },
+    {
+      "id": "eatmost",
+      "key": "eat-most",
+      "category": "score_points",
+      "icon": "COOKIE",
+      "class": "goal.EatMostGoal",
+      "since": "2.1.2"
+    },
+    {
+      "id": "collectmostdeaths",
+      "key": "most-deaths",
+      "category": "score_points",
+      "icon": "LAVA_BUCKET",
+      "class": "goal.CollectMostDeathsGoal"
+    },
+    {
+      "id": "alladvancement",
+      "key": "all-advancements",
+      "category": "score_points",
+      "icon": "BOOK",
+      "class": "goal.AllAdvancementGoal",
+      "since": "2.1.0"
+    },
+    {
+      "id": "collectwood",
+      "key": "collect-wood",
+      "category": "fastest_time",
+      "icon": "GOLDEN_AXE",
+      "class": "goal.CollectWoodGoal"
+    },
+    {
+      "id": "collecthorseamor",
+      "key": "collect-horse-armor",
+      "category": "fastest_time",
+      "icon": "DIAMOND_HORSE_ARMOR",
+      "class": "goal.CollectHorseAmorGoal",
+      "since": "2.1.2"
+    },
+    {
+      "id": "collecticeblocks",
+      "key": "collect-ice",
+      "category": "fastest_time",
+      "icon": "PACKED_ICE",
+      "class": "goal.CollectIceBlocksGoal",
+      "since": "2.1.2"
+    },
+    {
+      "id": "collectswords",
+      "key": "collect-swords",
+      "category": "fastest_time",
+      "icon": "DIAMOND_SWORD",
+      "class": "goal.CollectSwordsGoal",
+      "since": "2.1.2"
+    },
+    {
+      "id": "collectworkstations",
+      "key": "collect-workstations",
+      "category": "fastest_time",
+      "icon": "FLETCHING_TABLE",
+      "class": "goal.CollectWorkstationsGoal",
+      "since": "2.1.2"
+    },
+    {
+      "id": "findelytra",
+      "key": "find-elytra",
+      "category": "fastest_time",
+      "icon": "ELYTRA",
+      "class": "goal.FindElytraGoal",
+      "since": "2.1.1"
+    },
+    {
+      "id": "eatcake",
+      "key": "eat-cake",
+      "category": "fastest_time",
+      "icon": "CAKE",
+      "class": "goal.EatCakeGoal",
+      "since": "2.1.2"
+    },
+    {
+      "id": "finishraid",
+      "key": "finish-raid",
+      "category": "fastest_time",
+      "icon": "CROSSBOW",
+      "class": "goal.FinishRaidGoal",
+      "since": "2.0"
+    },
+    {
+      "id": "getfullhealth",
+      "key": "get-full-health",
+      "category": "fastest_time",
+      "icon": "AZURE_BLUET",
+      "class": "goal.GetFullHealthGoal",
+      "since": "2.2.0"
+    },
+    {
+      "id": "maxheight",
+      "key": "max-height",
+      "category": "fastest_time",
+      "icon": "FEATHER",
+      "class": "goal.MaxHeightGoal",
+      "since": "2.1.0"
+    },
+    {
+      "id": "minheight",
+      "key": "min-height",
+      "category": "fastest_time",
+      "icon": "BEDROCK",
+      "class": "goal.MinHeightGoal",
+      "since": "2.1.0"
+    },
+    {
+      "id": "race",
+      "key": "race",
+      "category": "fastest_time",
+      "icon": "STRUCTURE_VOID",
+      "class": "goal.RaceGoal",
+      "since": "2.1"
+    },
+    {
+      "id": "firstonetodie",
+      "key": "first-one-to-die",
+      "category": "fastest_time",
+      "icon": "STONE_SWORD",
+      "class": "goal.FirstOneToDieGoal",
+      "since": "2.0"
+    },
+    {
+      "id": "forceitembattle",
+      "key": "force-item-battle",
+      "category": "force_battle",
+      "icon": "ITEM_FRAME",
+      "class": "goal.forcebattle.ForceItemBattleGoal",
+      "since": "2.1.3"
+    },
+    {
+      "id": "forcemobbattle",
+      "key": "force-mob-battle",
+      "category": "force_battle",
+      "icon": "BOW",
+      "class": "goal.forcebattle.ForceMobBattleGoal",
+      "since": "2.2.0"
+    },
+    {
+      "id": "forceadvancementbattle",
+      "key": "force-advancement-battle",
+      "category": "force_battle",
+      "icon": "EXPERIENCE_BOTTLE",
+      "class": "goal.forcebattle.ForceAdvancementBattleGoal",
+      "since": "2.2.0"
+    },
+    {
+      "id": "forceblockbattle",
+      "key": "force-block-battle",
+      "category": "force_battle",
+      "icon": "CHEST",
+      "class": "goal.forcebattle.ForceBlockBattleGoal",
+      "since": "2.2.0"
+    },
+    {
+      "id": "forcebiomebattle",
+      "key": "force-biome-battle",
+      "category": "force_battle",
+      "icon": "FILLED_MAP",
+      "class": "goal.forcebattle.ForceBiomeBattleGoal"
+    },
+    {
+      "id": "forcedamagebattle",
+      "key": "force-damage-battle",
+      "category": "force_battle",
+      "icon": "TOTEM_OF_UNDYING",
+      "class": "goal.forcebattle.ForceDamageBattleGoal"
+    },
+    {
+      "id": "forceheightbattle",
+      "key": "force-height-battle",
+      "category": "force_battle",
+      "icon": "RABBIT_FOOT",
+      "class": "goal.forcebattle.ForceHeightBattleGoal"
+    },
+    {
+      "id": "forcepositionbattle",
+      "key": "force-position-battle",
+      "category": "force_battle",
+      "icon": "DIAMOND_BOOTS",
+      "class": "goal.forcebattle.ForcePositionBattleGoal"
+    },
+    {
+      "id": "extremeforcebattle",
+      "key": "extreme-force-battle",
+      "category": "force_battle",
+      "icon": "BOOK",
+      "class": "goal.forcebattle.ExtremeForceBattleGoal"
+    },
+    {
+      "id": "lastmanstanding",
+      "key": "last-man-standing",
+      "category": "misc_goal",
+      "icon": "IRON_HELMET",
+      "class": "goal.LastManStandingGoal",
+      "since": "2.0"
+    },
+    {
+      "id": "collectallitems",
+      "key": "collect-all-items",
+      "category": "misc_goal",
+      "icon": "GRASS_BLOCK",
+      "class": "goal.CollectAllItemsGoal",
+      "command": "skipitem",
+      "since": "2.0",
+      "updated": "3.0"
+    },
+    {
+      "id": "damagerulenone",
+      "key": "damage-rule.none",
+      "category": "damage_rule",
+      "icon": "TOTEM_OF_UNDYING",
+      "damageRule": ["*"]
+    },
+    {
+      "id": "damagerulefire",
+      "key": "damage-rule.fire",
+      "category": "damage_rule",
+      "icon": "LAVA_BUCKET",
+      "damageRule": ["FIRE", "FIRE_TICK", "LAVA", "HOT_FLOOR"]
+    },
+    {
+      "id": "damageruleattack",
+      "key": "damage-rule.attack",
+      "category": "damage_rule",
+      "icon": "DIAMOND_SWORD",
+      "damageRule": ["ENTITY_ATTACK", "ENTITY_SWEEP_ATTACK", "ENTITY_EXPLOSION", "THORNS"]
+    },
+    {
+      "id": "damageruleprojectile",
+      "key": "damage-rule.projectile",
+      "category": "damage_rule",
+      "icon": "ARROW",
+      "damageRule": ["PROJECTILE"]
+    },
+    {
+      "id": "damagerulefall",
+      "key": "damage-rule.fall",
+      "category": "damage_rule",
+      "icon": "FEATHER",
+      "damageRule": ["FALL"]
+    },
+    {
+      "id": "damageruleexplosion",
+      "key": "damage-rule.explosion",
+      "category": "damage_rule",
+      "icon": "TNT",
+      "damageRule": ["ENTITY_EXPLOSION", "BLOCK_EXPLOSION"]
+    },
+    {
+      "id": "damageruledrowning",
+      "key": "damage-rule.drowning",
+      "category": "damage_rule",
+      "icon": "POTION",
+      "color": "#0000FF",
+      "damageRule": ["DROWNING"]
+    },
+    {
+      "id": "damageruleblock",
+      "key": "damage-rule.block",
+      "category": "damage_rule",
+      "icon": "SAND",
+      "damageRule": ["FALLING_BLOCK", "SUFFOCATION", "CONTACT"]
+    },
+    {
+      "id": "damagerulemagic",
+      "key": "damage-rule.magic",
+      "category": "damage_rule",
+      "icon": "BREWING_STAND",
+      "damageRule": ["MAGIC", "POISON", "WITHER"]
+    },
+    {
+      "id": "damagerulefreeze",
+      "key": "damage-rule.freeze",
+      "category": "damage_rule",
+      "icon": "POWDER_SNOW_BUCKET",
+      "damageRule": ["FREEZE"]
+    },
+    {
+      "id": "blockmaterialarmor",
+      "key": "material-rule.armor",
+      "category": "material_rule",
+      "icon": "IRON_CHESTPLATE",
+      "materialRule": [
+        "IRON_CHESTPLATE",
+        "IRON_LEGGINGS",
+        "IRON_BOOTS",
+        "IRON_HELMET",
+        "DIAMOND_CHESTPLATE",
+        "DIAMOND_LEGGINGS",
+        "DIAMOND_BOOTS",
+        "DIAMOND_HELMET",
+        "GOLDEN_CHESTPLATE",
+        "GOLDEN_LEGGINGS",
+        "GOLDEN_BOOTS",
+        "GOLDEN_HELMET",
+        "LEATHER_CHESTPLATE",
+        "LEATHER_LEGGINGS",
+        "LEATHER_BOOTS",
+        "LEATHER_HELMET",
+        "CHAINMAIL_CHESTPLATE",
+        "CHAINMAIL_LEGGINGS",
+        "CHAINMAIL_BOOTS",
+        "CHAINMAIL_HELMET",
+        "NETHERITE_CHESTPLATE",
+        "NETHERITE_LEGGINGS",
+        "NETHERITE_BOOTS",
+        "NETHERITE_HELMET",
+        "TURTLE_HELMET"
+      ]
+    },
+    {
+      "id": "blockmaterialgolden_apple",
+      "key": "material-rule.golden_apple",
+      "category": "material_rule",
+      "icon": "GOLDEN_APPLE",
+      "materialRule": ["GOLDEN_APPLE", "ENCHANTED_GOLDEN_APPLE"]
+    },
+    {
+      "id": "blockmaterialcrafting_table",
+      "key": "material-rule.crafting_table",
+      "category": "material_rule",
+      "icon": "CRAFTING_TABLE",
+      "materialRule": ["CRAFTING_TABLE"]
+    },
+    {
+      "id": "blockmaterialchest",
+      "key": "material-rule.chest",
+      "category": "material_rule",
+      "icon": "CHEST",
+      "materialRule": ["CHEST", "CHEST_MINECART", "TRAPPED_CHEST"]
+    },
+    {
+      "id": "blockmaterialfurnace",
+      "key": "material-rule.furnace",
+      "category": "material_rule",
+      "icon": "FURNACE",
+      "materialRule": ["FURNACE", "FURNACE_MINECART"]
+    },
+    {
+      "id": "blockmaterialenchant",
+      "key": "material-rule.enchant",
+      "category": "material_rule",
+      "icon": "ENCHANTING_TABLE",
+      "materialRule": ["ENCHANTING_TABLE"]
+    },
+    {
+      "id": "blockmaterialanvil",
+      "key": "material-rule.anvil",
+      "category": "material_rule",
+      "icon": "ANVIL",
+      "materialRule": ["ANVIL", "CHIPPED_ANVIL", "DAMAGED_ANVIL"]
+    },
+    {
+      "id": "blockmaterialbrewing_stand",
+      "key": "material-rule.brewing_stand",
+      "category": "material_rule",
+      "icon": "BREWING_STAND",
+      "materialRule": ["BREWING_STAND"]
+    },
+    {
+      "id": "blockmaterialbow",
+      "key": "material-rule.bow",
+      "category": "material_rule",
+      "icon": "BOW",
+      "materialRule": ["BOW", "CROSSBOW"]
+    },
+    {
+      "id": "blockmaterialthrowable",
+      "key": "material-rule.throwable",
+      "category": "material_rule",
+      "icon": "SNOWBALL",
+      "materialRule": ["SNOWBALL", "EGG", "BLUE_EGG", "BROWN_EGG"]
+    },
+    {
+      "id": "blockmaterialflint_and_steel",
+      "key": "material-rule.flint_and_steel",
+      "category": "material_rule",
+      "icon": "FLINT_AND_STEEL",
+      "materialRule": ["FLINT_AND_STEEL", "FIRE_CHARGE"]
+    },
+    {
+      "id": "blockmaterialbucket",
+      "key": "material-rule.bucket",
+      "category": "material_rule",
+      "icon": "BUCKET",
+      "materialRule": [
+        "BUCKET",
+        "WATER_BUCKET",
+        "LAVA_BUCKET",
+        "MILK_BUCKET",
+        "COD_BUCKET",
+        "SALMON_BUCKET",
+        "PUFFERFISH_BUCKET",
+        "TROPICAL_FISH_BUCKET",
+        "AXOLOTL_BUCKET",
+        "POWDER_SNOW_BUCKET",
+        "TADPOLE_BUCKET",
+        "SULFUR_CUBE_BUCKET"
+      ]
+    },
+    {
+      "id": "blockmaterialsword",
+      "key": "material-rule.sword",
+      "category": "material_rule",
+      "icon": "WOODEN_SWORD",
+      "materialRule": ["WOODEN_SWORD", "STONE_SWORD", "IRON_SWORD", "DIAMOND_SWORD", "GOLDEN_SWORD", "NETHERITE_SWORD"]
+    },
+    {
+      "id": "blockmaterialpickaxe",
+      "key": "material-rule.pickaxe",
+      "category": "material_rule",
+      "icon": "WOODEN_PICKAXE",
+      "materialRule": [
+        "WOODEN_PICKAXE",
+        "STONE_PICKAXE",
+        "IRON_PICKAXE",
+        "DIAMOND_PICKAXE",
+        "GOLDEN_PICKAXE",
+        "NETHERITE_PICKAXE"
+      ]
+    },
+    {
+      "id": "blockmaterialelytra",
+      "key": "material-rule.elytra",
+      "category": "material_rule",
+      "icon": "ELYTRA",
+      "materialRule": ["ELYTRA"]
+    },
+    {
+      "id": "blockmaterialshield",
+      "key": "material-rule.shield",
+      "category": "material_rule",
+      "icon": "SHIELD",
+      "materialRule": ["SHIELD"]
+    },
+    {
+      "id": "blockmaterialtotem",
+      "key": "material-rule.totem",
+      "category": "material_rule",
+      "icon": "TOTEM_OF_UNDYING",
+      "materialRule": ["TOTEM_OF_UNDYING"]
+    },
+    {
+      "id": "blockmaterialender_pearl",
+      "key": "material-rule.ender_pearl",
+      "category": "material_rule",
+      "icon": "ENDER_PEARL",
+      "materialRule": ["ENDER_PEARL"]
+    }
+  ]
+}

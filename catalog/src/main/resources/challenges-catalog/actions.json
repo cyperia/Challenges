@@ -1,0 +1,158 @@
+{
+  "package": "net.cyperia.challenges.plugin.challenges.custom.settings.action.impl",
+  "actions": [
+    {
+      "id": "cancel",
+      "class": "CancelEventAction",
+      "icon": "BARRIER"
+    },
+    {
+      "id": "win",
+      "class": "WinChallengeAction",
+      "icon": "GOLDEN_HELMET"
+    },
+    {
+      "id": "command",
+      "class": "ExecuteCommandAction",
+      "icon": "COMMAND_BLOCK"
+    },
+    {
+      "id": "kill",
+      "class": "KillEntityAction",
+      "icon": "DIAMOND_SWORD"
+    },
+    {
+      "id": "punish",
+      "class": "PunishPlayerAction",
+      "icon": "END_CRYSTAL",
+      "since": "3.0"
+    },
+    {
+      "id": "damage",
+      "class": "DamageEntityAction",
+      "icon": "FERMENTED_SPIDER_EYE"
+    },
+    {
+      "id": "heal",
+      "class": "HealEntityAction",
+      "icon": "GOLDEN_APPLE"
+    },
+    {
+      "id": "max_health",
+      "class": "ModifyMaxHealthAction",
+      "icon": "RED_DYE"
+    },
+    {
+      "id": "hunger",
+      "class": "HungerPlayerAction",
+      "icon": "ROTTEN_FLESH"
+    },
+    {
+      "id": "spawn_entity",
+      "class": "SpawnEntityAction",
+      "icon": "ZOMBIE_SPAWN_EGG"
+    },
+    {
+      "id": "random_mob",
+      "class": "RandomMobAction",
+      "icon": "BLAZE_SPAWN_EGG"
+    },
+    {
+      "id": "random_item",
+      "class": "RandomItemAction",
+      "icon": "BEACON"
+    },
+    {
+      "id": "uncraft_inventory",
+      "class": "UncraftInventoryAction",
+      "icon": "CRAFTING_TABLE"
+    },
+    {
+      "id": "boost_in_air",
+      "class": "BoostEntityInAirAction",
+      "icon": "FEATHER"
+    },
+    {
+      "id": "potion_effect",
+      "class": "PotionEffectAction",
+      "icon": "POTION"
+    },
+    {
+      "id": "permanent_effect",
+      "class": "AddPermanentEffectAction",
+      "icon": "MAGMA_CREAM"
+    },
+    {
+      "id": "random_effect",
+      "class": "RandomPotionEffectAction",
+      "icon": "BREWING_STAND"
+    },
+    {
+      "id": "clear_inventory",
+      "class": "ClearInventoryAction",
+      "icon": "TRAPPED_CHEST"
+    },
+    {
+      "id": "drop_random_item",
+      "class": "DropRandomItemAction",
+      "icon": "DISPENSER"
+    },
+    {
+      "id": "remove_random_item",
+      "class": "RemoveRandomItemAction",
+      "icon": "DROPPER"
+    },
+    {
+      "id": "swap_random_item",
+      "class": "SwapRandomItemAction",
+      "icon": "HOPPER"
+    },
+    {
+      "id": "freeze",
+      "class": "FreezeAction",
+      "icon": "ICE"
+    },
+    {
+      "id": "invert_health",
+      "class": "InvertHealthAction",
+      "icon": "REDSTONE"
+    },
+    {
+      "id": "water_mlg",
+      "class": "WaterMLGAction",
+      "icon": "WATER_BUCKET"
+    },
+    {
+      "id": "jnr",
+      "class": "JumpAndRunAction",
+      "icon": "ACACIA_STAIRS"
+    },
+    {
+      "id": "random_hotbar",
+      "class": "RandomHotBarAction",
+      "icon": "ARMOR_STAND"
+    },
+    {
+      "id": "modify_border",
+      "class": "ChangeWorldBorderAction",
+      "icon": "STRUCTURE_VOID"
+    },
+    {
+      "id": "chunk_to_block",
+      "class": "ChunkToBlockAction",
+      "icon": "PURPUR_BLOCK",
+      "beta": true
+    },
+    {
+      "id": "swap_mobs",
+      "class": "SwapRandomMobAction",
+      "icon": "ENDER_PEARL"
+    },
+    {
+      "id": "place_structure",
+      "class": "PlaceStructureAction",
+      "icon": "STRUCTURE_BLOCK",
+      "fallbackIds": ["place_random_structure"]
+    }
+  ]
+}

@@ -1,11 +1,11 @@
 name: Challenges-MongoConnector
-version: 2.3.3
+version: ${version}
 api-version: 1.14
-author: CodingArea
+author: cyperia
 authors:
   - anweisen
-main: net.codingarea.challenges.mongoconnector.MongoConnector
+main: net.cyperia.challenges.mongoconnector.MongoConnector
 depend:
   - Challenges
 description: |
-  Provides the needed depedencies to the ChallengesPlugin to conntent to a MongoDB database
+  Provides the needed dependencies to the ChallengesPlugin to connect to a MongoDB database

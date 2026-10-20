@@ -1,0 +1,166 @@
+{
+  "categories": [
+    {
+      "id": "misc_challenge",
+      "menu": "challenges",
+      "priority": 99,
+      "icon": "MINECART"
+    },
+    {
+      "id": "randomizer",
+      "menu": "challenges",
+      "priority": 1,
+      "icon": "COMMAND_BLOCK"
+    },
+    {
+      "id": "force",
+      "menu": "challenges",
+      "priority": 2,
+      "icon": "BLUE_BANNER"
+    },
+    {
+      "id": "entities",
+      "menu": "challenges",
+      "priority": 3,
+      "icon": "PIG_SPAWN_EGG"
+    },
+    {
+      "id": "damage",
+      "menu": "challenges",
+      "priority": 4,
+      "icon": "RED_DYE"
+    },
+    {
+      "id": "effect",
+      "menu": "challenges",
+      "priority": 5,
+      "icon": "FERMENTED_SPIDER_EYE"
+    },
+    {
+      "id": "world",
+      "menu": "challenges",
+      "priority": 6,
+      "icon": "TNT"
+    },
+    {
+      "id": "inventory",
+      "menu": "challenges",
+      "priority": 7,
+      "icon": "CHEST"
+    },
+    {
+      "id": "movement",
+      "menu": "challenges",
+      "priority": 8,
+      "icon": "RABBIT_FOOT"
+    },
+    {
+      "id": "limited_time",
+      "menu": "challenges",
+      "priority": 9,
+      "icon": "CLOCK"
+    },
+    {
+      "id": "extra_world",
+      "menu": "challenges",
+      "priority": 10,
+      "icon": "GRASS_BLOCK"
+    },
+    {
+      "id": "world_generator",
+      "menu": "challenges",
+      "priority": 11,
+      "icon": "STRUCTURE_BLOCK"
+    },
+    {
+      "id": "misc_goal",
+      "menu": "goal",
+      "priority": 99,
+      "icon": "MINECART"
+    },
+    {
+      "id": "kill_entity",
+      "menu": "goal",
+      "priority": 1,
+      "icon": "BOW"
+    },
+    {
+      "id": "score_points",
+      "menu": "goal",
+      "priority": 2,
+      "icon": "CHEST"
+    },
+    {
+      "id": "fastest_time",
+      "menu": "goal",
+      "priority": 3,
+      "icon": "CLOCK"
+    },
+    {
+      "id": "force_battle",
+      "menu": "goal",
+      "priority": 4,
+      "icon": "BLUE_BANNER"
+    },
+    {
+      "id": "misc_custom",
+      "menu": "custom",
+      "priority": 99,
+      "icon": "MINECART"
+    },
+    {
+      "id": "misc_settings",
+      "menu": "settings",
+      "priority": 99,
+      "icon": "MINECART"
+    },
+    {
+      "id": "difficulty",
+      "menu": "settings",
+      "priority": 1,
+      "icon": "TOTEM_OF_UNDYING"
+    },
+    {
+      "id": "consequence",
+      "menu": "settings",
+      "priority": 2,
+      "icon": "FLINT_AND_STEEL"
+    },
+    {
+      "id": "utility",
+      "menu": "settings",
+      "priority": 3,
+      "icon": "BUNDLE"
+    },
+    {
+      "id": "messages",
+      "menu": "settings",
+      "priority": 4,
+      "icon": "PAPER"
+    },
+    {
+      "id": "players",
+      "menu": "settings",
+      "priority": 5,
+      "icon": "PLAYER_HEAD"
+    },
+    {
+      "id": "limiting",
+      "menu": "settings",
+      "priority": 6,
+      "icon": "BARRIER"
+    },
+    {
+      "id": "material_rule",
+      "menu": "settings",
+      "priority": 10,
+      "icon": "STICK"
+    },
+    {
+      "id": "damage_rule",
+      "menu": "settings",
+      "priority": 11,
+      "icon": "IRON_SWORD"
+    }
+  ]
+}

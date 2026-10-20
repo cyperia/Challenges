@@ -1,0 +1,132 @@
+{
+  "package": "net.cyperia.challenges.plugin.challenges.custom.settings.trigger.impl",
+  "triggers": [
+    {
+      "id": "interval",
+      "class": "IntervallTrigger",
+      "icon": "CLOCK",
+      "fallbackIds": ["intervall"]
+    },
+    {
+      "id": "jump",
+      "class": "PlayerJumpTrigger",
+      "icon": "RABBIT_FOOT"
+    },
+    {
+      "id": "sneak",
+      "class": "PlayerSneakTrigger",
+      "icon": "SANDSTONE_SLAB"
+    },
+    {
+      "id": "move_block",
+      "class": "MoveBlockTrigger",
+      "icon": "LEATHER_BOOTS"
+    },
+    {
+      "id": "block_break",
+      "class": "BreakBlockTrigger",
+      "icon": "GOLDEN_PICKAXE"
+    },
+    {
+      "id": "new_chunk",
+      "class": "NewChunkTrigger",
+      "icon": "GRASS_BLOCK",
+      "since": "3.0"
+    },
+    {
+      "id": "block_place",
+      "class": "PlaceBlockTrigger",
+      "icon": "BRICKS"
+    },
+    {
+      "id": "death",
+      "class": "EntityDeathTrigger",
+      "icon": "BONE"
+    },
+    {
+      "id": "damage",
+      "class": "EntityDamageTrigger",
+      "icon": "FLINT_AND_STEEL"
+    },
+    {
+      "id": "damage_by_player",
+      "class": "EntityDamageByPlayerTrigger",
+      "icon": "WOODEN_SWORD"
+    },
+    {
+      "id": "consume_item",
+      "class": "ConsumeItemTrigger",
+      "icon": "COOKED_BEEF"
+    },
+    {
+      "id": "pickup_item",
+      "class": "PickupItemTrigger",
+      "icon": "STICK"
+    },
+    {
+      "id": "drop_item",
+      "class": "DropItemTrigger",
+      "icon": "DROPPER"
+    },
+    {
+      "id": "advancement",
+      "class": "AdvancementTrigger",
+      "icon": "KNOWLEDGE_BOOK"
+    },
+    {
+      "id": "hunger",
+      "class": "HungerTrigger",
+      "icon": "ROTTEN_FLESH"
+    },
+    {
+      "id": "move_up",
+      "class": "MoveUpTrigger",
+      "icon": "PURPUR_STAIRS"
+    },
+    {
+      "id": "move_down",
+      "class": "MoveDownTrigger",
+      "icon": "NETHER_BRICK_STAIRS"
+    },
+    {
+      "id": "move_camera",
+      "class": "MoveCameraTrigger",
+      "icon": "COMPASS"
+    },
+    {
+      "id": "stands_on_specific_block",
+      "class": "StandsOnSpecificBlockTrigger",
+      "icon": "PACKED_ICE"
+    },
+    {
+      "id": "stands_not_on_specific_block",
+      "class": "StandsNotOnSpecificBlockTrigger",
+      "icon": "MAGMA_BLOCK"
+    },
+    {
+      "id": "gain_xp",
+      "class": "GainXPTrigger",
+      "icon": "EXPERIENCE_BOTTLE"
+    },
+    {
+      "id": "level_up",
+      "class": "LevelUpTrigger",
+      "icon": "ENCHANTING_TABLE"
+    },
+    {
+      "id": "item_craft",
+      "class": "CraftItemTrigger",
+      "icon": "CRAFTING_TABLE"
+    },
+    {
+      "id": "in_liquid",
+      "class": "InLiquidTrigger",
+      "icon": "BUCKET"
+    },
+    {
+      "id": "get_item",
+      "class": "GetItemTrigger",
+      "icon": "HOPPER"
+    }
+  ]
+}

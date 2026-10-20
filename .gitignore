@@ -1,15 +1,21 @@
 
 # User-specific stuff
 .idea/
-plugin/dependency-reduced-pom.xml
-mongo-connector/dependency-reduced-pom.xml
+*.iml
+**/dependency-reduced-pom.xml
+**/local.gradle.kts
 
 # Test Sources
-**/src/test
 
 # Compiled files
 **/out
 **/target
+**/build
 *.class
 *.jar
-*.iml
+.gradle/
+
+*.log
+
+# Gradle wrapper jar must be tracked
+!gradle/wrapper/gradle-wrapper.jar
