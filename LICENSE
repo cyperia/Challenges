@@ -111,7 +111,8 @@ an official source, and parts marked in the Software as excluded from this
 license, such as the code of internal beta challenges, are not licensed and
 remain all rights reserved. This license applies to all versions of the Software
 published by the copyright holders, including earlier releases. Rights that
-someone already received to a copy under a different license are not affected.
+someone already received to a copy under a license other than a version of this
+license are not affected.
 
 8. Contributions. By submitting a contribution, such as code, a translation or
 an asset, to an official source, the contributor confirms they have the right to
@@ -131,3 +132,9 @@ protection of the country where a consumer lives is not affected. The Software i
 provided free of charge and as is, without any warranty. The copyright holders
 are liable only for intent and gross negligence, except where mandatory law,
 such as the German Product Liability Act, provides otherwise.
+
+11. Changes. The copyright holders may publish a new version of this license at
+any time, and it applies to releases published after it. For earlier releases,
+they may end this license with 90 days notice, published in the official GitHub
+repository and on the official Modrinth page. After that, every version of the
+Software may only be used under the license version then in force.
