@@ -65,7 +65,7 @@ public final class ChallengeLoader extends ModuleChallengeLoader {
     }
     try {
       IChallenge challenge = (IChallenge) type.getDeclaredConstructor().newInstance();
-      registerWithCommand(challenge, implementation.commands().toArray(String[]::new));
+      register(challenge);
     } catch (Throwable ex) {
       Logger.error("Could not create challenge {}", entry.id(), ex);
     }

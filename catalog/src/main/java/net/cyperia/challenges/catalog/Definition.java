@@ -9,8 +9,7 @@ import java.util.Map;
 public sealed interface Definition {
 
   // A class of its own; requiredPlugin is a plugin that has to be enabled for it to register
-  record Implementation(@NotNull String className, @NotNull List<String> commands,
-                        @Nullable String requiredPlugin) implements Definition {
+  record Implementation(@NotNull String className, @Nullable String requiredPlugin) implements Definition {
   }
 
   // A trigger and an action; a value is set by the player and filled into a setting whose value is ${value}

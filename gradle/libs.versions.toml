@@ -11,6 +11,8 @@ protocol-lib = "5.4.0"
 # utilities
 slf4j = "1.7.32"
 gson = "2.13.2"
+# The version paper-api ships, so the catalog export renders texts like the game
+adventure = "5.2.0"
 
 # annotations, compile time processing
 lombok = "1.18.38"
@@ -45,6 +47,7 @@ protocol-lib = { group = "net.dmulloy2", name = "ProtocolLib", version.ref = "pr
 # utilities
 slf4j-api = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+adventure-minimessage = { group = "net.kyori", name = "adventure-text-minimessage", version.ref = "adventure" }
 
 # annotations, compile time processing
 lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }

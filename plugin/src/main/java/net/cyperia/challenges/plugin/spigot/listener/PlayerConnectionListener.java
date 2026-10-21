@@ -9,6 +9,7 @@ import net.cyperia.challenges.plugin.content.loader.LanguageLoader;
 import net.cyperia.challenges.plugin.content.loader.UpdateLoader;
 import net.cyperia.challenges.plugin.management.files.ConfigManager;
 import net.cyperia.challenges.plugin.management.server.PlayerManager;
+import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import net.cyperia.challenges.plugin.utils.misc.DatabaseHelper;
 import net.cyperia.challenges.plugin.utils.misc.ParticleUtils;
 import net.cyperia.commons.bukkit.utils.misc.MinecraftVersion;
@@ -69,11 +70,11 @@ public class PlayerConnectionListener implements Listener {
       }
     }
 
-    if (Challenges.getInstance().isFirstInstall() && !player.hasPermission("challenges.gui")) {
+    if (Challenges.getInstance().isFirstInstall() && !player.hasPermission(ChallengesPermissions.COMMAND_CHALLENGES)) {
       MessageKey.of("server.not-op").send(player, Prefix.CHALLENGES);
     }
 
-    if (player.hasPermission("challenges.gui")) {
+    if (player.hasPermission(ChallengesPermissions.COMMAND_CHALLENGES)) {
       if (Challenges.getInstance().isFirstInstall()) {
         player.sendMessage("");
         HelpListener.sendFirstInstallWelcome(player);
@@ -100,7 +101,7 @@ public class PlayerConnectionListener implements Listener {
       ChallengeAPI.resumeTimer();
     }
 
-    if (player.hasPermission("challenges.gui")) {
+    if (player.hasPermission(ChallengesPermissions.COMMAND_CHALLENGES)) {
       int replacedMessages = Challenges.getInstance().getLoaderRegistry().getFirstLoaderByClass(LanguageLoader.class)
         .map(LanguageLoader::takeUnannouncedReplacements)
         .orElse(0);

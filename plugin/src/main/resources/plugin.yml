@@ -23,219 +23,25 @@ require:
   paper: true
   version: 26.3
 
-commands:
-  help:
-    usage: "/help"
-    description: "Provides you with some information of this plugin"
-    aliases:
-      - "hilfe"
-      - "h"
-      - "info"
-  reset:
-    usage: "/reset [confirm]"
-    description: "Resets the world and stops/restarts the server"
-    permission: "challenges.reset"
-  challenges:
-    usage: "/c"
-    permission: "challenges.gui"
-    description: "Opens the Settings GUI"
-    aliases:
-      - "c"
-      - "settings"
-      - "challenge"
-  timer:
-    usage: "/timer <set/stop/set>"
-    description: "Start/Stops/Sets the timer"
-    permission: "challenges.timer"
-    aliases:
-      - "t"
-  start:
-    usage: "/start"
-    description: "Start the timer"
-    permission: "challenges.timer"
-    aliases:
-      - "resume"
-  pause:
-    usage: "/pause"
-    description: "Pauses the timer"
-    permission: "challenges.timer"
-  search:
-    usage: "/search [query]"
-    description: "Opens the search menu, optionally with a query already entered"
-    permission: "challenges.gui"
-  randomizer:
-    usage: "/randomizer [query]"
-    description: "Shows what the enabled randomizers turn each block, recipe and mob into, optionally searched"
-    permission: "challenges.randomizer"
-  goal:
-    usage: "/goal"
-    description: "Lists every entry of the current goal and who got it"
-  position:
-    usage: "/pos [name]"
-    description: "Allows you to save locations"
-    aliases:
-      - "pos"
-      - "coords"
-  delposition:
-    usage: "/delpos [name]"
-    description: "Deletes previously saved locations"
-    aliases:
-      - "delpos"
-      - "delcoords"
-    permission: "challenges.delposition"
-  setposition:
-    usage: "/setpos [name]"
-    description: "Creates a position at a specific location"
-    aliases:
-      - "setpos"
-      - "setcoords"
-    permission: "challenges.setposition"
-  backpack:
-    usage: "/bp"
-    description: "Opens the player's or the shared backpack"
-    aliases:
-      - "bp"
-  database:
-    aliases:
-      - "db"
-    usage: "/db <save/load> <config/custom_challenges>"
-    description: "Manage your settings in the database"
-    permission: "challenges.database"
-  gamestate:
-    usage: "/gamestate <reset/reload>"
-    description: "Allows you to reload/reset the current challenges gamestate"
-    permission: "challenges.gamestate"
-  top:
-    usage: "/top"
-    description: "Teleports you to the surface or to the overworld"
-    aliases:
-      - "up"
-  village:
-    usage: "/village"
-    description: "Teleports you to a not generated village"
-    permission: "challenges.village"
-  heal:
-    usage: "/heal [player]"
-    description: "Heals yourself or other players"
-    permission: "challenges.heal"
-  feed:
-    usage: "/feed [player]"
-    description: "Reset food level of yourself or other players"
-    permission: "challenges.feed"
-  invsee:
-    usage: "/invsee <player>"
-    description: "Opens an inventory of another player"
-    permission: "challenges.invsee"
-  fly:
-    usage: "fly [player]"
-    description: "Let yourself or other players fly"
-    permission: "challenges.fly"
-  gamemode:
-    usage: "/gm <gamemode> [player]"
-    aliases:
-      - "gm"
-  gmc:
-    usage: "/gmc [player]"
-    description: "Sets your or other players' gamemode to creative, shortcut for /gamemode creative [player]"
-    permission: "challenges.gamemode.creative"
-  gms:
-    usage: "/gms [player]"
-    description: "Sets your or other players' gamemode to survival, shortcut for /gamemode survival [player]"
-    permission: "challenges.gamemode.survival"
-  gma:
-    usage: "/gma [player]"
-    permission: "challenges.gamemode.adventure"
-  gmsp:
-    usage: "/gmsp [player]"
-    permission: "challenges.gamemode.spectator"
-  weather:
-    usage: "/weather <clear/sun/rain/thunder>"
-    description: "Changes the weather"
-    permission: "challenges.weather"
-  sun:
-    usage: "/sun"
-    description: "Makes the weather sunny, shortcut for /weather sun"
-    permission: "challenges.weather"
-  rain:
-    usage: "/rain"
-    description: "Makes the weather rainy, shortcut for /weather rain"
-    permission: "challenges.weather"
-  thunder:
-    usage: "/thunder"
-    description: "Makes the weather thundery, shortcut for /weather thunder"
-    permission: "challenges.weather"
-  time:
-    usage: "/time <day/night/noon/midnight/set/add/remove/query>"
-    description: "Sets the time"
-    permission: "challenges.time"
-  day:
-    usage: "/day"
-    description: "Makes the time to day, shortcut for /time day"
-    permission: "challenges.time"
-  night:
-    usage: "/night"
-    description: "Makes the time to night, shortcut for /time night"
-    permission: "challenges.time"
-  noon:
-    usage: "/noon"
-    description: "Makes the time to noon, shortcut for /time noon"
-    permission: "challenges.time"
-  midnight:
-    usage: "/midnight"
-    description: "Makes the time to midnight, shortcut for /time midnight"
-    permission: "challenges.time"
-  enderchest:
-    usage: "/enderchest"
-    description: "Opens your enderchest"
-    aliases:
-      - ec
-    permission: "challenges.enderchest"
-  difficulty:
-    usage: "/difficulty <difficulty>"
-    description: "Changes the difficulty with saving it in the difficulty setting"
-    permission: "challenges.difficulty"
-  world:
-    usage: "/world <world>"
-    description: "Teleport to another world"
-    permission: "challenges.world"
-  back:
-    usage: "/back [count]"
-    description: "Teleport to old locations"
-    permission: "challenges.back"
-  skipitem:
-    usage: "/skipitem"
-    description: "Skips the current item of the collect all items goal"
-    permission: "challenges.manage.current"
-  openmissingitems:
-    usage: "/openmissingitems"
-    description: "Reopens the missing items inventory"
-  result:
-    usage: "/result"
-    description: "Shows the result of the current force battle (if enabled)"
-    permission: "challenges.result"
-  guess:
-    usage: "/guess <answer>"
-    description: "Used to guess at quiz challenge"
-  skiptimer:
-    usage: "/skiptimer [challenge]"
-    description: "Skips the timers of all activated challenges, or of one"
-    permission: "challenges.skiptimer"
-  godmode:
-    usage: "/godmode [player]"
-    description: "Disable damage for a player"
-    permission: "challenges.godmode"
-    aliases:
-      - "god"
-  setlanguage:
-    usage: "/setlanguage [language]"
-    description: "Changes the language"
-    permission: "challenges.setlanguage"
-    aliases:
-      - "setlang"
-      - "language"
-  cancelinput:
-    usage: "/cancelinput"
-    description: "Cancels the current chat input"
-  teams:
-    usage: "/teams"
-    description: "Join or create a team"
+# Every other node defaults to op, see ChallengesPermissions
+permissions:
+  challenges.command.help:
+    default: true
+  challenges.command.goal:
+    default: true
+  challenges.command.teams:
+    default: true
+  challenges.command.cancelinput:
+    default: true
+  challenges.command.position:
+    default: true
+  challenges.command.backpack:
+    default: true
+  challenges.command.top:
+    default: true
+  challenges.command.enderchest:
+    default: true
+  challenges.command.openmissingitems:
+    default: true
+  challenges.command.guess:
+    default: true

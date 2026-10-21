@@ -1,12 +1,16 @@
 package net.cyperia.challenges.plugin.challenges.implementation.setting;
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.cyperia.challenges.plugin.ChallengeAPI;
 import net.cyperia.challenges.plugin.challenges.type.ValueUnit;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.Modifier;
 import net.cyperia.challenges.plugin.content.i18n.LocalizableMessage;
-import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.content.i18n.Prefix;
-import net.cyperia.challenges.plugin.utils.bukkit.command.SenderCommand;
+import net.cyperia.challenges.plugin.management.command.ChallengeCommand;
+import net.cyperia.challenges.plugin.management.command.CommandInfo;
+import net.cyperia.challenges.plugin.management.command.CommandNodes;
+import net.cyperia.challenges.plugin.management.command.CommandProvider;
+import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import net.cyperia.commons.common.config.Document;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -16,18 +20,13 @@ import org.bukkit.Difficulty;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
-public class DifficultySetting extends Modifier implements SenderCommand, TabCompleter {
+public class DifficultySetting extends Modifier implements CommandProvider {
 
   public DifficultySetting() {
     super(0, 3, 2);
@@ -77,20 +76,13 @@ public class DifficultySetting extends Modifier implements SenderCommand, TabCom
     super.loadSettings(document);
   }
 
+  @NotNull
   @Override
-  public void onCommand(@NotNull CommandSender sender, @NotNull String[] args) throws Exception {
+  public List<ChallengeCommand> getCommands() {
+    return List.of(new DifficultyCommand());
+  }
 
-    if (args.length == 0) {
-      getChallengeMessageKey("command-current").send(sender, Prefix.CHALLENGES, getDifficultyComponent(getValue()));
-      return;
-    }
-
-    int difficulty = getDifficultyValue(args[0]);
-    if (difficulty == -1) {
-      MessageKey.of("command.syntax").send(sender, Prefix.CHALLENGES, "difficulty <difficulty>");
-      return;
-    }
-
+  private void setDifficultyByCommand(int difficulty) {
     setValue(difficulty);
     getChallengeMessageKey("command-set").broadcast(Prefix.CHALLENGES, getDifficultyComponent(difficulty));
     playValueChangeTitle();
@@ -112,32 +104,23 @@ public class DifficultySetting extends Modifier implements SenderCommand, TabCom
     };
   }
 
-  @Nullable
-  @Override
-  public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-    if (args.length > 1) return new ArrayList<>();
-    return Arrays.asList("peaceful", "easy", "normal", "hard");
-  }
+  private class DifficultyCommand implements ChallengeCommand {
 
-  private int getDifficultyValue(@NotNull String input) {
-
-    switch (input.toLowerCase()) {
-      case "peaceful":
-        return 0;
-      case "easy":
-        return 1;
-      case "normal":
-        return 2;
-      case "hard":
-        return 3;
+    @NotNull
+    @Override
+    public CommandInfo info() {
+      return CommandInfo.command("difficulty", ChallengesPermissions.COMMAND_DIFFICULTY);
     }
 
-    try {
-      int value = Integer.parseInt(input);
-      if (value < 0 || value > 3) return -1;
-      return value;
-    } catch (Exception ex) {
-      return -1;
+    @Override
+    public <S> void define(@NotNull LiteralArgumentBuilder<S> root, @NotNull CommandNodes<S> nodes) {
+      root.executes(nodes.run((sender, context) ->
+        getChallengeMessageKey("command-current").send(sender, Prefix.CHALLENGES, getDifficultyComponent(getValue()))));
+      for (Difficulty difficulty : Difficulty.values()) {
+        for (String name : List.of(difficulty.name().toLowerCase(Locale.ROOT), String.valueOf(difficulty.ordinal()))) {
+          root.then(nodes.literal(name).executes(nodes.run((sender, context) -> setDifficultyByCommand(difficulty.ordinal()))));
+        }
+      }
     }
 
   }

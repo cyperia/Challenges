@@ -7,6 +7,7 @@ import net.cyperia.challenges.plugin.management.menu.format.Interaction;
 import net.cyperia.challenges.plugin.management.scheduler.policy.ExtraWorldPolicy;
 import net.cyperia.challenges.plugin.management.scheduler.policy.TimerPolicy;
 import net.cyperia.challenges.plugin.management.scheduler.task.ScheduledTask;
+import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
 import net.cyperia.commons.bukkit.utils.menu.MenuClickInfo;
 import net.cyperia.commons.bukkit.utils.menu.MenuClickType;
@@ -94,7 +95,7 @@ public class TimerTimeMenuGenerator extends AbstractTimeUnitMenuGenerator {
         boolean add = info.getSlot() == slot - CONTROL_SLOT_OFFSET;
         boolean subtract = info.getSlot() == slot + CONTROL_SLOT_OFFSET;
         if (!add && !subtract && info.getSlot() != slot) continue;
-        if (playNoPermissionsEffect(info.getPlayer())) return true;
+        if (playNoPermissionsEffect(info.getPlayer(), add || subtract ? ChallengesPermissions.COMMAND_TIMER_SET : ChallengesPermissions.COMMAND_TIMER_RESET)) return true;
 
         if (!add && !subtract) {
           getTimer().reset();

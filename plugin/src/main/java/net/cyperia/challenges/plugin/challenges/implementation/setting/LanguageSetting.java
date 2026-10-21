@@ -1,5 +1,7 @@
 package net.cyperia.challenges.plugin.challenges.implementation.setting;
 
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.challenges.type.ValueUnit;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.Modifier;
@@ -9,10 +11,12 @@ import net.cyperia.challenges.plugin.content.i18n.Prefix;
 import net.cyperia.challenges.plugin.content.i18n.TranslationManager;
 import net.cyperia.challenges.plugin.content.i18n.hook.LanguageProvider;
 import net.cyperia.challenges.plugin.content.loader.LanguageLoader;
+import net.cyperia.challenges.plugin.management.command.ChallengeCommand;
+import net.cyperia.challenges.plugin.management.command.CommandInfo;
+import net.cyperia.challenges.plugin.management.command.CommandNodes;
+import net.cyperia.challenges.plugin.management.command.CommandProvider;
 import net.cyperia.challenges.plugin.management.menu.info.ChallengeMenuClickInfo;
-import net.cyperia.challenges.plugin.utils.bukkit.command.Completer;
-import net.cyperia.challenges.plugin.utils.bukkit.command.SenderCommand;
-import net.cyperia.challenges.plugin.utils.misc.Utils;
+import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
 import net.cyperia.commons.bukkit.utils.item.ItemBuilder;
 import net.cyperia.commons.common.config.Document;
@@ -26,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 
-public class LanguageSetting extends Modifier implements SenderCommand, Completer {
+public class LanguageSetting extends Modifier implements CommandProvider {
 
   public static final int ENGLISH = 1;
   public static final int GERMAN = 2;
@@ -124,13 +128,13 @@ public class LanguageSetting extends Modifier implements SenderCommand, Complete
     // will be saved in plugin.yml (saved by LanguageLoader)
   }
 
+  @NotNull
   @Override
-  public void onCommand(@NotNull CommandSender sender, @NotNull String[] args) throws Exception {
-    if (args.length < 1) {
-      MessageKey.of("command.syntax").send(sender, Prefix.CHALLENGES, "setlang <language>");
-      return;
-    }
+  public List<ChallengeCommand> getCommands() {
+    return List.of(new SetLanguageCommand());
+  }
 
+  private void setLanguage(@NotNull CommandSender sender, @NotNull String language) {
     LanguageProvider languageProvider = Challenges.getInstance().getTranslationManager().getLanguageProvider();
     if (!languageProvider.isDefaultBehaviour()) {
       getChallengeMessageKey("command-disabled").send(sender, Prefix.CHALLENGES);
@@ -138,11 +142,11 @@ public class LanguageSetting extends Modifier implements SenderCommand, Complete
     }
 
     String languageTag;
-    switch (args[0].toLowerCase()) {
+    switch (language.toLowerCase()) {
       case "german", "deutsch", "de" -> languageTag = "de";
       case "english", "englisch", "en" -> languageTag = "en";
       default -> {
-        getChallengeMessageKey("command-unknown").send(sender, Prefix.CHALLENGES, Component.text(args[0]));
+        getChallengeMessageKey("command-unknown").send(sender, Prefix.CHALLENGES, Component.text(language));
         return;
       }
     }
@@ -154,8 +158,21 @@ public class LanguageSetting extends Modifier implements SenderCommand, Complete
     playValueChangeTitle();
   }
 
-  @Override
-  public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull String[] args) {
-    return Utils.filterRecommendations(args[0], "german", "english");
+  private class SetLanguageCommand implements ChallengeCommand {
+
+    @NotNull
+    @Override
+    public CommandInfo info() {
+      return CommandInfo.command("setlanguage", ChallengesPermissions.COMMAND_SETLANGUAGE).withAliases("setlang", "language");
+    }
+
+    @Override
+    public <S> void define(@NotNull LiteralArgumentBuilder<S> root, @NotNull CommandNodes<S> nodes) {
+      root.then(nodes.argument("language", StringArgumentType.word())
+        .suggests(nodes.suggest(sender -> List.of("german", "english")))
+        .executes(nodes.run((sender, context) -> setLanguage(sender, StringArgumentType.getString(context, "language")))));
+    }
+
   }
+
 }

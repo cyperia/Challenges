@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 // id is the key the plugin saves the challenge's settings under, so it must never change; an entry that is
 // not registered keeps a challenge the plugin does not offer (yet), for example one that is still broken
 public record Challenge(@NotNull String id, @NotNull String key, @NotNull String category, @NotNull Icon icon,
-                        @NotNull Definition definition, boolean excludeFromRandom, boolean registered,
+                        @NotNull Definition definition, boolean excludeFromRandom, boolean featured, boolean registered,
                         @NotNull Release release) {
 
   @NotNull

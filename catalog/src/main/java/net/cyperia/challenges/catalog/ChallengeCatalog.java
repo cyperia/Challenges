@@ -23,9 +23,9 @@ public final class ChallengeCatalog {
   public static final String DIRECTORY = "challenges-catalog/";
 
   private static final Set<String> CHALLENGE_FIELDS = Set.of("id", "key", "category", "icon", "color", "since",
-    "updated", "beta", "excludeFromRandom", "registered", "class", "command", "requires", "preset", "damageRule", "materialRule");
+    "updated", "beta", "excludeFromRandom", "featured", "registered", "class", "requires", "preset", "damageRule", "materialRule");
   private static final Set<String> DEFINITIONS = Set.of("class", "preset", "damageRule", "materialRule");
-  private static final Set<String> CLASS_ONLY = Set.of("command", "requires");
+  private static final Set<String> CLASS_ONLY = Set.of("requires");
   private static final Set<String> CUSTOM_SETTING_FIELDS = Set.of("id", "class", "icon", "color", "since", "updated",
     "beta", "fallbackIds");
 
@@ -173,13 +173,14 @@ public final class ChallengeCatalog {
     }
     Definition definition = switch (definitions.getFirst()) {
       case "class" -> new Definition.Implementation(className(classPackage, string(json, "class")),
-        strings(json, "command"), optionalString(json, "requires"));
+        optionalString(json, "requires"));
       case "preset" -> preset(json.getAsJsonObject("preset"));
       case "damageRule" -> new Definition.DamageRule(strings(json, "damageRule"));
       default -> new Definition.MaterialRule(strings(json, "materialRule"));
     };
     return new Challenge(id, string(json, "key"), string(json, "category"), icon(json), definition,
-      flag(json, "excludeFromRandom"), !json.has("registered") || json.get("registered").getAsBoolean(), release(json));
+      flag(json, "excludeFromRandom"), flag(json, "featured"), !json.has("registered") || json.get("registered").getAsBoolean(),
+      release(json));
   }
 
   @NotNull

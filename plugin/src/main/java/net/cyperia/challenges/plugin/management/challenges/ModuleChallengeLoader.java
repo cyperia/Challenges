@@ -4,9 +4,9 @@ import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.challenges.custom.CustomChallenge;
 import net.cyperia.challenges.plugin.challenges.custom.TriggerActionChallenge;
 import net.cyperia.challenges.plugin.challenges.type.IChallenge;
+import net.cyperia.challenges.plugin.management.command.CommandProvider;
 import net.cyperia.commons.bukkit.core.BukkitModule;
 import net.cyperia.commons.bukkit.utils.logging.Logger;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +19,7 @@ public class ModuleChallengeLoader {
     this.plugin = plugin;
   }
 
-  public final void registerWithCommand(@NotNull IChallenge challenge, @NotNull String... commandNames) {
+  public final void register(@NotNull IChallenge challenge) {
     try {
 
       Challenges.getInstance().getSearchRegistry().register(challenge);
@@ -32,8 +32,8 @@ public class ModuleChallengeLoader {
         Challenges.getInstance().getPresetChallengeLoader().listen(triggerActionChallenge);
       }
 
-      if (challenge instanceof CommandExecutor) {
-        plugin.registerCommand((CommandExecutor) challenge, commandNames);
+      if (challenge instanceof CommandProvider provider) {
+        provider.getCommands().forEach(Challenges.getInstance().getCommandManager()::register);
       }
       if (challenge instanceof Listener) {
         plugin.registerListener((Listener) challenge);
@@ -42,10 +42,6 @@ public class ModuleChallengeLoader {
     } catch (Throwable ex) {
       Logger.error("Could not register challenge {}", challenge.getClass().getSimpleName(), ex);
     }
-  }
-
-  public final void register(@NotNull IChallenge challenge) {
-    registerWithCommand(challenge);
   }
 
   /**

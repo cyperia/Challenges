@@ -6,8 +6,7 @@
       "key": "difficulty",
       "category": "difficulty",
       "icon": "GLISTERING_MELON_SLICE",
-      "class": "setting.DifficultySetting",
-      "command": "difficulty"
+      "class": "setting.DifficultySetting"
     },
     {
       "id": "damagemultiplier",
@@ -106,8 +105,7 @@
       "key": "position",
       "category": "utility",
       "icon": "BLUE_BANNER",
-      "class": "setting.PositionSetting",
-      "command": "position"
+      "class": "setting.PositionSetting"
     },
     {
       "id": "deathposition",
@@ -122,16 +120,14 @@
       "key": "top-command",
       "category": "utility",
       "icon": "MAGENTA_GLAZED_TERRACOTTA",
-      "class": "setting.TopCommandSetting",
-      "command": "top"
+      "class": "setting.TopCommandSetting"
     },
     {
       "id": "backpack",
       "key": "backpack",
       "category": "utility",
       "icon": "CHEST",
-      "class": "setting.BackpackSetting",
-      "command": "backpack"
+      "class": "setting.BackpackSetting"
     },
     {
       "id": "enderchestcommand",
@@ -139,7 +135,6 @@
       "category": "utility",
       "icon": "ENDER_CHEST",
       "class": "setting.EnderChestCommandSetting",
-      "command": "enderchest",
       "since": "2.0"
     },
     {
@@ -179,8 +174,7 @@
       "key": "language",
       "category": "misc_settings",
       "icon": "KNOWLEDGE_BOOK",
-      "class": "setting.LanguageSetting",
-      "command": "setlanguage"
+      "class": "setting.LanguageSetting"
     },
     {
       "id": "pregamemovement",
@@ -488,6 +482,7 @@
     },
     {
       "id": "chunkmobbattle",
+      "featured": true,
       "key": "chunk-mob-battle",
       "category": "entities",
       "icon": "IRON_BARS",
@@ -608,6 +603,7 @@
     },
     {
       "id": "intervalwarden",
+      "featured": true,
       "key": "interval-warden",
       "category": "entities",
       "icon": "SCULK_SHRIEKER",
@@ -821,6 +817,7 @@
     },
     {
       "id": "levelblock",
+      "featured": true,
       "key": "level-block",
       "category": "world",
       "icon": "EXPERIENCE_BOTTLE",
@@ -830,6 +827,7 @@
     },
     {
       "id": "damageborder",
+      "featured": true,
       "key": "damage-border",
       "category": "world",
       "icon": "MAGENTA_GLAZED_TERRACOTTA",
@@ -839,6 +837,7 @@
     },
     {
       "id": "chunkrandomblock",
+      "featured": true,
       "key": "chunk-random-block",
       "category": "world",
       "icon": "PURPUR_BLOCK",
@@ -847,6 +846,7 @@
     },
     {
       "id": "allblockssame",
+      "featured": true,
       "key": "all-blocks-same",
       "category": "world",
       "icon": "WHITE_CONCRETE",
@@ -855,6 +855,7 @@
     },
     {
       "id": "stepoffblock",
+      "featured": true,
       "key": "step-off-block",
       "category": "world",
       "icon": "CRACKED_STONE_BRICKS",
@@ -863,6 +864,7 @@
     },
     {
       "id": "stepofflava",
+      "featured": true,
       "key": "step-off-lava",
       "category": "world",
       "icon": "POINTED_DRIPSTONE",
@@ -1016,6 +1018,7 @@
     },
     {
       "id": "strongholdworld",
+      "featured": true,
       "key": "stronghold-world",
       "category": "world_generator",
       "icon": "END_PORTAL_FRAME",
@@ -1025,6 +1028,7 @@
     },
     {
       "id": "obsidianworld",
+      "featured": true,
       "key": "obsidian-world",
       "category": "world_generator",
       "icon": "OBSIDIAN",
@@ -1034,6 +1038,7 @@
     },
     {
       "id": "lineworld",
+      "featured": true,
       "key": "line-world",
       "category": "world_generator",
       "icon": "END_ROD",
@@ -1043,6 +1048,7 @@
     },
     {
       "id": "gridworld",
+      "featured": true,
       "key": "grid-world",
       "category": "world_generator",
       "icon": "IRON_BARS",
@@ -1081,7 +1087,6 @@
       "category": "inventory",
       "icon": "FISHING_ROD",
       "class": "challenge.inventory.MissingItemsChallenge",
-      "command": "openmissingitems",
       "since": "2.0",
       "updated": "3.0"
     },
@@ -1319,7 +1324,6 @@
       "category": "misc_challenge",
       "icon": "WRITABLE_BOOK",
       "class": "challenge.quiz.QuizChallenge",
-      "command": "guess",
       "since": "3.0"
     },
     {
@@ -1372,6 +1376,7 @@
     },
     {
       "id": "witherwaves",
+      "featured": true,
       "key": "goal-wither-waves",
       "category": "kill_entity",
       "icon": "WITHER_SKELETON_SKULL",
@@ -1388,6 +1393,7 @@
     },
     {
       "id": "killallbossesnew",
+      "featured": true,
       "key": "goal-all-bosses-new",
       "category": "kill_entity",
       "icon": "NETHERITE_SWORD",
@@ -1592,6 +1598,7 @@
     },
     {
       "id": "forceitembattle",
+      "featured": true,
       "key": "force-item-battle",
       "category": "force_battle",
       "icon": "ITEM_FRAME",
@@ -1667,11 +1674,11 @@
     },
     {
       "id": "collectallitems",
+      "featured": true,
       "key": "collect-all-items",
       "category": "misc_goal",
       "icon": "GRASS_BLOCK",
       "class": "goal.CollectAllItemsGoal",
-      "command": "skipitem",
       "since": "2.0",
       "updated": "3.0"
     },

@@ -33,7 +33,7 @@ class ChallengeCatalogTest {
     assertEquals("cut-clean", cutClean.key());
     assertEquals("utility", cutClean.category());
     assertEquals(new Icon("IRON_AXE", null), cutClean.icon());
-    assertEquals(new Definition.Implementation(IMPLEMENTATION + "setting.CutCleanSetting", List.of(), null), cutClean.definition());
+    assertEquals(new Definition.Implementation(IMPLEMENTATION + "setting.CutCleanSetting", null), cutClean.definition());
     assertEquals("2.0", cutClean.release().since());
     assertSame(cutClean, bundled.challengeOf(IMPLEMENTATION + "setting.CutCleanSetting").orElseThrow());
   }
@@ -87,9 +87,9 @@ class ChallengeCatalogTest {
   }
 
   @Test
-  void rejectsACommandOnAPreset(@TempDir Path dir) throws IOException {
+  void rejectsARequiredPluginOnAPreset(@TempDir Path dir) throws IOException {
     assertRejected(dir, """
-      {"challenges": [{"id": "a", "key": "a", "category": "c", "icon": "STONE", "command": "a",
+      {"challenges": [{"id": "a", "key": "a", "category": "c", "icon": "STONE", "requires": "a",
         "preset": {"trigger": "t", "triggerSettings": {}, "action": "x", "actionSettings": {}}}]}
       """, "only apply to an entry with a class");
   }

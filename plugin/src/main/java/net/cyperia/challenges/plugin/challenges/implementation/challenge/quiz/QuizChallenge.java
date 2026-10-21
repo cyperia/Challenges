@@ -1,6 +1,8 @@
 package net.cyperia.challenges.plugin.challenges.implementation.challenge.quiz;
 
-import org.bukkit.attribute.Attribute;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.cyperia.challenges.plugin.ChallengeAPI;
@@ -10,19 +12,21 @@ import net.cyperia.challenges.plugin.challenges.type.helper.ChallengeHelper;
 import net.cyperia.challenges.plugin.content.i18n.LocalizableMessage;
 import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.content.i18n.Prefix;
+import net.cyperia.challenges.plugin.management.command.ChallengeCommand;
+import net.cyperia.challenges.plugin.management.command.CommandInfo;
+import net.cyperia.challenges.plugin.management.command.CommandNodes;
+import net.cyperia.challenges.plugin.management.command.CommandProvider;
 import net.cyperia.challenges.plugin.management.scheduler.task.ScheduledTask;
+import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import net.cyperia.challenges.plugin.spigot.events.PlayerJumpEvent;
-import net.cyperia.challenges.plugin.utils.bukkit.command.PlayerCommand;
 import net.cyperia.challenges.plugin.utils.misc.BlockUtils;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
 import net.cyperia.commons.common.collection.IRandom;
 import net.cyperia.commons.common.config.Document;
 import net.kyori.adventure.bossbar.BossBar;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -48,7 +52,7 @@ import java.util.*;
  * All state lives on the main thread except {@link #activeQuestion}, which the (asynchronous) bossbar
  * update reads and is therefore swapped as a whole instead of being mutated field by field.
  */
-public class QuizChallenge extends TimedChallenge implements PlayerCommand, TabCompleter {
+public class QuizChallenge extends TimedChallenge implements CommandProvider {
 
   private static final int ANSWER_TIME_SECONDS = 60;
 
@@ -248,8 +252,13 @@ public class QuizChallenge extends TimedChallenge implements PlayerCommand, TabC
 
   // Command
 
+  @NotNull
   @Override
-  public void onCommand(@NotNull Player player, @NotNull String[] args) {
+  public List<ChallengeCommand> getCommands() {
+    return List.of(new GuessCommand());
+  }
+
+  private void guess(@NotNull Player player, @NotNull String input) throws CommandSyntaxException {
     ActiveQuestion active = activeQuestion;
     if (active == null || active.getPlayer() != player) {
       messageKey("command.none").send(player, Prefix.QUIZ);
@@ -258,11 +267,10 @@ public class QuizChallenge extends TimedChallenge implements PlayerCommand, TabC
     }
 
     Question question = active.getQuestion();
-    Answer answer = args.length == 1 ? question.findOption(args[0]) : null;
+    Answer answer = question.findOption(input);
     if (answer == null) {
       // options are clicked, not typed: anything else is a misuse and must not count as a wrong answer
-      MessageKey.of("command.syntax").send(player, Prefix.QUIZ, "guess <answer>");
-      return;
+      throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherUnknownArgument().create();
     }
 
     if (!question.correctAnswers().contains(answer)) {
@@ -291,16 +299,25 @@ public class QuizChallenge extends TimedChallenge implements PlayerCommand, TabC
     });
   }
 
-  @Override
-  public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-    ActiveQuestion active = activeQuestion;
-    if (active == null || active.getPlayer() != sender || args.length != 1) return List.of();
+  private class GuessCommand implements ChallengeCommand {
 
-    String started = args[0].toLowerCase(Locale.ROOT);
-    return active.getQuestion().options().stream()
-      .map(Answer::key)
-      .filter(key -> key.startsWith(started))
-      .toList();
+    @NotNull
+    @Override
+    public CommandInfo info() {
+      return CommandInfo.command("guess", ChallengesPermissions.COMMAND_GUESS);
+    }
+
+    @Override
+    public <S> void define(@NotNull LiteralArgumentBuilder<S> root, @NotNull CommandNodes<S> nodes) {
+      root.then(nodes.argument("answer", StringArgumentType.word())
+        .suggests(nodes.suggest(sender -> {
+          ActiveQuestion active = activeQuestion;
+          if (active == null || active.getPlayer() != sender) return List.of();
+          return active.getQuestion().options().stream().map(Answer::key).toList();
+        }))
+        .executes(nodes.runAsPlayer((player, context) -> guess(player, StringArgumentType.getString(context, "answer")))));
+    }
+
   }
 
   // Model

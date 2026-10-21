@@ -3425,7 +3425,6 @@
     "chars-exceeded": "<gray>You've reached the limit of {0} characters</gray>"
   },
   "command": {
-    "syntax": "<gray>Please use <yellow>/{0}</yellow></gray>",
     "skip-timer": {
       "done": "<gray>The timers of the following challenges were skipped: {0}</gray>",
       "none": "<gray>There is <red>no challenge</red> enabled whose timer could be skipped</gray>"
@@ -3443,7 +3442,8 @@
         "<gray>The Challenge <red>hasn't been </red>started</gray>"
       ],
       "custom-challenges": "<gray>The <yellow>local </yellow>custom challenges were reset <green>successfully</green></gray>",
-      "config": "<gray>The <yellow>local </yellow>settings were reset <green>successfully</green></gray>"
+      "config": "<gray>The <yellow>local </yellow>settings were reset <green>successfully</green></gray>",
+      "desc": "Resets the world, or only the settings or the custom challenges."
     },
     "feature-disabled": "<gray>This function is currently <red>deactivated</red></gray>",
     "database": {
@@ -3453,33 +3453,40 @@
       "config-reset": "<gray>Your settings were reset <green>successfully</green></gray>",
       "customs-loaded": "<gray>Your challenges have been loaded <green>successfully</green></gray>",
       "customs-saved": "<gray>Your challenges have been saved <green>successfully</green></gray>",
-      "customs-reset": "<gray>Your challenges were <green>successfully </green>reset</gray>"
+      "customs-reset": "<gray>Your challenges were <green>successfully </green>reset</gray>",
+      "desc": "Saves, loads or deletes your settings and challenges in the database."
     },
     "search": {
       "open": "<gray>You opened the search menu..</gray>",
-      "query": "<gray>The search menu for <yellow>{0}</yellow> was opened..</gray>"
+      "query": "<gray>The search menu for <yellow>{0}</yellow> was opened..</gray>",
+      "desc": "Searches the settings, challenges and goals."
     },
     "no-target": "<red>No </red><gray>players has been found</gray>",
     "heal": {
       "done": "<gray>You have been <green>healed</green></gray>",
-      "done-others": "<gray>You healed <yellow>{0} player/s</yellow></gray>"
+      "done-others": "<gray>You healed <yellow>{0} player/s</yellow></gray>",
+      "desc": "Heals you or other players."
     },
     "gamemode": {
       "done": "<gray>Your gamemode has been changed to <yellow>{0}</yellow></gray>",
-      "done-others": "<gray>The gamemode of <yellow>{1} </yellow>player/s has been changed to <yellow>{0}</yellow></gray>"
+      "done-others": "<gray>The gamemode of <yellow>{1} </yellow>player/s has been changed to <yellow>{0}</yellow></gray>",
+      "desc": "Changes your game mode or that of other players."
     },
     "village": {
       "searching": "<gray>A village is being searched..</gray>",
       "done": "<gray>You have been <green>teleported to a village</green></gray>",
-      "none": "<red>No </red><gray>new village was found</gray>"
+      "none": "<red>No </red><gray>new village was found</gray>",
+      "desc": "Teleports you to a village nearby."
     },
     "weather": {
       "clear": "<gray>Weather was changed to <yellow>clear</yellow></gray>",
       "rain": "<gray>Weather was changed to <yellow>rainy</yellow></gray>",
-      "thunder": "<gray>Weather was changed to <yellow>thundery</yellow></gray>"
+      "thunder": "<gray>Weather was changed to <yellow>thundery</yellow></gray>",
+      "desc": "Changes the weather."
     },
     "invsee": {
-      "open": "<gray>Inventory of <yellow>{0} </yellow>opened</gray>"
+      "open": "<gray>Inventory of <yellow>{0} </yellow>opened</gray>",
+      "desc": "Opens another player's inventory."
     },
     "time": {
       "done": "<gray>Time was changed to <yellow>{0} </yellow>Ticks <dark_gray>(</dark_gray>ca. <yellow>{1}</yellow><dark_gray>)</dark_gray></gray>",
@@ -3492,31 +3499,39 @@
       "noon": "Noon",
       "night": "Night",
       "midnight": "Midnight",
-      "day": "Day"
+      "day": "Day",
+      "desc": "Sets, changes or shows the time of day."
     },
     "fly": {
       "enabled": "<gray>You can fly <green>now</green></gray>",
       "disabled": "<gray>You can <red>no longer </red>fly</gray>",
-      "done-others": "<gray>You toggled <yellow>fly </yellow>for <yellow>{0} </yellow>player/s</gray>"
+      "done-others": "<gray>You toggled <yellow>fly </yellow>for <yellow>{0} </yellow>player/s</gray>",
+      "desc": "Toggles flight for you or other players."
     },
     "feed": {
       "done": "<gray>Your appetite was <yellow>sated</yellow></gray>",
-      "done-others": "<gray>You satiated the appetite of <yellow>{0} </yellow>player/s</gray>"
+      "done-others": "<gray>You satiated the appetite of <yellow>{0} </yellow>player/s</gray>",
+      "desc": "Fills up your hunger or that of other players."
     },
     "gamestate": {
       "reloaded": "<gray>The gamestate was <green>reloaded</green></gray>",
-      "reset": "<gray>The gamestate was <green>reset</green></gray>"
+      "reset": "<gray>The gamestate was <green>reset</green></gray>",
+      "desc": "Resets or reloads the saved progress of the challenges."
     },
     "world": {
-      "done": "<gray>You'll be teleported into the <yellow>{0}</yellow></gray>"
+      "done": "<gray>You'll be teleported into the <yellow>{0}</yellow></gray>",
+      "not-loaded": "<gray>This world is <red>not </red>loaded</gray>",
+      "desc": "Teleports you to the overworld, the nether or the end."
     },
     "back": {
       "none": "<gray>You <red>weren't </red>teleported yet</gray>",
       "done": "<gray>You were teleported <yellow>{0} </yellow>location back</gray>",
-      "done-multiple": "<gray>You were teleported <yellow>{0} </yellow>locations back</gray>"
+      "done-multiple": "<gray>You were teleported <yellow>{0} </yellow>locations back</gray>",
+      "desc": "Teleports you back to where you were before a teleport."
     },
     "result": {
-      "none": "<gray>There is currently <red>no </red>Force Battle enabled</gray>"
+      "none": "<gray>There is currently <red>no </red>Force Battle enabled</gray>",
+      "desc": "Shows the result of the current force battle."
     },
     "god-mode": {
       "enabled": "<gray>You are now in <green>God mode</green></gray>",
@@ -3525,7 +3540,8 @@
     },
     "goal": {
       "none": "<gray>No goal is <red>enabled</red></gray>",
-      "no-checklist": "<gray>The goal {0} has <red>no additional information</red></gray>"
+      "no-checklist": "<gray>The goal {0} has <red>no additional information</red></gray>",
+      "desc": "Shows what the current goal still needs and who found what."
     },
     "randomizer": {
       "none": "<gray>No randomizer is <red>enabled</red></gray>",
@@ -3540,7 +3556,101 @@
         "kill-instead": "<gray>{0}{1}</gray><yellow>{2}</yellow> <gray>← kill</gray> <yellow>{3}</yellow><gray>, it spawns instead of</gray> <yellow>{4}</yellow>",
         "shown": "<gray>{0}{1}</gray><yellow>{2}</yellow> <gray>(see above)</gray>",
         "none": "<gray>There is no known way to get</gray> <yellow>{0}</yellow>"
-      }
+      },
+      "desc": "Shows what the active randomizers turn blocks, recipes and mobs into."
+    },
+    "help": {
+      "desc": "Shows who made this plugin and where to get it."
+    },
+    "challenges": {
+      "desc": "Opens the settings menu, or one of its menus by name."
+    },
+    "timer": {
+      "desc": "Opens the timer menu, or starts, pauses and sets the timer."
+    },
+    "start": {
+      "desc": "Starts the timer."
+    },
+    "pause": {
+      "desc": "Pauses the timer."
+    },
+    "gms": {
+      "desc": "Switches to survival mode."
+    },
+    "gmc": {
+      "desc": "Switches to creative mode."
+    },
+    "gma": {
+      "desc": "Switches to adventure mode."
+    },
+    "gmsp": {
+      "desc": "Switches to spectator mode."
+    },
+    "sun": {
+      "desc": "Makes the weather clear."
+    },
+    "rain": {
+      "desc": "Makes it rain."
+    },
+    "thunder": {
+      "desc": "Starts a thunderstorm."
+    },
+    "day": {
+      "desc": "Sets the time to day."
+    },
+    "night": {
+      "desc": "Sets the time to night."
+    },
+    "noon": {
+      "desc": "Sets the time to noon."
+    },
+    "midnight": {
+      "desc": "Sets the time to midnight."
+    },
+    "skiptimer": {
+      "desc": "Skips the timers of the active challenges, or of one."
+    },
+    "cancelinput": {
+      "desc": "Cancels the current chat input."
+    },
+    "teams": {
+      "desc": "Opens the team selection."
+    },
+    "godmode": {
+      "desc": "Makes you or other players invulnerable."
+    },
+    "position": {
+      "desc": "Shows the saved positions or saves a new one."
+    },
+    "delposition": {
+      "desc": "Deletes a saved position."
+    },
+    "setposition": {
+      "desc": "Saves a position at the given coordinates."
+    },
+    "top": {
+      "desc": "Teleports you to the surface or back to the overworld."
+    },
+    "backpack": {
+      "desc": "Opens the backpack."
+    },
+    "enderchest": {
+      "desc": "Opens your ender chest."
+    },
+    "setlanguage": {
+      "desc": "Changes the language of the plugin."
+    },
+    "difficulty": {
+      "desc": "Shows or changes the difficulty."
+    },
+    "skipitem": {
+      "desc": "Skips the item you are looking for."
+    },
+    "openmissingitems": {
+      "desc": "Opens the missing items menu again."
+    },
+    "guess": {
+      "desc": "Answers the quiz question."
     }
   },
   "server": {

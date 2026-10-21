@@ -11,7 +11,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -21,12 +20,20 @@ public final class CommandHelper {
   }
 
   public static List<String> getCompletions(CommandSender sender) {
-    LinkedList<String> list = new LinkedList<>();
-    for (Player player : getTargetable(sender)) {
-      list.add(player.getName());
-    }
+    List<String> list = new ArrayList<>(getNames(sender));
     list.addAll(Arrays.asList("@a", "@r", "@p", "@s"));
     return list;
+  }
+
+  @NotNull
+  public static List<String> getNames(@NotNull CommandSender sender) {
+    return getTargetable(sender).stream().map(Player::getName).toList();
+  }
+
+  @Nullable
+  public static Player getPlayer(@NotNull CommandSender sender, @NotNull String name) {
+    Player player = Bukkit.getPlayer(name);
+    return player != null && getTargetable(sender).contains(player) ? player : null;
   }
 
   public static List<Player> getPlayers(@NotNull CommandSender sender, @NotNull String input) {

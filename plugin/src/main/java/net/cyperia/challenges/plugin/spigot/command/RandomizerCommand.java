@@ -1,27 +1,29 @@
 package net.cyperia.challenges.plugin.spigot.command;
 
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.RandomizerSetting;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.RandomizerSetting.Pairing;
 import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.content.i18n.Prefix;
+import net.cyperia.challenges.plugin.management.command.ChallengeCommand;
+import net.cyperia.challenges.plugin.management.command.CommandInfo;
+import net.cyperia.challenges.plugin.management.command.CommandNodes;
 import net.cyperia.challenges.plugin.management.menu.generator.impl.randomizer.RandomizerMenuGenerator;
 import net.cyperia.challenges.plugin.management.menu.generator.impl.randomizer.RandomizerPairingsMenuGenerator;
 import net.cyperia.challenges.plugin.management.menu.generator.impl.randomizer.RandomizerPairingsMenuGenerator.Entry;
 import net.cyperia.challenges.plugin.management.randomizer.GameObtainSources;
 import net.cyperia.challenges.plugin.management.randomizer.ObtainChain;
 import net.cyperia.challenges.plugin.management.randomizer.ObtainChain.*;
+import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import net.cyperia.challenges.plugin.utils.misc.ExperimentalUtils;
-import net.cyperia.commons.bukkit.utils.item.ItemUtils;
-import net.cyperia.challenges.plugin.utils.bukkit.command.Completer;
-import net.cyperia.challenges.plugin.utils.bukkit.command.PlayerCommand;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
+import net.cyperia.commons.bukkit.utils.item.ItemUtils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -30,10 +32,25 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public class RandomizerCommand implements PlayerCommand, Completer {
+public class RandomizerCommand implements ChallengeCommand {
+
+  @NotNull
+  @Override
+  public CommandInfo info() {
+    return CommandInfo.command("randomizer", ChallengesPermissions.COMMAND_RANDOMIZER);
+  }
 
   @Override
-  public void onCommand(@NotNull Player player, @NotNull String[] args) {
+  public <S> void define(@NotNull LiteralArgumentBuilder<S> root, @NotNull CommandNodes<S> nodes) {
+    root
+      .executes(nodes.runAsPlayer((player, context) -> show(player, new String[0])))
+      .then(nodes.argument("query", StringArgumentType.greedyString())
+        .suggests(nodes.suggest(sender -> suggestions()))
+        .executes(nodes.runAsPlayer((player, context) ->
+          show(player, StringArgumentType.getString(context, "query").trim().split(" +")))));
+  }
+
+  private static void show(@NotNull Player player, @NotNull String[] args) {
     Material item = args.length == 0 ? null : Material.matchMaterial(String.join("_", args));
     if (item != null && item.isItem()) {
       sendObtainChain(player, item);
@@ -133,10 +150,8 @@ public class RandomizerCommand implements PlayerCommand, Completer {
       .toList();
   }
 
-  @Nullable
-  @Override
-  public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull String[] args) {
-    if (args.length != 1) return List.of();
+  @NotNull
+  private static List<String> suggestions() {
     Stream<String> items = Arrays.stream(ExperimentalUtils.getMaterials())
       .filter(material -> material.isItem() && ItemUtils.isObtainableInSurvival(material))
       .map(material -> material.name().toLowerCase(Locale.ROOT));

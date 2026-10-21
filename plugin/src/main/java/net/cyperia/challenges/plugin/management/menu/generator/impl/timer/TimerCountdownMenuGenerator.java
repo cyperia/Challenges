@@ -14,6 +14,7 @@ import net.cyperia.challenges.plugin.management.scheduler.task.ScheduledTask;
 import net.cyperia.challenges.plugin.management.scheduler.task.TimerTask;
 import net.cyperia.challenges.plugin.management.scheduler.timer.ChallengeTimer;
 import net.cyperia.challenges.plugin.management.scheduler.timer.TimerStatus;
+import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
 import net.cyperia.commons.bukkit.utils.menu.MenuClickInfo;
 import net.cyperia.commons.bukkit.utils.menu.MenuClickType;
@@ -127,7 +128,7 @@ public class TimerCountdownMenuGenerator extends AbstractTimeUnitMenuGenerator {
     @Override
     public boolean handleMenuClick(@NotNull MenuClickInfo info) {
       if (info.getSlot() == STATE_SLOT) {
-        if (playNoPermissionsEffect(info.getPlayer())) return true;
+        if (playNoPermissionsEffect(info.getPlayer(), ChallengesPermissions.COMMAND_TIMER_COUNTDOWN)) return true;
         if (!getCountdownState().isToggleable()) {
           SoundSample.BASS_OFF.play(info.getPlayer());
           return true;
@@ -139,7 +140,7 @@ public class TimerCountdownMenuGenerator extends AbstractTimeUnitMenuGenerator {
 
       int unitIndex = findUnitIndex(info.getSlot());
       if (unitIndex == -1) return false;
-      if (playNoPermissionsEffect(info.getPlayer())) return true;
+      if (playNoPermissionsEffect(info.getPlayer(), ChallengesPermissions.COMMAND_TIMER_COUNTDOWN)) return true;
 
       getTimer().addCountdownSeconds(getChangeAmount(TIME_UNITS.get(unitIndex), info.isLeftClick(), info.isShiftClick()));
       SoundSample.PLOP.play(info.getPlayer());

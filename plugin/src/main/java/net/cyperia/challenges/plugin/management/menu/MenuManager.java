@@ -10,8 +10,9 @@ import net.cyperia.challenges.plugin.content.i18n.Prefix;
 import net.cyperia.challenges.plugin.content.loader.LanguageLoader;
 import net.cyperia.challenges.plugin.management.files.ConfigManager;
 import net.cyperia.challenges.plugin.management.menu.generator.AbstractMenuGenerator;
-import net.cyperia.challenges.plugin.management.menu.generator.types.IChallengesMenuGenerator;
 import net.cyperia.challenges.plugin.management.menu.generator.impl.MainMenuGenerator;
+import net.cyperia.challenges.plugin.management.menu.generator.types.IChallengesMenuGenerator;
+import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
 import net.cyperia.commons.bukkit.utils.menu.MenuPosition;
 import net.cyperia.commons.common.config.Document;
@@ -24,7 +25,6 @@ import java.util.Locale;
 
 public final class MenuManager {
 
-  public static final String MANAGE_GUI_PERMISSION = "challenges.manage";
   public static final int[] GUI_SLOTS = {30, 32, 19, 25, 11, 15, 4};
   @Getter
   private final boolean newSuffix;
@@ -140,7 +140,7 @@ public final class MenuManager {
   }
 
   static boolean maySettingsChange(boolean permissionRequired, @NotNull Permissible player) {
-    return !permissionRequired || player.hasPermission(MANAGE_GUI_PERMISSION);
+    return !permissionRequired || player.hasPermission(ChallengesPermissions.MANAGE);
   }
 
 }

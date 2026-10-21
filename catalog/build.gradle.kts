@@ -11,8 +11,11 @@ dependencies {
   compileOnly(libs.jetbrains.annotations)
   // Paper and Velocity both bundle gson, so a consumer never has to shade it
   compileOnly(libs.gson)
+  // Only CatalogExport parses texts, and every platform that loads the catalog bundles adventure
+  compileOnly(libs.adventure.minimessage)
 
   testImplementation(libs.gson)
+  testImplementation(libs.adventure.minimessage)
   testImplementation(platform(libs.junit.bom))
   testImplementation(libs.junit.jupiter)
   testRuntimeOnly(libs.junit.platform.launcher)
@@ -20,6 +23,19 @@ dependencies {
 
 tasks.test {
   useJUnitPlatform()
+}
+
+val exportRuntime by configurations.creating
+
+dependencies {
+  exportRuntime(libs.gson)
+  exportRuntime(libs.adventure.minimessage)
+}
+
+tasks.register<JavaExec>("exportCatalog") {
+  classpath = sourceSets.main.get().runtimeClasspath + exportRuntime
+  mainClass = "net.cyperia.challenges.catalog.CatalogExport"
+  args(layout.projectDirectory.file("export/catalog.json").asFile.path)
 }
 
 tasks.processResources {
