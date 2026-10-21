@@ -2,20 +2,123 @@ Challenges License (based on the tr7zw Protective License)
 
 Copyright (c) 2022-present anweisen & DomiIRL (cyperia.net, formerly coding-area.net)
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software (in source or binary form) and associated documentation files
-(the "Software"), to use, modify and compile the Software, subject to the
-following conditions:
+Definitions
 
-The Software may be used privately, publicly and commercially, including on public servers and in videos and streams, as long as visible credit to cyperia.net is given, for example in the video description, on stream or on the server. The Software may not be sold or passed off as one's own work. On a server, access to the Software or any of its features may not be limited to players who paid for it, directly or through a rank or any other purchase, and no features of the Software may be sold.
+"Software" means the Challenges plugin in source or binary form, including its
+documentation, language files and every part of it, such as individual
+challenges, settings and menus. Ports or translations of its code into another
+language, platform or mod loader are modified versions of the Software.
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+"Official sources" means only the GitHub repository github.com/cyperia/Challenges
+with its releases, and the Modrinth project page modrinth.com/plugin/challengesplugin.
+Obtaining the Software through a tool that downloads it from an official source,
+such as a server panel's plugin installer, counts as obtaining it from that source.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+"Server" means a Minecraft server or a network of servers, including its proxy,
+lobbies and every round, world or instance the Software runs on.
+
+"Operator" means whoever runs a Server, together with its staff and anyone acting
+on its behalf.
+
+"Payment" means money or anything else of value, given directly or through a
+third party, including in-game currency, items, ranks, donations, subscriptions,
+memberships, votes, boosts, sponsorships and advertising.
+
+"Content" means videos, streams, clips, posts, articles and other media that a
+content creator publishes.
+
+Permission
+
+Permission is granted, free of charge, to any person to obtain the Software from
+an official source and to copy, use, modify and compile it, only under the
+following conditions. These conditions limit the permission itself.
+
+1. No payment. No Operator may require or accept Payment, from players or from
+anyone else, in connection with the Software. In particular, no Payment may:
+a. be required to join a Server, round or world where the Software runs, or to
+use any part of the Software, including through a paid whitelist, membership,
+entry fee or tournament fee;
+b. unlock, extend, speed up, prioritize, influence or otherwise improve anyone's
+access to or use of the Software, including through perks that apply to the whole
+Server, such as a priority queue or reserved slots;
+c. give rewards, multipliers, statistics or other advantages for playing with the
+Software;
+d. buy advertising, sponsorship messages or other promotion within the Software
+or within rounds played with it.
+Roles such as staff or administrator may have more rights in the Software than
+other players, as long as no role or right is obtained through Payment. A Server
+may sell cosmetics or perks that have no effect on the Software, on joining it or
+on gameplay with it, and that are not made for, named after or advertised with
+the Software. Paying for one's own server hosting is not Payment under this
+condition.
+
+2. Content creation. Content made with the Software may be published and
+monetized, including with sponsorships, advertising, subscriptions and
+memberships. Visible credit naming cyperia.net must be given in or with the
+Content; the in-game credit shown in the Content counts. Payment received for
+the Content itself is not Payment under condition 1. As the only exception to
+condition 1, a content creator may let only their subscribers or members join a
+round, if:
+a. the creator plays in that round personally and it is streamed live or
+recorded for publication;
+b. the Server is open only during such rounds; and
+c. the subscription or membership is a general one of the creator's channel and
+is not offered or advertised mainly as access to the Software or to a Server
+running it.
+
+3. No sale. The Software and any part of it, modified or not, must not be sold,
+rented, licensed, sublicensed or otherwise offered for Payment, alone or as part
+of a bundle, pack, template or setup. This includes servers, rounds,
+installation, configuration, add-ons, presets, configurations, worlds and other
+products or services made for or with the Software and offered for Payment.
+General server hosting is not affected as long as it is not advertised, priced or
+bundled with the Software.
+
+4. Authorship and endorsement. The Software must not be presented as one's own
+work, and modified versions must state that they are modified. Nothing may
+suggest that cyperia.net endorses, runs or is affiliated with a Server, Content
+or offer.
+
+5. Credits and references. No credit or reference to cyperia.net in the Software
+may be removed, hidden, shortened, changed or replaced by any means, including in
+modified versions, through the Software's own settings, its messages or language
+files, or through other plugins, proxies or resource packs. This includes the
+credits, the links and the beta challenges that are shown locked in the public
+releases, together with their notes. Translating the text around a credit or
+reference is allowed as long as its meaning and the name cyperia.net stay.
+
+6. Copies. The Software must only be obtained from an official source. It must
+not be published, uploaded, mirrored or passed on, modified or not, except:
+a. to the Operator of the same Server, including its hosting provider, for
+running that Server;
+b. in a fork of the official repository on GitHub, as long as no releases or
+compiled builds are published from it; and
+c. in private storage that only the Operator can access.
+A copy received under a. counts as obtained from an official source. Every
+permitted copy must include this license.
+
+7. Scope. Parts of the Software that the copyright holders have not published in
+an official source, and parts marked in the Software as excluded from this
+license, such as the code of internal beta challenges, are not licensed and
+remain all rights reserved. This license applies to all versions of the Software
+published by the copyright holders, including earlier releases. Rights that
+someone already received to a copy under a different license are not affected.
+
+8. Contributions. By submitting a contribution, such as code, a translation or
+an asset, to an official source, the contributor confirms they have the right to
+do so and grants the copyright holders a non-exclusive, free of charge,
+perpetual, irrevocable, worldwide, transferable and sublicensable right to use the
+contribution in every way known at the time of submission, in particular to
+reproduce, modify, distribute and make it available to the public, also
+commercially, and to publish it under this or any other license.
+
+9. Breach. If a person does not meet any of these conditions, all rights under
+this license end automatically for that person, for every version of the
+Software. They are restored only if the copyright holders agree in text form.
+
+10. Law and liability. This license is governed by German law, excluding the UN
+Convention on Contracts for the International Sale of Goods. Mandatory consumer
+protection of the country where a consumer lives is not affected. The Software is
+provided free of charge and as is, without any warranty. The copyright holders
+are liable only for intent and gross negligence, except where mandatory law,
+such as the German Product Liability Act, provides otherwise.
