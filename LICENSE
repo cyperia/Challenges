@@ -76,7 +76,10 @@ offer the Software preinstalled or as part of a hosting package and pass it on t
 their customers for that purpose, as long as nothing is charged for the Software
 itself and cyperia.net is named where the package is offered. Any other paid
 offer that includes the Software needs the consent of the copyright holders in
-text form.
+text form. Also as an exception, a content creator may pay someone to install,
+configure or modify the Software for their Content under condition 2, as long as
+the result is only used for that creator's Content and is not offered to anyone
+else.
 
 4. Authorship and endorsement. The Software must not be presented as one's own
 work, and modified versions must state that they are modified. Nothing may
@@ -97,9 +100,10 @@ a. to the Operator of the same Server, including its hosting provider, for
 running that Server;
 b. in a fork of the official repository on GitHub, as long as no releases or
 compiled builds are published from it; and
-c. in private storage that only the Operator can access; and
-d. by a hosting provider to its customers, as allowed in condition 3.
-A copy received under a. or d. counts as obtained from an official source. Every
+c. in private storage that only the Operator can access;
+d. by a hosting provider to its customers, as allowed in condition 3; and
+e. by someone a content creator paid under condition 3, to that creator.
+A copy received under a., d. or e. counts as obtained from an official source. Every
 permitted copy must include this license.
 
 7. Scope. Parts of the Software that the copyright holders have not published in
