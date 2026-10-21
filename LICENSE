@@ -1,6 +1,6 @@
 Challenges License
 
-Copyright (c) 2022-present anweisen & DomiIRL (cyperia.net, formerly coding-area.net)
+Copyright (c) 2020-present anweisen & DomiIRL (cyperia.net, formerly coding-area.net)
 
 Definitions
 
@@ -18,14 +18,20 @@ such as a server panel's plugin installer, counts as obtaining it from that sour
 lobbies and every round, world or instance the Software runs on.
 
 "Operator" means whoever runs a Server, together with its staff and anyone acting
-on its behalf.
+on its behalf. Someone who rents or is given a round, world, instance or private
+server inside another's Server is a player of that Server, not its Operator.
+
+"Hosting provider" means a business that rents servers or server resources to
+customers who run them as their own Operator, with access to the server's files
+and configuration.
 
 "Payment" means money or anything else of value, given directly or through a
 third party, including in-game currency, items, ranks, donations, subscriptions,
 memberships, votes, boosts, sponsorships and advertising.
 
 "Content" means videos, streams, clips, posts, articles and other media that a
-content creator publishes.
+content creator publishes. "Content creator" means a natural person who publishes
+Content under their own name or channel.
 
 Permission
 
@@ -49,16 +55,18 @@ Roles such as staff or administrator may have more rights in the Software than
 other players, as long as no role or right is obtained through Payment. A Server
 may sell cosmetics or perks that have no effect on the Software, on joining it or
 on gameplay with it, and that are not made for, named after or advertised with
-the Software. Paying for one's own server hosting is not Payment under this
-condition.
+the Software. Paying a hosting provider for a Server one runs as its Operator is
+not Payment under this condition.
 
 2. Content creation. Content made with the Software may be published and
 monetized, including with sponsorships, advertising, subscriptions and
 memberships. Visible credit naming cyperia.net must be given in or with the
 Content; the in-game credit shown in the Content counts. Payment received for
-the Content itself is not Payment under condition 1. As the only exception to
-condition 1, a content creator may let only their subscribers or members join a
-round, if:
+the Content itself is not Payment under condition 1. A sponsorship or
+advertisement that a content creator shows within their own rounds as part of
+their Content is part of the Content, not a case of condition 1 d. As the only
+exception to condition 1 a. and b., a content creator may let only their
+subscribers or members join a round, if:
 a. the creator plays in that round personally and it is streamed live or
 recorded for publication;
 b. the Server is open only during such rounds; and
@@ -71,20 +79,28 @@ rented, licensed, sublicensed or otherwise offered for Payment, alone or as part
 of a bundle, pack, template or setup. This includes servers, rounds,
 installation, configuration, add-ons, presets, configurations, worlds and other
 products or services made for or with the Software and offered for Payment.
-General server hosting is not affected. As an exception, hosting providers may
-offer the Software preinstalled or as part of a hosting package and pass it on to
-their customers for that purpose, as long as nothing is charged for the Software
-itself and cyperia.net is named where the package is offered. Any other paid
-offer that includes the Software needs the consent of the copyright holders in
-text form. Also as an exception, a content creator may pay someone to install,
-configure or modify the Software for their Content under condition 2, as long as
-the result is only used for that creator's Content and is not offered to anyone
-else.
+Renting out servers or server resources on which customers install the Software
+themselves is not affected. There are only these exceptions:
+a. A hosting provider may offer an unmodified copy of the Software from an
+official source preinstalled or as part of a hosting package, and pass it on to
+its customers for running their own Server, as long as the same offer without
+the Software is available at the same price, no price, fee, plan or tier depends
+on whether the Software is included, and cyperia.net is named as the author of
+the Software wherever the Software is offered or listed.
+b. A content creator may commission someone to install, configure or modify the
+Software for that creator's own Content under condition 2. The work must be made
+for that creator alone and not be a standard package offered to several
+creators. The person commissioned may pass the result only to that creator, and
+the creator may use it only for their own Content. Running or providing a Server
+for the creator is not covered by this exception.
+Any other paid offer that includes the Software needs the consent of the
+copyright holders in text form.
 
 4. Authorship and endorsement. The Software must not be presented as one's own
 work, and modified versions must state that they are modified. Nothing may
 suggest that cyperia.net endorses, runs or is affiliated with a Server, Content
-or offer.
+or offer. Naming cyperia.net as the author, as this license requires, is not
+such a suggestion.
 
 5. Credits and references. No credit or reference to cyperia.net in the Software
 may be removed, hidden, shortened, changed or replaced by any means, including in
@@ -99,20 +115,21 @@ not be published, uploaded, mirrored or passed on, modified or not, except:
 a. to the Operator of the same Server, including its hosting provider, for
 running that Server;
 b. in a fork of the official repository on GitHub, as long as no releases or
-compiled builds are published from it; and
+compiled builds are published from it;
 c. in private storage that only the Operator can access;
-d. by a hosting provider to its customers, as allowed in condition 3; and
-e. by someone a content creator paid under condition 3, to that creator.
-A copy received under a., d. or e. counts as obtained from an official source. Every
-permitted copy must include this license.
+d. by a hosting provider to its customers under condition 3 a.; or
+e. by someone a content creator commissioned under condition 3 b., to that creator.
+A copy received under a., d. or e. counts as obtained from an official source.
+Every permitted copy must include this license.
 
 7. Scope. Parts of the Software that the copyright holders have not published in
 an official source, and parts marked in the Software as excluded from this
 license, such as the code of internal beta challenges, are not licensed and
 remain all rights reserved. This license applies to all versions of the Software
 published by the copyright holders, including earlier releases. Rights that
-someone already received to a copy under a license other than a version of this
-license are not affected.
+anyone has or obtains in a copy under a license other than a version of this
+license, such as the Apache License 2.0 for releases published before March 2022,
+are not affected.
 
 8. Contributions. By submitting a contribution, such as code, a translation or
 an asset, to an official source, the contributor confirms they have the right to
@@ -124,7 +141,8 @@ commercially, and to publish it under this or any other license.
 
 9. Breach. If a person does not meet any of these conditions, all rights under
 this license end automatically for that person, for every version of the
-Software. They are restored only if the copyright holders agree in text form.
+Software, including rights under later versions of this license. They are
+restored only if the copyright holders agree in text form.
 
 10. Law and liability. This license is governed by German law, excluding the UN
 Convention on Contracts for the International Sale of Goods. Mandatory consumer
@@ -133,8 +151,13 @@ provided free of charge and as is, without any warranty. The copyright holders
 are liable only for intent and gross negligence, except where mandatory law,
 such as the German Product Liability Act, provides otherwise.
 
-11. Changes. The copyright holders may publish a new version of this license at
-any time, and it applies to releases published after it. For earlier releases,
-they may end this license with 90 days notice, published in the official GitHub
-repository and on the official Modrinth page. After that, every version of the
-Software may only be used under the license version then in force.
+11. New versions and termination. The copyright holders may publish a new
+version of this license at any time. It applies to releases published after it,
+and anyone may choose to use an earlier release under it instead. For earlier
+releases, the copyright holders may end this license with at least 90 days
+notice, published in the official GitHub repository and on the official Modrinth
+page. Until the notice period ends, earlier releases stay under this version.
+After that, every version of the Software may only be used under the license
+version then in force, except as stated in condition 7; anyone who does not
+accept that version must stop using the Software. Content published before the
+notice period ends may stay published.
