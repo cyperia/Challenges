@@ -1,48 +1,46 @@
 package net.cyperia.challenges.plugin.spigot.command;
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.cyperia.challenges.plugin.ChallengeAPI;
 import net.cyperia.challenges.plugin.challenges.implementation.setting.PositionSetting;
 import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.content.i18n.Prefix;
-import net.cyperia.challenges.plugin.utils.bukkit.command.PlayerCommand;
+import net.cyperia.challenges.plugin.management.command.ChallengeCommand;
+import net.cyperia.challenges.plugin.management.command.CommandInfo;
+import net.cyperia.challenges.plugin.management.command.CommandNodes;
+import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import net.cyperia.challenges.plugin.utils.misc.BlockUtils;
-import net.cyperia.challenges.plugin.utils.misc.Utils;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 
-public class WorldCommand implements PlayerCommand, TabCompleter {
+public class WorldCommand implements ChallengeCommand {
+
+  @NotNull
+  @Override
+  public CommandInfo info() {
+    return CommandInfo.command("world", ChallengesPermissions.COMMAND_WORLD);
+  }
 
   @Override
-  public void onCommand(@NotNull Player player, @NotNull String[] args) throws Exception {
+  public <S> void define(@NotNull LiteralArgumentBuilder<S> root, @NotNull CommandNodes<S> nodes) {
+    for (String name : new String[]{"overworld", "nether", "end"}) {
+      root.then(nodes.literal(name).executes(nodes.runAsPlayer((player, context) -> {
+        Environment environment = PositionSetting.getWorldEnvironment(name);
+        World world = environment != null ? ChallengeAPI.getGameWorld(environment) : null;
+        if (world == null) {
+          MessageKey.of("command.world.not-loaded").send(player, Prefix.CHALLENGES);
+          return;
+        }
 
-    if (args.length < 1) {
-      MessageKey.of("command.syntax").send(player, Prefix.CHALLENGES, "world <world>");
-      return;
+        Location location = getSpawn(world, player);
+        MessageKey.of("command.world.done").send(player, Prefix.CHALLENGES, getWorldName(location));
+        player.teleport(location);
+      })));
     }
-
-    String worldName = args[0];
-
-    Environment environment = PositionSetting.getWorldEnvironment(worldName);
-
-    World world = environment != null ? ChallengeAPI.getGameWorld(environment) : null;
-    if (world == null) {
-      MessageKey.of("command.syntax").send(player, Prefix.CHALLENGES, "world <world>");
-      return;
-    }
-
-    Location location = getSpawn(world, player);
-
-    MessageKey.of("command.world.done").send(player, Prefix.CHALLENGES, getWorldName(location));
-    player.teleport(location);
   }
 
   public Location getSpawn(@NotNull World world, @NotNull Player player) {
@@ -68,11 +66,5 @@ public class WorldCommand implements PlayerCommand, TabCompleter {
     }
   }
 
-  @Nullable
-  @Override
-  public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
-                                    @NotNull String alias, @NotNull String[] args) {
-    return Utils.filterRecommendations(args[0], "Overworld", "Nether", "End");
-  }
 
 }

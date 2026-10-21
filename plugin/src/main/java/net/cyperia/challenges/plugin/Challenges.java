@@ -1,7 +1,7 @@
 package net.cyperia.challenges.plugin;
 
-import net.cyperia.challenges.catalog.ChallengeCatalog;
 import lombok.Getter;
+import net.cyperia.challenges.catalog.ChallengeCatalog;
 import net.cyperia.challenges.plugin.challenges.custom.settings.CustomSettingsLoader;
 import net.cyperia.challenges.plugin.content.i18n.TranslationManager;
 import net.cyperia.challenges.plugin.content.loader.LanguageLoader;
@@ -14,6 +14,9 @@ import net.cyperia.challenges.plugin.management.challenges.ChallengeManager;
 import net.cyperia.challenges.plugin.management.challenges.CustomChallengesLoader;
 import net.cyperia.challenges.plugin.management.challenges.PresetChallengeLoader;
 import net.cyperia.challenges.plugin.management.cloud.CloudSupportManager;
+import net.cyperia.challenges.plugin.management.command.ChallengeCommand;
+import net.cyperia.challenges.plugin.management.command.CommandInfo;
+import net.cyperia.challenges.plugin.management.command.CommandManager;
 import net.cyperia.challenges.plugin.management.database.DatabaseManager;
 import net.cyperia.challenges.plugin.management.files.ConfigManager;
 import net.cyperia.challenges.plugin.management.inventory.HotbarManager;
@@ -23,12 +26,16 @@ import net.cyperia.challenges.plugin.management.scheduler.ScheduleManager;
 import net.cyperia.challenges.plugin.management.scheduler.timer.ChallengeTimer;
 import net.cyperia.challenges.plugin.management.server.*;
 import net.cyperia.challenges.plugin.management.team.TeamProvider;
+import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import net.cyperia.challenges.plugin.spigot.command.*;
+import net.cyperia.challenges.plugin.spigot.command.WeatherCommand.Weather;
 import net.cyperia.challenges.plugin.spigot.listener.*;
-import net.cyperia.challenges.plugin.utils.bukkit.command.ForwardingCommand;
 import net.cyperia.commons.bukkit.core.BukkitModule;
 import net.cyperia.commons.common.version.Version;
+import org.bukkit.GameMode;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 @Getter
 public final class Challenges extends BukkitModule {
@@ -56,6 +63,7 @@ public final class Challenges extends BukkitModule {
   private ChallengeTimer challengeTimer;
   private LoaderRegistry loaderRegistry;
   private MetricsLoader metricsLoader;
+  private CommandManager commandManager;
   private GameWorldStorage gameWorldStorage;
   private GeneratorWorldPortalManager generatorWorldPortalManager;
   private TeamProvider teamProvider;
@@ -102,6 +110,7 @@ public final class Challenges extends BukkitModule {
   private void createManagers() {
     catalog = ChallengeCatalog.load(getClass().getClassLoader()).requireComplete();
     configManager = new ConfigManager();
+    commandManager = new CommandManager();
     configManager.loadConfigs();
 
     loaderRegistry = new LoaderRegistry(
@@ -159,43 +168,55 @@ public final class Challenges extends BukkitModule {
   }
 
   private void registerCommands() {
-    registerCommand(new HelpCommand(), "help");
-    registerCommand(new ChallengesCommand(), "challenges");
-    registerCommand(new TimerCommand(), "timer");
-    registerCommand(new ForwardingCommand("timer start"), "start");
-    registerCommand(new ForwardingCommand("timer pause"), "pause");
-    registerCommand(new ResetCommand(), "reset");
-    registerCommand(new DatabaseCommand(), "database");
-    registerCommand(new GamestateCommand(), "gamestate");
-    registerCommand(new VillageCommand(), "village");
-    registerCommand(new HealCommand(), "heal");
-    registerCommand(new FeedCommand(), "feed");
-    registerCommand(new SearchCommand(), "search");
-    registerCommand(new RandomizerCommand(), "randomizer");
-    registerCommand(new GoalCommand(), "goal");
-    registerListenerCommand(new InvseeCommand(), "invsee");
-    registerCommand(new FlyCommand(), "fly");
-    registerCommand(new WorldCommand(), "world");
-    registerListenerCommand(new BackCommand(), "back");
-    registerCommand(new GamemodeCommand(), "gamemode");
-    registerCommand(new ForwardingCommand("gamemode 0", false), "gms");
-    registerCommand(new ForwardingCommand("gamemode 1", false), "gmc");
-    registerCommand(new ForwardingCommand("gamemode 2", false), "gma");
-    registerCommand(new ForwardingCommand("gamemode 3", false), "gmsp");
-    registerCommand(new WeatherCommand(), "weather");
-    registerCommand(new ForwardingCommand("weather sun"), "sun");
-    registerCommand(new ForwardingCommand("weather rain"), "rain");
-    registerCommand(new ForwardingCommand("weather thunder"), "thunder");
-    registerCommand(new TimeCommand(), "time");
-    registerCommand(new ForwardingCommand("time set day"), "day");
-    registerCommand(new ForwardingCommand("time set night"), "night");
-    registerCommand(new ForwardingCommand("time set noon"), "noon");
-    registerCommand(new ForwardingCommand("time set midnight"), "midnight");
-    registerCommand(new ResultCommand(), "result");
-    registerCommand(new SkipTimerCommand(), "skiptimer");
-    registerListenerCommand(new GodModeCommand(), "godmode");
-    registerCommand(new CancelChatInputCommand(), "cancelinput");
-    registerCommand(new TeamsCommand(), "teams");
+    commandManager.enable(this);
+    for (ChallengeCommand command : List.of(
+      new HelpCommand(),
+      new ChallengesCommand(),
+      new TimerCommand(),
+      ShortcutCommand.forSender(CommandInfo.command("start", ChallengesPermissions.COMMAND_TIMER_START).withAliases("resume"),
+        (sender, context) -> TimerCommand.start(sender)),
+      ShortcutCommand.forSender(CommandInfo.command("pause", ChallengesPermissions.COMMAND_TIMER_PAUSE),
+        (sender, context) -> TimerCommand.pause(sender)),
+      new ResetCommand(),
+      new DatabaseCommand(),
+      new GamestateCommand(),
+      new VillageCommand(),
+      new HealCommand(),
+      new FeedCommand(),
+      new SearchCommand(),
+      new RandomizerCommand(),
+      new GoalCommand(),
+      new FlyCommand(),
+      new WorldCommand(),
+      new GamemodeCommand(),
+      new GamemodeShortcutCommand("gms", GameMode.SURVIVAL),
+      new GamemodeShortcutCommand("gmc", GameMode.CREATIVE),
+      new GamemodeShortcutCommand("gma", GameMode.ADVENTURE),
+      new GamemodeShortcutCommand("gmsp", GameMode.SPECTATOR),
+      new WeatherCommand(),
+      WeatherCommand.shortcut("sun", Weather.CLEAR),
+      WeatherCommand.shortcut("rain", Weather.RAIN),
+      WeatherCommand.shortcut("thunder", Weather.THUNDER),
+      new TimeCommand(),
+      TimeCommand.shortcut("day"),
+      TimeCommand.shortcut("night"),
+      TimeCommand.shortcut("noon"),
+      TimeCommand.shortcut("midnight"),
+      new ResultCommand(),
+      new SkipTimerCommand(),
+      new CancelChatInputCommand(),
+      new TeamsCommand()
+    )) {
+      commandManager.register(command);
+    }
+
+    InvseeCommand invsee = new InvseeCommand();
+    BackCommand back = new BackCommand();
+    GodModeCommand godMode = new GodModeCommand();
+    commandManager.register(invsee);
+    commandManager.register(back);
+    commandManager.register(godMode);
+    registerListener(invsee, back, godMode);
   }
 
   private void registerListeners() {

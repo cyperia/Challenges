@@ -12,13 +12,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Locale;
 
 /**
- * The frame every timer menu shares: its size, its decoration and the permission it guards its clicks
- * with.
+ * The frame every timer menu shares: its size, its decoration and the permission check of its clicks.
  */
 public abstract class AbstractTimerMenuGenerator extends SinglePageMenuGenerator {
 
   public static final int SIZE = 5 * 9;
-  public static final String MANAGE_PERMISSION = "challenges.timer";
 
   private static final int[] CONTRAST_SLOTS = {1, 2, 6, 7, 9, 10, 16, 17, 27, 28, 34, 35, 37, 38, 39, 41, 42, 43};
 
@@ -40,12 +38,9 @@ public abstract class AbstractTimerMenuGenerator extends SinglePageMenuGenerator
     return SIZE;
   }
 
-  /**
-   * @return {@code true} if the player may not manage the timer; the rejection effect has then already
-   * been played and the click must not be handled
-   */
-  protected boolean playNoPermissionsEffect(@NotNull Player player) {
-    if (player.hasPermission(MANAGE_PERMISSION)) return false;
+  // True when the click is rejected and must not be handled; the rejection effect has already played
+  protected boolean playNoPermissionsEffect(@NotNull Player player, @NotNull String permission) {
+    if (player.hasPermission(permission)) return false;
     Challenges.getInstance().getMenuManager().playNoPermissionsEffect(player);
     return true;
   }

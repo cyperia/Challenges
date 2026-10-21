@@ -87,10 +87,10 @@ join-quit-messages: true
 # Shows every player the plugin credits when they join - the same lines /help prints
 plugin-info-on-join: true
 
-# Send players a permission info message when they join the server when noone with the permission 'challenges.gui' has joined before
+# Send players a permission info message when they join the server when noone with the permission 'challenges.command.challenges' has joined before
 permission-info: true
 
-# Players with the permission 'challenges.gui' will get a message if the timer is paused when they join
+# Players with the permission 'challenges.command.challenges' will get a message if the timer is paused when they join
 timer-is-paused-info: true
 
 # Whether to display new/updated challenges at the front of the setting menu
@@ -109,7 +109,7 @@ animate-main-menu: true
 play-paused-particles: true
 
 # If activated players need the permission "challenges.manage" to manage settings in the gui
-# To manage the timer in the gui, players will always need the permission "challenges.timer"
+# The timer menu always checks the permission of the /timer subcommand a click does, like "challenges.command.timer.start"
 manage-settings-permission: false
 
 # A dragon breath sound will be played when the timer is started

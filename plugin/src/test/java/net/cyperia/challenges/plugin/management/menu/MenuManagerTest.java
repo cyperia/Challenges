@@ -1,5 +1,6 @@
 package net.cyperia.challenges.plugin.management.menu;
 
+import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import org.bukkit.permissions.Permissible;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,7 @@ class MenuManagerTest {
   void requiredPermissionGatesSettingsChanges() {
     Permissible without = mock(Permissible.class);
     Permissible with = mock(Permissible.class);
-    when(with.hasPermission(MenuManager.MANAGE_GUI_PERMISSION)).thenReturn(true);
+    when(with.hasPermission(ChallengesPermissions.MANAGE)).thenReturn(true);
 
     assertFalse(MenuManager.maySettingsChange(true, without));
     assertTrue(MenuManager.maySettingsChange(true, with));

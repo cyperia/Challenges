@@ -8,8 +8,12 @@ import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.content.i18n.Prefix;
 import net.cyperia.challenges.plugin.content.i18n.TranslationManager;
 import net.cyperia.challenges.plugin.content.loader.LanguageLoader;
+import net.cyperia.challenges.plugin.management.command.ChallengeCommand;
+import net.cyperia.challenges.plugin.management.command.CommandInfo;
+import net.cyperia.challenges.plugin.management.command.CommandProvider;
 import net.cyperia.challenges.plugin.management.files.ConfigManager;
-import net.cyperia.challenges.plugin.utils.bukkit.command.PlayerCommand;
+import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
+import net.cyperia.challenges.plugin.spigot.command.ShortcutCommand;
 import net.cyperia.challenges.plugin.utils.bukkit.container.BukkitSerialization;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
 import net.cyperia.commons.common.config.Document;
@@ -23,11 +27,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
-public class BackpackSetting extends SettingModifier implements PlayerCommand {
+public class BackpackSetting extends SettingModifier implements CommandProvider {
 
   public static final int SHARED = 1, PLAYER = 2;
 
@@ -50,8 +55,14 @@ public class BackpackSetting extends SettingModifier implements PlayerCommand {
     return new ItemStack(getValue() == SHARED ? Material.ENDER_CHEST : Material.PLAYER_HEAD);
   }
 
+  @NotNull
   @Override
-  public void onCommand(@NotNull Player player, @NotNull String[] args) {
+  public List<ChallengeCommand> getCommands() {
+    return List.of(ShortcutCommand.forPlayer(CommandInfo.command("backpack", ChallengesPermissions.COMMAND_BACKPACK).withAliases("bp"),
+      (player, context) -> openBackpack(player)));
+  }
+
+  private void openBackpack(@NotNull Player player) {
     if (ChallengeAPI.isPaused()) {
       MessageKey.of("timer.messages.not-started").send(player, Prefix.BACKPACK);
       SoundSample.BASS_OFF.play(player);

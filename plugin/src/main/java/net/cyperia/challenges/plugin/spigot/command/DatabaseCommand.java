@@ -1,26 +1,22 @@
 package net.cyperia.challenges.plugin.spigot.command;
 
-import com.google.common.collect.Lists;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.content.i18n.Prefix;
 import net.cyperia.challenges.plugin.management.challenges.ChallengeManager;
+import net.cyperia.challenges.plugin.management.command.ChallengeCommand;
+import net.cyperia.challenges.plugin.management.command.CommandInfo;
+import net.cyperia.challenges.plugin.management.command.CommandNodes;
 import net.cyperia.challenges.plugin.management.files.ConfigManager;
-import net.cyperia.challenges.plugin.utils.bukkit.command.PlayerCommand;
-import net.cyperia.challenges.plugin.utils.misc.Utils;
+import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class DatabaseCommand implements PlayerCommand, TabCompleter {
+public class DatabaseCommand implements ChallengeCommand {
 
   private final Map<String, DatabaseCommandExecutor> databaseExecutors;
   private final boolean savePlayerConfigs;
@@ -30,8 +26,7 @@ public class DatabaseCommand implements PlayerCommand, TabCompleter {
     savePlayerConfigs = Challenges.getInstance().getConfigDocument().getBoolean(ConfigManager.Keys.SAVE_PLAYER_CONFIGS);
     savePlayerChallenges = Challenges.getInstance().getConfigDocument().getBoolean(ConfigManager.Keys.SAVE_PLAYER_CUSTOM_CHALLENGES);
 
-    databaseExecutors = new HashMap<>();
-    databaseExecutors.put("settings", new DatabaseCommandExecutor() {
+    databaseExecutors = Map.of("settings", new DatabaseCommandExecutor() {
       @Override
       public void save(Player player) throws Exception {
         if (checkFeatureDisabled(savePlayerConfigs, player)) return;
@@ -56,9 +51,7 @@ public class DatabaseCommand implements PlayerCommand, TabCompleter {
           .execute();
         MessageKey.of("command.database.config-reset").send(player, Prefix.CHALLENGES);
       }
-    });
-    databaseExecutors.put("customs", new DatabaseCommandExecutor() {
-
+    }, "customs", new DatabaseCommandExecutor() {
       @Override
       public void save(Player player) throws Exception {
         if (checkFeatureDisabled(savePlayerChallenges, player)) return;
@@ -86,35 +79,28 @@ public class DatabaseCommand implements PlayerCommand, TabCompleter {
     });
   }
 
+  @NotNull
   @Override
-  public void onCommand(@NotNull Player player, @NotNull String[] args) throws Exception {
+  public CommandInfo info() {
+    return CommandInfo.command("database", ChallengesPermissions.COMMAND_DATABASE).withAliases("db");
+  }
 
-    if (checkFeatureDisabled(Challenges.getInstance().getDatabaseManager().isConnected(), player)) {
-      return;
-    }
+  @Override
+  public <S> void define(@NotNull LiteralArgumentBuilder<S> root, @NotNull CommandNodes<S> nodes) {
+    root.then(action(nodes, "save", ChallengesPermissions.COMMAND_DATABASE_SAVE, DatabaseCommandExecutor::save));
+    root.then(action(nodes, "load", ChallengesPermissions.COMMAND_DATABASE_LOAD, DatabaseCommandExecutor::load));
+    root.then(action(nodes, "reset", ChallengesPermissions.COMMAND_DATABASE_RESET, DatabaseCommandExecutor::reset));
+  }
 
-    if (args.length != 2 || !databaseExecutors.containsKey(args[1])) {
-      MessageKey.of("command.syntax").send(player, Prefix.CHALLENGES, "database <save/load/reset> <settings/customs>");
-      return;
-    }
-
-    String type = args[1].toLowerCase();
-    DatabaseCommandExecutor executor = databaseExecutors.get(type);
-
-    switch (args[0].toLowerCase()) {
-      case "save":
-        executor.save(player);
-        break;
-      case "load":
-        executor.load(player);
-        break;
-      case "reset":
-        executor.reset(player);
-        break;
-      default:
-        MessageKey.of("command.syntax").send(player, Prefix.CHALLENGES, "database <save/load/reset> <settings/customs>");
-    }
-
+  @NotNull
+  private <S> LiteralArgumentBuilder<S> action(@NotNull CommandNodes<S> nodes, @NotNull String name,
+                                               @NotNull String permission, @NotNull DatabaseAction action) {
+    LiteralArgumentBuilder<S> node = nodes.literal(name).requires(nodes.permission(permission));
+    databaseExecutors.forEach((type, executor) -> node.then(nodes.literal(type).executes(nodes.runAsPlayer((player, context) -> {
+      if (checkFeatureDisabled(Challenges.getInstance().getDatabaseManager().isConnected(), player)) return;
+      action.run(executor, player);
+    }))));
+    return node;
   }
 
   /**
@@ -129,26 +115,16 @@ public class DatabaseCommand implements PlayerCommand, TabCompleter {
     return false;
   }
 
-  @Nullable
-  @Override
-  public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
-                                    @NotNull String alias, @NotNull String[] args) {
-
-    if (args.length <= 1) {
-      return Utils.filterRecommendations(args[0], "save", "load", "reset");
-    } else if (args.length == 2) {
-      return Utils.filterRecommendations(args[1], databaseExecutors.keySet().toArray(new String[0]));
-    }
-    return Lists.newLinkedList();
-  }
-
-
   private interface DatabaseCommandExecutor {
     void save(Player player) throws Exception;
 
     void load(Player player) throws Exception;
 
     void reset(Player player) throws Exception;
+  }
+
+  private interface DatabaseAction {
+    void run(DatabaseCommandExecutor executor, Player player) throws Exception;
   }
 
 }

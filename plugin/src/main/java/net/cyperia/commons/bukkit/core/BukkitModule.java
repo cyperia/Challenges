@@ -18,8 +18,6 @@ import net.cyperia.commons.common.logging.internal.BukkitLoggerWrapper;
 import net.cyperia.commons.common.logging.lib.JavaILogger;
 import net.cyperia.commons.common.version.Version;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -52,7 +50,6 @@ public abstract class BukkitModule extends JavaPlugin {
   private static boolean setFirstInstance = true;
   private static boolean wasShutdown;
 
-  private final Map<String, CommandExecutor> commandsQueue = new HashMap<>();
   private final List<Listener> listenersQueue = new ArrayList<>();
   private final SimpleConfigManager configManager = new SimpleConfigManager(this);
 
@@ -116,9 +113,6 @@ public abstract class BukkitModule extends JavaPlugin {
       // Paper runs the tasks scheduled during startup right before "Done", so the warning is repeated at the end of the startup log
       getServer().getScheduler().runTask(this, () -> new RequirementsChecker(this).checkVersion(getPluginDocument().getDocument("require")));
     }
-
-    commandsQueue.forEach((name, executor) -> registerCommand0(executor, name));
-    commandsQueue.clear();
 
     listenersQueue.forEach(this::registerListener);
     listenersQueue.clear();
@@ -258,30 +252,6 @@ public abstract class BukkitModule extends JavaPlugin {
   @Deprecated
   public void saveConfig() {
     super.saveConfig();
-  }
-
-  public final <T extends CommandExecutor & Listener> void registerListenerCommand(@NotNull T listenerAndExecutor, @NotNull String... names) {
-    registerCommand(listenerAndExecutor, names);
-    registerListener(listenerAndExecutor);
-  }
-
-  public final void registerCommand(@NotNull CommandExecutor executor, @NotNull String... names) {
-    for (String name : names) {
-      if (isEnabled()) {
-        registerCommand0(executor, name);
-      } else {
-        commandsQueue.put(name, executor);
-      }
-    }
-  }
-
-  private void registerCommand0(@NotNull CommandExecutor executor, @NotNull String name) {
-    PluginCommand command = getCommand(name);
-    if (command == null) {
-      getILogger().warn("Tried to register invalid command '{}'", name);
-    } else {
-      command.setExecutor(executor);
-    }
   }
 
   public final void registerListener(@NotNull Listener... listeners) {

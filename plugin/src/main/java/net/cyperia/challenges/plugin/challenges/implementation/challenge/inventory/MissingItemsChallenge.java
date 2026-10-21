@@ -6,11 +6,15 @@ import net.cyperia.challenges.plugin.challenges.type.abstraction.TimedChallenge;
 import net.cyperia.challenges.plugin.challenges.type.helper.ChallengeHelper;
 import net.cyperia.challenges.plugin.content.i18n.Prefix;
 import net.cyperia.challenges.plugin.content.i18n.TranslationManager;
+import net.cyperia.challenges.plugin.management.command.ChallengeCommand;
+import net.cyperia.challenges.plugin.management.command.CommandInfo;
+import net.cyperia.challenges.plugin.management.command.CommandProvider;
 import net.cyperia.challenges.plugin.management.menu.format.InteractionTooltips;
 import net.cyperia.challenges.plugin.management.menu.format.ItemFormatter;
 import net.cyperia.challenges.plugin.management.scheduler.policy.ChallengeStatusPolicy;
 import net.cyperia.challenges.plugin.management.scheduler.task.ScheduledTask;
-import net.cyperia.challenges.plugin.utils.bukkit.command.PlayerCommand;
+import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
+import net.cyperia.challenges.plugin.spigot.command.ShortcutCommand;
 import net.cyperia.challenges.plugin.utils.misc.ExperimentalUtils;
 import net.cyperia.challenges.plugin.utils.misc.InventoryUtils;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
@@ -36,7 +40,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MissingItemsChallenge extends TimedChallenge implements PlayerCommand {
+public class MissingItemsChallenge extends TimedChallenge implements CommandProvider {
 
   private static final int GUESS_SECONDS = 150;
   private static final int SOUND_WARNING_SECONDS = 5;
@@ -99,8 +103,14 @@ public class MissingItemsChallenge extends TimedChallenge implements PlayerComma
     if (game != null) game.end();
   }
 
+  @NotNull
   @Override
-  public void onCommand(@NotNull Player player, @NotNull String[] args) {
+  public List<ChallengeCommand> getCommands() {
+    return List.of(ShortcutCommand.forPlayer(CommandInfo.command("openmissingitems", ChallengesPermissions.COMMAND_OPENMISSINGITEMS),
+      (player, context) -> openGame(player)));
+  }
+
+  private void openGame(@NotNull Player player) {
     Game game = games.get(player.getUniqueId());
     if (game == null) {
       getChallengeMessageKey("command.none").send(player, Prefix.CHALLENGES);

@@ -1,21 +1,35 @@
 package net.cyperia.challenges.plugin.spigot.command;
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.challenges.type.ChecklistGoal;
 import net.cyperia.challenges.plugin.challenges.type.IGoal;
 import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.content.i18n.Prefix;
+import net.cyperia.challenges.plugin.management.command.ChallengeCommand;
+import net.cyperia.challenges.plugin.management.command.CommandInfo;
+import net.cyperia.challenges.plugin.management.command.CommandNodes;
 import net.cyperia.challenges.plugin.management.menu.generator.impl.goal.GoalChecklistMenuGenerator;
-import net.cyperia.challenges.plugin.utils.bukkit.command.PlayerCommand;
+import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class GoalCommand implements PlayerCommand {
+public class GoalCommand implements ChallengeCommand {
+
+  @NotNull
+  @Override
+  public CommandInfo info() {
+    return CommandInfo.command("goal", ChallengesPermissions.COMMAND_GOAL);
+  }
 
   @Override
-  public void onCommand(@NotNull Player player, @NotNull String[] args) {
+  public <S> void define(@NotNull LiteralArgumentBuilder<S> root, @NotNull CommandNodes<S> nodes) {
+    root.executes(nodes.runAsPlayer((player, context) -> openChecklist(player)));
+  }
+
+  private static void openChecklist(@NotNull Player player) {
     IGoal goal = Challenges.getInstance().getChallengeManager().getCurrentGoal();
     if (goal == null) {
       MessageKey.of("command.goal.none").send(player, Prefix.CHALLENGES);

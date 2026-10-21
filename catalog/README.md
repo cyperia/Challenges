@@ -39,6 +39,7 @@ relative to.
 - `since`, `updated` mark the entry new or updated in the menu; `beta` leaves its class out of the
   public release, which shows the entry locked instead.
 - `excludeFromRandom` keeps the random challenge from picking it.
+- `featured` puts it among the highlighted entries of a listing outside the plugin, such as the export below.
 - `"registered": false` keeps a challenge out of the plugin without losing its entry, for one that is
   broken or not ready; anything listing challenges should skip it too.
 
@@ -46,7 +47,7 @@ Exactly one definition:
 
 | field | registers |
 |---|---|
-| `class` | a class with a constructor without parameters; `command` registers it as a command, `requires` names a plugin it needs |
+| `class` | a class with a constructor without parameters; `requires` names a plugin it needs. Its commands come from the class (`CommandProvider`) |
 | `preset` | `trigger`, `triggerSettings`, `action`, `actionSettings` and an optional `value` (`unit` is a `ValueUnit` constant, `min`, `max`, `default`) filled into a setting written `${value}` |
 | `damageRule` | the `DamageCause` constants it covers, `"*"` for all |
 | `materialRule` | the `Material` constants it covers |
@@ -54,6 +55,17 @@ Exactly one definition:
 Unknown fields, a second definition or a reference to a missing category, trigger or action fail
 loading. `CatalogClassesTest` in the plugin checks that every class and constant exists and that every
 challenge class has an entry.
+
+## Export
+
+`export/catalog.json` holds the registered challenges and the categories with their names and descriptions
+in every bundled language, for readers without the plugin such as a website, which can read it from the
+repository. Each challenge also carries `styled`: its name, its description lines and its item tooltip as
+run through the menu's item formats, each line a list of text runs with the colour (hex) and bold the game
+renders them with. A preset names its `trigger` and `action`, and the top-level `triggers` and `actions`
+list what custom challenges are built from, with the same texts. Lore lines are joined into paragraphs, and a value the plugin fills in at
+runtime reads as an ellipsis or is left out. The file is committed: after changing the catalog or a challenge's texts, run
+`./gradlew :catalog:exportCatalog` and commit the result. `CatalogExportTest` fails while it is out of date.
 
 ## Modules
 

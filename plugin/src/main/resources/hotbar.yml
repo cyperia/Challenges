@@ -2,9 +2,9 @@
 # Material names can be looked up here: https://jd.papermc.io/paper/org/bukkit/Material.html
 
 # Every item that can appear in a layout. Setting enabled to false removes an item from all layouts.
-#   timer       opens /timer        requires challenges.timer.manage
-#   challenges  opens /challenges   requires challenges.gui
-#   start       runs /start         requires challenges.timer
+#   timer       opens /timer        requires challenges.command.timer
+#   challenges  opens /challenges   requires challenges.command.challenges
+#   start       runs /start         requires challenges.command.timer.start
 #   teams       runs its command    only before a run, and only with force until the team setting exists
 # Items added by other plugins can be listed and disabled here as well, by their id.
 # PLAYER_HEAD renders the head of the player holding the item.

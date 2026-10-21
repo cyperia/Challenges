@@ -6,10 +6,14 @@ import net.cyperia.challenges.plugin.challenges.type.ChecklistGoal;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.SettingGoal;
 import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.content.i18n.Prefix;
+import net.cyperia.challenges.plugin.management.command.ChallengeCommand;
+import net.cyperia.challenges.plugin.management.command.CommandInfo;
+import net.cyperia.challenges.plugin.management.command.CommandProvider;
 import net.cyperia.challenges.plugin.management.server.ChallengeEndCause;
+import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
+import net.cyperia.challenges.plugin.spigot.command.ShortcutCommand;
 import net.cyperia.challenges.plugin.spigot.events.PlayerInventoryClickEvent;
 import net.cyperia.challenges.plugin.spigot.events.PlayerPickupItemEvent;
-import net.cyperia.challenges.plugin.utils.bukkit.command.SenderCommand;
 import net.cyperia.challenges.plugin.utils.misc.ExperimentalUtils;
 import net.cyperia.challenges.plugin.utils.misc.Utils;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
@@ -30,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class CollectAllItemsGoal extends SettingGoal implements SenderCommand, ChecklistGoal {
+public class CollectAllItemsGoal extends SettingGoal implements CommandProvider, ChecklistGoal {
 
   private static final String SEED_KEY = "seed";
   private static final String FOUND_ITEMS_KEY = "found-items";
@@ -144,8 +148,14 @@ public class CollectAllItemsGoal extends SettingGoal implements SenderCommand, C
     bossbar.hide();
   }
 
+  @NotNull
   @Override
-  public void onCommand(@NotNull CommandSender sender, @NotNull String[] args) throws Exception {
+  public List<ChallengeCommand> getCommands() {
+    return List.of(ShortcutCommand.forSender(CommandInfo.command("skipitem", ChallengesPermissions.COMMAND_SKIPITEM),
+      (sender, context) -> skipItem(sender)));
+  }
+
+  private void skipItem(@NotNull CommandSender sender) {
     if (!isEnabled()) {
       MessageKey.of("challenge.generic.disabled").send(sender, Prefix.CHALLENGES);
       SoundSample.BASS_OFF.playIfPlayer(sender);

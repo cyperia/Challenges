@@ -4,8 +4,8 @@ import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.content.i18n.Prefix;
 import net.cyperia.challenges.plugin.content.i18n.TranslationManager;
 import net.cyperia.challenges.plugin.content.i18n.impl.format.ComponentFormatter;
+import net.cyperia.challenges.plugin.spigot.command.HelpCommand;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -13,8 +13,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 public class HelpListener implements Listener {
@@ -31,12 +29,7 @@ public class HelpListener implements Listener {
       commandName = commandName.substring(commandName.indexOf(':') + 1);
     }
 
-    PluginCommand command = Challenges.getInstance().getCommand("help");
-    if (command == null) return;
-    List<String> names = new ArrayList<>(command.getAliases());
-    names.add("help");
-
-    if (!names.contains(commandName)) return;
+    if (!HelpCommand.INFO.getLiteral().equals(commandName) && !HelpCommand.INFO.getAliases().contains(commandName)) return;
 
     event.getPlayer().sendMessage(" ");
     sendPluginInfo(event.getPlayer());

@@ -19,6 +19,7 @@ import net.cyperia.challenges.plugin.management.scheduler.task.ScheduledTask;
 import net.cyperia.challenges.plugin.management.scheduler.task.TimerTask;
 import net.cyperia.challenges.plugin.management.scheduler.timer.ChallengeTimer;
 import net.cyperia.challenges.plugin.management.scheduler.timer.TimerStatus;
+import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import net.cyperia.challenges.plugin.utils.item.DefaultItems;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
 import net.cyperia.commons.bukkit.utils.item.ItemBuilder;
@@ -180,10 +181,22 @@ public class TimerMenuGenerator extends AbstractTimerMenuGenerator implements Ve
       return switch (info.getSlot()) {
         case TIME_SLOT -> openSubMenu(timeGenerator, info.getPlayer());
         case COUNTDOWN_SLOT -> openSubMenu(countdownGenerator, info.getPlayer());
-        case START_SLOT -> handleStateClick(info, timer -> handleStartClick(timer, info.isShiftClick()));
-        case MODE_SLOT -> handleStateClick(info, timer -> timer.setCountingUp(!timer.isCountingUp()));
-        case SHOW_SLOT -> handleStateClick(info, timer -> timer.setHidden(!timer.isHidden()));
+        case START_SLOT -> handleStateClick(info, getStartPermission(getTimer(), info.isShiftClick()),
+          timer -> handleStartClick(timer, info.isShiftClick()));
+        case MODE_SLOT -> handleStateClick(info, ChallengesPermissions.COMMAND_TIMER_MODE,
+          timer -> timer.setCountingUp(!timer.isCountingUp()));
+        case SHOW_SLOT -> handleStateClick(info, getTimer().isHidden() ? ChallengesPermissions.COMMAND_TIMER_SHOW : ChallengesPermissions.COMMAND_TIMER_HIDE,
+          timer -> timer.setHidden(!timer.isHidden()));
         default -> false;
+      };
+    }
+
+    @NotNull
+    private String getStartPermission(@NotNull ChallengeTimer timer, boolean shiftClick) {
+      return switch (getStartState(timer)) {
+        case RUNNING -> ChallengesPermissions.COMMAND_TIMER_PAUSE;
+        case COUNTDOWN_RUNNING, COUNTDOWN_READY -> shiftClick ? ChallengesPermissions.COMMAND_TIMER_START : ChallengesPermissions.COMMAND_TIMER_COUNTDOWN;
+        case PAUSED -> ChallengesPermissions.COMMAND_TIMER_START;
       };
     }
 
@@ -208,8 +221,8 @@ public class TimerMenuGenerator extends AbstractTimerMenuGenerator implements Ve
       return true;
     }
 
-    private boolean handleStateClick(@NotNull MenuClickInfo info, @NotNull Consumer<ChallengeTimer> action) {
-      if (playNoPermissionsEffect(info.getPlayer())) return true;
+    private boolean handleStateClick(@NotNull MenuClickInfo info, @NotNull String permission, @NotNull Consumer<ChallengeTimer> action) {
+      if (playNoPermissionsEffect(info.getPlayer(), permission)) return true;
       action.accept(getTimer());
       updatePages(); // the clicker should not have to wait for the periodic refresh
       return true;

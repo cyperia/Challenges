@@ -2,10 +2,8 @@ package net.cyperia.challenges.plugin.spigot.command;
 
 import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.content.i18n.Prefix;
-import net.cyperia.challenges.plugin.utils.bukkit.command.Completer;
-import net.cyperia.challenges.plugin.utils.bukkit.command.SenderCommand;
-import net.cyperia.challenges.plugin.utils.misc.CommandHelper;
-import org.bukkit.command.CommandSender;
+import net.cyperia.challenges.plugin.management.command.CommandInfo;
+import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -13,64 +11,35 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class GodModeCommand implements SenderCommand, Completer, Listener {
+public class GodModeCommand extends PlayerTargetCommand implements Listener {
 
   private final List<UUID> godModePlayers = new ArrayList<>();
 
-  @Override
-  public void onCommand(@NotNull CommandSender sender, @NotNull String[] args) throws Exception {
-
-    List<Player> targets = new ArrayList<>();
-
-    if (args.length > 0) {
-      targets.addAll(CommandHelper.getPlayers(sender, args[0]));
-
-    } else if (sender instanceof Player) {
-      targets.add((Player) sender);
-    }
-
-    if (targets.isEmpty()) {
-      MessageKey.of("command.no-target").send(sender, Prefix.CHALLENGES);
-      return;
-    }
-
-    boolean otherPlayers = false;
-    for (Player target : targets) {
-      if (godModePlayers.contains(target.getUniqueId())) {
-        godModePlayers.remove(target.getUniqueId());
-        MessageKey.of("command.god-mode.disabled").send(target, Prefix.CHALLENGES);
-      } else {
-        godModePlayers.add(target.getUniqueId());
-        MessageKey.of("command.god-mode.enabled").send(target, Prefix.CHALLENGES);
-        target.setFoodLevel(20);
-      }
-
-      if (target != sender)
-        otherPlayers = true;
-
-    }
-
-    if (otherPlayers)
-      MessageKey.of("command.god-mode.done-others").send(sender, Prefix.CHALLENGES, targets.size());
-
+  public GodModeCommand() {
+    super(CommandInfo.command("godmode", ChallengesPermissions.COMMAND_GODMODE).withAliases("god").asGeneric(),
+      ChallengesPermissions.COMMAND_GODMODE_OTHER, "command.god-mode.done-others");
   }
 
-  @Nullable
   @Override
-  public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull String[] args) {
-    return CommandHelper.getCompletions(sender);
+  protected void applyTo(@NotNull Player target) {
+    if (godModePlayers.contains(target.getUniqueId())) {
+      godModePlayers.remove(target.getUniqueId());
+      MessageKey.of("command.god-mode.disabled").send(target, Prefix.CHALLENGES);
+    } else {
+      godModePlayers.add(target.getUniqueId());
+      MessageKey.of("command.god-mode.enabled").send(target, Prefix.CHALLENGES);
+      target.setFoodLevel(20);
+    }
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onDamage(EntityDamageEvent event) {
-    if (!(event.getEntity() instanceof Player)) return;
-    Player player = (Player) event.getEntity();
+    if (!(event.getEntity() instanceof Player player)) return;
     if (godModePlayers.contains(player.getUniqueId())) {
       event.setCancelled(true);
     }
@@ -78,8 +47,7 @@ public class GodModeCommand implements SenderCommand, Completer, Listener {
 
   @EventHandler
   private void onFoodLevelChange(FoodLevelChangeEvent event) {
-    if (!(event.getEntity() instanceof Player)) return;
-    Player player = (Player) event.getEntity();
+    if (!(event.getEntity() instanceof Player player)) return;
     if (godModePlayers.contains(player.getUniqueId())) {
       event.setCancelled(true);
     }

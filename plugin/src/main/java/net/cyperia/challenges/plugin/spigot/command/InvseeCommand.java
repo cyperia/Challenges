@@ -1,11 +1,17 @@
 package net.cyperia.challenges.plugin.spigot.command;
 
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.content.i18n.Prefix;
+import net.cyperia.challenges.plugin.management.command.ChallengeCommand;
+import net.cyperia.challenges.plugin.management.command.CommandInfo;
+import net.cyperia.challenges.plugin.management.command.CommandNodes;
+import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import net.cyperia.challenges.plugin.spigot.events.PlayerInventoryClickEvent;
-import net.cyperia.challenges.plugin.utils.bukkit.command.PlayerCommand;
 import net.cyperia.challenges.plugin.utils.item.DefaultItems;
+import net.cyperia.challenges.plugin.utils.misc.CommandHelper;
 import net.cyperia.commons.bukkit.utils.menu.MenuPosition;
 import net.cyperia.commons.bukkit.utils.menu.positions.SlottedMenuPosition;
 import org.bukkit.Bukkit;
@@ -23,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class InvseeCommand implements PlayerCommand, Listener {
+public class InvseeCommand implements ChallengeCommand, Listener {
 
   private static final int
     startBottom = 36,
@@ -36,22 +42,27 @@ public class InvseeCommand implements PlayerCommand, Listener {
 
   private final Map<Player, Inventory> inventories = new HashMap<>();
 
+  @NotNull
   @Override
-  public void onCommand(@NotNull Player player, @NotNull String[] args) throws Exception {
-    if (args.length < 1) {
-      MessageKey.of("command.syntax").send(player, Prefix.CHALLENGES, "invsee <player>");
-      return;
-    }
+  public CommandInfo info() {
+    return CommandInfo.command("invsee", ChallengesPermissions.COMMAND_INVSEE).asGeneric();
+  }
 
-    Player target = Bukkit.getPlayer(args[0]);
-    if (target == null) {
-      MessageKey.of("command.no-target").send(player, Prefix.CHALLENGES);
-      return;
-    }
+  @Override
+  public <S> void define(@NotNull LiteralArgumentBuilder<S> root, @NotNull CommandNodes<S> nodes) {
+    root.then(nodes.argument("player", StringArgumentType.word())
+      .suggests(nodes.suggest(CommandHelper::getNames))
+      .executes(nodes.runAsPlayer((player, context) -> {
+        Player target = CommandHelper.getPlayer(player, StringArgumentType.getString(context, "player"));
+        if (target == null) {
+          MessageKey.of("command.no-target").send(player, Prefix.CHALLENGES);
+          return;
+        }
 
-    player.openInventory(getInventory(target));
-    MenuPosition.set(player, new SlottedMenuPosition());
-    MessageKey.of("command.invsee.open").send(player, Prefix.CHALLENGES, target);
+        player.openInventory(getInventory(target));
+        MenuPosition.set(player, new SlottedMenuPosition());
+        MessageKey.of("command.invsee.open").send(player, Prefix.CHALLENGES, target);
+      })));
   }
 
   public Inventory getInventory(@NotNull Player target) {

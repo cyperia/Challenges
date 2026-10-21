@@ -1,60 +1,51 @@
 package net.cyperia.challenges.plugin.spigot.command;
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.content.i18n.Prefix;
-import net.cyperia.challenges.plugin.utils.bukkit.command.Completer;
-import net.cyperia.challenges.plugin.utils.bukkit.command.PlayerCommand;
-import net.cyperia.challenges.plugin.utils.misc.Utils;
+import net.cyperia.challenges.plugin.management.command.ChallengeCommand;
+import net.cyperia.challenges.plugin.management.command.CommandInfo;
+import net.cyperia.challenges.plugin.management.command.CommandNodes;
+import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import org.bukkit.World;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class WeatherCommand implements PlayerCommand, Completer {
+public class WeatherCommand implements ChallengeCommand {
 
-  @Override
-  public void onCommand(@NotNull Player player, @NotNull String[] args) throws Exception {
-
-    if (args.length == 0) {
-      MessageKey.of("command.syntax").send(player, Prefix.CHALLENGES, "weather <sun/clear/rain/thunder>");
-      return;
-    }
-
-    World world = player.getWorld();
-
-    switch (args[0].toLowerCase()) {
-
-      case "clear":
-      case "sun":
-        world.setStorm(false);
-        world.setThundering(false);
-        MessageKey.of("command.weather.clear").send(player, Prefix.CHALLENGES);
-        break;
-      case "rain":
-        world.setThundering(false);
-        world.setStorm(true);
-        MessageKey.of("command.weather.rain").send(player, Prefix.CHALLENGES);
-        break;
-      case "thunder":
-        world.setStorm(true);
-        world.setThundering(true);
-        MessageKey.of("command.weather.thunder").send(player, Prefix.CHALLENGES);
-        break;
-      default:
-        MessageKey.of("command.syntax").send(player, Prefix.CHALLENGES, "weather <sun/clear/rain/thunder>");
-    }
-
+  public enum Weather {
+    CLEAR, RAIN, THUNDER
   }
 
-  @Nullable
+  @NotNull
   @Override
-  public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull String[] args) {
-    if (args.length > 1) return new ArrayList<>();
-    return Utils.filterRecommendations(args[0], "sun", "clear", "rain", "thunder");
+  public CommandInfo info() {
+    return CommandInfo.command("weather", ChallengesPermissions.COMMAND_WEATHER).asGeneric();
+  }
+
+  @Override
+  public <S> void define(@NotNull LiteralArgumentBuilder<S> root, @NotNull CommandNodes<S> nodes) {
+    for (String name : List.of("clear", "sun")) {
+      root.then(nodes.literal(name).executes(nodes.runAsPlayer((player, context) -> set(player, Weather.CLEAR))));
+    }
+    root.then(nodes.literal("rain").executes(nodes.runAsPlayer((player, context) -> set(player, Weather.RAIN))));
+    root.then(nodes.literal("thunder").executes(nodes.runAsPlayer((player, context) -> set(player, Weather.THUNDER))));
+  }
+
+  @NotNull
+  public static ShortcutCommand shortcut(@NotNull String literal, @NotNull Weather weather) {
+    return ShortcutCommand.forPlayer(CommandInfo.command(literal, ChallengesPermissions.COMMAND_WEATHER).asGeneric(),
+      (player, context) -> set(player, weather));
+  }
+
+  private static void set(@NotNull Player player, @NotNull Weather weather) {
+    World world = player.getWorld();
+    world.setStorm(weather != Weather.CLEAR);
+    world.setThundering(weather == Weather.THUNDER);
+    MessageKey.of("command.weather." + weather.name().toLowerCase(Locale.ROOT)).send(player, Prefix.CHALLENGES);
   }
 
 }

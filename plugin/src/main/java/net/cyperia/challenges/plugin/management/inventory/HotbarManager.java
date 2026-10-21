@@ -7,7 +7,7 @@ import net.cyperia.challenges.plugin.content.loader.LanguageLoader;
 import net.cyperia.challenges.plugin.management.scheduler.policy.ExtraWorldPolicy;
 import net.cyperia.challenges.plugin.management.scheduler.task.TimerTask;
 import net.cyperia.challenges.plugin.management.scheduler.timer.TimerStatus;
-import net.cyperia.challenges.plugin.spigot.command.TimerCommand;
+import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import net.cyperia.challenges.plugin.spigot.events.PlayerIgnoreStatusChangeEvent;
 import net.cyperia.challenges.plugin.spigot.events.SettingToggleEvent;
 import net.cyperia.commons.bukkit.utils.logging.Logger;
@@ -225,11 +225,11 @@ public final class HotbarManager implements Listener {
     boolean forceTeams = teams.getBoolean("force", false);
     return List.of(
       new CommandHotbarItem("timer", material(config, "timer", Material.CLOCK), "timer", false,
-        player -> player.hasPermission(TimerCommand.MANAGE_PERMISSION)),
+        player -> player.hasPermission(ChallengesPermissions.COMMAND_TIMER)),
       new CommandHotbarItem("challenges", material(config, "challenges", Material.BOOK), "challenges", false,
-        player -> player.hasPermission("challenges.gui")),
+        player -> player.hasPermission(ChallengesPermissions.COMMAND_CHALLENGES)),
       new CommandHotbarItem("start", material(config, "start", Material.LIME_DYE), "start", false,
-        player -> player.hasPermission("challenges.timer")),
+        player -> player.hasPermission(ChallengesPermissions.COMMAND_TIMER_START)),
       new CommandHotbarItem("teams", material(config, "teams", Material.WHITE_BED), "teams", true,
         _ -> forceTeams)
     );
