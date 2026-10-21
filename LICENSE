@@ -71,8 +71,12 @@ rented, licensed, sublicensed or otherwise offered for Payment, alone or as part
 of a bundle, pack, template or setup. This includes servers, rounds,
 installation, configuration, add-ons, presets, configurations, worlds and other
 products or services made for or with the Software and offered for Payment.
-General server hosting is not affected as long as it is not advertised, priced or
-bundled with the Software.
+General server hosting is not affected. As an exception, hosting providers may
+offer the Software preinstalled or as part of a hosting package and pass it on to
+their customers for that purpose, as long as nothing is charged for the Software
+itself and cyperia.net is named where the package is offered. Any other paid
+offer that includes the Software needs the consent of the copyright holders in
+text form.
 
 4. Authorship and endorsement. The Software must not be presented as one's own
 work, and modified versions must state that they are modified. Nothing may
@@ -93,8 +97,9 @@ a. to the Operator of the same Server, including its hosting provider, for
 running that Server;
 b. in a fork of the official repository on GitHub, as long as no releases or
 compiled builds are published from it; and
-c. in private storage that only the Operator can access.
-A copy received under a. counts as obtained from an official source. Every
+c. in private storage that only the Operator can access; and
+d. by a hosting provider to its customers, as allowed in condition 3.
+A copy received under a. or d. counts as obtained from an official source. Every
 permitted copy must include this license.
 
 7. Scope. Parts of the Software that the copyright holders have not published in
