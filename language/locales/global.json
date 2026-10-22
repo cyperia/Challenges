@@ -669,6 +669,9 @@
     "chunk-effect": {
       "*colorize*": "<dark_aqua>{0}</dark_aqua>"
     },
+    "biome-effect": {
+      "*colorize*": "<dark_aqua>{0}</dark_aqua>"
+    },
     "block-effect": {
       "*colorize*": "<dark_aqua>{0}</dark_aqua>"
     },
@@ -1216,7 +1219,25 @@
     "settings-modifier-strength": "<gray>{@generic.strength}: {0}</gray>",
     "settings-modifier-radius": "<gray>{@generic.radius}: {0}</gray>",
     "settings-modifier-damage": "<gray>{@generic.damage}: {0}</gray>",
-    "settings-modifier-max-health": "<gray>{@generic.max-health}: {0}</gray>"
+    "settings-modifier-max-health": "<gray>{@generic.max-health}: {0}</gray>",
+    "kill-effect": {
+      "*colorize*": "<dark_red>{0}</dark_red>"
+    },
+    "only-up": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "level-teleport": {
+      "*colorize*": "<dark_purple>{0}</dark_purple>"
+    },
+    "never-full-hearts": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "no-same-hearts": {
+      "*colorize*": "<light_purple>{0}</light_purple>"
+    },
+    "only-minecart": {
+      "*colorize*": "<gray>{0}</gray>"
+    }
   },
   "custom": {
     "trigger": {

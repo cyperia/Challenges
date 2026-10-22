@@ -1,5 +1,7 @@
 package net.cyperia.challenges.plugin.management.command;
 
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.tree.CommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
@@ -20,6 +22,8 @@ public final class CommandManager {
   private final List<ChallengeCommand> commands = new ArrayList<>();
   private CommandRegistrar registrar;
   private boolean registeredWithPaper;
+  // Only set while the commands are registered with Paper; through a registrar its handler matches case
+  private CommandNode<CommandSender> literalTree;
 
   /**
    * Paper builds its dispatcher once every plugin is enabled, so a registrar set by another plugin's
@@ -28,15 +32,19 @@ public final class CommandManager {
   public void enable(@NotNull Plugin plugin) {
     plugin.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event -> {
       if (registrar != null) return;
+      CommandDispatcher<CommandSender> literals = new CommandDispatcher<>();
       for (ChallengeCommand command : commands) {
         try {
           registerWithPaper(event.registrar(), command);
+          registerLiterals(literals, command);
         } catch (RuntimeException ex) {
           Logger.error("Could not register the command /{}", command.info().getLiteral(), ex);
         }
       }
+      literalTree = literals.getRoot();
       registeredWithPaper = true;
     });
+    plugin.getServer().getPluginManager().registerEvents(new CommandCaseListener(() -> registrar == null ? literalTree : null), plugin);
   }
 
   public void register(@NotNull ChallengeCommand command) {
@@ -67,6 +75,18 @@ public final class CommandManager {
     String description = PlainTextComponentSerializer.plainText()
       .serialize(MessageKey.of(info.getDescriptionKey()).asComponent(TranslationManager.getServerLocale()));
     registrar.register(root.build(), description, info.getAliases());
+  }
+
+  // The same tree on Bukkit's sender, only read for the spelling of the literals
+  static void registerLiterals(@NotNull CommandDispatcher<CommandSender> dispatcher, @NotNull ChallengeCommand command) {
+    CommandNodes<CommandSender> nodes = new CommandNodes<>(sender -> sender);
+    List<String> names = new ArrayList<>(List.of(command.info().getLiteral()));
+    names.addAll(command.info().getAliases());
+    for (String name : names) {
+      var root = nodes.literal(name);
+      nodes.define(command, root);
+      dispatcher.register(root);
+    }
   }
 
   // /execute as <player> run ... acts for the player, as the commands did when they were Bukkit commands

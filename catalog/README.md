@@ -33,7 +33,8 @@ relative to.
 }
 ```
 
-- `id` is the key its settings are saved under. **Never change it**, saved settings would be lost.
+- `id` is the key its settings are saved under. To rename it, move the old id into `fallbackIds`: the
+  plugin then still loads settings and game states saved under it, and a lookup by it finds the entry.
 - `key` is the message key below `challenge` (`challenge.cut-clean.name`, `.desc`).
 - `icon` is a `Material` constant, `color` (`"#RRGGBB"`) tints a potion or leather item.
 - `since`, `updated` mark the entry new or updated in the menu; `beta` leaves its class out of the
@@ -47,7 +48,7 @@ Exactly one definition:
 
 | field | registers |
 |---|---|
-| `class` | a class with a constructor without parameters; `requires` names a plugin it needs. Its commands come from the class (`CommandProvider`) |
+| `class` | a class with a constructor without parameters; `requires` names a plugin it needs. Its commands come from the class (`CommandProvider`). `pairing` (`trigger`, `action`) names the custom challenge it plays at heart, its own rules on top, for a builder outside the plugin to point to it |
 | `preset` | `trigger`, `triggerSettings`, `action`, `actionSettings` and an optional `value` (`unit` is a `ValueUnit` constant, `min`, `max`, `default`) filled into a setting written `${value}` |
 | `damageRule` | the `DamageCause` constants it covers, `"*"` for all |
 | `materialRule` | the `Material` constants it covers |
@@ -62,7 +63,7 @@ challenge class has an entry.
 in every bundled language, for readers without the plugin such as a website, which can read it from the
 repository. Each challenge also carries `styled`: its name, its description lines and its item tooltip as
 run through the menu's item formats, each line a list of text runs with the colour (hex) and bold the game
-renders them with. A preset names its `trigger` and `action`, and the top-level `triggers` and `actions`
+renders them with. `fallbackIds` lists the ids a challenge had before, for a reader that linked to it under one. A preset names its `trigger` and `action`, a challenge with a `pairing` names it the same way under `pairing`, and the top-level `triggers` and `actions`
 list what custom challenges are built from, with the same texts. Lore lines are joined into paragraphs, and a value the plugin fills in at
 runtime reads as an ellipsis or is left out. The file is committed: after changing the catalog or a challenge's texts, run
 `./gradlew :catalog:exportCatalog` and commit the result. `CatalogExportTest` fails while it is out of date.

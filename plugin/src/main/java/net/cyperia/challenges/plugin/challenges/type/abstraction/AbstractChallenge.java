@@ -253,6 +253,12 @@ public abstract class AbstractChallenge implements IChallenge, Listener {
     return getCatalogEntry().id();
   }
 
+  @NotNull
+  @Override
+  public List<String> getFallbackNames() {
+    return getCatalogEntry().fallbackIds();
+  }
+
   @Override
   public void handleShutdown() {
   }

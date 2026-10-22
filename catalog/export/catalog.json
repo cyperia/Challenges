@@ -8483,10 +8483,17 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "interval",
+        "action": "random_item"
       }
     },
     {
-      "id": "preset-damage-random-item",
+      "id": "damage-random-item",
+      "fallbackIds": [
+        "preset-damage-random-item"
+      ],
       "category": "randomizer",
       "icon": {
         "material": "BEACON"
@@ -8661,7 +8668,10 @@
       }
     },
     {
-      "id": "preset-level-random-item",
+      "id": "level-random-item",
+      "fallbackIds": [
+        "preset-level-random-item"
+      ],
       "category": "randomizer",
       "icon": {
         "material": "EXPERIENCE_BOTTLE"
@@ -8836,7 +8846,10 @@
       }
     },
     {
-      "id": "preset-advancement-random-item",
+      "id": "advancement-random-item",
+      "fallbackIds": [
+        "preset-advancement-random-item"
+      ],
       "category": "randomizer",
       "icon": {
         "material": "KNOWLEDGE_BOOK"
@@ -9157,6 +9170,10 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "interval",
+        "action": "random_hotbar"
       }
     },
     {
@@ -9337,6 +9354,10 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "interval",
+        "action": "drop_random_item"
       }
     },
     {
@@ -9517,6 +9538,10 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "interval",
+        "action": "remove_random_item"
       }
     },
     {
@@ -9719,6 +9744,10 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "interval",
+        "action": "swap_random_item"
       }
     },
     {
@@ -11117,7 +11146,10 @@
       }
     },
     {
-      "id": "preset-chunk-random-mob",
+      "id": "chunk-random-mob",
+      "fallbackIds": [
+        "preset-chunk-random-mob"
+      ],
       "category": "entities",
       "icon": {
         "material": "SPAWNER"
@@ -11515,7 +11547,10 @@
       }
     },
     {
-      "id": "preset-break-random-mob",
+      "id": "break-random-mob",
+      "fallbackIds": [
+        "preset-break-random-mob"
+      ],
       "category": "entities",
       "icon": {
         "material": "IRON_PICKAXE"
@@ -11690,7 +11725,10 @@
       }
     },
     {
-      "id": "preset-place-random-mob",
+      "id": "place-random-mob",
+      "fallbackIds": [
+        "preset-place-random-mob"
+      ],
       "category": "entities",
       "icon": {
         "material": "BRICKS"
@@ -11865,7 +11903,10 @@
       }
     },
     {
-      "id": "preset-craft-random-mob",
+      "id": "craft-random-mob",
+      "fallbackIds": [
+        "preset-craft-random-mob"
+      ],
       "category": "entities",
       "icon": {
         "material": "CRAFTING_TABLE"
@@ -12231,10 +12272,17 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "jump",
+        "action": "random_mob"
       }
     },
     {
-      "id": "preset-damage-random-mob",
+      "id": "damage-random-mob",
+      "fallbackIds": [
+        "preset-damage-random-mob"
+      ],
       "category": "entities",
       "icon": {
         "material": "BLAZE_SPAWN_EGG"
@@ -12416,7 +12464,10 @@
       }
     },
     {
-      "id": "preset-interval-random-mob",
+      "id": "interval-random-mob",
+      "fallbackIds": [
+        "preset-interval-random-mob"
+      ],
       "category": "entities",
       "icon": {
         "material": "ZOMBIE_SPAWN_EGG"
@@ -14781,6 +14832,10 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "move_block",
+        "action": "damage"
       }
     },
     {
@@ -14976,6 +15031,10 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "sneak",
+        "action": "damage"
       }
     },
     {
@@ -15171,6 +15230,10 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "jump",
+        "action": "damage"
       }
     },
     {
@@ -15380,6 +15443,10 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "block_break",
+        "action": "damage"
       }
     },
     {
@@ -15589,6 +15656,10 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "block_place",
+        "action": "damage"
       }
     },
     {
@@ -15842,6 +15913,10 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "pickup_item",
+        "action": "damage"
       }
     },
     {
@@ -16014,6 +16089,10 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "advancement",
+        "action": "damage"
       }
     },
     {
@@ -16713,6 +16792,10 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "damage",
+        "action": "freeze"
       }
     },
     {
@@ -17097,6 +17180,10 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "interval",
+        "action": "random_effect"
       }
     },
     {
@@ -17263,6 +17350,181 @@
               },
               {
                 "text": "zufälligen Effekt",
+                "color": "#00AAAA"
+              }
+            ]
+          ]
+        }
+      },
+      "pairing": {
+        "trigger": "new_chunk",
+        "action": "random_effect"
+      }
+    },
+    {
+      "id": "biomeeffect",
+      "category": "effect",
+      "icon": {
+        "material": "MOSS_BLOCK"
+      },
+      "name": {
+        "en": "Biome = Effect",
+        "de": "Biom = Effekt"
+      },
+      "description": {
+        "en": [
+          "Every biome gives you its own potion effect"
+        ],
+        "de": [
+          "Jedes Biom gibt dir einen eigenen Effekt"
+        ]
+      },
+      "styled": {
+        "en": {
+          "name": [
+            {
+              "text": "Biome = Effect",
+              "color": "#00AAAA"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "Every "
+              },
+              {
+                "text": "biome",
+                "color": "#00AAAA"
+              },
+              {
+                "text": " gives you"
+              }
+            ],
+            [
+              {
+                "text": "its own "
+              },
+              {
+                "text": "potion effect",
+                "color": "#00AAAA"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Biome = Effect",
+                "color": "#00AAAA"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "Every ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "biome",
+                "color": "#00AAAA"
+              },
+              {
+                "text": " gives you",
+                "color": "#AAAAAA"
+              }
+            ],
+            [
+              {
+                "text": "its own ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "potion effect",
+                "color": "#00AAAA"
+              }
+            ]
+          ]
+        },
+        "de": {
+          "name": [
+            {
+              "text": "Biom = Effekt",
+              "color": "#00AAAA"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "Jedes "
+              },
+              {
+                "text": "Biom",
+                "color": "#00AAAA"
+              },
+              {
+                "text": " gibt dir"
+              }
+            ],
+            [
+              {
+                "text": "einen "
+              },
+              {
+                "text": "eigenen Effekt",
+                "color": "#00AAAA"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Biom = Effekt",
+                "color": "#00AAAA"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "Jedes ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "Biom",
+                "color": "#00AAAA"
+              },
+              {
+                "text": " gibt dir",
+                "color": "#AAAAAA"
+              }
+            ],
+            [
+              {
+                "text": "einen ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "eigenen Effekt",
                 "color": "#00AAAA"
               }
             ]
@@ -17599,6 +17861,211 @@
               {
                 "text": "zufälligen Effekt",
                 "color": "#FFAA00"
+              }
+            ]
+          ]
+        }
+      },
+      "pairing": {
+        "trigger": "damage",
+        "action": "permanent_effect"
+      }
+    },
+    {
+      "id": "killeffect",
+      "category": "effect",
+      "icon": {
+        "material": "DRAGON_BREATH"
+      },
+      "name": {
+        "en": "Kill = Effect",
+        "de": "Kill = Effekt"
+      },
+      "description": {
+        "en": [
+          "Every kill and every hit from a mob gives you a permanent effect"
+        ],
+        "de": [
+          "Jeder Kill und jeder Treffer von einem Mob gibt dir einen Dauereffekt"
+        ]
+      },
+      "styled": {
+        "en": {
+          "name": [
+            {
+              "text": "Kill = Effect",
+              "color": "#AA0000"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "Every "
+              },
+              {
+                "text": "kill",
+                "color": "#AA0000"
+              },
+              {
+                "text": " and every "
+              },
+              {
+                "text": "hit",
+                "color": "#AA0000"
+              },
+              {
+                "text": " from"
+              }
+            ],
+            [
+              {
+                "text": "a mob gives you a "
+              },
+              {
+                "text": "permanent effect",
+                "color": "#AA0000"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Kill = Effect",
+                "color": "#AA0000"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "Every ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "kill",
+                "color": "#AA0000"
+              },
+              {
+                "text": " and every ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "hit",
+                "color": "#AA0000"
+              },
+              {
+                "text": " from",
+                "color": "#AAAAAA"
+              }
+            ],
+            [
+              {
+                "text": "a mob gives you a ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "permanent effect",
+                "color": "#AA0000"
+              }
+            ]
+          ]
+        },
+        "de": {
+          "name": [
+            {
+              "text": "Kill = Effekt",
+              "color": "#AA0000"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "Jeder "
+              },
+              {
+                "text": "Kill",
+                "color": "#AA0000"
+              },
+              {
+                "text": " und jeder "
+              },
+              {
+                "text": "Treffer",
+                "color": "#AA0000"
+              },
+              {
+                "text": " von"
+              }
+            ],
+            [
+              {
+                "text": "einem Mob gibt dir einen "
+              },
+              {
+                "text": "Dauereffekt",
+                "color": "#AA0000"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Kill = Effekt",
+                "color": "#AA0000"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "Jeder ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "Kill",
+                "color": "#AA0000"
+              },
+              {
+                "text": " und jeder ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "Treffer",
+                "color": "#AA0000"
+              },
+              {
+                "text": " von",
+                "color": "#AAAAAA"
+              }
+            ],
+            [
+              {
+                "text": "einem Mob gibt dir einen ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "Dauereffekt",
+                "color": "#AA0000"
               }
             ]
           ]
@@ -18162,6 +18629,10 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "level_up",
+        "action": "modify_border"
       }
     },
     {
@@ -18573,6 +19044,10 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "damage",
+        "action": "modify_border"
       }
     },
     {
@@ -18745,6 +19220,10 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "new_chunk",
+        "action": "chunk_to_block"
       }
     },
     {
@@ -20862,7 +21341,10 @@
       }
     },
     {
-      "id": "preset-interval-border",
+      "id": "interval-border",
+      "fallbackIds": [
+        "preset-interval-border"
+      ],
       "category": "world",
       "icon": {
         "material": "PURPLE_GLAZED_TERRACOTTA"
@@ -25342,6 +25824,10 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "move_block",
+        "action": "remove_random_item"
       }
     },
     {
@@ -25550,10 +26036,17 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "damage",
+        "action": "clear_inventory"
       }
     },
     {
-      "id": "preset-interval-clear-inventory",
+      "id": "interval-clear-inventory",
+      "fallbackIds": [
+        "preset-interval-clear-inventory"
+      ],
       "category": "inventory",
       "icon": {
         "material": "TRAPPED_CHEST"
@@ -25941,6 +26434,10 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "pickup_item",
+        "action": "boost_in_air"
       }
     },
     {
@@ -26629,6 +27126,509 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "move_up",
+        "action": "kill"
+      }
+    },
+    {
+      "id": "onlyup",
+      "category": "movement",
+      "icon": {
+        "material": "LADDER"
+      },
+      "name": {
+        "en": "Go Down = Death",
+        "de": "Nach unten = Tod"
+      },
+      "description": {
+        "en": [
+          "You may never stand lower than the highest you have stood"
+        ],
+        "de": [
+          "Du darfst nie tiefer stehen als an deinem höchsten Punkt"
+        ]
+      },
+      "styled": {
+        "en": {
+          "name": [
+            {
+              "text": "Go Down = Death",
+              "color": "#FF5555"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "You may never "
+              },
+              {
+                "text": "stand lower",
+                "color": "#FF5555"
+              }
+            ],
+            [
+              {
+                "text": "than the "
+              },
+              {
+                "text": "highest",
+                "color": "#FF5555"
+              },
+              {
+                "text": " you have stood"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Go Down = Death",
+                "color": "#FF5555"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "You may never ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "stand lower",
+                "color": "#FF5555"
+              }
+            ],
+            [
+              {
+                "text": "than the ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "highest",
+                "color": "#FF5555"
+              },
+              {
+                "text": " you have stood",
+                "color": "#AAAAAA"
+              }
+            ]
+          ]
+        },
+        "de": {
+          "name": [
+            {
+              "text": "Nach unten = Tod",
+              "color": "#FF5555"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "Du darfst nie "
+              },
+              {
+                "text": "tiefer stehen",
+                "color": "#FF5555"
+              }
+            ],
+            [
+              {
+                "text": "als an deinem "
+              },
+              {
+                "text": "höchsten Punkt",
+                "color": "#FF5555"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Nach unten = Tod",
+                "color": "#FF5555"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "Du darfst nie ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "tiefer stehen",
+                "color": "#FF5555"
+              }
+            ],
+            [
+              {
+                "text": "als an deinem ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "höchsten Punkt",
+                "color": "#FF5555"
+              }
+            ]
+          ]
+        }
+      },
+      "pairing": {
+        "trigger": "move_down",
+        "action": "kill"
+      }
+    },
+    {
+      "id": "levelteleport",
+      "category": "movement",
+      "icon": {
+        "material": "ENDER_PEARL"
+      },
+      "name": {
+        "en": "Level = Teleport",
+        "de": "Level = Teleport"
+      },
+      "description": {
+        "en": [
+          "You can't walk, but every level gives you an ender pearl"
+        ],
+        "de": [
+          "Du kannst nicht laufen, aber jedes Level gibt dir eine Enderperle"
+        ]
+      },
+      "styled": {
+        "en": {
+          "name": [
+            {
+              "text": "Level = Teleport",
+              "color": "#AA00AA"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "You "
+              },
+              {
+                "text": "can't walk",
+                "color": "#AA00AA"
+              },
+              {
+                "text": ", but every"
+              }
+            ],
+            [
+              {
+                "text": "level",
+                "color": "#AA00AA"
+              },
+              {
+                "text": " gives you an "
+              },
+              {
+                "text": "ender pearl",
+                "color": "#AA00AA"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Level = Teleport",
+                "color": "#AA00AA"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "You ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "can't walk",
+                "color": "#AA00AA"
+              },
+              {
+                "text": ", but every",
+                "color": "#AAAAAA"
+              }
+            ],
+            [
+              {
+                "text": "level",
+                "color": "#AA00AA"
+              },
+              {
+                "text": " gives you an ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "ender pearl",
+                "color": "#AA00AA"
+              }
+            ]
+          ]
+        },
+        "de": {
+          "name": [
+            {
+              "text": "Level = Teleport",
+              "color": "#AA00AA"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "Du "
+              },
+              {
+                "text": "kannst nicht laufen",
+                "color": "#AA00AA"
+              },
+              {
+                "text": ", aber jedes"
+              }
+            ],
+            [
+              {
+                "text": "Level",
+                "color": "#AA00AA"
+              },
+              {
+                "text": " gibt dir eine "
+              },
+              {
+                "text": "Enderperle",
+                "color": "#AA00AA"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Level = Teleport",
+                "color": "#AA00AA"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "Du ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "kannst nicht laufen",
+                "color": "#AA00AA"
+              },
+              {
+                "text": ", aber jedes",
+                "color": "#AAAAAA"
+              }
+            ],
+            [
+              {
+                "text": "Level",
+                "color": "#AA00AA"
+              },
+              {
+                "text": " gibt dir eine ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "Enderperle",
+                "color": "#AA00AA"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "onlyminecart",
+      "category": "movement",
+      "icon": {
+        "material": "MINECART"
+      },
+      "name": {
+        "en": "Only Minecart",
+        "de": "Nur mit Minecart"
+      },
+      "description": {
+        "en": [
+          "You sit in a minecart the whole time and can't get out"
+        ],
+        "de": [
+          "Du sitzt die ganze Zeit in einer Lore und kommst nicht raus"
+        ]
+      },
+      "styled": {
+        "en": {
+          "name": [
+            {
+              "text": "Only Minecart",
+              "color": "#AAAAAA"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "You sit in a "
+              },
+              {
+                "text": "minecart",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": " the"
+              }
+            ],
+            [
+              {
+                "text": "whole time and "
+              },
+              {
+                "text": "can't get out",
+                "color": "#AAAAAA"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Only Minecart",
+                "color": "#AAAAAA"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "You sit in a minecart the",
+                "color": "#AAAAAA"
+              }
+            ],
+            [
+              {
+                "text": "whole time and can't get out",
+                "color": "#AAAAAA"
+              }
+            ]
+          ]
+        },
+        "de": {
+          "name": [
+            {
+              "text": "Nur mit Minecart",
+              "color": "#AAAAAA"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "Du sitzt die ganze Zeit in einer"
+              }
+            ],
+            [
+              {
+                "text": "Lore",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": " und "
+              },
+              {
+                "text": "kommst nicht raus",
+                "color": "#AAAAAA"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Nur mit Minecart",
+                "color": "#AAAAAA"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "Du sitzt die ganze Zeit in einer",
+                "color": "#AAAAAA"
+              }
+            ],
+            [
+              {
+                "text": "Lore und kommst nicht raus",
+                "color": "#AAAAAA"
+              }
+            ]
+          ]
+        }
       }
     },
     {
@@ -27138,6 +28138,10 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "move_block",
+        "action": "hunger"
       }
     },
     {
@@ -27634,6 +28638,10 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "move_camera",
+        "action": "damage"
       }
     },
     {
@@ -28162,6 +29170,10 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "interval",
+        "action": "water_mlg"
       }
     },
     {
@@ -28404,10 +29416,17 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "interval",
+        "action": "jnr"
       }
     },
     {
-      "id": "preset-no-eating",
+      "id": "no-eating",
+      "fallbackIds": [
+        "preset-no-eating"
+      ],
       "category": "misc_challenge",
       "icon": {
         "material": "COOKED_BEEF"
@@ -28884,6 +29903,10 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "consume_item",
+        "action": "boost_in_air"
       }
     },
     {
@@ -29180,6 +30203,10 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "gain_xp",
+        "action": "kill"
       }
     },
     {
@@ -29934,6 +30961,10 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "interval",
+        "action": "uncraft_inventory"
       }
     },
     {
@@ -30410,6 +31441,10 @@
             ]
           ]
         }
+      },
+      "pairing": {
+        "trigger": "interval",
+        "action": "invert_health"
       }
     },
     {
@@ -30607,6 +31642,332 @@
               },
               {
                 "text": " beantworten",
+                "color": "#AAAAAA"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "neverfullhearts",
+      "category": "misc_challenge",
+      "icon": {
+        "material": "GLISTERING_MELON_SLICE"
+      },
+      "name": {
+        "en": "Full Hearts = Death",
+        "de": "Volle Herzen = Tod"
+      },
+      "description": {
+        "en": [
+          "Never heal back to full hearts, your hunger always stays full"
+        ],
+        "de": [
+          "Heil dich nie auf volle Herzen, dein Hunger bleibt immer voll"
+        ]
+      },
+      "styled": {
+        "en": {
+          "name": [
+            {
+              "text": "Full Hearts = Death",
+              "color": "#FF5555"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "Never heal back to "
+              },
+              {
+                "text": "full hearts",
+                "color": "#FF5555"
+              },
+              {
+                "text": ","
+              }
+            ],
+            [
+              {
+                "text": "your "
+              },
+              {
+                "text": "hunger",
+                "color": "#FF5555"
+              },
+              {
+                "text": " always stays full"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Full Hearts = Death",
+                "color": "#FF5555"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "Never heal back to ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "full hearts",
+                "color": "#FF5555"
+              },
+              {
+                "text": ",",
+                "color": "#AAAAAA"
+              }
+            ],
+            [
+              {
+                "text": "your ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "hunger",
+                "color": "#FF5555"
+              },
+              {
+                "text": " always stays full",
+                "color": "#AAAAAA"
+              }
+            ]
+          ]
+        },
+        "de": {
+          "name": [
+            {
+              "text": "Volle Herzen = Tod",
+              "color": "#FF5555"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "Heil dich nie auf "
+              },
+              {
+                "text": "volle Herzen",
+                "color": "#FF5555"
+              },
+              {
+                "text": ","
+              }
+            ],
+            [
+              {
+                "text": "dein "
+              },
+              {
+                "text": "Hunger",
+                "color": "#FF5555"
+              },
+              {
+                "text": " bleibt immer voll"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Volle Herzen = Tod",
+                "color": "#FF5555"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "Heil dich nie auf ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "volle Herzen",
+                "color": "#FF5555"
+              },
+              {
+                "text": ",",
+                "color": "#AAAAAA"
+              }
+            ],
+            [
+              {
+                "text": "dein ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "Hunger",
+                "color": "#FF5555"
+              },
+              {
+                "text": " bleibt immer voll",
+                "color": "#AAAAAA"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "nosamehearts",
+      "category": "misc_challenge",
+      "icon": {
+        "material": "BEETROOT"
+      },
+      "name": {
+        "en": "Same Hearts = Death",
+        "de": "Gleiche Herzen = Tod"
+      },
+      "description": {
+        "en": [
+          "No two players may ever have the same number of hearts"
+        ],
+        "de": [
+          "Niemand darf gleich viele Herzen wie ein anderer haben"
+        ]
+      },
+      "styled": {
+        "en": {
+          "name": [
+            {
+              "text": "Same Hearts = Death",
+              "color": "#FF55FF"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "No two players may ever"
+              }
+            ],
+            [
+              {
+                "text": "have the "
+              },
+              {
+                "text": "same number of hearts",
+                "color": "#FF55FF"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Same Hearts = Death",
+                "color": "#FF55FF"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "No two players may ever",
+                "color": "#AAAAAA"
+              }
+            ],
+            [
+              {
+                "text": "have the ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "same number of hearts",
+                "color": "#FF55FF"
+              }
+            ]
+          ]
+        },
+        "de": {
+          "name": [
+            {
+              "text": "Gleiche Herzen = Tod",
+              "color": "#FF55FF"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "Niemand darf gleich viele"
+              }
+            ],
+            [
+              {
+                "text": "Herzen",
+                "color": "#FF55FF"
+              },
+              {
+                "text": " wie ein anderer haben"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Gleiche Herzen = Tod",
+                "color": "#FF55FF"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "Niemand darf gleich viele",
+                "color": "#AAAAAA"
+              }
+            ],
+            [
+              {
+                "text": "Herzen",
+                "color": "#FF55FF"
+              },
+              {
+                "text": " wie ein anderer haben",
                 "color": "#AAAAAA"
               }
             ]
