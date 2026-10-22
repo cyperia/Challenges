@@ -134,8 +134,8 @@ public final class ChallengeManager {
     for (IChallenge challenge : challenges) {
       if (challenge instanceof CustomChallenge) continue;
 
-      String name = challenge.getUniqueName();
-      if (!config.contains(name)) continue;
+      String name = savedName(config, challenge.getUniqueName(), challenge.getFallbackNames());
+      if (name == null) continue;
       try {
         Document document = config.getDocument(name);
         challenge.loadSettings(document);
@@ -150,8 +150,8 @@ public final class ChallengeManager {
     LinkedList<GamestateSaveable> list = new LinkedList<>(additionalSaver);
     list.addAll(challenges);
     for (GamestateSaveable challenge : list) {
-      String name = challenge.getUniqueGamestateName();
-      if (!config.contains(name)) continue;
+      String name = savedName(config, challenge.getUniqueGamestateName(), challenge.getFallbackNames());
+      if (name == null) continue;
       try {
         Document document = config.getDocument(name);
         challenge.loadGameState(document);
@@ -204,6 +204,7 @@ public final class ChallengeManager {
       try {
         Document document = config.getDocument(challenge.getUniqueGamestateName());
         challenge.writeGameState(document);
+        challenge.getFallbackNames().forEach(config::remove);
       } catch (Exception ex) {
         Logger.error("Could not write gamestate of {}", challenge.getClass().getSimpleName(), ex);
       }
@@ -222,6 +223,7 @@ public final class ChallengeManager {
       try {
         Document document = config.getDocument(challenge.getUniqueGamestateName());
         challenge.writeSettings(document);
+        challenge.getFallbackNames().forEach(config::remove);
       } catch (Exception ex) {
         Logger.error("Could not write settings of {}", challenge.getClass().getSimpleName(), ex);
       }
@@ -255,6 +257,13 @@ public final class ChallengeManager {
     config.save(async);
   }
 
+
+  // The key something was saved under in config: its name, else an id it had before
+  @Nullable
+  static String savedName(@NotNull Document config, @NotNull String name, @NotNull List<String> fallbackIds) {
+    if (config.contains(name)) return name;
+    return fallbackIds.stream().filter(config::contains).findFirst().orElse(null);
+  }
 
   @Nullable
   public IGoal getCurrentGoal() {

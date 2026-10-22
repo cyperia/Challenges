@@ -22,10 +22,10 @@ public final class ChallengeCatalog {
 
   public static final String DIRECTORY = "challenges-catalog/";
 
-  private static final Set<String> CHALLENGE_FIELDS = Set.of("id", "key", "category", "icon", "color", "since",
-    "updated", "beta", "excludeFromRandom", "featured", "registered", "class", "requires", "preset", "damageRule", "materialRule");
+  private static final Set<String> CHALLENGE_FIELDS = Set.of("id", "fallbackIds", "key", "category", "icon", "color", "since",
+    "updated", "beta", "excludeFromRandom", "featured", "registered", "class", "requires", "pairing", "preset", "damageRule", "materialRule");
   private static final Set<String> DEFINITIONS = Set.of("class", "preset", "damageRule", "materialRule");
-  private static final Set<String> CLASS_ONLY = Set.of("requires");
+  private static final Set<String> CLASS_ONLY = Set.of("requires", "pairing");
   private static final Set<String> CUSTOM_SETTING_FIELDS = Set.of("id", "class", "icon", "color", "since", "updated",
     "beta", "fallbackIds");
 
@@ -47,7 +47,7 @@ public final class ChallengeCatalog {
     this.triggers = List.copyOf(triggers);
     this.actions = List.copyOf(actions);
     categoriesById = index(categories, Category::id, "category");
-    challengesById = index(challenges, Challenge::id, "challenge");
+    challengesById = indexChallenges(challenges);
     challengesByClass = index(challenges.stream()
       .filter(challenge -> challenge.definition() instanceof Definition.Implementation).toList(),
       challenge -> ((Definition.Implementation) challenge.definition()).className(), "challenge class");
@@ -103,6 +103,14 @@ public final class ChallengeCatalog {
           problems.add(challenge.id() + " is built from a beta trigger or action, so it has to be beta too");
         }
       }
+      if (challenge.pairing() != null) {
+        if (!triggersById.containsKey(challenge.pairing().trigger())) {
+          problems.add(challenge.id() + " pairs the unknown trigger " + challenge.pairing().trigger());
+        }
+        if (!actionsById.containsKey(challenge.pairing().action())) {
+          problems.add(challenge.id() + " pairs the unknown action " + challenge.pairing().action());
+        }
+      }
     }
     if (!problems.isEmpty()) throw new IllegalStateException("Inconsistent challenge catalog:\n  " + String.join("\n  ", problems));
     return this;
@@ -134,6 +142,7 @@ public final class ChallengeCatalog {
     return Optional.ofNullable(categoriesById.get(id));
   }
 
+  // Also finds a challenge by an id it was saved under before
   @NotNull
   public Optional<Challenge> challenge(@NotNull String id) {
     return Optional.ofNullable(challengesById.get(id));
@@ -178,9 +187,17 @@ public final class ChallengeCatalog {
       case "damageRule" -> new Definition.DamageRule(strings(json, "damageRule"));
       default -> new Definition.MaterialRule(strings(json, "materialRule"));
     };
-    return new Challenge(id, string(json, "key"), string(json, "category"), icon(json), definition,
+    return new Challenge(id, strings(json, "fallbackIds"), string(json, "key"), string(json, "category"), icon(json), definition, pairing(json),
       flag(json, "excludeFromRandom"), flag(json, "featured"), !json.has("registered") || json.get("registered").getAsBoolean(),
       release(json));
+  }
+
+  @Nullable
+  private static Challenge.Pairing pairing(@NotNull JsonObject challenge) {
+    if (!challenge.has("pairing")) return null;
+    JsonObject json = challenge.getAsJsonObject("pairing");
+    requireFields(json, Set.of("trigger", "action"));
+    return new Challenge.Pairing(string(json, "trigger"), string(json, "action"));
   }
 
   @NotNull
@@ -285,6 +302,19 @@ public final class ChallengeCatalog {
     return entries.stream().collect(Collectors.toMap(id, Function.identity(), (first, second) -> {
       throw new IllegalArgumentException("Two catalog entries for the " + kind + " " + id.apply(first));
     }, LinkedHashMap::new));
+  }
+
+  @NotNull
+  private static Map<String, Challenge> indexChallenges(@NotNull List<Challenge> challenges) {
+    Map<String, Challenge> byId = new LinkedHashMap<>();
+    for (Challenge challenge : challenges) {
+      for (String id : Stream.concat(Stream.of(challenge.id()), challenge.fallbackIds().stream()).toList()) {
+        if (byId.putIfAbsent(id, challenge) != null) {
+          throw new IllegalArgumentException("Two catalog entries for the challenge " + id);
+        }
+      }
+    }
+    return byId;
   }
 
   @NotNull

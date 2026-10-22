@@ -19,6 +19,7 @@ import net.cyperia.challenges.plugin.management.command.CommandInfo;
 import net.cyperia.challenges.plugin.management.command.CommandManager;
 import net.cyperia.challenges.plugin.management.database.DatabaseManager;
 import net.cyperia.challenges.plugin.management.files.ConfigManager;
+import net.cyperia.challenges.plugin.management.files.CreatorBuild;
 import net.cyperia.challenges.plugin.management.inventory.HotbarManager;
 import net.cyperia.challenges.plugin.management.menu.MenuManager;
 import net.cyperia.challenges.plugin.management.menu.search.SearchRegistry;
@@ -96,6 +97,11 @@ public final class Challenges extends BukkitModule {
 
   @Override
   protected void handleEnable() {
+    CreatorBuild creatorBuild = CreatorBuild.read(getClassLoader());
+    if (creatorBuild != null) {
+      getLogger().info("Beta build " + creatorBuild.build() + " licensed to " + creatorBuild.creator() + ", not to be shared");
+    }
+
     enableManagers();
 
     registerCommands();

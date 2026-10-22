@@ -77,6 +77,11 @@ public final class CatalogExport {
       if (!challenge.registered()) continue;
       JsonObject json = new JsonObject();
       json.addProperty("id", challenge.id());
+      if (!challenge.fallbackIds().isEmpty()) {
+        JsonArray fallbackIds = new JsonArray();
+        challenge.fallbackIds().forEach(fallbackIds::add);
+        json.add("fallbackIds", fallbackIds);
+      }
       json.addProperty("category", challenge.category());
       json.add("icon", icon(challenge.icon()));
       if (challenge.featured()) json.addProperty("featured", true);
@@ -91,6 +96,12 @@ public final class CatalogExport {
         built.addProperty("trigger", preset.trigger());
         built.addProperty("action", preset.action());
         json.add("preset", built);
+      }
+      if (challenge.pairing() != null) {
+        JsonObject pairing = new JsonObject();
+        pairing.addProperty("trigger", challenge.pairing().trigger());
+        pairing.addProperty("action", challenge.pairing().action());
+        json.add("pairing", pairing);
       }
       challenges.add(json);
     }

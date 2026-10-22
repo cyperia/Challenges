@@ -1,5 +1,6 @@
 package net.cyperia.challenges.plugin.challenges.custom.settings.trigger.impl;
 
+import net.cyperia.challenges.catalog.Challenge;
 import net.cyperia.challenges.plugin.ChallengeAPI;
 import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.challenges.custom.TriggerActionChallenge;
@@ -276,8 +277,9 @@ public class NewChunkTrigger extends ChallengeTrigger implements GamestateSaveab
   public void loadGameState(@NotNull Document document) {
     memories.clear();
 
-    for (String uniqueName : document.keys()) {
-      Document challengeDocument = document.getDocument(uniqueName);
+    for (String savedName : document.keys()) {
+      Document challengeDocument = document.getDocument(savedName);
+      String uniqueName = Challenges.getInstance().getCatalog().challenge(savedName).map(Challenge::id).orElse(savedName);
       Memory memory = new Memory(new ChunkSet(), new HashMap<>());
       memory.entered.loadGameState(challengeDocument, "entered-chunks");
 

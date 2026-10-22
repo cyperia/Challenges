@@ -54,10 +54,24 @@ class ChallengeCatalogTest {
 
   @Test
   void readsAPresetWithItsValue() {
-    Definition.Preset preset = (Definition.Preset) bundled.challenge("preset-interval-border").orElseThrow().definition();
+    Definition.Preset preset = (Definition.Preset) bundled.challenge("interval-border").orElseThrow().definition();
     assertEquals("interval", preset.trigger());
     assertEquals(Map.of("change", List.of("-1")), preset.actionSettings());
     assertEquals(new Definition.Preset.Value("INTERVAL_MINUTES", 1, 10, 1), preset.value());
+  }
+
+  @Test
+  void readsThePairingAChallengePlays() {
+    assertEquals(new Challenge.Pairing("new_chunk", "chunk_to_block"), bundled.challenge("chunkrandomblock").orElseThrow().pairing());
+    assertNull(bundled.challenge("cutclean").orElseThrow().pairing());
+  }
+
+  @Test
+  void rejectsAPairingOnAPreset(@TempDir Path dir) throws IOException {
+    assertRejected(dir, """
+      {"challenges": [{"id": "a", "key": "a", "category": "c", "icon": "STONE", "pairing": {"trigger": "t", "action": "x"},
+        "preset": {"trigger": "t", "triggerSettings": {}, "action": "x", "actionSettings": {}}}]}
+      """, "only apply to an entry with a class");
   }
 
   @Test
@@ -65,6 +79,25 @@ class ChallengeCatalogTest {
     assertEquals(new Definition.DamageRule(List.of(Definition.DamageRule.EVERY_CAUSE)),
       bundled.challenge("damagerulenone").orElseThrow().definition());
     assertEquals(new Icon("POTION", 0x0000FF), bundled.challenge("damageruledrowning").orElseThrow().icon());
+  }
+
+  @Test
+  void findsAChallengeByAnIdItHadBefore() {
+    assertEquals("interval-border", bundled.challenge("preset-interval-border").orElseThrow().id());
+  }
+
+  // A preset's id is how the plugin wires it, not something a player or a link should see
+  @Test
+  void noIdCarriesThePresetPrefix() {
+    bundled.challenges().forEach(challenge -> assertFalse(challenge.id().startsWith("preset-"), challenge.id()));
+  }
+
+  @Test
+  void aModuleCannotReuseAFallbackId(@TempDir Path dir) throws IOException {
+    ChallengeCatalog module = load(dir, """
+      {"package": "x", "challenges": [{"id": "preset-interval-border", "key": "a", "category": "utility", "icon": "STONE", "class": "A"}]}
+      """);
+    assertThrows(IllegalArgumentException.class, () -> bundled.merge(module));
   }
 
   @Test
@@ -117,12 +150,14 @@ class ChallengeCatalogTest {
       {"challenges": [
         {"id": "a", "key": "a", "category": "nowhere", "icon": "STONE", "class": "A"},
         {"id": "b", "key": "b", "category": "utility", "icon": "STONE",
-          "preset": {"trigger": "interval", "triggerSettings": {}, "action": "chunk_to_block", "actionSettings": {}}}
+          "preset": {"trigger": "interval", "triggerSettings": {}, "action": "chunk_to_block", "actionSettings": {}}},
+        {"id": "c", "key": "c", "category": "utility", "icon": "STONE", "class": "C", "pairing": {"trigger": "nothing", "action": "kill"}}
       ]}
       """);
     IllegalStateException error = assertThrows(IllegalStateException.class, () -> bundled.merge(module).requireComplete());
     assertTrue(error.getMessage().contains("a names the unknown category nowhere"), error.getMessage());
     assertTrue(error.getMessage().contains("b is built from a beta trigger or action"), error.getMessage());
+    assertTrue(error.getMessage().contains("c pairs the unknown trigger nothing"), error.getMessage());
   }
 
   private static void assertRejected(Path dir, String challenges, String message) throws IOException {

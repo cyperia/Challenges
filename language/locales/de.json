@@ -1363,6 +1363,13 @@
         "einen *zufälligen Effekt*"
       ]
     },
+    "biome-effect": {
+      "name": "*Biom = Effekt*",
+      "desc": [
+        "Jedes *Biom* gibt dir",
+        "einen *eigenen Effekt*"
+      ]
+    },
     "block-effect": {
       "name": "*Neuer Block = Zufallseffekt*",
       "desc": [
@@ -2801,6 +2808,57 @@
       "points": "<yellow>{0} </yellow><gray>Punkte</gray>",
       "bossbar-height": "{@bossbar.format-arg('<white>Ziel</white>', 'Y: {0}')}",
       "leaderboard-entry": "{0} <dark_gray>» </dark_gray><yellow>{1} </yellow><dark_gray>┃ </dark_gray><yellow>{2}</yellow>"
+    },
+    "kill-effect": {
+      "name": "*Kill = Effekt*",
+      "desc": [
+        "Jeder *Kill* und jeder *Treffer* von",
+        "einem Mob gibt dir einen *Dauereffekt*"
+      ],
+      "new-effect": "<gray>Effekt <yellow>{0} </yellow><dark_gray>➔ </dark_gray><yellow>{1}</yellow></gray>",
+      "settings-desc": {
+        "everyone": "<gray>Alle erhalten den Effekt</gray>",
+        "player": "<gray>Nur der aktive Spieler erhält den Effekt</gray>"
+      }
+    },
+    "only-up": {
+      "name": "*Nach unten = Tod*",
+      "desc": [
+        "Du darfst nie *tiefer stehen*",
+        "als an deinem *höchsten Punkt*"
+      ],
+      "failed": "<yellow>{0} </yellow><gray>ist zu tief gekommen</gray>",
+      "bossbar": "{@bossbar.format-arg('<white>Mindesthöhe</white>', 'Y: {0}')}"
+    },
+    "level-teleport": {
+      "name": "*Level = Teleport*",
+      "desc": [
+        "Du *kannst nicht laufen*, aber jedes",
+        "*Level* gibt dir eine *Enderperle*"
+      ]
+    },
+    "never-full-hearts": {
+      "name": "*Volle Herzen = Tod*",
+      "desc": [
+        "Heil dich nie auf *volle Herzen*,",
+        "dein *Hunger* bleibt immer voll"
+      ],
+      "failed": "<yellow>{0} </yellow><gray>hatte volle Herzen</gray>"
+    },
+    "no-same-hearts": {
+      "name": "*Gleiche Herzen = Tod*",
+      "desc": [
+        "Niemand darf gleich viele",
+        "*Herzen* wie ein anderer haben"
+      ],
+      "failed": "<yellow>{0} </yellow><gray>hat gleich viele Herzen wie </gray><yellow>{1}</yellow>"
+    },
+    "only-minecart": {
+      "name": "*Nur mit Minecart*",
+      "desc": [
+        "Du sitzt die ganze Zeit in einer",
+        "*Lore* und *kommst nicht raus*"
+      ]
     }
   },
   "custom": {
@@ -3462,7 +3520,7 @@
       ],
       "custom-challenges": "<gray>Die <yellow>lokalen </yellow>Challenges wurden <green>erfolgreich zurückgesetzt</green></gray>",
       "config": "<gray>Die <yellow>lokalen </yellow>Einstellungen wurden <green>erfolgreich zurückgesetzt</green></gray>",
-      "desc": "Setzt die Welt zurück, oder nur die Einstellungen oder die eigenen Challenges."
+      "description": "Setzt die Welt zurück, oder nur die Einstellungen oder die eigenen Challenges."
     },
     "feature-disabled": "<gray>Diese Funktion ist derzeit <red>deaktiviert</red></gray>",
     "database": {
@@ -3473,39 +3531,39 @@
       "customs-loaded": "<gray>Deine Challenges wurden <green>erfolgreich geladen</green></gray>",
       "customs-saved": "<gray>Deine Challenges wurden <green>erfolgreich gespeichert</green></gray>",
       "customs-reset": "<gray>Deine Challenges wurden <green>erfolgreich zurückgesetzt</green></gray>",
-      "desc": "Speichert, lädt oder löscht deine Einstellungen und Challenges in der Datenbank."
+      "description": "Speichert, lädt oder löscht deine Einstellungen und Challenges in der Datenbank."
     },
     "search": {
       "open": "<gray>Das Suchmenü wurde geöffnet</gray>",
       "query": "<gray>Das Suchmenü für <yellow>{0}</yellow> wird geöffnet..</gray>",
-      "desc": "Durchsucht die Einstellungen, Challenges und Ziele."
+      "description": "Durchsucht die Einstellungen, Challenges und Ziele."
     },
     "no-target": "<gray>Es wurde <red>kein </red>Spieler gefunden</gray>",
     "heal": {
       "done": "<gray>Du wurdest <green>geheilt</green></gray>",
       "done-others": "<gray>Du hast <yellow>{0} Spieler </yellow><green>geheilt</green></gray>",
-      "desc": "Heilt dich oder andere Spieler."
+      "description": "Heilt dich oder andere Spieler."
     },
     "gamemode": {
       "done": "<gray>Du wurdest in den Gamemode <yellow>{0} </yellow>gesetzt</gray>",
       "done-others": "<gray>Du hast <yellow>{1} Spieler </yellow>in den Gamemode <yellow>{0} </yellow>gesetzt</gray>",
-      "desc": "Ändert deinen Spielmodus oder den anderer Spieler."
+      "description": "Ändert deinen Spielmodus oder den anderer Spieler."
     },
     "village": {
       "searching": "<gray>Es wird nach einem Dorf gesucht..</gray>",
       "done": "<gray>Du wurdest in ein Dorf <green>teleportiert</green></gray>",
       "none": "<gray>Es wurde <red>kein neues </red>Dorf gefunden</gray>",
-      "desc": "Teleportiert dich zu einem Dorf in der Nähe."
+      "description": "Teleportiert dich zu einem Dorf in der Nähe."
     },
     "weather": {
       "clear": "<gray>Wetter zu <yellow>klar </yellow>geändert</gray>",
       "rain": "<gray>Wetter zu <yellow>regnerisch </yellow>geändert</gray>",
       "thunder": "<gray>Wetter zu <yellow>stürmisch </yellow>geändert</gray>",
-      "desc": "Ändert das Wetter."
+      "description": "Ändert das Wetter."
     },
     "invsee": {
       "open": "<gray>Inventar von <yellow>{0} </yellow>geöffnet</gray>",
-      "desc": "Öffnet das Inventar eines anderen Spielers."
+      "description": "Öffnet das Inventar eines anderen Spielers."
     },
     "time": {
       "done": "<gray>Die Zeit wurde auf <yellow>{0} </yellow>Ticks <dark_gray>(</dark_gray>ca. <yellow>{1}</yellow><dark_gray>) </dark_gray>geändert</gray>",
@@ -3519,38 +3577,38 @@
       "night": "Nacht",
       "midnight": "Mitternacht",
       "day": "Tag",
-      "desc": "Stellt, ändert oder zeigt die Tageszeit."
+      "description": "Stellt, ändert oder zeigt die Tageszeit."
     },
     "fly": {
       "enabled": "<gray>Du kannst <green>nun fliegen</green></gray>",
       "disabled": "<gray>Du kannst nun <red>nicht mehr </red>fliegen</gray>",
       "done-others": "<gray>Du hast <yellow>Fly </yellow>für <yellow>{0} </yellow>Spieler verändert</gray>",
-      "desc": "Schaltet den Flugmodus für dich oder andere Spieler um."
+      "description": "Schaltet den Flugmodus für dich oder andere Spieler um."
     },
     "feed": {
       "done": "<gray>Dein Hunger wurde <green>gestillt</green></gray>",
       "done-others": "<gray>Du hast den Hunger von <yellow>{0} </yellow>Spieler *gestillt*</gray>",
-      "desc": "Füllt deinen Hunger oder den anderer Spieler auf."
+      "description": "Füllt deinen Hunger oder den anderer Spieler auf."
     },
     "gamestate": {
       "reloaded": "<gray>Der Gamestate wurde <green>neu geladen</green></gray>",
       "reset": "<gray>Der Gamestate wurde <green>zurückgesetzt</green></gray>",
-      "desc": "Setzt den gespeicherten Fortschritt der Challenges zurück oder lädt ihn neu."
+      "description": "Setzt den gespeicherten Fortschritt der Challenges zurück oder lädt ihn neu."
     },
     "world": {
       "done": "<gray>Du wirst in die Welt <yellow>{0} </yellow>teleportiert</gray>",
       "not-loaded": "<gray>Diese Welt ist <red>nicht </red>geladen</gray>",
-      "desc": "Teleportiert dich in die Oberwelt, den Nether oder das End."
+      "description": "Teleportiert dich in die Oberwelt, den Nether oder das End."
     },
     "back": {
       "none": "<gray>Du hast dich noch <red>nicht </red>teleportiert</gray>",
       "done": "<gray>Du wurdest <yellow>{0} </yellow>Position zurück teleportiert</gray>",
       "done-multiple": "<gray>Du wurdest <yellow>{0} </yellow>Positionen zurück teleportiert</gray>",
-      "desc": "Teleportiert dich dorthin zurück, wo du vor einem Teleport warst."
+      "description": "Teleportiert dich dorthin zurück, wo du vor einem Teleport warst."
     },
     "result": {
       "none": "<gray>Es ist aktuell <red>kein </red>Force-Battle aktiviert</gray>",
-      "desc": "Zeigt das Ergebnis des aktuellen Force Battles."
+      "description": "Zeigt das Ergebnis des aktuellen Force Battles."
     },
     "god-mode": {
       "enabled": "<gray>Du bist nun im <green>God-Mode</green></gray>",
@@ -3560,7 +3618,7 @@
     "goal": {
       "none": "<gray>Es ist <red>kein</red> Ziel aktiviert</gray>",
       "no-checklist": "<gray>Das Ziel {0} hat <red>keine weiteren Informationen</red></gray>",
-      "desc": "Zeigt, was das aktuelle Ziel noch braucht und wer was gefunden hat."
+      "description": "Zeigt, was das aktuelle Ziel noch braucht und wer was gefunden hat."
     },
     "randomizer": {
       "none": "<gray>Es ist <red>kein</red> Randomizer aktiviert</gray>",
@@ -3576,100 +3634,100 @@
         "shown": "<gray>{0}{1}</gray><yellow>{2}</yellow> <gray>(siehe oben)</gray>",
         "none": "<gray>Es gibt keinen bekannten Weg zu</gray> <yellow>{0}</yellow>"
       },
-      "desc": "Zeigt, wozu die aktiven Randomizer Blöcke, Rezepte und Mobs machen."
+      "description": "Zeigt, wozu die aktiven Randomizer Blöcke, Rezepte und Mobs machen."
     },
     "help": {
-      "desc": "Zeigt, wer dieses Plugin entwickelt hat und wo du es bekommst."
+      "description": "Zeigt, wer dieses Plugin entwickelt hat und wo du es bekommst."
     },
     "challenges": {
-      "desc": "Öffnet das Einstellungsmenü oder eines seiner Menüs."
+      "description": "Öffnet das Einstellungsmenü oder eines seiner Menüs."
     },
     "timer": {
-      "desc": "Öffnet das Timer-Menü oder startet, pausiert und stellt den Timer."
+      "description": "Öffnet das Timer-Menü oder startet, pausiert und stellt den Timer."
     },
     "start": {
-      "desc": "Startet den Timer."
+      "description": "Startet den Timer."
     },
     "pause": {
-      "desc": "Pausiert den Timer."
+      "description": "Pausiert den Timer."
     },
     "gms": {
-      "desc": "Wechselt in den Überlebensmodus."
+      "description": "Wechselt in den Überlebensmodus."
     },
     "gmc": {
-      "desc": "Wechselt in den Kreativmodus."
+      "description": "Wechselt in den Kreativmodus."
     },
     "gma": {
-      "desc": "Wechselt in den Abenteuermodus."
+      "description": "Wechselt in den Abenteuermodus."
     },
     "gmsp": {
-      "desc": "Wechselt in den Zuschauermodus."
+      "description": "Wechselt in den Zuschauermodus."
     },
     "sun": {
-      "desc": "Macht das Wetter klar."
+      "description": "Macht das Wetter klar."
     },
     "rain": {
-      "desc": "Lässt es regnen."
+      "description": "Lässt es regnen."
     },
     "thunder": {
-      "desc": "Startet ein Gewitter."
+      "description": "Startet ein Gewitter."
     },
     "day": {
-      "desc": "Stellt die Zeit auf Tag."
+      "description": "Stellt die Zeit auf Tag."
     },
     "night": {
-      "desc": "Stellt die Zeit auf Nacht."
+      "description": "Stellt die Zeit auf Nacht."
     },
     "noon": {
-      "desc": "Stellt die Zeit auf Mittag."
+      "description": "Stellt die Zeit auf Mittag."
     },
     "midnight": {
-      "desc": "Stellt die Zeit auf Mitternacht."
+      "description": "Stellt die Zeit auf Mitternacht."
     },
     "skiptimer": {
-      "desc": "Überspringt die Timer der aktiven Challenges oder einer davon."
+      "description": "Überspringt die Timer der aktiven Challenges oder einer davon."
     },
     "cancelinput": {
-      "desc": "Bricht die aktuelle Chateingabe ab."
+      "description": "Bricht die aktuelle Chateingabe ab."
     },
     "teams": {
-      "desc": "Öffnet die Teamauswahl."
+      "description": "Öffnet die Teamauswahl."
     },
     "godmode": {
-      "desc": "Macht dich oder andere Spieler unverwundbar."
+      "description": "Macht dich oder andere Spieler unverwundbar."
     },
     "position": {
-      "desc": "Zeigt die gespeicherten Positionen oder speichert eine neue."
+      "description": "Zeigt die gespeicherten Positionen oder speichert eine neue."
     },
     "delposition": {
-      "desc": "Löscht eine gespeicherte Position."
+      "description": "Löscht eine gespeicherte Position."
     },
     "setposition": {
-      "desc": "Speichert eine Position an den angegebenen Koordinaten."
+      "description": "Speichert eine Position an den angegebenen Koordinaten."
     },
     "top": {
-      "desc": "Teleportiert dich an die Oberfläche oder zurück in die Oberwelt."
+      "description": "Teleportiert dich an die Oberfläche oder zurück in die Oberwelt."
     },
     "backpack": {
-      "desc": "Öffnet den Rucksack."
+      "description": "Öffnet den Rucksack."
     },
     "enderchest": {
-      "desc": "Öffnet deine Enderkiste."
+      "description": "Öffnet deine Enderkiste."
     },
     "setlanguage": {
-      "desc": "Ändert die Sprache des Plugins."
+      "description": "Ändert die Sprache des Plugins."
     },
     "difficulty": {
-      "desc": "Zeigt oder ändert den Schwierigkeitsgrad."
+      "description": "Zeigt oder ändert den Schwierigkeitsgrad."
     },
     "skipitem": {
-      "desc": "Überspringt das gesuchte Item."
+      "description": "Überspringt das gesuchte Item."
     },
     "openmissingitems": {
-      "desc": "Öffnet das Menü der fehlenden Items erneut."
+      "description": "Öffnet das Menü der fehlenden Items erneut."
     },
     "guess": {
-      "desc": "Beantwortet die Quizfrage."
+      "description": "Beantwortet die Quizfrage."
     }
   },
   "server": {

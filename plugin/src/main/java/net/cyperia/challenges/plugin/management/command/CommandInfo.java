@@ -41,7 +41,7 @@ public final class CommandInfo {
 
   @NotNull
   public String getDescriptionKey() {
-    return "command." + literal + ".desc";
+    return "command." + literal + ".description";
   }
 
 }

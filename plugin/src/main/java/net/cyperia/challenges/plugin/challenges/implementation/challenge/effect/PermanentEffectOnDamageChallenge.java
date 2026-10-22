@@ -109,11 +109,15 @@ public class PermanentEffectOnDamageChallenge extends SettingModifier {
     if (event.getFinalDamage() <= 0 && event.getDamage(DamageModifier.ABSORPTION) >= 0) return;
     if (!(event.getEntity() instanceof Player player)) return;
     if (!shouldExecuteEffect(player)) return;
-    DamageCause cause = event.getCause();
-    if (cause == DamageCause.POISON || cause == DamageCause.WITHER) return;
+    if (!givesEffect(event)) return;
 
     addRandomEffect(player);
     updateEffects();
+  }
+
+  protected boolean givesEffect(@NotNull EntityDamageEvent event) {
+    DamageCause cause = event.getCause();
+    return cause != DamageCause.POISON && cause != DamageCause.WITHER;
   }
 
   public void addRandomEffect(@NotNull Player eventPlayer) {
