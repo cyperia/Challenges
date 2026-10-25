@@ -8,6 +8,10 @@
 
 [![Watch the trailer](https://img.youtube.com/vi/qJid5OSKfOQ/maxresdefault.jpg)](https://www.youtube.com/watch?v=qJid5OSKfOQ)
 
+> 🇬🇧 **Showing Challenges in a video or stream?** We would be happy about a link to [cyperia.net](https://cyperia.net) in the description. It is not required, but it helps us a lot.
+
+> 🇩🇪 **Du zeigst Challenges in einem Video oder Stream?** Wir freuen uns über einen Link zu [cyperia.net](https://cyperia.net) in der Beschreibung. Das ist keine Pflicht, hilft uns aber sehr.
+
 ![Play on Cyperia](https://raw.githubusercontent.com/cyperia/Challenges/main/.github/assets/banners/cyperia.png)
 
 🇬🇧 **[Cyperia.net](https://cyperia.net)** is our German Minecraft network. No server of your own, or want to try the beta challenges? On Cyperia, Challenges is a game mode of its own: start a private Challenge server for you and your friends without setting anything up, with the beta challenges already included. Bingo, OneBlockRace and Manhunt are waiting there too. Join with the address **`cyperia.net`**, free of charge.
