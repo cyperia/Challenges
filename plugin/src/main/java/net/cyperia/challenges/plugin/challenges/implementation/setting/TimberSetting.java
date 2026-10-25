@@ -4,7 +4,7 @@ import net.cyperia.challenges.plugin.challenges.type.abstraction.SettingModifier
 import net.cyperia.challenges.plugin.challenges.type.helper.ChallengeHelper;
 import net.cyperia.challenges.plugin.utils.misc.WoodSpecies;
 import net.cyperia.commons.bukkit.utils.item.ItemUtils;
-import org.bukkit.Bukkit;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.type.Leaves;
@@ -137,7 +137,7 @@ public class TimberSetting extends SettingModifier {
    */
   private void fellTree(@NotNull Player player, @NotNull WoodSpecies species, @NotNull List<Block> tree) {
     Iterator<Block> blocks = tree.iterator();
-    Bukkit.getScheduler().runTaskTimer(plugin, task -> {
+    Regions.timer(plugin, tree.getFirst().getLocation(), task -> {
       if (!player.isOnline()) {
         task.cancel();
         return;

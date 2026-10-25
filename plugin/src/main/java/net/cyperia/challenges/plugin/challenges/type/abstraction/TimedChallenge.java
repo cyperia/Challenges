@@ -1,12 +1,13 @@
 package net.cyperia.challenges.plugin.challenges.type.abstraction;
 
+import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.challenges.type.SkippableTimer;
 import net.cyperia.challenges.plugin.challenges.type.ValueUnit;
 import net.cyperia.challenges.plugin.management.scheduler.task.ScheduledTask;
 import net.cyperia.commons.bukkit.utils.logging.Logger;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.collection.IRandom;
 import net.cyperia.commons.common.config.Document;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class TimedChallenge extends SettingModifier implements SkippableTimer {
@@ -56,7 +57,7 @@ public abstract class TimedChallenge extends SettingModifier implements Skippabl
   public void setValue(int value) {
     super.setValue(value);
     if (!timerStatus) {
-      restartTimer();
+      Regions.global(Challenges.getInstance(), this::restartTimer);
     }
   }
 
@@ -92,9 +93,9 @@ public abstract class TimedChallenge extends SettingModifier implements Skippabl
 
   public final void executeTimeActivation() {
     if (runAsync) {
-      Bukkit.getScheduler().runTaskAsynchronously(plugin, this::onTimeActivation);
+      Regions.async(plugin, this::onTimeActivation);
     } else {
-      Bukkit.getScheduler().runTask(plugin, this::onTimeActivation);
+      Regions.nextTick(plugin, this::onTimeActivation);
     }
   }
 

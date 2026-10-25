@@ -19,7 +19,7 @@ import net.cyperia.challenges.plugin.utils.misc.InventoryUtils;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
 import net.cyperia.commons.bukkit.utils.menu.MenuClickInfo;
 import net.cyperia.commons.bukkit.utils.menu.MenuClickType;
-import org.bukkit.Bukkit;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -42,8 +42,8 @@ public final class ChallengeHelper {
   /** amount a shift click adds to / subtracts from a modifier value */
   public static final int SHIFT_STEP = 10;
 
-  @Getter
-  private static volatile boolean inInstantKill = false;
+  // Set while the kill's damage is dealt, and read by the handlers that damage calls on the same thread
+  private static final ThreadLocal<Boolean> inInstantKill = ThreadLocal.withInitial(() -> false);
 
   @Getter
   @Setter
@@ -53,19 +53,33 @@ public final class ChallengeHelper {
   }
 
   public static void punish(@NotNull Player player) {
-    runSync(() -> penalty.punish(player));
+    Regions.entity(Challenges.getInstance(), player, () -> penalty.punish(player));
   }
 
   public static void punish(@NotNull Player player, int delay) {
-    Bukkit.getScheduler().runTaskLater(Challenges.getInstance(), () -> punish(player), delay);
+    Regions.later(Challenges.getInstance(), player, () -> punish(player), delay);
+  }
+
+  public static boolean isInInstantKill() {
+    return inInstantKill.get();
   }
 
   /** use {@link #punish(Player)} where applicable instead */
   @ApiStatus.Internal
   public static void kill(@NotNull Player player) {
-    runSync(() -> {
+    kill(player, () -> {
+    });
+  }
+
+  /**
+   * Kills the player on their own thread. {@code finished} runs there afterwards, or on this thread when
+   * the player is gone before the kill could be scheduled.
+   */
+  @ApiStatus.Internal
+  public static void kill(@NotNull Player player, @NotNull Runnable finished) {
+    Regions.entity(Challenges.getInstance(), player, () -> {
       try {
-        inInstantKill = true;
+        inInstantKill.set(true);
         player.setNoDamageTicks(0);
         player.damage(Integer.MAX_VALUE);
 
@@ -76,32 +90,30 @@ public final class ChallengeHelper {
           player.setHealth(0);
         }
       } finally {
-        inInstantKill = false;
+        inInstantKill.set(false);
+        finished.run();
       }
-    });
+    }, finished);
   }
 
   /** use {@link #punish(Player, int)} where applicable instead */
   @ApiStatus.Internal
   public static void kill(@NotNull Player player, int delay) {
-    Bukkit.getScheduler().runTaskLater(Challenges.getInstance(), () -> kill(player), delay);
+    Regions.later(Challenges.getInstance(), player, () -> kill(player), delay);
   }
 
   @CheckReturnValue
   public static boolean runSyncIfConcurrent(Runnable task) {
-    if (Bukkit.isPrimaryThread()) {
+    if (Regions.isGlobalThread()) {
       return false;
     }
-    Bukkit.getScheduler().runTask(Challenges.getInstance(), task);
+    Regions.global(Challenges.getInstance(), task);
     return true;
   }
 
+  /** Runs on the global region, where game state and world settings are owned */
   public static void runSync(@NotNull Runnable task) {
-    if (Bukkit.isPrimaryThread()) {
-      task.run();
-      return;
-    }
-    Bukkit.getScheduler().runTask(Challenges.getInstance(), task);
+    Regions.global(Challenges.getInstance(), task);
   }
 
   public static void openPunishmentMenu(@NotNull Player player) {

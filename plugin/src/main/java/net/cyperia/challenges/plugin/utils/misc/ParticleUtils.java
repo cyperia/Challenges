@@ -1,6 +1,7 @@
 package net.cyperia.challenges.plugin.utils.misc;
 
 import net.cyperia.commons.bukkit.utils.logging.Logger;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.collection.IRandom;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -47,7 +48,7 @@ public final class ParticleUtils {
                                             @NotNull BiConsumer<World, Location> playParticle) {
     for (double y = 0, i = 0; y < height; y += cylinderParticleVerticalStep, i++) {
       final double Y = y;
-      Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
+      Regions.later(plugin, location, () -> {
         spawnParticleCircle(location.clone().add(0, Y, 0), points, radius, playParticle);
       }, (long) i);
     }
@@ -78,7 +79,7 @@ public final class ParticleUtils {
     for (double y = 0, i = 0; y < height; y += .25, i++) {
       final double Y = y;
 
-      Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> spawnParticleCircle(
+      Regions.later(plugin, location, () -> spawnParticleCircle(
         location.clone().add(0, Y, 0), points, radius,
         (world, loc) -> doSpawnParticleWithData(loc, particle, 1, overrideColor)
       ), (long) i);

@@ -4,6 +4,7 @@ import net.cyperia.challenges.plugin.content.i18n.LocalizableMessage;
 import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.content.i18n.TranslationManager;
 import net.cyperia.challenges.plugin.content.i18n.impl.format.ComponentFormatter;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ import java.util.Map;
  * and how well; this class decides what is searched and how the hits are ordered.
  *
  * <h2>Visibility</h2>
- * A findable stays registered for its whole lifetime, but {@link SearchFindable#isVisible()} may flip
+ * A findable stays registered for its whole lifetime, but {@link SearchFindable#isVisibleTo(org.bukkit.entity.Player)} may flip
  * at any point, so it is asked once per search rather than cached anywhere.
  *
  * <h2>Ranking</h2>
@@ -78,13 +79,13 @@ public final class SearchRegistry {
    * them to show and may use the full size as the hit count.
    */
   @NotNull
-  public synchronized List<SearchFindable> search(@NotNull String query, @NotNull Locale locale) {
+  public synchronized List<SearchFindable> search(@NotNull String query, @NotNull Player viewer, @NotNull Locale locale) {
     SearchQuery searchQuery = new SearchQuery(query);
     if (searchQuery.isEmpty() || findables.isEmpty()) return List.of();
 
     SearchFindable[] entries = snapshot();
     long[] hits = new long[entries.length];
-    boolean[] skipped = hidden(entries);
+    boolean[] skipped = hidden(entries, viewer);
 
     Locale playerLocale = TranslationManager.normalizeLocale(locale);
     int count = collect(searchQuery, playerLocale, entries, hits, skipped, 0, true);
@@ -149,10 +150,10 @@ public final class SearchRegistry {
    * @return which findables this search leaves out, indexed like {@code entries}
    */
   @NotNull
-  private static boolean[] hidden(@NotNull SearchFindable[] entries) {
+  private static boolean[] hidden(@NotNull SearchFindable[] entries, @NotNull Player viewer) {
     boolean[] hidden = new boolean[entries.length];
     for (int i = 0; i < entries.length; i++) {
-      hidden[i] = !entries[i].isVisible();
+      hidden[i] = !entries[i].isVisibleTo(viewer);
     }
     return hidden;
   }

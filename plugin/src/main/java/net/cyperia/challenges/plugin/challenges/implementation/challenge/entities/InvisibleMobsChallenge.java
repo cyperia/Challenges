@@ -4,6 +4,7 @@ import net.cyperia.challenges.plugin.ChallengeAPI;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.Setting;
 import net.cyperia.challenges.plugin.management.scheduler.policy.TimerPolicy;
 import net.cyperia.challenges.plugin.management.scheduler.task.ScheduledTask;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -36,10 +37,12 @@ public class InvisibleMobsChallenge extends Setting {
 
   private void addEffectForEveryEntity() {
     for (World world : ChallengeAPI.getGameWorlds()) {
-      for (LivingEntity entity : world.getLivingEntities()) {
-        if (entity instanceof Player) continue;
-        addEffect(entity);
-      }
+      Regions.forEachRegion(plugin, world, () -> {
+        for (LivingEntity entity : world.getLivingEntities()) {
+          if (entity instanceof Player) continue;
+          addEffect(entity);
+        }
+      });
     }
   }
 

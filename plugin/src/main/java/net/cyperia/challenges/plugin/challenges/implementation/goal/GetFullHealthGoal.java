@@ -1,11 +1,11 @@
 package net.cyperia.challenges.plugin.challenges.implementation.goal;
 
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.attribute.Attribute;
 import net.cyperia.challenges.plugin.ChallengeAPI;
 import net.cyperia.challenges.plugin.challenges.type.ValueUnit;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.SettingModifierGoal;
 import net.cyperia.challenges.plugin.management.server.ChallengeEndCause;
-import org.bukkit.Bukkit;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -52,9 +52,10 @@ public class GetFullHealthGoal extends SettingModifierGoal {
   public void onHealthChange(EntityRegainHealthEvent event) {
     if (!(event.getEntity() instanceof Player)) return;
     if (!shouldExecuteEffect((Player) event.getEntity())) return;
-    Bukkit.getScheduler().runTask(plugin, () -> {
-      AttributeInstance attribute = ((Player) event.getEntity()).getAttribute(Attribute.MAX_HEALTH);
-      if (attribute != null && ((Player) event.getEntity()).getHealth() >= attribute.getBaseValue()) {
+    Player player = (Player) event.getEntity();
+    Regions.nextTick(plugin, player, () -> {
+      AttributeInstance attribute = player.getAttribute(Attribute.MAX_HEALTH);
+      if (attribute != null && player.getHealth() >= attribute.getBaseValue()) {
         ChallengeAPI.endChallenge(ChallengeEndCause.GOAL_REACHED);
       }
     });

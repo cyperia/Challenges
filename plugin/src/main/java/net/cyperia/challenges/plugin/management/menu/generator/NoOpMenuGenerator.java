@@ -5,8 +5,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Locale;
-
 public class NoOpMenuGenerator extends AbstractMenuGenerator {
 
   public void playDenyEffect(@NotNull Player player) {
@@ -26,8 +24,13 @@ public class NoOpMenuGenerator extends AbstractMenuGenerator {
 
   @NotNull
   @Override
-  public Inventory getOrInitInventory(@NotNull Locale locale, int page) {
+  public Inventory createInventory(@NotNull Player viewer, int page) {
     throw new UnsupportedOperationException("NoOpMenuGenerator does not support inventory generation");
+  }
+
+  @Override
+  public void renderPage(@NotNull Inventory inventory, int page, @NotNull Player viewer) {
+    // noop
   }
 
   @Override
@@ -36,22 +39,7 @@ public class NoOpMenuGenerator extends AbstractMenuGenerator {
   }
 
   @Override
-  public void updateOrGeneratePages(@NotNull Locale locale) {
-    // noop
-  }
-
-  @Override
-  public void updatePages() {
-    // noop
-  }
-
-  @Override
-  public void updatePage(int page) {
-    // noop
-  }
-
-  @Override
-  public int getPageCount() {
+  public int getPageCount(@NotNull Player viewer) {
     return 0;
   }
 

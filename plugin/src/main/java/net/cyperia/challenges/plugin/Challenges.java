@@ -31,7 +31,9 @@ import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import net.cyperia.challenges.plugin.spigot.command.*;
 import net.cyperia.challenges.plugin.spigot.command.WeatherCommand.Weather;
 import net.cyperia.challenges.plugin.spigot.listener.*;
+import net.cyperia.challenges.plugin.spigot.region.RespawnPortalAdapters;
 import net.cyperia.commons.bukkit.core.BukkitModule;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.version.Version;
 import org.bukkit.GameMode;
 import org.jetbrains.annotations.NotNull;
@@ -103,7 +105,6 @@ public final class Challenges extends BukkitModule {
     }
 
     enableManagers();
-
     registerCommands();
     registerListeners();
   }
@@ -130,7 +131,7 @@ public final class Challenges extends BukkitModule {
     borderManager = new BorderManager();
     serverManager = new ServerManager();
     autoResetManager = new AutoResetManager();
-    scheduler = new ScheduleManager();
+    scheduler = new ScheduleManager(this);
     playerManager = new PlayerManager();
     scoreboardManager = new ScoreboardManager();
     cloudSupportManager = new CloudSupportManager();
@@ -157,6 +158,8 @@ public final class Challenges extends BukkitModule {
     challengeTimer.loadSession();
   }
 
+  // The challenges and their commands are registered here, in onEnable: the server builds its command tree
+  // right after plugins enable, so a registration pushed to the global region would miss it.
   private void enableManagers() {
     gameWorldStorage.enable();
     // Before challengeLoader: the presets it registers resolve their trigger and action from here.
@@ -164,6 +167,11 @@ public final class Challenges extends BukkitModule {
     challengeLoader.enable();
     borderManager.enable();
     databaseManager.enable();
+    // onEnable is not on the global region, which creating worlds, time, weather and game rules need
+    Regions.global(this, this::enableWorlds);
+  }
+
+  private void enableWorlds() {
     worldManager.enable();
     challengeTimer.enable();
     challengeManager.enable();
@@ -236,7 +244,8 @@ public final class Challenges extends BukkitModule {
       new CustomEventListener(),
       new HelpListener(),
       new GeneratorWorldsListener(),
-      new ScoreboardUpdateListener()
+      new ScoreboardUpdateListener(),
+      RespawnPortalAdapters.create()
     );
   }
 

@@ -14,14 +14,14 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DontStopRunningChallenge extends SettingModifier {
 
   private static final int YELLOW = 5, RED = 3;
 
-  private final Map<Player, Integer> playerStandingCount = new HashMap<>();
+  private final Map<Player, Integer> playerStandingCount = new ConcurrentHashMap<>();
 
   public DontStopRunningChallenge() {
     super(3, 30, 10);

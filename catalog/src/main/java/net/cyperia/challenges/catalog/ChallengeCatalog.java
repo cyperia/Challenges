@@ -23,7 +23,8 @@ public final class ChallengeCatalog {
   public static final String DIRECTORY = "challenges-catalog/";
 
   private static final Set<String> CHALLENGE_FIELDS = Set.of("id", "fallbackIds", "key", "category", "icon", "color", "since",
-    "updated", "beta", "excludeFromRandom", "featured", "registered", "class", "requires", "pairing", "preset", "damageRule", "materialRule");
+    "updated", "beta", "excludeFromRandom", "featured", "registered", "permission", "hidden", "class", "requires", "pairing",
+    "preset", "damageRule", "materialRule");
   private static final Set<String> DEFINITIONS = Set.of("class", "preset", "damageRule", "materialRule");
   private static final Set<String> CLASS_ONLY = Set.of("requires", "pairing");
   private static final Set<String> CUSTOM_SETTING_FIELDS = Set.of("id", "class", "icon", "color", "since", "updated",
@@ -180,6 +181,10 @@ public final class ChallengeCatalog {
     if (!json.has("class") && CLASS_ONLY.stream().anyMatch(json::has)) {
       throw new IllegalArgumentException(id + ": " + CLASS_ONLY + " only apply to an entry with a class");
     }
+    String permission = optionalString(json, "permission");
+    if (permission == null && flag(json, "hidden")) {
+      throw new IllegalArgumentException(id + ": hidden only applies to an entry with a permission");
+    }
     Definition definition = switch (definitions.getFirst()) {
       case "class" -> new Definition.Implementation(className(classPackage, string(json, "class")),
         optionalString(json, "requires"));
@@ -189,7 +194,7 @@ public final class ChallengeCatalog {
     };
     return new Challenge(id, strings(json, "fallbackIds"), string(json, "key"), string(json, "category"), icon(json), definition, pairing(json),
       flag(json, "excludeFromRandom"), flag(json, "featured"), !json.has("registered") || json.get("registered").getAsBoolean(),
-      release(json));
+      release(json), permission, flag(json, "hidden"));
   }
 
   @Nullable

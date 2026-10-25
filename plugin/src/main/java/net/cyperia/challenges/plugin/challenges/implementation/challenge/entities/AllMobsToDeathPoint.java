@@ -2,12 +2,12 @@ package net.cyperia.challenges.plugin.challenges.implementation.challenge.entiti
 
 import net.cyperia.challenges.plugin.challenges.type.abstraction.Setting;
 import net.cyperia.challenges.plugin.spigot.events.EntityDeathByPlayerEvent;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
 
 public class AllMobsToDeathPoint extends Setting {
 
@@ -21,13 +21,15 @@ public class AllMobsToDeathPoint extends Setting {
   }
 
   private void teleportAllMobsOfType(@NotNull EntityType entityType, @NotNull Location location) {
-    if (location.getWorld() == null) return;
-    Collection<Entity> entities = location.getWorld().getEntitiesByClasses(entityType.getEntityClass());
-    for (Entity entity : entities) {
-      if (!(entity instanceof LivingEntity)) return;
-      ((LivingEntity) entity).setNoDamageTicks(20);
-      entity.teleport(location);
-    }
+    World world = location.getWorld();
+    if (world == null) return;
+    Regions.forEachRegion(plugin, world, () -> {
+      for (Entity entity : world.getEntitiesByClasses(entityType.getEntityClass())) {
+        if (!(entity instanceof LivingEntity living)) continue;
+        living.setNoDamageTicks(20);
+        living.teleportAsync(location);
+      }
+    });
   }
 
 }

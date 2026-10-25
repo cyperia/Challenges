@@ -10,14 +10,16 @@ import net.cyperia.challenges.plugin.management.scheduler.policy.TimerPolicy;
 import net.cyperia.challenges.plugin.management.scheduler.task.ScheduledTask;
 import net.cyperia.challenges.plugin.management.scheduler.task.TimerTask;
 import net.cyperia.challenges.plugin.management.scheduler.timer.TimerStatus;
+import net.cyperia.challenges.plugin.spigot.events.PlayerRespawnedEvent;
 import net.cyperia.challenges.plugin.utils.misc.InventoryUtils;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
 import net.cyperia.commons.bukkit.utils.item.ItemBuilder;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.config.Document;
 import net.cyperia.commons.common.config.document.GsonDocument;
 import net.kyori.adventure.bossbar.BossBar;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -27,21 +29,21 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 public abstract class ForceBattleGoal<T extends ForceTarget<?>> extends MenuGoal {
 
-  protected final Map<UUID, Integer> jokerUsed = new HashMap<>();
-  protected final Map<UUID, List<T>> foundTargets = new HashMap<>();
-  protected final Map<UUID, T> currentTarget = new HashMap<>();
+  protected final Map<UUID, Integer> jokerUsed = new ConcurrentHashMap<>();
+  protected final Map<UUID, List<T>> foundTargets = new ConcurrentHashMap<>();
+  protected final Map<UUID, T> currentTarget = new ConcurrentHashMap<>();
   protected T[] targetsPossibleToFind;
   private ItemStack jokerItem;
 
@@ -255,7 +257,7 @@ public abstract class ForceBattleGoal<T extends ForceTarget<?>> extends MenuGoal
   public void handleTargetFound(Player player) {
     T foundTarget = currentTarget.get(player.getUniqueId());
     if (foundTarget != null) {
-      List<T> list = foundTargets.computeIfAbsent(player.getUniqueId(), _ -> new LinkedList<>());
+      List<T> list = foundTargets.computeIfAbsent(player.getUniqueId(), _ -> new CopyOnWriteArrayList<>());
       list.add(foundTarget);
       getTargetCompletedMessage(foundTarget).send(player, Prefix.CHALLENGES, foundTarget.getDisplayName());
     }
@@ -264,11 +266,11 @@ public abstract class ForceBattleGoal<T extends ForceTarget<?>> extends MenuGoal
 
   @Override
   public void getWinnersOnEnd(@NotNull List<Player> winners) {
-    Bukkit.getScheduler().runTask(plugin, () -> sendLeaderboard(null));
+    Regions.nextTick(plugin, () -> sendLeaderboard(null));
   }
 
   public void sendResult(@NotNull Player player) {
-    Bukkit.getScheduler().runTask(plugin, () -> sendLeaderboard(player));
+    Regions.nextTick(plugin, player, () -> sendLeaderboard(player));
   }
 
   /**
@@ -288,8 +290,8 @@ public abstract class ForceBattleGoal<T extends ForceTarget<?>> extends MenuGoal
    * One point per target found, so that the sidebar ranks the same way the result leaderboard does.
    */
   @NotNull
-  protected Map<Player, Integer> getPoints(@NotNull AtomicInteger mostPoints, boolean zeros) {
-    return GoalHelper.createPointsFromValues(mostPoints, foundTargets, (_, targets) -> targets.size(), zeros);
+  protected Map<OfflinePlayer, Integer> getLeaderboard() {
+    return GoalHelper.createLeaderboardFromValues(foundTargets, (_, targets) -> targets.size());
   }
 
   private int getUsableJokers(UUID uuid) {
@@ -316,7 +318,7 @@ public abstract class ForceBattleGoal<T extends ForceTarget<?>> extends MenuGoal
   }
 
   protected void setScoreboardContent() {
-    scoreboard.setContent(GoalLeaderboard.scoreboardContent(() -> getPoints(new AtomicInteger(), true)));
+    scoreboard.setContent(GoalLeaderboard.scoreboardContent(this::getLeaderboard));
     bossbar.setContent((bar, player) -> {
       bar.setColor(BossBar.Color.WHITE);
       LocalizableMessage target = getCurrentTargetDisplay(player);
@@ -390,9 +392,9 @@ public abstract class ForceBattleGoal<T extends ForceTarget<?>> extends MenuGoal
   }
 
   @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-  public void onRespawn(PlayerRespawnEvent event) {
+  public void onRespawn(PlayerRespawnedEvent event) {
     if (!shouldExecuteEffect(event.getPlayer())) return;
-    Bukkit.getScheduler().runTask(plugin, () -> {
+    Regions.nextTick(plugin, event.getPlayer(), () -> {
       updateJokersInInventory(event.getPlayer());
     });
   }

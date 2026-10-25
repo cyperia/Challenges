@@ -68,9 +68,9 @@ public final class ChallengesPermissions {
   public static final String COMMAND_SKIPTIMER = COMMAND + "skiptimer";
   public static final String COMMAND_RANDOMIZER = COMMAND + "randomizer";
   public static final String COMMAND_SETLANGUAGE = COMMAND + "setlanguage";
-  public static final String COMMAND_SKIPITEM = COMMAND + "skipitem";
   public static final String COMMAND_SETPOSITION = COMMAND + "setposition";
   public static final String COMMAND_DELPOSITION = COMMAND + "delposition";
+  public static final String COMMAND_GOAL_SKIP = COMMAND + "goal.skip";
 
   // Player commands, granted to everybody by default
   public static final String COMMAND_GOAL = COMMAND + "goal";

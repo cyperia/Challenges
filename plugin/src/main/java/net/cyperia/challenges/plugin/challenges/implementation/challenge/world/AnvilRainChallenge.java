@@ -1,11 +1,12 @@
 package net.cyperia.challenges.plugin.challenges.implementation.challenge.world;
 
+import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.challenges.type.ValueUnit;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.menu.MenuSetting;
-import net.cyperia.challenges.plugin.challenges.type.helper.ChallengeHelper;
 import net.cyperia.challenges.plugin.management.scheduler.task.ScheduledTask;
 import net.cyperia.challenges.plugin.management.scheduler.task.TimerTask;
 import net.cyperia.challenges.plugin.management.scheduler.timer.TimerStatus;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
@@ -19,6 +20,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class AnvilRainChallenge extends MenuSetting {
 
@@ -61,12 +64,14 @@ public class AnvilRainChallenge extends MenuSetting {
 
   private void removeAnvils() {
     for (World world : Bukkit.getWorlds()) {
-      for (FallingBlock entity : world.getEntitiesByClass(FallingBlock.class)) {
-        // TODO: SWITCH CASE
-        String name = entity.getBlockData().getMaterial().name();
-        if (!name.contains("ANVIL")) continue;
-        entity.remove();
-      }
+      Regions.forEachRegion(plugin, world, () -> {
+        for (FallingBlock entity : world.getEntitiesByClass(FallingBlock.class)) {
+          // TODO: SWITCH CASE
+          String name = entity.getBlockData().getMaterial().name();
+          if (!name.contains("ANVIL")) continue;
+          entity.remove();
+        }
+      });
     }
   }
 
@@ -82,24 +87,25 @@ public class AnvilRainChallenge extends MenuSetting {
   }
 
   private void handleTimeActivation() {
-    List<Chunk> chunks = new ArrayList<>();
-    for (Player player : ChallengeHelper.getIngamePlayers()) {
+    Set<Chunk> chunks = ConcurrentHashMap.newKeySet();
+    Challenges.getInstance().getPlayerManager().forEachChallengePlayer(player -> {
       List<Chunk> targetChunks = getTargetChunks(player.getLocation().getChunk());
       for (Chunk targetChunk : targetChunks) {
-        if (chunks.contains(targetChunk)) continue;
-        chunks.add(targetChunk);
+        if (!chunks.add(targetChunk)) continue;
         spawnAnvils(targetChunk, getAnvilHeight(player.getLocation().getBlockY()));
       }
-    }
+    });
 
   }
 
   private void spawnAnvils(@NotNull Chunk chunk, int height) {
-    for (int i = 0; i < getCount(); i++) {
-      Block block = getRandomBlockInChunk(chunk, height);
-      Location location = block.getLocation().add(0.5, 0, 0.5);
-      block.getWorld().spawnFallingBlock(location, Material.ANVIL, ((byte) 0));
-    }
+    Regions.at(plugin, new Location(chunk.getWorld(), chunk.getX() * 16 + 8, height, chunk.getZ() * 16 + 8), () -> {
+      for (int i = 0; i < getCount(); i++) {
+        Block block = getRandomBlockInChunk(chunk, height);
+        Location location = block.getLocation().add(0.5, 0, 0.5);
+        block.getWorld().spawnFallingBlock(location, Material.ANVIL, ((byte) 0));
+      }
+    });
   }
 
   private List<Chunk> getTargetChunks(@NotNull Chunk origin) {

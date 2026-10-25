@@ -1,9 +1,10 @@
 package net.cyperia.challenges.plugin.spigot.generator;
 
 import net.cyperia.challenges.plugin.Challenges;
-import org.bukkit.Bukkit;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
@@ -104,7 +105,7 @@ public abstract class ConvertingWorldGenerator extends ChunkGenerator {
     Challenges.getInstance().runAsync(() -> {
       int[] leftovers = leftovers(snapshot, minY, world.getMaxHeight());
       if (!Challenges.getInstance().isEnabled()) return;
-      Bukkit.getScheduler().runTask(Challenges.getInstance(), () -> {
+      Regions.nextTick(Challenges.getInstance(), new Location(world, chunk.getX() << 4, 0, chunk.getZ() << 4), () -> {
         if (!chunk.isLoaded()) return;
         for (int position : leftovers) {
           chunk.getBlock(position & 15, minY + (position >> 8), position >> 4 & 15).setType(replacement, false);

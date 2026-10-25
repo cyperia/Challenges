@@ -73,8 +73,10 @@
     "title": "{@title-format('Challenges')}",
     "leaderboard": {
       "entry": "<yellow>{0}</yellow> <dark_gray>{@symbol.vertical}</dark_gray> <gray>{1}</gray> <dark_gray>{@symbol.arrow}</dark_gray> <yellow>{2}</yellow>",
-      "entry-detail": "{@entry} <dark_gray>{@symbol.vertical}</dark_gray> <gray>{3}</gray>"
-    }
+      "entry-detail": "{@entry} <dark_gray>{@symbol.vertical}</dark_gray> <gray>{3}</gray>",
+      "skipped": "<gray>...</gray>"
+    },
+    "footer": ""
   },
   "hotbar": {
     "format": "{0} <dark_gray>{@symbol.vertical}</dark_gray> <yellow>{1}</yellow>",
@@ -669,9 +671,6 @@
     "chunk-effect": {
       "*colorize*": "<dark_aqua>{0}</dark_aqua>"
     },
-    "biome-effect": {
-      "*colorize*": "<dark_aqua>{0}</dark_aqua>"
-    },
     "block-effect": {
       "*colorize*": "<dark_aqua>{0}</dark_aqua>"
     },
@@ -1080,6 +1079,9 @@
     "collect-all-items": {
       "*colorize*": "<dark_green>{0}</dark_green>"
     },
+    "collect-everything": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
     "damage-teleport": {
       "*colorize*": "<red>{0}</red>"
     },
@@ -1220,6 +1222,28 @@
     "settings-modifier-radius": "<gray>{@generic.radius}: {0}</gray>",
     "settings-modifier-damage": "<gray>{@generic.damage}: {0}</gray>",
     "settings-modifier-max-health": "<gray>{@generic.max-health}: {0}</gray>",
+    "generic": {
+      "sub": {
+        "ranking": {
+          "*colorize*": "<gold>{0}</gold>"
+        },
+        "random-order": {
+          "*colorize*": "<aqua>{0}</aqua>"
+        },
+        "item-variants": {
+          "*colorize*": "<light_purple>{0}</light_purple>"
+        },
+        "mob-attributes": {
+          "*colorize*": "<red>{0}</red>"
+        },
+        "mob-equipment": {
+          "*colorize*": "<gold>{0}</gold>"
+        }
+      }
+    },
+    "biome-effect": {
+      "*colorize*": "<dark_aqua>{0}</dark_aqua>"
+    },
     "kill-effect": {
       "*colorize*": "<dark_red>{0}</dark_red>"
     },

@@ -6,10 +6,11 @@ import net.cyperia.challenges.plugin.challenges.type.abstraction.SettingModifier
 import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.management.scheduler.task.ScheduledTask;
 import net.cyperia.challenges.plugin.utils.bukkit.misc.ChunkFillQueue;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.collection.pair.Tuple;
 import net.kyori.adventure.bossbar.BossBar;
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
@@ -17,7 +18,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ChunkDeletionChallenge extends SettingModifier {
 
   private final ChunkFillQueue fills = new ChunkFillQueue();
-  private final Map<Chunk, Tuple<BukkitTask, Long>> chunks = new ConcurrentHashMap<>(); // access from concurrent threads
+  private final Map<Chunk, Tuple<io.papermc.paper.threadedregions.scheduler.ScheduledTask, Long>> chunks = new ConcurrentHashMap<>(); // access from concurrent threads
 
   public ChunkDeletionChallenge() {
     super(10, 120, 60);
@@ -39,7 +39,7 @@ public class ChunkDeletionChallenge extends SettingModifier {
       MessageKey message = getChallengeMessageKey("bossbar");
       bossbar.setColor(BossBar.Color.PINK);
       if (!checkIfAllowed(player)) {
-        Tuple<BukkitTask, Long> taskTuple = chunks.get(player.getLocation().getChunk());
+        Tuple<io.papermc.paper.threadedregions.scheduler.ScheduledTask, Long> taskTuple = chunks.get(player.getLocation().getChunk());
         if (taskTuple != null) {
           long remainingTime = calculateRemainingTime(taskTuple.getSecond());
           bossbar.setTitle(message, ChallengeAPI.formatTime(remainingTime));
@@ -101,15 +101,16 @@ public class ChunkDeletionChallenge extends SettingModifier {
   private void scheduleChunkDeletion(Chunk chunk) {
     chunks.computeIfAbsent(chunk, key -> {
       long timer = getValue() * 20L;
-      BukkitTask bukkitTask = Bukkit.getScheduler().runTaskLater(plugin, () -> {
+      Location center = new Location(chunk.getWorld(), chunk.getX() * 16 + 8, 0, chunk.getZ() * 16 + 8);
+      io.papermc.paper.threadedregions.scheduler.ScheduledTask bukkitTask = Regions.later(plugin, center, () -> {
         if (!shouldExecuteEffect()) {
-          BukkitTask task = chunks.remove(chunk).getFirst();
+          io.papermc.paper.threadedregions.scheduler.ScheduledTask task = chunks.remove(chunk).getFirst();
           if (task != null) {
             task.cancel();
           }
           return;
         }
-        BukkitTask task = chunks.remove(chunk).getFirst();
+        io.papermc.paper.threadedregions.scheduler.ScheduledTask task = chunks.remove(chunk).getFirst();
         if (task != null) {
           task.cancel();
         }

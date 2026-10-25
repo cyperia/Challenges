@@ -5,6 +5,7 @@ import net.cyperia.commons.bukkit.utils.item.ItemUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -19,11 +20,24 @@ public interface ChecklistGoal extends IGoal {
   @NotNull
   MessageKey getFinderMessage();
 
-  record ChecklistEntry(@NotNull Object name, @NotNull ItemStack icon, boolean done, @NotNull List<UUID> finders) {
+  /**
+   * @param foundAt timer time in seconds when the entry was done, {@code null} if not done or not known
+   */
+  record ChecklistEntry(@NotNull Object name, @NotNull ItemStack icon, boolean done, @NotNull List<UUID> finders,
+                        @Nullable Long foundAt) {
+
+    public ChecklistEntry(@NotNull Object name, @NotNull ItemStack icon, boolean done, @NotNull List<UUID> finders) {
+      this(name, icon, done, finders, null);
+    }
 
     @NotNull
     public static ChecklistEntry of(@NotNull Object value, boolean done, @NotNull Collection<UUID> finders) {
-      return new ChecklistEntry(value, new ItemStack(ItemUtils.getIcon(value)), done, List.copyOf(finders));
+      return of(value, done, finders, null);
+    }
+
+    @NotNull
+    public static ChecklistEntry of(@NotNull Object value, boolean done, @NotNull Collection<UUID> finders, @Nullable Long foundAt) {
+      return new ChecklistEntry(value, new ItemStack(ItemUtils.getIcon(value)), done, List.copyOf(finders), foundAt);
     }
 
   }

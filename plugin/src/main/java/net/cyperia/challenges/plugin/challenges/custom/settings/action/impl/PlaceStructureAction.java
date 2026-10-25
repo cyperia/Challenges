@@ -1,7 +1,9 @@
 package net.cyperia.challenges.plugin.challenges.custom.settings.action.impl;
 
+import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.challenges.custom.settings.action.EntityTargetAction;
 import net.cyperia.challenges.plugin.challenges.type.helper.SubSettingsHelper;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.collection.IRandom;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -14,8 +16,8 @@ import java.util.stream.Collectors;
 
 public class PlaceStructureAction extends EntityTargetAction {
 
-  private List<NamespacedKey> structureKeys;
-  private List<NamespacedKey> villageKeys;
+  private volatile List<NamespacedKey> structureKeys;
+  private volatile List<NamespacedKey> villageKeys;
 
   public PlaceStructureAction(String name) {
     super(name, SubSettingsHelper.createEntityTargetSettingsBuilder(false, true).addChild(SubSettingsHelper.createStructureSettingsBuilder()));
@@ -45,24 +47,28 @@ public class PlaceStructureAction extends EntityTargetAction {
     Location location = entity.getLocation();
     String locationString = (int) location.getX() + " " + (int) location.getY() + " " + (int) location.getZ();
     String command = String.format("minecraft:place structure %s %s", structureKey, locationString);
-    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+    Regions.global(Challenges.getInstance(), () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command));
   }
 
   private void reloadStructureKeys() {
-    structureKeys = StructureType.getStructureTypes().values().stream()
+    List<NamespacedKey> structures = StructureType.getStructureTypes().values().stream()
       .map(StructureType::getKey)
       .collect(Collectors.toList());
 
-    structureKeys.remove(StructureType.OCEAN_RUIN.getKey());
-    structureKeys.add(NamespacedKey.minecraft("ocean_ruin_cold"));
-    structureKeys.add(NamespacedKey.minecraft("ocean_ruin_warm"));
+    structures.remove(StructureType.OCEAN_RUIN.getKey());
+    structures.add(NamespacedKey.minecraft("ocean_ruin_cold"));
+    structures.add(NamespacedKey.minecraft("ocean_ruin_warm"));
 
-    villageKeys = new ArrayList<>();
-    villageKeys.add(NamespacedKey.minecraft("village_desert"));
-    villageKeys.add(NamespacedKey.minecraft("village_plains"));
-    villageKeys.add(NamespacedKey.minecraft("village_savanna"));
-    villageKeys.add(NamespacedKey.minecraft("village_snowy"));
-    villageKeys.add(NamespacedKey.minecraft("village_taiga"));
+    List<NamespacedKey> villages = new ArrayList<>();
+    villages.add(NamespacedKey.minecraft("village_desert"));
+    villages.add(NamespacedKey.minecraft("village_plains"));
+    villages.add(NamespacedKey.minecraft("village_savanna"));
+    villages.add(NamespacedKey.minecraft("village_snowy"));
+    villages.add(NamespacedKey.minecraft("village_taiga"));
+
+    // Entity threads can enter concurrently; villageKeys must be set before structureKeys is visible.
+    villageKeys = villages;
+    structureKeys = structures;
   }
 
   private NamespacedKey getStructureKey(StructureType structureType) {

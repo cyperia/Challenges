@@ -1400,7 +1400,7 @@
       "fallbackIds": ["preset-no-eating"],
       "key": "no-eating",
       "category": "misc_challenge",
-      "icon": "COOKED_BEEF",
+      "icon": "BOWL",
       "preset": {
         "trigger": "consume_item",
         "triggerSettings": {"item": "any"},
@@ -1881,6 +1881,16 @@
       "class": "goal.CollectAllItemsGoal",
       "since": "2.0",
       "updated": "3.0"
+    },
+    {
+      "id": "collecteverything",
+      "key": "collect-everything",
+      "category": "misc_goal",
+      "icon": "DRAGON_EGG",
+      "class": "goal.CollectEverythingGoal",
+      "beta": true,
+      "permission": "challenges.play.collect-everything",
+      "hidden": true
     },
     {
       "id": "damagerulenone",

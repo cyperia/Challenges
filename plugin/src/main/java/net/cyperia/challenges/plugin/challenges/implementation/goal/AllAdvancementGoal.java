@@ -7,6 +7,7 @@ import net.cyperia.challenges.plugin.challenges.type.abstraction.PointsGoal;
 import net.cyperia.challenges.plugin.challenges.type.helper.GoalLeaderboard;
 import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.management.server.ChallengeEndCause;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Bukkit;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.advancement.AdvancementProgress;
@@ -20,10 +21,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class AllAdvancementGoal extends PointsGoal implements ChecklistGoal {
 
@@ -31,19 +30,29 @@ public class AllAdvancementGoal extends PointsGoal implements ChecklistGoal {
   private final int advancementCount;
 
   public AllAdvancementGoal() {
-    allAdvancements = new LinkedList<>();
+    allAdvancements = loadAdvancements();
+    advancementCount = allAdvancements.size();
+  }
+
+  @NotNull
+  static List<Advancement> loadAdvancements() {
+    List<Advancement> advancements = new ArrayList<>();
     Bukkit.getServer().advancementIterator().forEachRemaining(advancement -> {
-      if (!advancement.getKey().toString().contains(":recipes/")) {
-        allAdvancements.add(advancement);
+      if (!isRecipe(advancement)) {
+        advancements.add(advancement);
       }
     });
-    advancementCount = allAdvancements.size();
+    return advancements;
+  }
+
+  static boolean isRecipe(@NotNull Advancement advancement) {
+    return advancement.getKey().toString().contains(":recipes/");
   }
 
   @Override
   protected void onEnable() {
     updateAdvancements();
-    scoreboard.setContent(GoalLeaderboard.scoreboardContent(() -> getPoints(new AtomicInteger(), true),
+    scoreboard.setContent(GoalLeaderboard.scoreboardContent(this::getLeaderboard,
       _ -> Collections.singletonList(getChallengeMessageKey("bossbar").withArgs(advancementCount))));
     scoreboard.show();
   }
@@ -55,16 +64,15 @@ public class AllAdvancementGoal extends PointsGoal implements ChecklistGoal {
 
   @Override
   public void getWinnersOnEnd(@NotNull List<Player> winners) {
-    broadcastFiltered(player -> {
-      if (hasWon(player)) {
-        winners.add(player);
-      }
-    });
+    // From the points, read on this thread: the winners are used as soon as this returns
+    for (Player player : plugin.getPlayerManager().getChallengePlayers()) {
+      if (hasWon(player)) winners.add(player);
+    }
   }
 
   @EventHandler(priority = EventPriority.HIGH)
   public void onAdvancement(PlayerAdvancementDoneEvent event) {
-    if (event.getAdvancement().getKey().toString().contains(":recipes/")) return;
+    if (isRecipe(event.getAdvancement())) return;
     if (!shouldExecuteEffect(event.getPlayer())) return;
     updateAdvancements(event.getPlayer());
     scoreboard.update();
@@ -80,7 +88,7 @@ public class AllAdvancementGoal extends PointsGoal implements ChecklistGoal {
   @EventHandler(priority = EventPriority.HIGH)
   public void onGamemodeChange(PlayerGameModeChangeEvent event) {
     if (!shouldExecuteEffect()) return;
-    Bukkit.getScheduler().runTask(plugin, (Runnable) scoreboard::update);
+    Regions.nextTick(plugin, (Runnable) scoreboard::update);
   }
 
   protected void updateAdvancements() {

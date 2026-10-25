@@ -3,22 +3,22 @@ package net.cyperia.challenges.plugin.challenges.type.abstraction;
 import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.challenges.type.helper.ChallengeHelper;
 import net.cyperia.challenges.plugin.management.server.GameWorldStorage;
+import net.cyperia.challenges.plugin.spigot.events.PlayerRespawnLocationEvent;
+import net.cyperia.challenges.plugin.spigot.events.PortalTravelEvent;
 import net.cyperia.challenges.plugin.spigot.generator.ConvertingWorldGenerator;
 import net.cyperia.challenges.plugin.spigot.generator.VoidMapGenerator;
 import net.cyperia.challenges.plugin.utils.misc.BlockUtils;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.PortalType;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerPortalEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.event.world.AsyncStructureSpawnEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.generator.ChunkGenerator;
@@ -100,42 +100,32 @@ public abstract class WorldGeneratorChallenge extends OneEnabledSetting {
     if (!isEnabled()) return;
     Player player = event.getPlayer();
     World replacement = getStorage().getReplacement(player.getWorld());
-    if (replacement != null) player.teleport(BlockUtils.getCenteredSpawn(replacement));
+    // Canvas refuses a teleport while the player is still logging in
+    if (replacement != null) {
+      Regions.nextTick(Challenges.getInstance(), player, () -> player.teleportAsync(BlockUtils.getCenteredSpawn(replacement)));
+    }
   }
 
   @EventHandler(priority = EventPriority.LOW)
-  public void onRespawn(@NotNull PlayerRespawnEvent event) {
+  public void onRespawn(@NotNull PlayerRespawnLocationEvent event) {
     if (!isEnabled()) return;
     World replacement = getStorage().getReplacement(event.getRespawnLocation().getWorld());
     if (replacement != null) event.setRespawnLocation(BlockUtils.getCenteredSpawn(replacement));
   }
 
+  // The server resolves every portal against its own worlds, so a destination in a replaced one has to be moved over
   @EventHandler
-  public void onPlayerPortal(@NotNull PlayerPortalEvent event) {
+  public void onPortalTravel(@NotNull PortalTravelEvent event) {
     if (!isEnabled()) return;
-    Location to = event.getTo();
-    World replacement = getReplacement(to);
-    if (replacement != null) event.setTo(redirectPortalTravel(to, replacement, event.getCause() == TeleportCause.END_PORTAL, true));
-  }
-
-  @EventHandler
-  public void onEntityPortal(@NotNull EntityPortalEvent event) {
-    if (!isEnabled()) return;
-    Location to = event.getTo();
-    World replacement = getReplacement(to);
+    World replacement = getStorage().getReplacement(event.getTargetWorld());
     if (replacement == null) return;
 
-    // The event carries no cause, but only an end portal leads into or out of the end
-    boolean endPortal = replacement.getEnvironment() == Environment.THE_END
-      || event.getFrom().getWorld().getEnvironment() == Environment.THE_END;
-    event.setTo(redirectPortalTravel(to, replacement, endPortal, false));
-  }
-
-  // The server resolves every portal against its own worlds, so a destination in a replaced one has to be moved over
-  @Nullable
-  private static World getReplacement(@Nullable Location to) {
-    if (to == null || to.getWorld() == null) return null;
-    return getStorage().getReplacement(to.getWorld());
+    event.setTargetWorld(replacement);
+    Location destination = event.getDestination();
+    // Only a server that hands out the destination lets it be rebuilt, elsewhere it follows the world
+    if (destination == null) return;
+    boolean endPortal = event.getPortalType() == PortalType.ENDER;
+    event.setDestination(redirectPortalTravel(destination, replacement, endPortal, event.getEntity() instanceof Player));
   }
 
   @NotNull

@@ -1,5 +1,6 @@
 package net.cyperia.challenges.plugin.challenges.type.abstraction;
 
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.jetbrains.annotations.Nullable;
 import net.cyperia.challenges.catalog.Challenge;
 import net.cyperia.challenges.plugin.Challenges;
@@ -101,15 +102,17 @@ public abstract class Setting extends AbstractChallenge implements ISetting {
     if (this.enabled == enabled) return;
     this.enabled = enabled;
 
-    try {
-      if (enabled) onEnable();
-      else onDisable();
-    } catch (Exception exception) {
-      Challenges.getInstance().getILogger().error("Error while {} Setting {}", enabled ? "enabling" : "disabling", getClass().getSimpleName(), exception);
-    }
-
-    // Sync, a Bukkit event must not be called from the threads settings are loaded on
-    ChallengeHelper.runSync(() -> Bukkit.getPluginManager().callEvent(new SettingToggleEvent(this)));
+    // A menu click runs on the clicker's thread, but what a setting does belongs to the global region.
+    // A Bukkit event must not be called from the threads settings are loaded on either.
+    Regions.global(Challenges.getInstance(), () -> {
+      try {
+        if (enabled) onEnable();
+        else onDisable();
+      } catch (Exception exception) {
+        Challenges.getInstance().getILogger().error("Error while {} Setting {}", enabled ? "enabling" : "disabling", getClass().getSimpleName(), exception);
+      }
+      Bukkit.getPluginManager().callEvent(new SettingToggleEvent(this));
+    });
     updateItems();
   }
 

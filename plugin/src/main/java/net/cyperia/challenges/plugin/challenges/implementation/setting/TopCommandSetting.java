@@ -11,6 +11,7 @@ import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import net.cyperia.challenges.plugin.spigot.command.ShortcutCommand;
 import net.cyperia.challenges.plugin.utils.misc.BlockUtils;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
@@ -44,31 +45,32 @@ public class TopCommandSetting extends Setting implements CommandProvider {
       Location location = player.getWorld().getHighestBlockAt(playerLocation).getLocation().add(0.5, 1, 0.5);
       location.setYaw(playerLocation.getYaw());
       location.setPitch(playerLocation.getPitch());
-      player.setFallDistance(0);
-      player.teleport(location);
+      teleport(player, location);
 
     } else {
       getChallengeMessageKey("overworld").send(player, Prefix.CHALLENGES);
 
       if (environment == Environment.NETHER) {
-        Location location = playerLocation.clone();
-        world = ChallengeAPI.getGameWorld(Environment.NORMAL);
-        location.setWorld(world);
-        location.multiply(8);
-        location = world.getHighestBlockAt(location).getLocation().add(0.5, 1, 0.5);
-        player.setFallDistance(0);
-        player.teleport(location);
+        Location target = playerLocation.clone();
+        World overworld = ChallengeAPI.getGameWorld(Environment.NORMAL);
+        target.setWorld(overworld);
+        target.multiply(8);
+        overworld.getChunkAtAsync(target).thenAccept(chunk -> Regions.at(plugin, target, () ->
+          teleport(player, overworld.getHighestBlockAt(target).getLocation().add(0.5, 1, 0.5))));
       } else {
-        world = ChallengeAPI.getGameWorld(Environment.NORMAL);
         Location location = player.getBedSpawnLocation();
-        if (location == null) location = BlockUtils.getCenteredSpawn(world);
-        player.setFallDistance(0);
-        player.teleport(location);
+        if (location == null) location = BlockUtils.getCenteredSpawn(ChallengeAPI.getGameWorld(Environment.NORMAL));
+        teleport(player, location);
       }
 
     }
-    SoundSample.TELEPORT.play(player);
+  }
 
+  private void teleport(@NotNull Player player, @NotNull Location location) {
+    Regions.entity(plugin, player, () -> {
+      player.setFallDistance(0);
+      player.teleportAsync(location).thenAccept(success -> SoundSample.TELEPORT.play(player));
+    });
   }
 
 }

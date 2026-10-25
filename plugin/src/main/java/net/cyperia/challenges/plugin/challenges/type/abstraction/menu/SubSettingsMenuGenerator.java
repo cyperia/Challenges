@@ -4,6 +4,7 @@ import lombok.Getter;
 import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.content.i18n.LocalizableMessage;
 import net.cyperia.challenges.plugin.content.i18n.MessageKey;
+import net.cyperia.challenges.plugin.management.menu.MenuManager;
 import net.cyperia.challenges.plugin.management.menu.generator.IDynamicMenuGenerator;
 import net.cyperia.challenges.plugin.management.menu.generator.MultiPageMenuGenerator;
 import net.cyperia.challenges.plugin.management.menu.generator.impl.challenge.ChallengeListMenuGenerator;
@@ -12,6 +13,7 @@ import net.cyperia.challenges.plugin.management.menu.info.ChallengeMenuClickInfo
 import net.cyperia.commons.bukkit.utils.menu.MenuClickInfo;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -77,7 +79,8 @@ public class SubSettingsMenuGenerator extends MultiPageMenuGenerator implements 
   }
 
   @Override
-  public void updateInventoryContent(@NotNull Inventory inventory, int page, @NotNull Locale locale) {
+  public void updateInventoryContent(@NotNull Inventory inventory, int page, @NotNull Player viewer) {
+    Locale locale = localeOf(viewer);
     List<MenuSetting.SubSetting> settings = getSubSettingsForPage(page);
     int[] slots = getSlots(settings.size());
 
@@ -113,6 +116,11 @@ public class SubSettingsMenuGenerator extends MultiPageMenuGenerator implements 
   public void setSubSettingItemsAt(@NotNull MenuSetting.SubSetting setting, @NotNull Inventory inventory, int displaySlot, @NotNull Locale locale) {
     inventory.setItem(displaySlot + ChallengeListMenuGenerator.SLOT_OFFSET_DISPLAY, setting.getDisplayItem(locale).build());
     inventory.setItem(displaySlot + ChallengeListMenuGenerator.SLOT_OFFSET_SETTINGS, setting.getSettingsItem(locale).build());
+    MenuManager manager = Challenges.getInstance().getMenuManager();
+    ItemStack pane = ChallengeListMenuGenerator.releasePane(setting, manager.isNewSuffix(), manager.isUpdatedSuffix());
+    if (pane == null) return;
+    inventory.setItem(displaySlot + ChallengeListMenuGenerator.SLOT_OFFSET_UPPER, pane);
+    inventory.setItem(displaySlot + ChallengeListMenuGenerator.SLOT_OFFSET_LOWER, pane);
   }
 
   @NotNull
@@ -145,7 +153,7 @@ public class SubSettingsMenuGenerator extends MultiPageMenuGenerator implements 
   }
 
   @Override
-  public int getPageCount() {
+  public int getPageCount(@NotNull Player viewer) {
     // must have at least one page
     return Math.max(1, Math.ceilDiv(subSettingsCache.size(), MAX_SLOTS_PER_PAGE));
   }
@@ -183,7 +191,8 @@ public class SubSettingsMenuGenerator extends MultiPageMenuGenerator implements 
         int slot = slots[i];
         if (info.getSlot() != slot && info.getSlot() != slot + 9) continue;
         MenuSetting.SubSetting setting = settings.get(i);
-        if (Challenges.getInstance().getMenuManager().denySettingsChange(info.getPlayer())) return true;
+        MenuManager menuManager = Challenges.getInstance().getMenuManager();
+        if (menuManager.denySettingsChange(info.getPlayer()) || menuManager.denyLockedChange(info.getPlayer(), challenge)) return true;
         setting.handleClick(new ChallengeMenuClickInfo(info, info.getSlot() == slot));
         return true;
       }

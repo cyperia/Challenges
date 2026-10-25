@@ -1,5 +1,8 @@
 package net.cyperia.challenges.plugin.management.menu.generator.impl;
 
+import org.bukkit.entity.Player;
+import java.util.stream.Collectors;
+import net.cyperia.challenges.plugin.challenges.type.EntryAccess;
 import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.content.i18n.LocalizableMessage;
 import net.cyperia.challenges.plugin.content.i18n.MessageKey;
@@ -57,7 +60,7 @@ public class MainMenuGenerator extends SingleAnimatedMenuGenerator {
 
   @NotNull
   @Override
-  public AnimatedInventory createAnimatedInventory(@NotNull Locale locale) {
+  public AnimatedInventory createAnimatedInventory(@NotNull Locale locale, @NotNull Player viewer) {
     AnimatedInventory gui = createEmptyInventory(locale);
     gui.createAndAdd().fill(DefaultItems.FILL_ITEM);
     gui.cloneLastAndAdd().setContrast(
@@ -83,19 +86,19 @@ public class MainMenuGenerator extends SingleAnimatedMenuGenerator {
     for (int i = 0; i < SLOT_MAPPING.length; i += 2) {
       AnimationFrame frame = gui.cloneLastAndAdd();
 
-      frame.setItem(GUI_SLOTS[i], createDisplayItem(locale, SLOT_MAPPING[i]));
-      frame.setItem(GUI_SLOTS[i + 1], createDisplayItem(locale, SLOT_MAPPING[i + 1]));
+      frame.setItem(GUI_SLOTS[i], createDisplayItem(locale, viewer, SLOT_MAPPING[i]));
+      frame.setItem(GUI_SLOTS[i + 1], createDisplayItem(locale, viewer, SLOT_MAPPING[i + 1]));
     }
 
     return gui;
   }
 
   @NotNull
-  protected ItemStack createDisplayItem(@NotNull Locale locale, @NotNull MenuType<?> menuType) {
+  protected ItemStack createDisplayItem(@NotNull Locale locale, @NotNull Player viewer, @NotNull MenuType<?> menuType) {
     ItemFormatter item = new ItemFormatter(menuType.getDisplayItemMaterial())
       .name(menuType.getName())
       .description(menuType.getDescription())
-      .suffixIfNewUpdated(menuType.getMenuGenerator())
+      .suffixIfNewUpdated(menuType.getMenuGenerator(), viewer)
       .tooltip(MenuClickType.LEFT, Interaction.OPEN);
 
     ChallengesMenuGenerator generator = findChallengesGenerator(menuType);
@@ -111,6 +114,15 @@ public class MainMenuGenerator extends SingleAnimatedMenuGenerator {
     IMenuGenerator generator = menuType.getMenuGenerator();
     if (generator instanceof CustomHomeMenuGenerator custom) return custom.getListGenerator();
     return generator instanceof ChallengesMenuGenerator challenges ? challenges : null;
+  }
+
+  // Who may see a hidden entry sees it in the counts on the menu items
+  @NotNull
+  @Override
+  protected Object variantOf(@NotNull Player viewer) {
+    return Challenges.getInstance().getChallengeManager().getChallenges().stream()
+      .filter(challenge -> EntryAccess.isHidden(challenge) && EntryAccess.isListed(challenge, viewer))
+      .collect(Collectors.toSet());
   }
 
   @Override

@@ -1,5 +1,6 @@
 package net.cyperia.challenges.plugin.management.server;
 
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import net.cyperia.challenges.plugin.ChallengeAPI;
 import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.AbstractChallenge;
@@ -7,6 +8,7 @@ import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.content.i18n.Prefix;
 import net.cyperia.challenges.plugin.management.files.ConfigManager;
 import net.cyperia.challenges.plugin.spigot.events.PlayerIgnoreStatusChangeEvent;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.config.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -16,7 +18,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
@@ -48,7 +49,7 @@ public final class AutoResetManager implements Listener {
 
   private static final Set<Integer> COUNTDOWN_ANNOUNCED_AT = Set.of(120, 60, 30, 10, 5, 3, 2, 1);
 
-  private BukkitTask pendingReset;
+  private volatile ScheduledTask pendingReset;
   private boolean cancelPendingResetOnJoin;
   private int secondsUntilReset;
 
@@ -148,8 +149,7 @@ public final class AutoResetManager implements Listener {
     cancelPendingReset();
     cancelPendingResetOnJoin = true;
     secondsUntilReset = afterEmptySeconds;
-    pendingReset = Bukkit.getScheduler().runTaskTimer(Challenges.getInstance(),
-      this::countDownToReset, 20L, 20L);
+    pendingReset = Regions.timer(Challenges.getInstance(), _ -> countDownToReset(), 20L, 20L);
   }
 
   private void countDownToReset() {
@@ -206,7 +206,7 @@ public final class AutoResetManager implements Listener {
   private void scheduleReset(int seconds) {
     cancelPendingReset();
     cancelPendingResetOnJoin = false;
-    pendingReset = Bukkit.getScheduler().runTaskLater(Challenges.getInstance(),
+    pendingReset = Regions.later(Challenges.getInstance(),
       () -> Challenges.getInstance().getWorldManager().prepareWorldReset(Bukkit.getConsoleSender()),
       seconds * 20L);
   }

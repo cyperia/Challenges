@@ -3,8 +3,6 @@ package net.cyperia.challenges.plugin.management.menu.generator;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Locale;
-
 public interface IMenuGenerator {
 
   void openMenu(@NotNull Player player, int page);
@@ -13,19 +11,16 @@ public interface IMenuGenerator {
     openMenu(player, 0);
   }
 
-  void updateOrGeneratePages(@NotNull Locale locale);
-
   /**
-   * @implSpec regenerates all pages (only for locales already generated!)
-   * use {@link #updateOrGeneratePages(Locale)} to create the menu for a new locale
+   * @implSpec re-renders the menu for everyone who has it open; a page is rendered for its viewer when it is opened
    */
   void updatePages();
 
   void updatePage(int page);
 
   /**
-   * @implSpec must be at least {@code 1}
+   * @implSpec must be at least {@code 1}; may differ between viewers when entries are hidden from some of them
    */
-  int getPageCount();
+  int getPageCount(@NotNull Player viewer);
 
 }

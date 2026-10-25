@@ -22,20 +22,20 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class BlockEffectChallenge extends Setting {
 
   /*
    * 	Saving potion effect to prevent the possibility that an effect remove was somehow skipped
    */
-  private Map<UUID, PotionEffect> currentPotionEffects = new HashMap<>();
+  private Map<UUID, PotionEffect> currentPotionEffects = new ConcurrentHashMap<>();
 
   @Override
   protected void onEnable() {
-    currentPotionEffects = new HashMap<>();
+    currentPotionEffects = new ConcurrentHashMap<>();
     if (!shouldExecuteEffect()) return;
     broadcastFiltered(player -> {
       addEffect(player, player.getLocation(), null);

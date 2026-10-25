@@ -1,6 +1,8 @@
 package net.cyperia.challenges.plugin.utils.bukkit.container;
 
 import lombok.Data;
+import net.cyperia.challenges.plugin.Challenges;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -68,13 +70,13 @@ public final class PlayerData {
     this.flying = allowedFlight && flying;
   }
 
+  // Runs on the player's thread. Everything but the position is restored before the teleport, so a player who
+  // leaves while it is under way has already got their state back and the teleport is all that is lost.
   public void apply(@NotNull Player player) {
     for (PotionEffect effect : player.getActivePotionEffects()) {
       player.removePotionEffect(effect.getType());
     }
     player.setGameMode(gamemode);
-    player.teleport(location);
-    player.setFallDistance(0); // a teleport keeps it, so a fall in the extra world would land here
     player.setHealth(health);
     player.setFoodLevel(food);
     player.setSaturation(saturation);
@@ -84,6 +86,9 @@ public final class PlayerData {
     player.addPotionEffects(effects);
     player.setAllowFlight(allowedFlight);
     player.setFlying(flying);
+    player.teleportAsync(location).thenRun(() ->
+      // a teleport keeps the fall distance, so a fall in the extra world would land here
+      Regions.entity(Challenges.getInstance(), player, () -> player.setFallDistance(0)));
   }
 
 }

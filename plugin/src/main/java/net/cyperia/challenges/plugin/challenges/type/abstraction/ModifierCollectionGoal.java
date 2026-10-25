@@ -1,5 +1,7 @@
 package net.cyperia.challenges.plugin.challenges.type.abstraction;
 
+import net.cyperia.challenges.plugin.Challenges;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.challenges.plugin.challenges.type.IModifier;
 import net.cyperia.challenges.plugin.challenges.type.ValueUnit;
 import net.cyperia.challenges.plugin.challenges.type.helper.ChallengeHelper;
@@ -96,7 +98,9 @@ public abstract class ModifierCollectionGoal extends CollectionGoal implements I
     if (value < min) throw new IllegalArgumentException("value < min");
     this.value = value;
 
-    if (isEnabled()) onValueChange();
+    Regions.global(Challenges.getInstance(), () -> {
+      if (isEnabled()) onValueChange();
+    });
 
     updateItems();
   }

@@ -16,6 +16,7 @@ import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import net.cyperia.challenges.plugin.spigot.command.ShortcutCommand;
 import net.cyperia.challenges.plugin.utils.bukkit.container.BukkitSerialization;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.config.Document;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -26,18 +27,18 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class BackpackSetting extends SettingModifier implements CommandProvider {
 
   public static final int SHARED = 1, PLAYER = 2;
 
   private final int size;
-  private final Map<UUID, Inventory> backpacks = new HashMap<>();
+  private final Map<UUID, Inventory> backpacks = new ConcurrentHashMap<>();
   private final Inventory sharedBackpack;
 
   public BackpackSetting() {
@@ -77,7 +78,7 @@ public class BackpackSetting extends SettingModifier implements CommandProvider 
 
     if (getValue() == SHARED || getValue() == PLAYER) {
       getChallengeMessageKey("opened").send(player, Prefix.BACKPACK, getBackpackName());
-      player.openInventory(getCurrentBackpack(player));
+      Regions.entity(Challenges.getInstance(), player, () -> player.openInventory(getCurrentBackpack(player)));
       SoundSample.OPEN.play(player);
     } else {
       getChallengeMessageKey("disabled").send(player, Prefix.BACKPACK);

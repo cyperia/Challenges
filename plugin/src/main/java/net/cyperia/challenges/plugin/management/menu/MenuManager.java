@@ -3,6 +3,7 @@ package net.cyperia.challenges.plugin.management.menu;
 import lombok.Getter;
 import net.cyperia.challenges.plugin.ChallengeAPI;
 import net.cyperia.challenges.plugin.Challenges;
+import net.cyperia.challenges.plugin.challenges.type.EntryAccess;
 import net.cyperia.challenges.plugin.challenges.type.IChallenge;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.menu.MenuSetting;
 import net.cyperia.challenges.plugin.content.i18n.MessageKey;
@@ -21,7 +22,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Locale;
 
 public final class MenuManager {
 
@@ -70,15 +70,9 @@ public final class MenuManager {
       }
     }
 
-    Locale language = Challenges.getInstance().getLoaderRegistry().findLoaderByClassOrThrow(LanguageLoader.class).getConfigLanguage();
-    // seed the config language, then refresh every already-cached locale so a visibility change
-    // (e.g. LanguageSetting hiding itself for a non-default provider) reaches all players, not just
-    // those viewing in the config language
     mainMenu.updatePages();
-    mainMenu.updateOrGeneratePages(language);
     for (MenuType<?> value : MenuType.values()) {
       value.getMenuGenerator().updatePages();
-      value.getMenuGenerator().updateOrGeneratePages(language);
     }
 
     generated = true;
@@ -136,6 +130,14 @@ public final class MenuManager {
   public boolean denySettingsChange(@NotNull Player player) {
     if (maySettingsChange(permissionToManageGUI, player)) return false;
     playNoPermissionsEffect(player);
+    return true;
+  }
+
+  // true means the rejection effect has already been played and the click must not be handled
+  public boolean denyLockedChange(@NotNull Player player, @NotNull IChallenge challenge) {
+    if (!EntryAccess.isLocked(challenge, player)) return false;
+    SoundSample.BASS_OFF.play(player);
+    MessageKey.of("menu.restricted.click").send(player, Prefix.CHALLENGES);
     return true;
   }
 

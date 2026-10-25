@@ -1,5 +1,6 @@
 package net.cyperia.challenges.plugin.management.server;
 
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.entity.EntityType;
 import net.cyperia.challenges.plugin.ChallengeAPI;
 import net.cyperia.challenges.plugin.Challenges;
@@ -63,14 +64,10 @@ public final class ServerManager {
   }
 
   public void endChallenge(@NotNull ChallengeEndCause endCause, Supplier<List<Player>> winnerGetter) {
-    if (!Bukkit.isPrimaryThread()) {
-      // calling end challenge logic async results in all kinds of issues as bukkit/paper does not allow certain actions
-      // to be performed async (in some versions): PlayerGameModeChangeEvent may only be triggered synchronously
-      Logger.debug("End challenge called from async thread, scheduling sync task (Caller: {}", ReflectionUtils.getCallerName(1));
-      Bukkit.getScheduler().callSyncMethod(Challenges.getInstance(), () -> {
-        endChallenge(endCause, winnerGetter);
-        return null;
-      });
+    if (!Regions.isGlobalThread()) {
+      // The game state is owned by the global region, and PlayerGameModeChangeEvent may only be triggered synchronously
+      Logger.debug("End challenge called off the global region, scheduling task (Caller: {}", ReflectionUtils.getCallerName(1));
+      Regions.global(Challenges.getInstance(), () -> endChallenge(endCause, winnerGetter));
       return;
     }
 
@@ -96,7 +93,7 @@ public final class ServerManager {
     if (dropItemsOnEnd) {
       for (Player player : ChallengeAPI.getIngamePlayers()) {
         if (winners.isEmpty() || winners.contains(player)) continue;
-        dropItems(player);
+        Regions.entity(Challenges.getInstance(), player, () -> dropItems(player));
       }
     }
 
@@ -113,7 +110,7 @@ public final class ServerManager {
   }
 
   private void setSpectator() {
-    for (Player player : ChallengeAPI.getIngamePlayers()) {
+    Challenges.getInstance().getPlayerManager().forEachChallengePlayer(player -> {
       player.setGameMode(GameMode.SPECTATOR);
       SoundSample.BLAST.play(player);
 
@@ -122,7 +119,7 @@ public final class ServerManager {
       } catch (IllegalArgumentException ex) {
         // We cant spawn fireworks like that in some versions of spigot
       }
-    }
+    });
   }
 
   private void dropItems(@NotNull Player player) {

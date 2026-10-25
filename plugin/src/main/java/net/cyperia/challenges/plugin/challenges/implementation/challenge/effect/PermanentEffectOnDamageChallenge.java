@@ -8,6 +8,7 @@ import net.cyperia.challenges.plugin.management.scheduler.task.TimerTask;
 import net.cyperia.challenges.plugin.management.scheduler.timer.TimerStatus;
 import net.cyperia.challenges.plugin.utils.misc.TriConsumer;
 import net.cyperia.commons.bukkit.utils.logging.Logger;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.collection.pair.Tuple;
 import net.cyperia.commons.common.config.Document;
 import org.bukkit.Bukkit;
@@ -80,7 +81,7 @@ public class PermanentEffectOnDamageChallenge extends SettingModifier {
   public void onConsume(@NotNull PlayerItemConsumeEvent event) {
     if (!shouldExecuteEffect(event.getPlayer())) return;
     if (event.getItem().getType() != Material.MILK_BUCKET) return;
-    Bukkit.getScheduler().runTask(plugin, this::updateEffects);
+    Regions.nextTick(plugin, this::updateEffects);
   }
 
   @EventHandler(priority = EventPriority.HIGH)
@@ -98,7 +99,7 @@ public class PermanentEffectOnDamageChallenge extends SettingModifier {
   @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
   public void onPlayerGameModeChange(@NotNull PlayerGameModeChangeEvent event) {
     if (!shouldExecuteEffect()) return;
-    Bukkit.getScheduler().runTask(plugin, () -> {
+    Regions.nextTick(plugin, () -> {
       clearEffects();
       updateEffects();
     });
@@ -163,7 +164,7 @@ public class PermanentEffectOnDamageChallenge extends SettingModifier {
         });
       } else {
         if (!ignorePlayer(player)) {
-          addEffect(player, effectType, amplifier);
+          Regions.entity(plugin, player, () -> addEffect(player, effectType, amplifier));
         }
       }
     });

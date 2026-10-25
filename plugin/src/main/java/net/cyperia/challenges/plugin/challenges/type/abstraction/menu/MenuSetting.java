@@ -1,5 +1,6 @@
 package net.cyperia.challenges.plugin.challenges.type.abstraction.menu;
 
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import lombok.Getter;
 import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.challenges.type.IModifier;
@@ -13,7 +14,6 @@ import net.cyperia.challenges.plugin.content.i18n.MessageKeySpace;
 import net.cyperia.challenges.plugin.management.menu.format.Interaction;
 import net.cyperia.challenges.plugin.management.menu.format.InteractionTooltips;
 import net.cyperia.challenges.plugin.management.menu.format.ItemFormatter;
-import net.cyperia.challenges.plugin.management.menu.generator.VersionedContentContainer;
 import net.cyperia.challenges.plugin.management.menu.info.ChallengeMenuClickInfo;
 import net.cyperia.challenges.plugin.management.menu.search.SearchCategory;
 import net.cyperia.challenges.plugin.management.menu.search.SearchFindable;
@@ -22,6 +22,7 @@ import net.cyperia.commons.bukkit.utils.animation.SoundSample;
 import net.cyperia.commons.bukkit.utils.item.ItemBuilder;
 import net.cyperia.commons.bukkit.utils.menu.MenuClickType;
 import net.cyperia.commons.common.config.Document;
+import net.cyperia.commons.common.version.Version;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
@@ -30,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public abstract class MenuSetting extends Setting implements SearchCategory, VersionedContentContainer.FromList {
+public abstract class MenuSetting extends Setting implements SearchCategory {
 
   @Getter
   private final SubSettingsMenuGenerator menuGenerator;
@@ -56,6 +57,12 @@ public abstract class MenuSetting extends Setting implements SearchCategory, Ver
   }
 
   @NotNull
+  // A sub setting newer than this setting shows this setting as updated in that version
+  protected final <T extends SubSetting> T registerSetting(@NotNull String key, @NotNull String since, @NotNull T setting) {
+    ((SubSetting) setting).since = since;
+    return registerSetting(key, setting);
+  }
+
   protected final <T extends SubSetting> T registerSetting(@NotNull String key, @NotNull OneEnabledGroup group, @NotNull T setting) {
     group.add(setting);
     return registerSetting(key, setting);
@@ -149,10 +156,13 @@ public abstract class MenuSetting extends Setting implements SearchCategory, Ver
     return super.isDefaultSettings() && settings.values().stream().allMatch(SubSetting::isDefaultSettings);
   }
 
-  @NotNull
-  @Override
-  public List<?> getVersionedContent() {
-    return Arrays.asList(settings.values().toArray(new SubSetting[0])); // cheaper than new ArrayList
+  @Nullable
+  public final String getNewestSubSettingSince() {
+    String newest = null;
+    for (SubSetting setting : settings.values()) {
+      if (setting.since != null && (newest == null || Version.parse(setting.since).isNewerThan(Version.parse(newest)))) newest = setting.since;
+    }
+    return newest;
   }
 
   // TODO extract duplicate logic with AbstractChallenge
@@ -165,6 +175,9 @@ public abstract class MenuSetting extends Setting implements SearchCategory, Ver
 
     private final boolean enabledByDefault;
     private OneEnabledGroup group;
+    @Getter
+    @Nullable
+    private String since;
 
     /** The own state, {@link #isEnabled()} respects the setting this belongs to as well. */
     protected boolean enabled;
@@ -190,6 +203,7 @@ public abstract class MenuSetting extends Setting implements SearchCategory, Ver
         .name(getName())
         .description(getDescription())
         .tooltips(getDisplayTooltips())
+        .suffixIfNewUpdated(this)
         .builder(locale);
     }
 
@@ -266,6 +280,11 @@ public abstract class MenuSetting extends Setting implements SearchCategory, Ver
     }
 
     @Override
+    public boolean isVisibleTo(@NotNull Player viewer) {
+      return MenuSetting.this.isVisibleTo(viewer);
+    }
+
+    @Override
     public boolean isEnabled() {
       return MenuSetting.this.isEnabled() && enabled;
     }
@@ -284,8 +303,10 @@ public abstract class MenuSetting extends Setting implements SearchCategory, Ver
     private void applyEnabled(boolean enabled) {
       this.enabled = enabled;
 
-      if (enabled) this.onEnable();
-      else this.onDisable();
+      Regions.global(Challenges.getInstance(), () -> {
+        if (enabled) this.onEnable();
+        else this.onDisable();
+      });
 
       this.updateItems();
     }
@@ -477,7 +498,7 @@ public abstract class MenuSetting extends Setting implements SearchCategory, Ver
       this.value = value;
 
       updateItems();
-      onValueChange();
+      Regions.global(Challenges.getInstance(), this::onValueChange);
     }
 
     @Override

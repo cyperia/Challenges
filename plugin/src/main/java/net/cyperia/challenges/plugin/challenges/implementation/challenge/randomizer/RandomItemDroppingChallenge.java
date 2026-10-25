@@ -3,7 +3,7 @@ package net.cyperia.challenges.plugin.challenges.implementation.challenge.random
 import net.cyperia.challenges.plugin.challenges.type.ValueUnit;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.TimedChallenge;
 import net.cyperia.challenges.plugin.utils.misc.InventoryUtils;
-import org.bukkit.Bukkit;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -36,7 +36,7 @@ public class RandomItemDroppingChallenge extends TimedChallenge {
   protected void onTimeActivation() {
     restartTimer();
 
-    Bukkit.getScheduler().runTask(plugin, () -> {
+    Regions.nextTick(plugin, () -> {
       broadcastFiltered(RandomItemDroppingChallenge::dropRandomItem);
     });
   }

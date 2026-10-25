@@ -4,9 +4,10 @@ import net.cyperia.challenges.plugin.challenges.implementation.setting.OneTeamLi
 import net.cyperia.challenges.plugin.challenges.type.ValueUnit;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.AbstractChallenge;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.WorldDependentChallenge;
-import org.bukkit.Bukkit;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -24,16 +25,15 @@ public class WaterMLGChallenge extends WorldDependentChallenge {
 
   @Override
   public void startWorldChallenge() {
-    Location currentLocation = new Location(getExtraWorld(), 0, 150, 0);
+    World world = getExtraWorld();
 
     teleportToWorld(false, (player, index) -> {
-      currentLocation.add(100, 0, 0);
       player.getInventory().setHeldItemSlot(4);
       player.getInventory().setItem(4, new ItemStack(Material.WATER_BUCKET));
-      player.teleport(currentLocation);
+      player.teleportAsync(new Location(world, 100 * (index + 1), 150, 0));
     });
 
-    Bukkit.getScheduler().runTaskLater(plugin, () -> {
+    Regions.later(plugin, () -> {
       teleportBack();
       restartTimer();
     }, 10 * 20);
@@ -43,9 +43,9 @@ public class WaterMLGChallenge extends WorldDependentChallenge {
   public void onPlayerBucketEmpty(@NotNull PlayerBucketEmptyEvent event) {
     if (!isInExtraWorld()) return;
 
-    Bukkit.getScheduler().runTaskLater(plugin, () -> {
+    Regions.later(plugin, event.getBlock().getLocation(), () -> {
       event.getBlock().setType(Material.AIR);
-      Bukkit.getScheduler().runTaskLater(plugin, () -> {
+      Regions.later(plugin, event.getPlayer(), () -> {
         teleportBack(event.getPlayer());
       }, 40);
     }, 10);

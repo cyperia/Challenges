@@ -30,22 +30,18 @@ public abstract class DialogMenuGenerator<S> implements IMenuGenerator {
   @NotNull
   protected Dialog createNewDialog(@NotNull Player player, @NotNull S state) {
     Locale locale = TranslationManager.getLocaleOf(player);
-    return Dialog.create(factory -> this.setupDialog(factory, state, locale));
+    return Dialog.create(factory -> this.setupDialog(factory, state, player, locale));
   }
 
-  protected void setupDialog(@NotNull RegistryBuilderFactory<Dialog, ? extends DialogRegistryEntry.Builder> factory, @NotNull S state, @NotNull Locale locale) {
-    setupDialog(factory.empty(), state, locale);
+  protected void setupDialog(@NotNull RegistryBuilderFactory<Dialog, ? extends DialogRegistryEntry.Builder> factory, @NotNull S state,
+                             @NotNull Player viewer, @NotNull Locale locale) {
+    setupDialog(factory.empty(), state, viewer, locale);
   }
 
   @NotNull
   protected abstract S createDefaultState(@NotNull Player player);
 
-  protected abstract void setupDialog(@NotNull DialogRegistryEntry.Builder dialog, @NotNull S state, @NotNull Locale locale);
-
-  @Override
-  public void updateOrGeneratePages(@NotNull Locale locale) {
-    // noop; nothing to cache; generated dynamically
-  }
+  protected abstract void setupDialog(@NotNull DialogRegistryEntry.Builder dialog, @NotNull S state, @NotNull Player viewer, @NotNull Locale locale);
 
   @Override
   public void updatePages() {
@@ -58,7 +54,7 @@ public abstract class DialogMenuGenerator<S> implements IMenuGenerator {
   }
 
   @Override
-  public final int getPageCount() {
+  public final int getPageCount(@NotNull Player viewer) {
     return 1;
   }
 }

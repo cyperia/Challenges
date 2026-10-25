@@ -5,6 +5,7 @@ import net.cyperia.challenges.plugin.management.scheduler.task.ScheduledTask;
 import net.cyperia.challenges.plugin.management.scheduler.task.TimerTask;
 import net.cyperia.commons.bukkit.utils.logging.Logger;
 import net.cyperia.commons.common.misc.ReflectionUtils;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Method;
@@ -13,9 +14,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public final class ScheduleManager {
 
+  private final Plugin plugin;
   private final Map<ScheduledTaskConfig, ScheduledTaskExecutor> scheduledTaskExecutorsByConfig = new ConcurrentHashMap<>();
   private final Map<TimerTaskConfig, TimerTaskExecutor> timerTaskExecutorsByConfig = new ConcurrentHashMap<>();
-  private boolean started = false;
+  private volatile boolean started = false;
+
+  public ScheduleManager(@NotNull Plugin plugin) {
+    this.plugin = plugin;
+  }
 
   public void register(@NotNull Object... schedulers) {
     for (Object scheduler : schedulers) {
@@ -78,7 +84,7 @@ public final class ScheduleManager {
     if (executor != null) return executor;
 
     // Create a new task
-    executor = new ScheduledTaskExecutor(config);
+    executor = new ScheduledTaskExecutor(plugin, config);
     if (started) executor.start();
     scheduledTaskExecutorsByConfig.put(config, executor);
     return executor;
@@ -90,7 +96,7 @@ public final class ScheduleManager {
     if (executor != null) return executor;
 
     // Create a new task
-    executor = new TimerTaskExecutor(config);
+    executor = new TimerTaskExecutor(plugin, config);
     timerTaskExecutorsByConfig.put(config, executor);
     return executor;
   }

@@ -5,8 +5,8 @@ import net.cyperia.challenges.plugin.challenges.type.ValueUnit;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.SettingModifier;
 import net.cyperia.challenges.plugin.challenges.type.helper.ChallengeHelper;
 import net.cyperia.challenges.plugin.management.scheduler.task.ScheduledTask;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.kyori.adventure.bossbar.BossBar;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -47,7 +47,7 @@ public class MaxHeightTimeChallenge extends SettingModifier {
     if (!shouldExecuteEffect(event.getPlayer())) return;
     if (event.getTo() == null) return;
     if (event.getFrom().getBlockY() == event.getTo().getBlockY()) return;
-    Bukkit.getScheduler().runTask(plugin, () -> bossbar.update(event.getPlayer()));
+    Regions.nextTick(plugin, event.getPlayer(), () -> bossbar.update(event.getPlayer()));
   }
 
   @ScheduledTask(ticks = 20)

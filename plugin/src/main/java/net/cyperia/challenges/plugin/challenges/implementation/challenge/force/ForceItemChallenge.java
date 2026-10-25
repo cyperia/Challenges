@@ -7,13 +7,11 @@ import net.cyperia.challenges.plugin.content.i18n.Prefix;
 import net.cyperia.challenges.plugin.management.server.scoreboard.ChallengeBossBar.BossBarInstance;
 import net.cyperia.challenges.plugin.spigot.events.PlayerInventoryClickEvent;
 import net.cyperia.challenges.plugin.spigot.events.PlayerPickupItemEvent;
+import net.cyperia.challenges.plugin.utils.item.CollectableItem;
 import net.cyperia.challenges.plugin.utils.misc.BlockUtils;
-import net.cyperia.challenges.plugin.utils.misc.ExperimentalUtils;
-import net.cyperia.commons.bukkit.utils.item.ItemUtils;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.config.Document;
 import net.kyori.adventure.bossbar.BossBar;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -22,13 +20,12 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
 
 public class ForceItemChallenge extends CompletableForceChallenge {
 
-  private Material item;
+  private CollectableItem item;
 
   public ForceItemChallenge() {
     super(2, 15);
@@ -46,26 +43,24 @@ public class ForceItemChallenge extends CompletableForceChallenge {
 
       bossbar.setColor(BossBar.Color.GREEN);
       bossbar.setProgress(getProgress());
-      bossbar.setTitle(getChallengeMessageKey("bossbar-instruction"), item, ChallengeAPI.formatTime(getSecondsLeftUntilNextActivation()));
+      bossbar.setTitle(getChallengeMessageKey("bossbar-instruction"), item.displayName(), ChallengeAPI.formatTime(getSecondsLeftUntilNextActivation()));
     };
   }
 
   @Override
   protected void broadcastFailedMessage() {
-    getChallengeMessageKey("fail").broadcast(Prefix.CHALLENGES, item);
+    getChallengeMessageKey("fail").broadcast(Prefix.CHALLENGES, item.displayName());
   }
 
   @Override
   protected void broadcastSuccessMessage(@NotNull Player player) {
-    getChallengeMessageKey("success").broadcast(Prefix.CHALLENGES, player, item);
+    getChallengeMessageKey("success").broadcast(Prefix.CHALLENGES, player, item.displayName());
   }
 
   @Override
   protected void chooseForcing() {
-    List<Material> items = new ArrayList<>(Arrays.asList(ExperimentalUtils.getMaterials()));
-    items.removeIf(material -> !ItemUtils.isObtainableInSurvival(material));
-    items.removeIf(material -> !material.isItem());
-    items.removeIf(BlockUtils::isTooHardToGet);
+    List<CollectableItem> items = new ArrayList<>(CollectableItem.obtainableInSurvival(false));
+    items.removeIf(item -> BlockUtils.isTooHardToGet(item.material()));
 
     item = globalRandom.choose(items);
   }
@@ -78,24 +73,21 @@ public class ForceItemChallenge extends CompletableForceChallenge {
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onClick(@NotNull PlayerInventoryClickEvent event) {
     ItemStack item = event.getCurrentItem();
-    if (item == null) return;
-    if (item.getType() != this.item) return;
+    if (item == null || this.item == null || !this.item.matches(item)) return;
     completeForcing(event.getPlayer());
   }
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPickUp(@NotNull PlayerPickupItemEvent event) {
-    Material material = event.getItem().getItemStack().getType();
-    if (material != item) return;
+    if (item == null || !item.matches(event.getItem().getItemStack())) return;
     completeForcing(event.getPlayer());
   }
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onInteract(@NotNull PlayerInteractEvent event) {
-    Bukkit.getScheduler().runTaskLater(plugin, () -> {
+    Regions.later(plugin, event.getPlayer(), () -> {
       ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
-      Material material = item.getType();
-      if (material != this.item) return;
+      if (this.item == null || !this.item.matches(item)) return;
       completeForcing(event.getPlayer());
     }, 1);
   }
@@ -104,7 +96,8 @@ public class ForceItemChallenge extends CompletableForceChallenge {
   public void loadGameState(@NotNull Document document) {
     super.loadGameState(document);
     if (document.contains("target")) {
-      item = document.getEnum("target", Material.class);
+      String target = document.getString("target");
+      item = target == null ? null : CollectableItem.parse(target);
       setState(item == null ? WAITING : COUNTDOWN);
     }
   }
@@ -112,7 +105,7 @@ public class ForceItemChallenge extends CompletableForceChallenge {
   @Override
   public void writeGameState(@NotNull Document document) {
     super.writeGameState(document);
-    document.set("target", item);
+    document.set("target", item == null ? null : item.id());
   }
 
 }

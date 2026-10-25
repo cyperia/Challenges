@@ -4,12 +4,13 @@ import net.cyperia.commons.bukkit.utils.logging.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public abstract class AbstractTaskExecutor implements Runnable {
 
-  protected final List<ScheduledFunction> functions = new ArrayList<>(1);
+  // registered from any thread while the executor's own thread iterates
+  protected final List<ScheduledFunction> functions = new CopyOnWriteArrayList<>();
 
   @Override
   public void run() {

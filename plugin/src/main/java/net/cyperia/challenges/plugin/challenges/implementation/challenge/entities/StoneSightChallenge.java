@@ -1,9 +1,9 @@
 package net.cyperia.challenges.plugin.challenges.implementation.challenge.entities;
 
 import net.cyperia.challenges.plugin.challenges.type.abstraction.Setting;
-import net.cyperia.challenges.plugin.challenges.type.helper.ChallengeHelper;
 import net.cyperia.challenges.plugin.management.scheduler.task.ScheduledTask;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EnderDragon;
@@ -21,9 +21,7 @@ public class StoneSightChallenge extends Setting {
 
   @ScheduledTask(ticks = 1, async = false)
   public void onTick() {
-
-    for (Player player : ChallengeHelper.getIngamePlayers()) {
-
+    broadcastFiltered(player -> {
       RayTraceResult result = player.getWorld().rayTraceEntities(
         player.getEyeLocation(),
         player.getLocation().getDirection(),
@@ -31,24 +29,24 @@ public class StoneSightChallenge extends Setting {
         0.01,
         entity -> !(entity instanceof Player) && !(entity instanceof EnderDragon) && entity instanceof LivingEntity
       );
-      if (result == null) continue;
+      if (result == null) return;
 
       Location location = result.getHitPosition().toLocation(player.getWorld());
       LivingEntity entity = ((LivingEntity) result.getHitEntity());
-      if (entity == null) continue;
+      if (entity == null) return;
 
       double distance = entity.getEyeLocation().distance(location) * 5;
 
       BoundingBox box = entity.getBoundingBox();
       double volume = box.getWidthX() + box.getWidthZ() + box.getHeight();
-      if (distance > volume) continue;
+      if (distance > volume) return;
 
-      entity.getLocation().getBlock().setType(getRandomStone(), false);
-      entity.remove();
+      Regions.entity(plugin, entity, () -> {
+        entity.getLocation().getBlock().setType(getRandomStone(), false);
+        entity.remove();
+      });
       SoundSample.BREAK.play(player);
-
-    }
-
+    });
   }
 
   @NotNull

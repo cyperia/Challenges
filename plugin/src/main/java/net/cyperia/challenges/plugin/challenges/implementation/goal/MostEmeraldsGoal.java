@@ -2,7 +2,7 @@ package net.cyperia.challenges.plugin.challenges.implementation.goal;
 
 import net.cyperia.challenges.plugin.challenges.type.abstraction.PointsGoal;
 import net.cyperia.challenges.plugin.spigot.events.PlayerPickupItemEvent;
-import org.bukkit.Bukkit;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,7 +22,7 @@ public class MostEmeraldsGoal extends PointsGoal {
   }
 
   private void updatePoints(@NotNull Player player) {
-    Bukkit.getScheduler().runTask(plugin, () -> {
+    Regions.nextTick(plugin, player, () -> {
       int count = getEmeraldsCount(player);
       setPoints(player.getUniqueId(), count);
     });

@@ -1,6 +1,7 @@
 package net.cyperia.commons.bukkit.utils.animation;
 
 import net.cyperia.commons.bukkit.core.BukkitModule;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -48,17 +49,16 @@ public class AnimatedInventory {
   }
 
   public void open(@NotNull Player player, @NotNull JavaPlugin plugin) {
-    if (!Bukkit.isPrimaryThread()) {
-      Bukkit.getScheduler().runTask(plugin, () -> open(player, plugin));
-      return;
-    }
+    Regions.entity(plugin, player, () -> openOnOwnThread(player, plugin));
+  }
 
+  private void openOnOwnThread(@NotNull Player player, @NotNull JavaPlugin plugin) {
     Inventory inventory = createInventory();
     applyFrame(inventory, 0, player);
     player.openInventory(inventory);
 
     AtomicInteger index = new AtomicInteger(1);
-    Bukkit.getScheduler().runTaskTimer(plugin, task -> {
+    Regions.timer(plugin, player, task -> {
 
       boolean opened = inventory.getViewers().contains(player);
       if (index.get() >= frames.size() || !opened) {
@@ -79,22 +79,18 @@ public class AnimatedInventory {
   }
 
   public void openNotAnimated(@NotNull Player player, boolean playSound, @NotNull JavaPlugin plugin) {
-    if (!Bukkit.isPrimaryThread()) {
-      Bukkit.getScheduler().runTask(plugin, () -> openNotAnimated(player, playSound, plugin));
-      return;
-    }
+    Regions.entity(plugin, player, () -> {
+      Inventory inventory = createInventory();
 
-    Inventory inventory = createInventory();
+      if (!frames.isEmpty()) {
+        AnimationFrame frame = getLastFrame();
+        inventory.setContents(frame.getContent());
+      }
 
-    if (!frames.isEmpty()) {
-      AnimationFrame frame = getLastFrame();
-      inventory.setContents(frame.getContent());
-    }
+      player.openInventory(inventory);
 
-    player.openInventory(inventory);
-
-    if (playSound && endSound != null) endSound.play(player);
-
+      if (playSound && endSound != null) endSound.play(player);
+    });
   }
 
   private void applyFrame(@NotNull Inventory inventory, int index, @NotNull Player viewer) {

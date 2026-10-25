@@ -5,8 +5,8 @@ import net.cyperia.challenges.plugin.challenges.type.ValueUnit;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.SettingModifier;
 import net.cyperia.challenges.plugin.utils.misc.BlockUtils;
 import net.cyperia.challenges.plugin.utils.misc.InventoryUtils;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.config.Document;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -21,14 +21,14 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.world.LootGenerateEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class FiveHundredBlocksChallenge extends SettingModifier {
 
-  private final Map<UUID, Integer> blocksWalked = new HashMap<>();
+  private final Map<UUID, Integer> blocksWalked = new ConcurrentHashMap<>();
 
   public FiveHundredBlocksChallenge() {
     super(1, 5, 5);
@@ -122,7 +122,7 @@ public class FiveHundredBlocksChallenge extends SettingModifier {
 
     this.blocksWalked.put(uuid, blocksWalked);
 
-    Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+    Regions.async(plugin, () -> {
       bossbar.update(player);
     });
     return reached;

@@ -1,11 +1,13 @@
 package net.cyperia.challenges.plugin.challenges.custom.settings.action.impl;
 
+import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.challenges.custom.settings.ChallengeExecutionData;
 import net.cyperia.challenges.plugin.challenges.custom.settings.action.ChallengeAction;
 import net.cyperia.challenges.plugin.challenges.custom.settings.action.IEntityTargetAction;
 import net.cyperia.challenges.plugin.challenges.type.helper.SubSettingsHelper;
 import net.cyperia.challenges.plugin.content.i18n.MessageKeySpace;
 import net.cyperia.challenges.plugin.utils.misc.InventoryUtils;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -39,11 +41,13 @@ public class RandomItemAction extends ChallengeAction {
     String[] singleItem = subActions.get("single_item");
     boolean single = singleItem != null && singleItem.length > 0 && singleItem[0].equals("enabled");
 
-    for (Entity target : IEntityTargetAction.getTargets(executionData.getEntity(), subActions)) {
-      if (target instanceof Player player) {
-        giveRandomItemToPlayer(player, single);
+    IEntityTargetAction.getTargets(executionData.getEntity(), subActions).thenAccept(targets -> {
+      for (Entity target : targets) {
+        if (target instanceof Player player) {
+          Regions.entity(Challenges.getInstance(), player, () -> giveRandomItemToPlayer(player, single));
+        }
       }
-    }
+    });
   }
 
 }

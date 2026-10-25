@@ -11,6 +11,7 @@ import net.cyperia.challenges.plugin.utils.bukkit.jumpgeneration.RandomJumpGener
 import net.cyperia.challenges.plugin.utils.misc.BlockUtils;
 import net.cyperia.challenges.plugin.utils.misc.ParticleUtils;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.config.Document;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -96,19 +97,22 @@ public class JumpAndRunChallenge extends WorldDependentChallenge {
     buildNextJump();
     teleportToWorld(true, (player, index) -> {
       player.setGameMode(player.getUniqueId().equals(currentPlayer) ? GameMode.SURVIVAL : GameMode.SPECTATOR);
-      player.teleport(new Location(getExtraWorld(), 0.5, 101, 0.5));
+      player.teleportAsync(new Location(getExtraWorld(), 0.5, 101, 0.5));
     });
   }
 
   protected void buildNextJump() {
-    if (lastBlock != null) lastBlock.setType(Material.AIR);
-
-    lastBlock = targetBlock != null ? targetBlock : getExtraWorld().getBlockAt(0, 100, 0);
-    lastBlock.setType(Material.GOLD_BLOCK);
+    Block previous = lastBlock;
+    Block start = targetBlock != null ? targetBlock : getExtraWorld().getBlockAt(0, 100, 0);
+    lastBlock = start;
 
     Material type = getRandomBlockType();
-    targetBlock = new RandomJumpGenerator().next(globalRandom, lastBlock, type == Material.CYAN_TERRACOTTA || type == Material.EMERALD_BLOCK, type != Material.COBBLESTONE_WALL && type != Material.SPRUCE_FENCE);
-    targetBlock.setType(type);
+    Regions.at(plugin, start.getLocation(), () -> {
+      if (previous != null) previous.setType(Material.AIR);
+      start.setType(Material.GOLD_BLOCK);
+      targetBlock = new RandomJumpGenerator().next(globalRandom, start, type == Material.CYAN_TERRACOTTA || type == Material.EMERALD_BLOCK, type != Material.COBBLESTONE_WALL && type != Material.SPRUCE_FENCE);
+      targetBlock.setType(type);
+    });
   }
 
   @NotNull
@@ -157,11 +161,13 @@ public class JumpAndRunChallenge extends WorldDependentChallenge {
   }
 
   protected void breakJumpAndRun() {
-    if (lastBlock != null) lastBlock.setType(Material.AIR);
-    if (targetBlock != null) targetBlock.setType(Material.AIR);
-
+    Block last = lastBlock;
+    Block target = targetBlock;
     lastBlock = null;
     targetBlock = null;
+
+    if (last != null) Regions.at(plugin, last.getLocation(), () -> last.setType(Material.AIR));
+    if (target != null) Regions.at(plugin, target.getLocation(), () -> target.setType(Material.AIR));
   }
 
   @Override
@@ -178,11 +184,13 @@ public class JumpAndRunChallenge extends WorldDependentChallenge {
     jumpAndRunsDone = document.getInt("jumpsDone", jumpAndRunsDone);
   }
 
-  @ScheduledTask(ticks = 20, timerPolicy = TimerPolicy.ALWAYS, worldPolicy = ExtraWorldPolicy.USED)
+  @ScheduledTask(ticks = 20, async = false, timerPolicy = TimerPolicy.ALWAYS, worldPolicy = ExtraWorldPolicy.USED)
   public void spawnParticles() {
-    if (targetBlock == null) return;
-    ParticleUtils.spawnParticleCircle(targetBlock.getLocation().add(0.5, 1.05, 0.5),
-      Particle.INSTANT_EFFECT, Color.WHITE, 13, 0.35);
+    Block target = targetBlock;
+    if (target == null) return;
+    Location center = target.getLocation().add(0.5, 1.05, 0.5);
+    Regions.at(plugin, center, () -> ParticleUtils.spawnParticleCircle(center,
+      Particle.INSTANT_EFFECT, Color.WHITE, 13, 0.35));
   }
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

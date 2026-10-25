@@ -1,5 +1,6 @@
 package net.cyperia.challenges.plugin.challenges.implementation.setting;
 
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.GameRule;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.Setting;
 import org.bukkit.Bukkit;
@@ -9,16 +10,20 @@ public class ImmediateRespawnSetting extends Setting {
 
   @Override
   protected void onEnable() {
-    for (World world : Bukkit.getWorlds()) {
-      world.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
-    }
+    Regions.global(plugin, () -> {
+      for (World world : Bukkit.getWorlds()) {
+        world.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
+      }
+    });
   }
 
   @Override
   protected void onDisable() {
-    for (World world : Bukkit.getWorlds()) {
-      world.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, false);
-    }
+    Regions.global(plugin, () -> {
+      for (World world : Bukkit.getWorlds()) {
+        world.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, false);
+      }
+    });
   }
 
 }

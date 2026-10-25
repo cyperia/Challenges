@@ -4,6 +4,7 @@ import net.cyperia.commons.bukkit.utils.chat.ChatInputListener;
 import net.cyperia.commons.bukkit.utils.menu.MenuPosition;
 import net.cyperia.commons.bukkit.utils.menu.MenuPositionListener;
 import net.cyperia.commons.bukkit.utils.misc.MinecraftVersion;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.bukkit.utils.wrapper.ActionListener;
 import net.cyperia.commons.bukkit.utils.wrapper.SimpleEventExecutor;
 import net.cyperia.commons.common.annotations.ReplaceWith;
@@ -111,7 +112,7 @@ public abstract class BukkitModule extends JavaPlugin {
     }
     if (!versionSupported) {
       // Paper runs the tasks scheduled during startup right before "Done", so the warning is repeated at the end of the startup log
-      getServer().getScheduler().runTask(this, () -> new RequirementsChecker(this).checkVersion(getPluginDocument().getDocument("require")));
+      Regions.nextTick(this, () -> new RequirementsChecker(this).checkVersion(getPluginDocument().getDocument("require")));
     }
 
     listenersQueue.forEach(this::registerListener);
@@ -141,7 +142,9 @@ public abstract class BukkitModule extends JavaPlugin {
     if (executorService != null)
       executorService.shutdown();
 
+    // No task can be scheduled anymore, so only the players this thread owns are closed
     for (Player player : Bukkit.getOnlinePlayers()) {
+      if (!Bukkit.isOwnedByCurrentRegion(player)) continue;
       if (player.getOpenInventory().getTopInventory().getHolder() == MenuPosition.HOLDER)
         player.getOpenInventory().close();
     }

@@ -1,5 +1,6 @@
 package net.cyperia.challenges.plugin.management.menu.generator.impl.challenge.categorised;
 
+import org.bukkit.permissions.Permissible;
 import net.cyperia.challenges.plugin.challenges.type.IChallenge;
 import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.management.menu.SettingCategory;
@@ -103,53 +104,44 @@ public class CategorisedMenuGenerator extends ChallengesMenuGenerator {
     CategorisedListMenuGenerator generator = categoryGenerators.get(category);
     if (generator != null) {
       generator.updateElementDisplay(challenge);
-
-      int index = orderedCategories.indexOf(category);
-      int[] slots = getSlots();
-      int page = index / slots.length;
-      int slotIndex = index % slots.length;
-      updatePage(page, (inventory, locale) -> setCategoryItemsAt(category, inventory, slots, slotIndex, locale));
+      updatePages();
     }
   }
 
   @Override
-  public void updateInventoryContent(@NotNull Inventory inventory, int page, @NotNull Locale locale) {
+  public void updateInventoryContent(@NotNull Inventory inventory, int page, @NotNull Player viewer) {
     int[] slots = getSlots();
-    List<SettingCategory> categories = getCategoriesForPage(page, slots);
+    List<SettingCategory> categories = getCategoriesForPage(viewer, page, slots);
     int len = categories.size();
     for (int i = 0; i < len; i++) {
       SettingCategory category = categories.get(i);
-      setCategoryDisplayAt(category, inventory, slots, i, locale);
+      setCategoryDisplayAt(category, inventory, slots, i, viewer);
     }
   }
 
-  private void setCategoryDisplayAt(@NotNull SettingCategory category, @NotNull Inventory inventory, int[] slots, int slotIndex, @NotNull Locale locale) {
-    setCategoryItemsAt(category, inventory, slots, slotIndex, locale);
-    setCategoryUpdateItemsAt(category, inventory, slots, slotIndex, locale);
+  private void setCategoryDisplayAt(@NotNull SettingCategory category, @NotNull Inventory inventory, int[] slots, int slotIndex, @NotNull Player viewer) {
+    inventory.setItem(slots[slotIndex], createCategoryDisplayItem(viewer, category));
+    setCategoryUpdateItemsAt(category, inventory, slots, slotIndex, viewer);
   }
 
-  private void setCategoryItemsAt(@NotNull SettingCategory category, @NotNull Inventory inventory, int[] slots, int slotIndex, @NotNull Locale locale) {
-    inventory.setItem(slots[slotIndex], createCategoryDisplayItem(locale, category));
-  }
-
-  private void setCategoryUpdateItemsAt(@NotNull SettingCategory category, @NotNull Inventory inventory, int[] slots, int slotIndex, @NotNull Locale locale) {
+  private void setCategoryUpdateItemsAt(@NotNull SettingCategory category, @NotNull Inventory inventory, int[] slots, int slotIndex, @NotNull Player viewer) {
     CategorisedListMenuGenerator generator = categoryGenerators.get(category);
     if (generator != null) {
       // This will break if there are more than 2 rows!
       int row = slotIndex / getMaxItemsPerRow();
       int offset = row == 0 ? -9 : +9;
-      if (generator.getBetaCount() > 0) {
+      if (generator.getBetaCount(viewer) > 0) {
         inventory.setItem(slots[slotIndex] + offset, ChallengeListMenuGenerator.BETA_CHALLENGE_ITEM);
-      } else if (generator.isNewSuffix() && generator.getNewCount() > 0) {
+      } else if (generator.isNewSuffix() && generator.getNewCount(viewer) > 0) {
         inventory.setItem(slots[slotIndex] + offset, ChallengeListMenuGenerator.NEW_CHALLENGE_ITEM);
-      } else if (generator.isUpdatedSuffix() && generator.getUpdatedCount() > 0) {
+      } else if (generator.isUpdatedSuffix() && generator.getUpdatedCount(viewer) > 0) {
         inventory.setItem(slots[slotIndex] + offset, ChallengeListMenuGenerator.UPDATED_CHALLENGE_ITEM);
       }
     }
   }
 
   @NotNull
-  protected ItemStack createCategoryDisplayItem(@NotNull Locale locale, @NotNull SettingCategory category) {
+  protected ItemStack createCategoryDisplayItem(@NotNull Player viewer, @NotNull SettingCategory category) {
     ItemFormatter item = new ItemFormatter()
       .item(category.getDisplayItemPreset())
       .name(category.getName())
@@ -158,19 +150,28 @@ public class CategorisedMenuGenerator extends ChallengesMenuGenerator {
 
     CategorisedListMenuGenerator generator = categoryGenerators.get(category);
     if (generator != null) {
-      item.suffixIfNewUpdated(generator);
+      item.suffixIfNewUpdated(generator, viewer);
 
       item.state(generator.formatInfo(category.getDescriptionInfo()));
     }
 
-    return item.build(locale);
+    return item.build(localeOf(viewer));
+  }
+
+  // A category of which the viewer may see nothing is left out for them
+  @NotNull
+  protected List<SettingCategory> getListedCategories(@NotNull Player viewer) {
+    return orderedCategories.stream()
+      .filter(category -> !categoryGenerators.get(category).getListedChallenges(viewer).isEmpty())
+      .toList();
   }
 
   @NotNull
-  protected List<SettingCategory> getCategoriesForPage(int page, @NotNull int[] slots) {
+  protected List<SettingCategory> getCategoriesForPage(@NotNull Player viewer, int page, @NotNull int[] slots) {
+    List<SettingCategory> listed = getListedCategories(viewer);
     int startIndex = page * slots.length;
-    int endIndex = Math.min(startIndex + slots.length, orderedCategories.size());
-    return orderedCategories.subList(startIndex, endIndex);
+    int endIndex = Math.min(startIndex + slots.length, listed.size());
+    return startIndex >= endIndex ? List.of() : listed.subList(startIndex, endIndex);
   }
 
   @NotNull
@@ -204,6 +205,21 @@ public class CategorisedMenuGenerator extends ChallengesMenuGenerator {
       count += menuGenerator.getUpdatedCount();
     }
     return count;
+  }
+
+  @Override
+  public int getNewCount(@NotNull Permissible viewer) {
+    return categoryGenerators.values().stream().mapToInt(generator -> generator.getNewCount(viewer)).sum();
+  }
+
+  @Override
+  public int getBetaCount(@NotNull Permissible viewer) {
+    return categoryGenerators.values().stream().mapToInt(generator -> generator.getBetaCount(viewer)).sum();
+  }
+
+  @Override
+  public int getUpdatedCount(@NotNull Permissible viewer) {
+    return categoryGenerators.values().stream().mapToInt(generator -> generator.getUpdatedCount(viewer)).sum();
   }
 
   @Override
@@ -242,8 +258,8 @@ public class CategorisedMenuGenerator extends ChallengesMenuGenerator {
   }
 
   @Override
-  public int getPageCount() {
-    return Math.max(1, Math.ceilDiv(categoryGenerators.size(), getSlots().length));
+  public int getPageCount(@NotNull Player viewer) {
+    return Math.max(1, Math.ceilDiv(getListedCategories(viewer).size(), getSlots().length));
   }
 
   public class CategorisedOverviewMenuPosition extends GeneratorMenuPosition {
@@ -258,7 +274,7 @@ public class CategorisedMenuGenerator extends ChallengesMenuGenerator {
       for (int i = 0; i < slots.length; i++) {
         if (info.getSlot() != slots[i]) continue;
 
-        List<SettingCategory> categories = getCategoriesForPage(page, slots);
+        List<SettingCategory> categories = getCategoriesForPage(info.getPlayer(), page, slots);
         if (i >= categories.size()) return false; // empty slot; page not full
         SettingCategory category = categories.get(i);
         CategorisedListMenuGenerator generator = categoryGenerators.get(category);

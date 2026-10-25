@@ -74,7 +74,7 @@ public abstract class CustomChooseMultipleOptionsMenuGenerator extends CustomCho
     return new CustomChooseMultipleOptionsMenuPosition(page, player);
   }
 
-  public class CustomChooseMultipleOptionsMenuPosition extends UncachedMultiPageMenuPosition {
+  public class CustomChooseMultipleOptionsMenuPosition extends MultiPageSelectMenuPosition {
 
     public CustomChooseMultipleOptionsMenuPosition(int page, @NotNull Player player) {
       super(page, player);

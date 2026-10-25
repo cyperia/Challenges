@@ -13,8 +13,10 @@ import net.cyperia.challenges.plugin.challenges.type.abstraction.AbstractChallen
 import net.cyperia.challenges.plugin.management.challenges.entities.GamestateSaveable;
 import net.cyperia.challenges.plugin.management.scheduler.task.ScheduledTask;
 import net.cyperia.challenges.plugin.spigot.events.PlayerIgnoreStatusChangeEvent;
+import net.cyperia.challenges.plugin.spigot.events.PlayerRespawnedEvent;
 import net.cyperia.challenges.plugin.utils.bukkit.misc.ChunkSet;
 import net.cyperia.commons.bukkit.utils.logging.Logger;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.config.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -26,14 +28,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Fires when a player enters a chunk: every time, the first time anybody enters it, or the first time
@@ -48,11 +49,11 @@ public class NewChunkTrigger extends ChallengeTrigger implements GamestateSaveab
 
   // Keyed by the challenge's unique name: two challenges using this trigger track "new" independently,
   // so a chunk another challenge already converted still counts as new for this one.
-  private final Map<String, Memory> memories = new HashMap<>();
+  private final Map<String, Memory> memories = new ConcurrentHashMap<>();
 
   // A join that also teleports fires two handlers for the same entry, each scheduling its own delayed
   // fire() for the same tick; without this, "every" mode would run its action for that chunk twice.
-  private final Map<UUID, LastFire> lastFired = new HashMap<>();
+  private final Map<UUID, LastFire> lastFired = new ConcurrentHashMap<>();
 
   public NewChunkTrigger(String name) {
     super(name, SubSettingsBuilder.createChooseItem(CHUNK).fill(builder -> {
@@ -84,7 +85,7 @@ public class NewChunkTrigger extends ChallengeTrigger implements GamestateSaveab
 
   // A respawn is an entry into the chunk it lands in, same as a move.
   @EventHandler(priority = EventPriority.MONITOR)
-  public void onRespawn(PlayerRespawnEvent event) {
+  public void onRespawn(PlayerRespawnedEvent event) {
     if (!canTrigger()) return;
     Player player = event.getPlayer();
     if (AbstractChallenge.ignorePlayer(player)) return;
@@ -113,10 +114,10 @@ public class NewChunkTrigger extends ChallengeTrigger implements GamestateSaveab
   public void onSecond() {
     if (!canTrigger()) return;
 
-    for (Player player : ChallengeAPI.getIngamePlayers()) {
-      if (AbstractChallenge.ignorePlayer(player)) continue;
+    Challenges.getInstance().getPlayerManager().forEachChallengePlayer(player -> {
+      if (AbstractChallenge.ignorePlayer(player)) return;
       createData().entity(player).data(CHUNK, NEW, NEW_PERSONAL).execute();
-    }
+    });
   }
 
   private void handleMove(@NotNull Player player, @NotNull Location from, @Nullable Location to) {
@@ -135,7 +136,7 @@ public class NewChunkTrigger extends ChallengeTrigger implements GamestateSaveab
   // The player is still standing where they came from while a move event runs, so the actions are
   // handed the trigger a tick later, when the player is in the chunk they entered.
   private void fire(@NotNull Player player, @NotNull String... chunk) {
-    Bukkit.getScheduler().runTask(Challenges.getInstance(), () -> {
+    Regions.nextTick(Challenges.getInstance(), player, () -> {
       // A move followed by a quit in the same tick would otherwise run execute() against an offline player.
       if (!player.isOnline()) return;
       if (alreadyFiredThisTick(player)) return;
@@ -183,7 +184,7 @@ public class NewChunkTrigger extends ChallengeTrigger implements GamestateSaveab
     if (!(data.getEntity() instanceof Player player)) return EVERY.equals(mode);
 
     Chunk chunk = player.getLocation().getChunk();
-    Memory memory = memories.computeIfAbsent(challenge.getUniqueName(), name -> new Memory(new ChunkSet(), new HashMap<>()));
+    Memory memory = memories.computeIfAbsent(challenge.getUniqueName(), name -> new Memory(new ChunkSet(), new ConcurrentHashMap<>()));
 
     if (EVERY.equals(mode)) {
       memory.entered.add(chunk);
@@ -280,7 +281,7 @@ public class NewChunkTrigger extends ChallengeTrigger implements GamestateSaveab
     for (String savedName : document.keys()) {
       Document challengeDocument = document.getDocument(savedName);
       String uniqueName = Challenges.getInstance().getCatalog().challenge(savedName).map(Challenge::id).orElse(savedName);
-      Memory memory = new Memory(new ChunkSet(), new HashMap<>());
+      Memory memory = new Memory(new ChunkSet(), new ConcurrentHashMap<>());
       memory.entered.loadGameState(challengeDocument, "entered-chunks");
 
       Document playersDocument = challengeDocument.getDocument("players");

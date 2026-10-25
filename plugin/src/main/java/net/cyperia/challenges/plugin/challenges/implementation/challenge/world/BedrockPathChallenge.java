@@ -1,9 +1,9 @@
 package net.cyperia.challenges.plugin.challenges.implementation.challenge.world;
 
+import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.Setting;
 import net.cyperia.challenges.plugin.management.scheduler.task.ScheduledTask;
 import net.cyperia.challenges.plugin.utils.misc.BlockUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -20,9 +20,7 @@ public class BedrockPathChallenge extends Setting {
   // jumps can last a single tick that the moves of a lagging client arrive around.
   @ScheduledTask(ticks = 1, async = false)
   public void checkGround() {
-    for (Player player : Bukkit.getOnlinePlayers()) {
-      pave(player, player.getLocation());
-    }
+    Challenges.getInstance().getPlayerManager().forEachAudience(player -> pave(player, player.getLocation()));
   }
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

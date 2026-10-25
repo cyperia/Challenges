@@ -6,6 +6,7 @@ import net.cyperia.challenges.plugin.challenges.type.helper.SubSettingsHelper;
 import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.content.i18n.Prefix;
 import net.cyperia.challenges.plugin.management.files.ConfigManager;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -49,7 +50,7 @@ public class ExecuteCommandAction extends PlayerTargetAction {
       ? command
       : "execute as " + player.getName() + " at " + player.getName() + " run " + command;
 
-    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), fullCommand);
+    Regions.global(Challenges.getInstance(), () -> Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), fullCommand));
   }
 
   private static String commandName(String input) {

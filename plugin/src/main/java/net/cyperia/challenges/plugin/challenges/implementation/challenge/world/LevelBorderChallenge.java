@@ -8,6 +8,7 @@ import net.cyperia.challenges.plugin.management.scheduler.task.ScheduledTask;
 import net.cyperia.challenges.plugin.management.scheduler.task.TimerTask;
 import net.cyperia.challenges.plugin.management.scheduler.timer.TimerStatus;
 import net.cyperia.challenges.plugin.management.server.BorderManager;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.config.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -80,14 +81,14 @@ public class LevelBorderChallenge extends Setting {
   public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
     if (!shouldExecuteEffect()) return;
     if (ignorePlayer(event.getPlayer())) return;
-    Bukkit.getScheduler().runTaskLater(plugin, () -> checkBorderSize(false), 1);
+    Regions.later(plugin, () -> checkBorderSize(false), 1);
   }
 
   @EventHandler(priority = EventPriority.HIGH)
   public void onPlayerLeave(@NotNull PlayerQuitEvent event) {
     if (!shouldExecuteEffect()) return;
     if (ignorePlayer(event.getPlayer())) return;
-    Bukkit.getScheduler().runTaskLater(plugin, () -> checkBorderSize(false), 1);
+    Regions.later(plugin, () -> checkBorderSize(false), 1);
   }
 
   /**

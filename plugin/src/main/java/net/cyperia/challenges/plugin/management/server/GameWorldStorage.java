@@ -7,7 +7,6 @@ import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.WorldCreator;
-import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -113,13 +112,13 @@ public class GameWorldStorage {
   }
 
   private void moveOutOfFormerGameWorlds(@NotNull List<World> previousGameWorlds) {
-    for (Player player : Bukkit.getOnlinePlayers()) {
+    Challenges.getInstance().getPlayerManager().forEachAudience(player -> {
       World world = player.getWorld();
-      if (!previousGameWorlds.contains(world) || gameWorlds.contains(world)) continue;
+      if (!previousGameWorlds.contains(world) || gameWorlds.contains(world)) return;
 
       World target = getWorld(world.getEnvironment());
-      if (target != null) player.teleport(BlockUtils.getCenteredSpawn(target));
-    }
+      if (target != null) player.teleportAsync(BlockUtils.getCenteredSpawn(target));
+    });
   }
 
   @NotNull

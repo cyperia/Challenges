@@ -1,5 +1,6 @@
 package net.cyperia.challenges.plugin.challenges.implementation.setting;
 
+import net.cyperia.challenges.plugin.spigot.events.PlayerRespawnLocationEvent;
 import org.bukkit.Particle;
 import net.cyperia.challenges.plugin.ChallengeAPI;
 import net.cyperia.challenges.plugin.Challenges;
@@ -13,7 +14,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -49,7 +49,7 @@ public class RespawnSetting extends Setting {
   }
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  public void onRespawn(@NotNull PlayerRespawnEvent event) {
+  public void onRespawn(@NotNull PlayerRespawnLocationEvent event) {
     if (isEnabled()) return;
 
     Player player = event.getPlayer();

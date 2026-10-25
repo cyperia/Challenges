@@ -4,7 +4,7 @@ import lombok.Getter;
 import net.cyperia.challenges.plugin.challenges.custom.settings.sub.ValueSetting;
 import net.cyperia.challenges.plugin.content.i18n.LocalizableMessage;
 import net.cyperia.challenges.plugin.management.menu.MenuType;
-import net.cyperia.challenges.plugin.management.menu.generator.UncachedMultiPageSelectMenuGenerator;
+import net.cyperia.challenges.plugin.management.menu.generator.MultiPageSelectMenuGenerator;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
 import net.cyperia.commons.bukkit.utils.menu.MenuClickInfo;
 import org.bukkit.entity.Player;
@@ -19,7 +19,7 @@ import java.util.Map;
  * Displays adjustable {@link ValueSetting} rows with a finish button.
  * Replaces the legacy {@code ValueMenuGenerator}.
  */
-public abstract class CustomChooseValueMenuGenerator extends UncachedMultiPageSelectMenuGenerator<ValueSetting> {
+public abstract class CustomChooseValueMenuGenerator extends MultiPageSelectMenuGenerator<ValueSetting> {
 
   public static final int SIZE = 4 * 9;
   public static final int[] SLOTS = {10, 11, 12, 13}; // settings item at +9 each

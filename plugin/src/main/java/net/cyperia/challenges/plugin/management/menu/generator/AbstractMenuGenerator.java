@@ -16,6 +16,7 @@ import net.cyperia.commons.bukkit.utils.item.ItemBuilder;
 import net.cyperia.commons.bukkit.utils.menu.MenuClickInfo;
 import net.cyperia.commons.bukkit.utils.menu.MenuClickType;
 import net.cyperia.commons.bukkit.utils.menu.MenuPosition;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.BiConsumer;
 
 public abstract class AbstractMenuGenerator implements IMenuGenerator {
 
@@ -45,7 +47,12 @@ public abstract class AbstractMenuGenerator implements IMenuGenerator {
   public abstract GeneratorMenuPosition createMenuPosition(int page, @NotNull Player player);
 
   @NotNull
-  public abstract Inventory getOrInitInventory(@NotNull Locale locale, int page);
+  public abstract Inventory createInventory(@NotNull Player viewer, int page);
+
+  /**
+   * Draws a page into an inventory again, the one the viewer has open when a menu changes.
+   */
+  public abstract void renderPage(@NotNull Inventory inventory, int page, @NotNull Player viewer);
 
   /**
    * @implSpec multiple of 9
@@ -77,10 +84,11 @@ public abstract class AbstractMenuGenerator implements IMenuGenerator {
    * menu history the position carries intact.
    */
   public void openMenuWithPositionOverwrite(@NotNull Player player, int page, @NotNull GeneratorMenuPosition menuPosition) {
-    Locale locale = findLanguageProvider().getPlayerLanguage(player);
-    Inventory inventory = getOrInitInventory(locale, page);
-    MenuPosition.set(player, menuPosition);
-    player.openInventory(inventory);
+    Regions.entity(Challenges.getInstance(), player, () -> {
+      Inventory inventory = createInventory(player, page);
+      MenuPosition.set(player, menuPosition);
+      player.openInventory(inventory);
+    });
   }
 
   protected int getNavigateNextSlot() {
@@ -95,8 +103,62 @@ public abstract class AbstractMenuGenerator implements IMenuGenerator {
     return getNavigateHomeSlot() + 1;
   }
 
-  protected void setNavigationItems(@NotNull Inventory inventory, int page, @NotNull Locale locale) {
-    int lastPage = getPageCount() - 1;
+  @Override
+  public void updatePages() {
+    for (Player viewer : retrieveViewers()) {
+      int page = openPageOf(viewer);
+      int pageCount = getPageCount(viewer);
+      if (page < pageCount) {
+        renderOpenPage(viewer, page);
+      } else {
+        openMenu(viewer, pageCount - 1);
+      }
+    }
+  }
+
+  @Override
+  public void updatePage(int page) {
+    for (Player viewer : retrieveViewers()) {
+      if (openPageOf(viewer) == page) {
+        renderOpenPage(viewer, page);
+      }
+    }
+  }
+
+  protected void updatePage(int page, @NotNull BiConsumer<Inventory, Locale> updateAction) {
+    for (Player viewer : retrieveViewers()) {
+      Inventory inventory = openMenuInventory(viewer);
+      if (inventory != null && openPageOf(viewer) == page) {
+        updateAction.accept(inventory, localeOf(viewer));
+      }
+    }
+  }
+
+  private void renderOpenPage(@NotNull Player viewer, int page) {
+    Inventory inventory = openMenuInventory(viewer);
+    if (inventory != null) {
+      renderPage(inventory, page, viewer);
+    }
+  }
+
+  @Nullable
+  private static Inventory openMenuInventory(@NotNull Player viewer) {
+    Inventory inventory = viewer.getOpenInventory().getTopInventory();
+    return inventory.getHolder() == MenuPosition.HOLDER ? inventory : null;
+  }
+
+  private static int openPageOf(@NotNull Player viewer) {
+    return MenuPosition.get(viewer) instanceof GeneratorMenuPosition position ? position.getPage() : -1;
+  }
+
+  @NotNull
+  protected Locale localeOf(@NotNull Player viewer) {
+    return findLanguageProvider().getPlayerLanguage(viewer);
+  }
+
+  protected void setNavigationItems(@NotNull Inventory inventory, int page, @NotNull Player viewer) {
+    Locale locale = localeOf(viewer);
+    int lastPage = getPageCount(viewer) - 1;
 
     if (page < lastPage) {
       boolean canSkipPages = page + SHIFT_NAVIGATE_PAGES <= lastPage;
@@ -104,7 +166,7 @@ public abstract class AbstractMenuGenerator implements IMenuGenerator {
         .name(MessageKey.of("menu.generic.navigate.next"))
         .tooltip(MenuClickType.LEFT, Interaction.NEXT)
         .tooltipIf(canSkipPages, MenuClickType.LEFT_SHIFT, Interaction.NEXT_SHIFT.withArgs(SHIFT_NAVIGATE_PAGES))
-        .tooltipIf(!canSkipPages && page < lastPage - 1, MenuClickType.LEFT_SHIFT, Interaction.NEXT_LAST.withArgs(getPageCount()))
+        .tooltipIf(!canSkipPages && page < lastPage - 1, MenuClickType.LEFT_SHIFT, Interaction.NEXT_LAST.withArgs(lastPage + 1))
         .build(locale));
     }
 
@@ -125,18 +187,18 @@ public abstract class AbstractMenuGenerator implements IMenuGenerator {
     }
   }
 
-  protected boolean isSlotUnoccupied(int page, int slot) {
+  protected boolean isSlotUnoccupied(int page, int slot, @NotNull Player viewer) {
     if (page > 0 && slot == getNavigateBackSlot()) {
       return false;
     }
-    if (page < getPageCount() - 1 && slot == getNavigateNextSlot()) {
+    if (page < getPageCount(viewer) - 1 && slot == getNavigateNextSlot()) {
       return false;
     }
     return slot != getNavigateHomeSlot();
   }
 
-  protected void setItemSafely(@NotNull Inventory inventory, int slot, @NotNull ItemStack item, int page) {
-    if (isSlotUnoccupied(page, slot)) {
+  protected void setItemSafely(@NotNull Inventory inventory, int slot, @NotNull ItemStack item, int page, @NotNull Player viewer) {
+    if (isSlotUnoccupied(page, slot, viewer)) {
       inventory.setItem(slot, item);
     }
   }
@@ -170,7 +232,7 @@ public abstract class AbstractMenuGenerator implements IMenuGenerator {
 
     @Override
     public void handleClick(@NotNull MenuClickInfo info) {
-      int pageCount = getPageCount();
+      int pageCount = getPageCount(info.getPlayer());
       if (page >= pageCount) { // should not happen; dynamically calculated page count changed
         SoundSample.CLICK.play(info.getPlayer());
         return;
@@ -268,7 +330,7 @@ public abstract class AbstractMenuGenerator implements IMenuGenerator {
 
       AbstractMenuGenerator previousMenu = previousPosition.getGenerator();
       int previousPage = previousPosition.getPage();
-      int previousMenuPageCount = previousMenu.getPageCount();
+      int previousMenuPageCount = previousMenu.getPageCount(player);
       if (previousPage < previousMenuPageCount) { // dynamic page count might have changed
         previousMenu.openMenuWithPositionOverwrite(player, previousPage, previousPosition);
       } else {

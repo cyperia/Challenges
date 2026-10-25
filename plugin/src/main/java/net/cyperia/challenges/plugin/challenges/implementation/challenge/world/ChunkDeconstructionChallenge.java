@@ -3,13 +3,14 @@ package net.cyperia.challenges.plugin.challenges.implementation.challenge.world;
 import net.cyperia.challenges.plugin.ChallengeAPI;
 import net.cyperia.challenges.plugin.challenges.type.ValueUnit;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.TimedChallenge;
-import net.cyperia.challenges.plugin.utils.misc.ListBuilder;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ChunkDeconstructionChallenge extends TimedChallenge {
 
@@ -22,19 +23,22 @@ public class ChunkDeconstructionChallenge extends TimedChallenge {
   protected void onTimeActivation() {
     if (ChallengeAPI.isWorldInUse()) return;
 
-    for (Chunk chunk : getChunksToDeconstruct()) {
-      if (!chunk.isLoaded()) continue;
+    Set<Chunk> chunks = ConcurrentHashMap.newKeySet();
+    broadcastFiltered(player -> {
+      Chunk chunk = player.getLocation().getChunk();
+      if (!chunks.add(chunk) || !chunk.isLoaded()) return;
       deconstructChunk(chunk);
-    }
+    });
 
     restartTimer();
   }
 
   private void deconstructChunk(@NotNull Chunk chunk) {
+    Location center = new Location(chunk.getWorld(), chunk.getX() * 16 + 8, 0, chunk.getZ() * 16 + 8);
 
     for (int x = 0; x < 16; x++) {
       int finalX = x;
-      Bukkit.getScheduler().runTask(plugin, () -> {
+      Regions.nextTick(plugin, center, () -> {
         for (int z = 0; z < 16; z++) {
           deconstructAtLocation(chunk.getBlock(finalX, 0, z));
         }
@@ -65,12 +69,6 @@ public class ChunkDeconstructionChallenge extends TimedChallenge {
 
   private boolean isBreakable(@NotNull Block block) {
     return block.getType() != Material.BEDROCK && !block.getType().isAir() && !block.isLiquid();
-  }
-
-  private List<Chunk> getChunksToDeconstruct() {
-    return new ListBuilder<Chunk>().fill(builder ->
-      broadcastFiltered(player -> builder.addIfNotContains(player.getLocation().getChunk()))
-    ).build();
   }
 
 }

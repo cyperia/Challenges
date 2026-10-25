@@ -1,6 +1,7 @@
 package net.cyperia.commons.bukkit.utils.bstats;
 
 import net.cyperia.commons.bukkit.utils.bstats.chart.CustomChart;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -74,7 +75,7 @@ public class Metrics {
         true,
         this::appendPlatformData,
         this::appendServiceData,
-        submitDataTask -> Bukkit.getScheduler().runTask(plugin, submitDataTask),
+        submitDataTask -> Regions.nextTick(plugin, submitDataTask),
         plugin::isEnabled,
         (message, error) -> this.plugin.getLogger().log(Level.WARNING, message, error),
         (message) -> this.plugin.getLogger().log(Level.INFO, message),

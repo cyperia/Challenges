@@ -16,12 +16,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.function.ToIntFunction;
 
@@ -30,7 +34,10 @@ import java.util.function.ToIntFunction;
  */
 public final class GoalLeaderboard {
 
-  public static final int SCOREBOARD_ENTRIES = 9;
+  // Top places, then a skipped line and the viewer with this many either side: at most nine lines
+  private static final int TOP_PLACES = 5;
+  private static final int AROUND = 1;
+  static final int SKIPPED = -1;
 
   private static final TextColor GOLD = TextColor.color(0xFFD700);
   private static final TextColor SILVER = TextColor.color(0xC0C0C0);
@@ -39,6 +46,9 @@ public final class GoalLeaderboard {
 
   // the sidebar is rebuilt on every update, so every place it can reach is precomputed
   private static final Component[] PLACES = new Component[16];
+
+  // name() shows an offline player's rank only once it is loaded, and players who left drop out of that cache
+  private static final Set<UUID> loadedOfflineNames = ConcurrentHashMap.newKeySet();
 
   static {
     for (int i = 0; i < PLACES.length; i++) {
@@ -81,14 +91,20 @@ public final class GoalLeaderboard {
   }
 
   @NotNull
-  public static BiConsumer<ScoreboardInstance, Player> scoreboardContent(@NotNull Supplier<Map<Player, Integer>> points) {
+  public static BiConsumer<ScoreboardInstance, Player> scoreboardContent(@NotNull Supplier<Map<OfflinePlayer, Integer>> points) {
     return scoreboardContent(points, null);
   }
 
   @NotNull
-  public static BiConsumer<ScoreboardInstance, Player> scoreboardContent(@NotNull Supplier<Map<Player, Integer>> points,
+  public static BiConsumer<ScoreboardInstance, Player> scoreboardContent(@NotNull Supplier<Map<OfflinePlayer, Integer>> points,
                                                                          @Nullable Function<Player, List<LocalizableMessage>> additionalLines) {
-    return content(points, null, additionalLines);
+    return content(points, null, additionalLines, true);
+  }
+
+  // Everyone plays together, so there is no own placement to show above the ranking
+  @NotNull
+  public static BiConsumer<ScoreboardInstance, Player> sharedScoreboardContent(@NotNull Supplier<Map<OfflinePlayer, Integer>> points) {
+    return content(points, null, null, false);
   }
 
   /**
@@ -96,27 +112,35 @@ public final class GoalLeaderboard {
    * currently up to (force battles put the target they are hunting there).
    */
   @NotNull
-  public static BiConsumer<ScoreboardInstance, Player> scoreboardContentWithDetail(@NotNull Supplier<Map<Player, Integer>> points,
-                                                                                   @NotNull Function<Player, LocalizableMessage> entryDetail) {
-    return content(points, entryDetail, null);
+  public static BiConsumer<ScoreboardInstance, Player> scoreboardContentWithDetail(@NotNull Supplier<Map<OfflinePlayer, Integer>> points,
+                                                                                   @NotNull Function<OfflinePlayer, LocalizableMessage> entryDetail) {
+    return content(points, entryDetail, null, true);
   }
 
   @NotNull
-  private static BiConsumer<ScoreboardInstance, Player> content(@NotNull Supplier<Map<Player, Integer>> points,
-                                                                @Nullable Function<Player, LocalizableMessage> entryDetail,
-                                                                @Nullable Function<Player, List<LocalizableMessage>> additionalLines) {
+  private static BiConsumer<ScoreboardInstance, Player> content(@NotNull Supplier<Map<OfflinePlayer, Integer>> points,
+                                                                @Nullable Function<OfflinePlayer, LocalizableMessage> entryDetail,
+                                                                @Nullable Function<Player, List<LocalizableMessage>> additionalLines,
+                                                                boolean showPlacement) {
     return (board, viewer) -> {
-      Ranking<Player> ranking = rank(points.get(), Integer::intValue);
+      Map<OfflinePlayer, Integer> values = points.get();
+      loadOfflineNames(values.keySet());
+      Ranking<OfflinePlayer> ranking = rank(values, Integer::intValue);
 
       board.addEmptyLine();
-      board.addLine(MessageKey.of("scoreboard.leaderboard.placement"), placeComponent(ranking.placeOf(viewer)));
-      board.addEmptyLine();
+      if (showPlacement) {
+        board.addLine(MessageKey.of("scoreboard.leaderboard.placement"), placeComponent(ranking.placeOf(viewer)));
+        board.addEmptyLine();
+      }
 
       MessageKey entryKey = MessageKey.of(entryDetail == null
         ? "scoreboard.leaderboard.entry" : "scoreboard.leaderboard.entry-detail");
-      int entries = Math.min(ranking.size(), SCOREBOARD_ENTRIES);
-      for (int i = 0; i < entries; i++) {
-        Player ranked = ranking.keyAt(i);
+      for (int i : sidebarRows(ranking.size(), ranking.indexOf(player -> player.getUniqueId().equals(viewer.getUniqueId())), TOP_PLACES, AROUND)) {
+        if (i == SKIPPED) {
+          board.addLine(MessageKey.of("scoreboard.leaderboard.skipped"));
+          continue;
+        }
+        OfflinePlayer ranked = ranking.keyAt(i);
         Component place = placeComponent(ranking.placeAt(i));
         Component name = nameComponent(ranked, viewer);
         String score = NumberFormatter.MIDDLE_NUMBER.format(ranking.scoreAt(i));
@@ -136,6 +160,36 @@ public final class GoalLeaderboard {
         board.addLine(lines.get(i));
       }
     };
+  }
+
+  /**
+   * The ranking indices a sidebar shows: the top {@code places}, and where the viewer sits below them, {@link #SKIPPED}
+   * and the viewer with {@code around} entries either side. A viewer just below the top gets the whole run instead.
+   *
+   * @param own index of the viewer, -1 if unranked
+   */
+  @NotNull
+  static List<Integer> sidebarRows(int size, int own, int places, int around) {
+    List<Integer> rows = new ArrayList<>();
+    if (own <= places + around) {
+      for (int i = 0; i < Math.min(places + 2 * around + 1, size); i++) rows.add(i);
+      return rows;
+    }
+    for (int i = 0; i < places; i++) rows.add(i);
+    rows.add(SKIPPED);
+    for (int i = own - around; i <= Math.min(own + around, size - 1); i++) rows.add(i);
+    return rows;
+  }
+
+  private static void loadOfflineNames(@NotNull Collection<OfflinePlayer> players) {
+    List<UUID> missing = players.stream()
+      .filter(player -> !(player instanceof Player))
+      .map(OfflinePlayer::getUniqueId)
+      .filter(loadedOfflineNames::add)
+      .toList();
+    if (missing.isEmpty()) return;
+    Challenges.getInstance().getPlayerManager().getNameProvider().load(missing)
+      .thenRun(() -> ChallengeHelper.runSync(() -> Challenges.getInstance().getScoreboardManager().updateAll()));
   }
 
   /**
@@ -215,6 +269,14 @@ public final class GoalLeaderboard {
 
     public int placeAt(int index) {
       return places[index];
+    }
+
+    // -1 if no key matches
+    public int indexOf(@NotNull Predicate<K> key) {
+      for (int i = 0; i < keys.length; i++) {
+        if (key.test(keyAt(i))) return i;
+      }
+      return -1;
     }
 
     /**

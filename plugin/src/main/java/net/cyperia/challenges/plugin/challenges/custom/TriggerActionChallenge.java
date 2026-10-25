@@ -1,12 +1,10 @@
 package net.cyperia.challenges.plugin.challenges.custom;
 
-import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.challenges.custom.settings.ChallengeExecutionData;
 import net.cyperia.challenges.plugin.challenges.custom.settings.action.ChallengeAction;
 import net.cyperia.challenges.plugin.challenges.custom.settings.trigger.ChallengeTrigger;
 import net.cyperia.challenges.plugin.challenges.custom.settings.trigger.IChallengeTrigger;
 import net.cyperia.challenges.plugin.challenges.type.IChallenge;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -96,10 +94,6 @@ public interface TriggerActionChallenge extends IChallenge {
   default void executeAction(ChallengeExecutionData challengeExecutionData) {
     ChallengeAction action = getAction();
     if (action == null) return;
-    if (!Bukkit.isPrimaryThread()) {
-      Bukkit.getScheduler().runTask(Challenges.getInstance(), () -> action.execute(challengeExecutionData, getSubActions()));
-      return;
-    }
     action.execute(challengeExecutionData, getSubActions());
   }
 

@@ -6,7 +6,7 @@ import net.cyperia.challenges.plugin.management.scheduler.task.TimerTask;
 import net.cyperia.challenges.plugin.management.scheduler.timer.TimerStatus;
 import net.cyperia.challenges.plugin.spigot.events.PlayerInventoryClickEvent;
 import net.cyperia.challenges.plugin.utils.misc.InventoryUtils;
-import org.bukkit.Bukkit;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -55,7 +55,7 @@ public class HotBarRandomizerChallenge extends TimedChallenge {
   @TimerTask(status = TimerStatus.RUNNING)
   public void onStart() {
     // Execute after hotbar items are removed
-    Bukkit.getScheduler().runTask(plugin, () -> {
+    Regions.nextTick(plugin, () -> {
       broadcastFiltered(player -> {
         addItems(player, false);
       });

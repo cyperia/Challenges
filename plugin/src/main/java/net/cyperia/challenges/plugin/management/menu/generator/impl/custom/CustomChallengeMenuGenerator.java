@@ -20,8 +20,8 @@ import net.cyperia.commons.bukkit.utils.animation.SoundSample;
 import net.cyperia.commons.bukkit.utils.chat.ChatInputHandler;
 import net.cyperia.commons.bukkit.utils.menu.MenuClickInfo;
 import net.cyperia.commons.bukkit.utils.menu.MenuClickType;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.collection.IRandom;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -194,7 +194,7 @@ public class CustomChallengeMenuGenerator extends SinglePageMenuGenerator implem
       return;
     }
     CustomListMenuGenerator list = home.getListGenerator();
-    int page = Math.clamp(list.getPageOfChallenge(challenge), 0, list.getPageCount() - 1);
+    int page = Math.clamp(list.getPageOfChallenge(player, challenge), 0, list.getPageCount(player) - 1);
     list.openMenu(player, page);
   }
 
@@ -281,7 +281,7 @@ public class CustomChallengeMenuGenerator extends SinglePageMenuGenerator implem
         MessageKey.of("custom.chars-exceeded").send(event.getPlayer(), Prefix.CUSTOM, maxNameLength);
         return;
       }
-      Bukkit.getScheduler().runTask(Challenges.getInstance(), () -> {
+      Regions.nextTick(Challenges.getInstance(), event.getPlayer(), () -> {
         setName(input);
         openMenu(event.getPlayer());
       });

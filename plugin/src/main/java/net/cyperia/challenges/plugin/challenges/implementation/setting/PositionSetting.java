@@ -17,6 +17,7 @@ import net.cyperia.challenges.plugin.management.files.ConfigManager;
 import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import net.cyperia.challenges.plugin.utils.misc.ParticleUtils;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.config.Document;
 import org.bukkit.*;
 import org.bukkit.Particle.DustOptions;
@@ -25,11 +26,12 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.ToDoubleFunction;
 
 public class PositionSetting extends Setting implements CommandProvider {
 
-  private final Map<String, Location> positions = new HashMap<>();
+  private final Map<String, Location> positions = new ConcurrentHashMap<>();
   private final boolean particleLines;
 
   public PositionSetting() {
@@ -145,12 +147,12 @@ public class PositionSetting extends Setting implements CommandProvider {
     Location target = position.clone().add(0, 0.3, 0);
 
     final int[] current = {0};
-    Bukkit.getScheduler().runTaskTimer(plugin, task -> {
+    Regions.timer(plugin, player, task -> {
       current[0]++;
       if (current[0] >= 10) task.cancel();
       ParticleUtils.drawLine(player, player.getLocation(), target,
         Particle.DUST, new DustOptions(Color.LIME, 1), 1, 0.5, 50);
-    }, 0, 10);
+    }, 1, 10);
   }
 
   @Override

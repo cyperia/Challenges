@@ -1,5 +1,7 @@
 package net.cyperia.challenges.plugin.challenges.type.abstraction;
 
+import net.cyperia.challenges.plugin.Challenges;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.challenges.catalog.Challenge;
 import net.cyperia.challenges.plugin.challenges.type.ISetting;
 import net.cyperia.challenges.plugin.challenges.type.ValueUnit;
@@ -114,8 +116,10 @@ public abstract class SettingModifier extends Modifier implements ISetting {
     if (this.enabled == enabled) return;
     this.enabled = enabled;
 
-    if (enabled) onEnable();
-    else onDisable();
+    Regions.global(Challenges.getInstance(), () -> {
+      if (enabled) onEnable();
+      else onDisable();
+    });
 
     updateItems();
   }

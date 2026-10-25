@@ -1,31 +1,55 @@
 package net.cyperia.challenges.plugin.challenges.implementation.goal.forcebattle.targets;
 
 import net.cyperia.challenges.plugin.challenges.implementation.goal.forcebattle.ExtremeForceBattleGoal;
-import net.cyperia.challenges.plugin.utils.misc.ExperimentalUtils;
-import net.cyperia.commons.bukkit.utils.item.ItemUtils;
-import org.bukkit.Material;
+import net.cyperia.challenges.plugin.content.i18n.LocalizableMessage;
+import net.cyperia.challenges.plugin.utils.item.CollectableItem;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
-public class ItemTarget extends ForceTarget<Material> {
+public class ItemTarget extends ForceTarget<CollectableItem> {
 
-  public ItemTarget(Material target) {
+  public ItemTarget(CollectableItem target) {
     super(target);
+  }
+
+  // Saves written before item variants hold the bare material name, which parse() still reads
+  @Nullable
+  public static ItemTarget parse(@Nullable String saved) {
+    CollectableItem item = saved == null ? null : CollectableItem.parse(saved);
+    return item == null ? null : new ItemTarget(item);
   }
 
   @Override
   public boolean check(Player player) {
-    return player.getInventory().contains(target);
+    for (ItemStack item : player.getInventory().getContents()) {
+      if (item != null && target.matches(item)) return true;
+    }
+    return false;
   }
 
-  public static List<Material> getPossibleItems() {
-    List<Material> materials = new ArrayList<>(Arrays.asList(ExperimentalUtils.getMaterials()));
-    materials.removeIf(material -> !material.isItem());
-    materials.removeIf(material -> !ItemUtils.isObtainableInSurvival(material));
-    return materials;
+  public boolean matches(@NotNull ItemStack item) {
+    return target.matches(item);
+  }
+
+  public static List<CollectableItem> getPossibleItems(boolean variants) {
+    return CollectableItem.obtainableInSurvival(variants);
+  }
+
+  @NotNull
+  @Override
+  public LocalizableMessage getDisplayName() {
+    return target.displayName();
+  }
+
+  @Override
+  public void updateDisplayStand(@NotNull ArmorStand armorStand) {
+    Objects.requireNonNull(armorStand.getEquipment()).setHelmet(target.icon());
   }
 
   @Override
@@ -34,8 +58,8 @@ public class ItemTarget extends ForceTarget<Material> {
   }
 
   @Override
-  public String toString() {
-    return target.name();
+  public Object getTargetSaveObject() {
+    return target.id();
   }
 
 }

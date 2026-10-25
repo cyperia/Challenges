@@ -2,10 +2,8 @@ package net.cyperia.challenges.plugin.challenges.implementation.challenge.random
 
 import net.cyperia.challenges.plugin.challenges.type.ValueUnit;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.TimedChallenge;
-import net.cyperia.challenges.plugin.challenges.type.helper.ChallengeHelper;
 import net.cyperia.challenges.plugin.utils.misc.InventoryUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 
 public class RandomItemRemovingChallenge extends TimedChallenge {
 
@@ -18,13 +16,13 @@ public class RandomItemRemovingChallenge extends TimedChallenge {
   protected void onTimeActivation() {
     restartTimer();
 
-    for (Player player : ChallengeHelper.getIngamePlayers()) {
-      if (player.getInventory().getContents().length == 0) continue;
+    broadcastFiltered(player -> {
+      if (player.getInventory().getContents().length == 0) return;
 
-      Bukkit.getScheduler().runTask(plugin, () -> {
+      Regions.nextTick(plugin, player, () -> {
         InventoryUtils.removeRandomItem(player.getInventory());
       });
-    }
+    });
   }
 
 }

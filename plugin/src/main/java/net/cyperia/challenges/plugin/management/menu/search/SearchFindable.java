@@ -61,6 +61,13 @@ public interface SearchFindable {
     return true;
   }
 
+  /**
+   * @return whether this findable is offered to this player; the same constraints as {@link #isVisible()} apply
+   */
+  default boolean isVisibleTo(@NotNull Player viewer) {
+    return isVisible();
+  }
+
   @NotNull
   default LocalizableMessage getFindableInteraction() {
     return Interaction.SEARCH_SELECT;

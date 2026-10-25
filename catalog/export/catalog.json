@@ -24308,10 +24308,10 @@
       },
       "description": {
         "en": [
-          "The whole world is just one block wide. Next to the line is the void, and it runs through the stronghold"
+          "The whole world is just one block wide. Next to the line is the void"
         ],
         "de": [
-          "Die ganze Welt ist nur einen Block breit. Neben der Linie ist das Void, und sie führt durch den Stronghold"
+          "Die ganze Welt ist nur einen Block breit. Neben der Linie ist das Void"
         ]
       },
       "styled": {
@@ -24345,18 +24345,6 @@
               },
               {
                 "text": "void",
-                "color": "#00AAAA"
-              },
-              {
-                "text": ","
-              }
-            ],
-            [
-              {
-                "text": "and it runs "
-              },
-              {
-                "text": "through the stronghold",
                 "color": "#00AAAA"
               }
             ]
@@ -24406,20 +24394,6 @@
               {
                 "text": "void",
                 "color": "#00AAAA"
-              },
-              {
-                "text": ",",
-                "color": "#AAAAAA"
-              }
-            ],
-            [
-              {
-                "text": "and it runs ",
-                "color": "#AAAAAA"
-              },
-              {
-                "text": "through the stronghold",
-                "color": "#00AAAA"
               }
             ]
           ]
@@ -24454,18 +24428,6 @@
               },
               {
                 "text": "Void",
-                "color": "#00AAAA"
-              },
-              {
-                "text": ","
-              }
-            ],
-            [
-              {
-                "text": "und sie führt "
-              },
-              {
-                "text": "durch den Stronghold",
                 "color": "#00AAAA"
               }
             ]
@@ -24514,20 +24476,6 @@
               },
               {
                 "text": "Void",
-                "color": "#00AAAA"
-              },
-              {
-                "text": ",",
-                "color": "#AAAAAA"
-              }
-            ],
-            [
-              {
-                "text": "und sie führt ",
-                "color": "#AAAAAA"
-              },
-              {
-                "text": "durch den Stronghold",
                 "color": "#00AAAA"
               }
             ]
@@ -29429,7 +29377,7 @@
       ],
       "category": "misc_challenge",
       "icon": {
-        "material": "COOKED_BEEF"
+        "material": "BOWL"
       },
       "name": {
         "en": "No Eating",
@@ -41604,6 +41552,230 @@
               {
                 "text": "in Minecraft gibt",
                 "color": "#00AA00"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "collecteverything",
+      "category": "misc_goal",
+      "icon": {
+        "material": "DRAGON_EGG"
+      },
+      "name": {
+        "en": "Collect Everything",
+        "de": "Alles sammeln"
+      },
+      "description": {
+        "en": [
+          "Together, find every item, kill every mob and get every advancement once"
+        ],
+        "de": [
+          "Gemeinsam jedes Item finden, jeden Mob töten und jedes Advancement einmal holen"
+        ]
+      },
+      "styled": {
+        "en": {
+          "name": [
+            {
+              "text": "Collect Everything",
+              "color": "#FFAA00"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "Together, find "
+              },
+              {
+                "text": "every item",
+                "color": "#FFAA00"
+              },
+              {
+                "text": ","
+              }
+            ],
+            [
+              {
+                "text": "kill "
+              },
+              {
+                "text": "every mob",
+                "color": "#FFAA00"
+              },
+              {
+                "text": " and get"
+              }
+            ],
+            [
+              {
+                "text": "every advancement",
+                "color": "#FFAA00"
+              },
+              {
+                "text": " once"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Collect Everything",
+                "color": "#FFAA00"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "Together, find ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "every item",
+                "color": "#FFAA00"
+              },
+              {
+                "text": ",",
+                "color": "#AAAAAA"
+              }
+            ],
+            [
+              {
+                "text": "kill ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "every mob",
+                "color": "#FFAA00"
+              },
+              {
+                "text": " and get",
+                "color": "#AAAAAA"
+              }
+            ],
+            [
+              {
+                "text": "every advancement",
+                "color": "#FFAA00"
+              },
+              {
+                "text": " once",
+                "color": "#AAAAAA"
+              }
+            ]
+          ]
+        },
+        "de": {
+          "name": [
+            {
+              "text": "Alles sammeln",
+              "color": "#FFAA00"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "Gemeinsam "
+              },
+              {
+                "text": "jedes Item",
+                "color": "#FFAA00"
+              },
+              {
+                "text": " finden,"
+              }
+            ],
+            [
+              {
+                "text": "jeden Mob",
+                "color": "#FFAA00"
+              },
+              {
+                "text": " töten und "
+              },
+              {
+                "text": "jedes",
+                "color": "#FFAA00"
+              }
+            ],
+            [
+              {
+                "text": "Advancement",
+                "color": "#FFAA00"
+              },
+              {
+                "text": " einmal holen"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Alles sammeln",
+                "color": "#FFAA00"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "Gemeinsam ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "jedes Item",
+                "color": "#FFAA00"
+              },
+              {
+                "text": " finden,",
+                "color": "#AAAAAA"
+              }
+            ],
+            [
+              {
+                "text": "jeden Mob",
+                "color": "#FFAA00"
+              },
+              {
+                "text": " töten und ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "jedes",
+                "color": "#FFAA00"
+              }
+            ],
+            [
+              {
+                "text": "Advancement",
+                "color": "#FFAA00"
+              },
+              {
+                "text": " einmal holen",
+                "color": "#AAAAAA"
               }
             ]
           ]

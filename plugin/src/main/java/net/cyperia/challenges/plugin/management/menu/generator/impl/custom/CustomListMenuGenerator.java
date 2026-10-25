@@ -59,7 +59,7 @@ public class CustomListMenuGenerator extends ChallengeListMenuGenerator {
   }
 
   @Override
-  protected void setChallengeUpdateItemsAt(@NotNull IChallenge challenge, @NotNull Inventory inventory, int slotIndex, int page, @NotNull Locale locale) {
+  protected void setChallengeUpdateItemsAt(@NotNull IChallenge challenge, @NotNull Inventory inventory, int slotIndex, int page, @NotNull Player viewer) {
     // remove update/new indicator items as they would collide with display items and are not appropriate for custom challenges
   }
 

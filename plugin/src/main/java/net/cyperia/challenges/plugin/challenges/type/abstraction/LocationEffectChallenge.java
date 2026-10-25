@@ -16,14 +16,14 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class LocationEffectChallenge<R> extends Setting {
 
   // Only effects this challenge gave are taken away again, never a potion the player drank themselves
-  private Map<UUID, PotionEffect> givenEffects = new HashMap<>();
+  private Map<UUID, PotionEffect> givenEffects = new ConcurrentHashMap<>();
   private long worldSeed;
 
   @NotNull
@@ -38,7 +38,7 @@ public abstract class LocationEffectChallenge<R> extends Setting {
 
   @Override
   protected void onEnable() {
-    givenEffects = new HashMap<>();
+    givenEffects = new ConcurrentHashMap<>();
     worldSeed = ChallengeAPI.getGameWorld(Environment.NORMAL).getSeed();
     broadcastFiltered(player -> update(player, player.getLocation()));
   }

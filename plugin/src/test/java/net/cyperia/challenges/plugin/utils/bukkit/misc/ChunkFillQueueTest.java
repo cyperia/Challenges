@@ -4,6 +4,7 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.function.ToIntFunction;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -28,7 +30,17 @@ class ChunkFillQueueTest {
 
   private static final long FAR_DEADLINE = System.nanoTime() + 60_000_000_000L;
 
-  private final ChunkFillQueue queue = new ChunkFillQueue();
+  private final ChunkFillQueue queue = new ChunkFillQueue(new ChunkFillQueue.Owner() {
+    @Override
+    public boolean owns(@NotNull Chunk chunk) {
+      return true;
+    }
+
+    @Override
+    public void run(@NotNull Chunk chunk, @NotNull Runnable task) {
+      task.run();
+    }
+  });
   private final List<String> log = new ArrayList<>();
 
   @Test
@@ -161,6 +173,35 @@ class ChunkFillQueueTest {
     assertEquals(tagged("a", 5), log);
     assertFalse(log.contains("b"));
     assertFalse(log.contains("b-done"));
+  }
+
+  @Test
+  void submitAndForget_doNotWaitForBlocksBeingPlaced() throws Exception {
+    java.util.concurrent.CountDownLatch placing = new java.util.concurrent.CountDownLatch(1);
+    java.util.concurrent.CountDownLatch release = new java.util.concurrent.CountDownLatch(1);
+    Chunk slow = chunk();
+    queue.submit(slow, 0, 0, mock(BlockData.class), block -> {
+      placing.countDown();
+      try {
+        release.await();
+      } catch (InterruptedException ex) {
+        Thread.currentThread().interrupt();
+      }
+      return true;
+    }, block -> false, () -> new int[]{0}, false, () -> {});
+    Thread drain = new Thread(() -> queue.drainUntil(FAR_DEADLINE));
+    drain.start();
+    assertTrue(placing.await(5, java.util.concurrent.TimeUnit.SECONDS));
+
+    java.util.concurrent.CompletableFuture<Void> other = java.util.concurrent.CompletableFuture.runAsync(() -> {
+      submit(chunk(), "other", 1, false);
+      queue.forget(chunk());
+    });
+    other.get(5, java.util.concurrent.TimeUnit.SECONDS);
+
+    release.countDown();
+    drain.join();
+    assertEquals(tagged("other", 1), log);
   }
 
   @Test

@@ -10,19 +10,20 @@ import net.cyperia.challenges.plugin.management.scheduler.timer.TimerStatus;
 import net.cyperia.challenges.plugin.management.server.scoreboard.ChallengeActionBar;
 import net.cyperia.challenges.plugin.management.server.scoreboard.ChallengeBossBar;
 import net.cyperia.challenges.plugin.management.server.scoreboard.ChallengeScoreboard;
-import org.bukkit.Bukkit;
+import net.cyperia.challenges.plugin.management.server.scoreboard.PlayerScoreboards;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public final class ScoreboardManager {
 
-  private final List<ChallengeBossBar> bossbars = new ArrayList<>();
-  private ChallengeScoreboard currentScoreboard;
-  private ChallengeActionBar currentActionBar;
+  private final List<ChallengeBossBar> bossbars = new CopyOnWriteArrayList<>();
+  private volatile ChallengeScoreboard currentScoreboard;
+  private volatile ChallengeActionBar currentActionBar;
 
   public ScoreboardManager() {
     ChallengeAPI.subscribeLoader(LanguageLoader.class, this::updateAll);
@@ -35,8 +36,9 @@ public final class ScoreboardManager {
     }
     if (currentScoreboard != null) {
       currentScoreboard.applyHide(player);
-      Bukkit.getScheduler().runTaskLaterAsynchronously(Challenges.getInstance(), () -> currentScoreboard.update(), 1);
+      Regions.later(Challenges.getInstance(), () -> currentScoreboard.update(), 1);
     }
+    PlayerScoreboards.forget(player);
   }
 
   public void handleJoin(@NotNull Player player) {
@@ -44,7 +46,7 @@ public final class ScoreboardManager {
   }
 
   @ScheduledTask(timerPolicy = TimerPolicy.COUNTDOWN, ticks = 20, async = false)
-  @TimerTask(status = {TimerStatus.RUNNING, TimerStatus.PAUSED, TimerStatus.COUNTDOWN})
+  @TimerTask(status = {TimerStatus.RUNNING, TimerStatus.PAUSED, TimerStatus.COUNTDOWN}, async = false)
   public void updateAll() {
     for (ChallengeBossBar bossbar : bossbars) {
       bossbar.update();

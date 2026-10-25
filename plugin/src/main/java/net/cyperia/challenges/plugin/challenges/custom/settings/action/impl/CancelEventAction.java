@@ -7,19 +7,20 @@ import java.util.Map;
 
 public class CancelEventAction extends ChallengeAction {
 
-  public static boolean inCanceling;
+  // Set and read on the thread that fires the trigger, which runs the actions inline
+  private static final ThreadLocal<Boolean> inCanceling = ThreadLocal.withInitial(() -> false);
 
   public CancelEventAction(String name) {
     super(name);
   }
 
   public static void onPreTrigger() {
-    inCanceling = false;
+    inCanceling.set(false);
   }
 
   public static boolean shouldCancel() {
-    if (inCanceling) {
-      inCanceling = false;
+    if (inCanceling.get()) {
+      inCanceling.set(false);
       return true;
     }
     return false;
@@ -27,7 +28,7 @@ public class CancelEventAction extends ChallengeAction {
 
   @Override
   public void execute(ChallengeExecutionData executionData, Map<String, String[]> subActions) {
-    inCanceling = true;
+    inCanceling.set(true);
   }
 
 }

@@ -3,7 +3,7 @@ package net.cyperia.challenges.plugin.challenges.implementation.goal;
 import net.cyperia.challenges.plugin.ChallengeAPI;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.SettingGoal;
 import net.cyperia.challenges.plugin.management.server.ChallengeEndCause;
-import org.bukkit.Bukkit;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,7 +28,7 @@ public class EatCakeGoal extends SettingGoal {
     if (event.getClickedBlock().getType() != Material.CAKE) return;
     if (event.getPlayer().getFoodLevel() >= 20) return;
     // Execute on next tick to prevent hunger bar not filling up
-    Bukkit.getScheduler().runTask(plugin, () -> {
+    Regions.nextTick(plugin, () -> {
       ChallengeAPI.endChallenge(ChallengeEndCause.GOAL_REACHED, () -> Collections.singletonList(event.getPlayer()));
     });
   }

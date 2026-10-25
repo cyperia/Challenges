@@ -5,6 +5,7 @@ java = "25"
 # minecraft
 spigot = "26.1.2-R0.1-SNAPSHOT"
 paper = "26.3.build.+"
+canvas = "26.3.build.991-stable"
 
 protocol-lib = "5.4.0"
 
@@ -41,6 +42,8 @@ mockito = "5.21.0"
 # minecraft
 spigot-api = { group = "org.spigotmc", name = "spigot-api", version.ref = "spigot" }
 paper-api = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper" }
+
+canvas-api = { group = "io.canvasmc.canvas", name = "canvas-api", version.ref = "canvas" }
 
 protocol-lib = { group = "net.dmulloy2", name = "ProtocolLib", version.ref = "protocol-lib" }
 

@@ -9,6 +9,7 @@ import net.cyperia.challenges.plugin.content.i18n.MessageKeySpace;
 import net.cyperia.commons.bukkit.utils.logging.Logger;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 
 import java.util.Map;
 
@@ -28,7 +29,7 @@ public class ChangeWorldBorderAction extends ChallengeAction {
 
     try {
       int change = Integer.parseInt(subActions.get("change")[0]);
-      Challenges.getInstance().getBorderManager().changeSize(change);
+      Regions.global(Challenges.getInstance(), () -> Challenges.getInstance().getBorderManager().changeSize(change));
     } catch (NumberFormatException | IndexOutOfBoundsException ex) {
       Logger.error("Error while accessing change border action values", ex);
     }

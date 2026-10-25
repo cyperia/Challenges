@@ -3,12 +3,14 @@ package net.cyperia.challenges.plugin.spigot.command;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.content.i18n.Prefix;
 import net.cyperia.challenges.plugin.management.command.ChallengeCommand;
 import net.cyperia.challenges.plugin.management.command.CommandInfo;
 import net.cyperia.challenges.plugin.management.command.CommandNodes;
 import net.cyperia.challenges.plugin.utils.misc.CommandHelper;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -60,7 +62,7 @@ public abstract class PlayerTargetCommand implements ChallengeCommand {
           action.run(sender, CommandHelper.getPlayers(sender, StringArgumentType.getString(context, "player").trim())))));
   }
 
-  // True when one of the targets is somebody other than the sender
+  // Each change runs on its target's thread. True when one of the targets is somebody other than the sender
   static boolean changeAll(@NotNull CommandSender sender, @NotNull List<Player> targets, @NotNull Consumer<Player> change) {
     if (targets.isEmpty()) {
       MessageKey.of("command.no-target").send(sender, Prefix.CHALLENGES);
@@ -69,7 +71,7 @@ public abstract class PlayerTargetCommand implements ChallengeCommand {
 
     boolean otherPlayers = false;
     for (Player target : targets) {
-      change.accept(target);
+      Regions.entity(Challenges.getInstance(), target, () -> change.accept(target));
       if (target != sender) otherPlayers = true;
     }
     return otherPlayers;

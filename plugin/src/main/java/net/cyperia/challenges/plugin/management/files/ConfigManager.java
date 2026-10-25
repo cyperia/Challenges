@@ -118,7 +118,6 @@ public final class ConfigManager {
     public final String CUSTOM_CHALLENGE_ALLOWED_COMMANDS = "custom-challenge-settings.allowed-commands-to-execute";
 
     public final String JOIN_QUIT_MESSAGES = "join-quit-messages";
-    public final String PLUGIN_INFO_ON_JOIN = "plugin-info-on-join";
     public final String UNSUPPORTED_VERSION_CHAT_WARNING = "unsupported-version-chat-warning";
     public final String TIMER_COLORS = "timer-colors";
     public final String TIMER_IS_PAUSED_INFO = "timer-is-paused-info";

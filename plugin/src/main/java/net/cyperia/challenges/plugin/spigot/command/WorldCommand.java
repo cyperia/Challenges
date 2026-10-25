@@ -38,7 +38,7 @@ public class WorldCommand implements ChallengeCommand {
 
         Location location = getSpawn(world, player);
         MessageKey.of("command.world.done").send(player, Prefix.CHALLENGES, getWorldName(location));
-        player.teleport(location);
+        player.teleportAsync(location);
       })));
     }
   }

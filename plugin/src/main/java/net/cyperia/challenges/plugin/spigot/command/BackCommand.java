@@ -23,14 +23,15 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.IntStream;
 
 public class BackCommand implements ChallengeCommand, Listener {
 
-  private final Map<UUID, List<Location>> lastLocations = new HashMap<>();
+  private final Map<UUID, List<Location>> lastLocations = new ConcurrentHashMap<>();
 
   // To check if the current teleportation is from the command
-  private boolean inTeleport = false;
+  private final Set<UUID> inTeleport = ConcurrentHashMap.newKeySet();
 
   @NotNull
   @Override
@@ -64,16 +65,15 @@ public class BackCommand implements ChallengeCommand, Listener {
       .send(player, Prefix.CHALLENGES, countToTeleport);
 
     Location location = list.get(countToTeleport - 1);
-    inTeleport = true;
-    player.teleport(location);
-    inTeleport = false;
-
     list.subList(0, countToTeleport).clear();
+
+    inTeleport.add(player.getUniqueId());
+    player.teleportAsync(location).whenComplete((success, error) -> inTeleport.remove(player.getUniqueId()));
   }
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onTeleport(PlayerTeleportEvent event) {
-    if (inTeleport) return;
+    if (inTeleport.contains(event.getPlayer().getUniqueId())) return;
 
     // Don't save the teleports of the pregame movement setting
     if (!AbstractChallenge.getFirstInstance(PregameMovementSetting.class).isEnabled()) {

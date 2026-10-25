@@ -6,7 +6,7 @@ import net.cyperia.challenges.plugin.challenges.type.abstraction.TimedChallenge;
 import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.content.i18n.Prefix;
 import net.cyperia.commons.bukkit.utils.logging.Logger;
-import org.bukkit.Bukkit;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World.Environment;
@@ -120,15 +120,14 @@ public class RandomEventChallenge extends TimedChallenge {
     @Override
     public void run(@NotNull Player player) {
       Location location = player.getLocation();
-      Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+      Regions.async(plugin, () -> {
         for (int x = -100; x <= 100; x++) {
           for (int z = -100; z <= 100; z++) {
-            int finalZ = z;
-            int finalX = x;
-            Bukkit.getScheduler().runTask(plugin, () -> {
+            Location column = location.clone().add(x, 0, z);
+            Regions.nextTick(plugin, column, () -> {
               if (location.getWorld() == null) return;
               for (int y = location.getWorld().getMinHeight(); y < 80; y++) {
-                Location current = location.clone().add(finalX, 0, finalZ);
+                Location current = column.clone();
                 current.setY(y);
                 Block block = current.getBlock();
                 if (block.getType().name().contains("ORE")) {

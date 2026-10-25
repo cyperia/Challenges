@@ -14,7 +14,9 @@ import net.cyperia.challenges.plugin.utils.item.DefaultItems;
 import net.cyperia.challenges.plugin.utils.misc.CommandHelper;
 import net.cyperia.commons.bukkit.utils.menu.MenuPosition;
 import net.cyperia.commons.bukkit.utils.menu.positions.SlottedMenuPosition;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -26,8 +28,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class InvseeCommand implements ChallengeCommand, Listener {
 
@@ -40,7 +43,7 @@ public class InvseeCommand implements ChallengeCommand, Listener {
     bootsSlot = 49,
     offHandSlot = 52;
 
-  private final Map<Player, Inventory> inventories = new HashMap<>();
+  private final Map<Player, Inventory> inventories = new ConcurrentHashMap<>();
 
   @NotNull
   @Override
@@ -59,9 +62,15 @@ public class InvseeCommand implements ChallengeCommand, Listener {
           return;
         }
 
-        player.openInventory(getInventory(target));
-        MenuPosition.set(player, new SlottedMenuPosition());
-        MessageKey.of("command.invsee.open").send(player, Prefix.CHALLENGES, target);
+        // The target's inventory is read on the target's thread, the viewer opens it on theirs
+        Regions.entity(Challenges.getInstance(), target, () -> {
+          Inventory inventory = getInventory(target);
+          Regions.entity(Challenges.getInstance(), player, () -> {
+            player.openInventory(inventory);
+            MenuPosition.set(player, new SlottedMenuPosition());
+            MessageKey.of("command.invsee.open").send(player, Prefix.CHALLENGES, target);
+          });
+        });
       })));
   }
 
@@ -105,25 +114,28 @@ public class InvseeCommand implements ChallengeCommand, Listener {
   public void onPlayerInventoryClick(@NotNull PlayerInventoryClickEvent event) {
     if (event.getClickedInventory() == null) return;
     if (event.getClickedInventory().getHolder() != event.getPlayer()) return;
-    Bukkit.getScheduler().runTaskLater(Challenges.getInstance(), () -> updateInventory(event.getPlayer()), 1);
+    Regions.later(Challenges.getInstance(), event.getPlayer(), () -> updateInventory(event.getPlayer()), 1);
   }
 
   @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
   public void onPlayerDropItem(@NotNull PlayerDropItemEvent event) {
-    Bukkit.getScheduler().runTaskLater(Challenges.getInstance(), () -> updateInventory(event.getPlayer()), 1);
+    Regions.later(Challenges.getInstance(), event.getPlayer(), () -> updateInventory(event.getPlayer()), 1);
   }
 
   @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
   public void onPlayerQuit(@NotNull PlayerQuitEvent event) {
     Inventory inventory = inventories.remove(event.getPlayer());
     if (inventory == null) return;
-    inventory.close();
+    // Viewers sit in other regions than the quitting target, a window is closed on its viewer's thread
+    for (HumanEntity viewer : List.copyOf(inventory.getViewers())) {
+      Regions.entity(Challenges.getInstance(), viewer, viewer::closeInventory);
+    }
   }
 
   @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
   public void onClose(@NotNull InventoryCloseEvent event) {
     if (event.getInventory().getHolder() != MenuPosition.HOLDER) return;
-    Bukkit.getScheduler().runTaskLater(Challenges.getInstance(), this::pruneStaleInventories, 1);
+    Regions.later(Challenges.getInstance(), this::pruneStaleInventories, 1);
   }
 
   private void pruneStaleInventories() {

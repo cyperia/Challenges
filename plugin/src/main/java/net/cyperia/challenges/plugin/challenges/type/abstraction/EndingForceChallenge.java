@@ -1,13 +1,16 @@
 package net.cyperia.challenges.plugin.challenges.type.abstraction;
 
 import net.cyperia.challenges.plugin.ChallengeAPI;
+import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.challenges.type.helper.ChallengeHelper;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class EndingForceChallenge extends AbstractForceChallenge {
 
@@ -32,13 +35,31 @@ public abstract class EndingForceChallenge extends AbstractForceChallenge {
   }
 
   private void checkAllPlayers() {
-    List<Player> failed = new ArrayList<>();
-    for (Player player : ChallengeAPI.getIngamePlayers()) {
-      if (isFailing(player)) {
-        broadcastFailedMessage(player);
-        failed.add(player);
-      }
+    List<Player> players = ChallengeAPI.getIngamePlayers();
+    List<Player> failed = new CopyOnWriteArrayList<>();
+    if (players.isEmpty()) {
+      finishCheck(failed);
+      return;
     }
+
+    AtomicInteger remaining = new AtomicInteger(players.size());
+    Runnable checked = () -> {
+      if (remaining.decrementAndGet() == 0) {
+        Regions.global(Challenges.getInstance(), () -> finishCheck(failed));
+      }
+    };
+    for (Player player : players) {
+      Regions.entity(Challenges.getInstance(), player, () -> {
+        if (isFailing(player)) {
+          broadcastFailedMessage(player);
+          failed.add(player);
+        }
+        checked.run();
+      }, checked);
+    }
+  }
+
+  private void finishCheck(@NotNull List<Player> failed) {
     if (!failed.isEmpty()) {
       killFailedPlayers(failed);
       return;

@@ -100,7 +100,7 @@ class BorderManagerTest {
     border.teleportInside(player);
 
     ArgumentCaptor<Location> target = ArgumentCaptor.forClass(Location.class);
-    verify(player).teleport(target.capture());
+    verify(player).teleportAsync(target.capture());
     // a size of 10 around 0.5 is drawn up to 5.5, and half the player's width stays clear of it
     assertEquals(5.2, target.getValue().getX(), 1e-9);
     assertEquals(2, target.getValue().getZ(), 1e-9);
@@ -127,7 +127,7 @@ class BorderManagerTest {
     border.teleportInside(player);
 
     ArgumentCaptor<Location> target = ArgumentCaptor.forClass(Location.class);
-    verify(player).teleport(target.capture());
+    verify(player).teleportAsync(target.capture());
     assertEquals(0.5, target.getValue().getX(), 1e-9);
     assertEquals(0.5, target.getValue().getZ(), 1e-9);
   }

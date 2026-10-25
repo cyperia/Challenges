@@ -13,6 +13,7 @@ import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import net.cyperia.challenges.plugin.utils.misc.DatabaseHelper;
 import net.cyperia.challenges.plugin.utils.misc.ParticleUtils;
 import net.cyperia.commons.bukkit.utils.misc.MinecraftVersion;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.config.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -33,7 +34,6 @@ public class PlayerConnectionListener implements Listener {
   private final boolean startTimerOnJoin;
   private final boolean resetOnLastQuit;
   private final boolean restoreDefaultsOnLastQuit;
-  private final boolean pluginInfoOnJoin;
   private final boolean unsupportedVersionWarning;
 
   public PlayerConnectionListener() {
@@ -43,8 +43,6 @@ public class PlayerConnectionListener implements Listener {
     startTimerOnJoin = config.getBoolean(ConfigManager.Keys.START_ON_FIRST_JOIN);
     resetOnLastQuit = config.getBoolean(ConfigManager.Keys.RESET_ON_LAST_LEAVE);
     restoreDefaultsOnLastQuit = config.getBoolean(ConfigManager.Keys.RESTORE_DEFAULTS_ON_LAST_LEAVE);
-    // Defaults to true so a config.yml predating the key behaves like a fresh one
-    pluginInfoOnJoin = config.getBoolean(ConfigManager.Keys.PLUGIN_INFO_ON_JOIN, true);
     unsupportedVersionWarning = !Challenges.getInstance().isVersionSupported()
       && config.getBoolean(ConfigManager.Keys.UNSUPPORTED_VERSION_CHAT_WARNING, true);
   }
@@ -62,13 +60,7 @@ public class PlayerConnectionListener implements Listener {
 
     // First thing in chat, so it reads as a banner the rest of the join messages follow rather
     // than something interrupting them. No separator needed: each of those prepends its own.
-    if (pluginInfoOnJoin) {
-      if (Challenges.getInstance().isFirstInstall()) {
-        HelpListener.sendPluginInfo(player);
-      } else {
-        HelpListener.sendPluginSummary(player);
-      }
-    }
+    sendPluginInfo(player);
 
     if (Challenges.getInstance().isFirstInstall() && !player.hasPermission(ChallengesPermissions.COMMAND_CHALLENGES)) {
       MessageKey.of("server.not-op").send(player, Prefix.CHALLENGES);
@@ -143,7 +135,7 @@ public class PlayerConnectionListener implements Listener {
 
     if (unsupportedVersionWarning) {
       // A tick later, after the join messages of every other plugin, so it is the last thing in chat
-      Bukkit.getScheduler().runTask(Challenges.getInstance(), () -> {
+      Regions.nextTick(Challenges.getInstance(), player, () -> {
         player.sendMessage("");
         MessageKey.of("server.unsupported-version").send(player, Prefix.CHALLENGES,
           Challenges.getInstance().getDescription().getVersion(),
@@ -164,6 +156,15 @@ public class PlayerConnectionListener implements Listener {
       if (player != quitting && playerManager.isVisible(player)) return false;
     }
     return true;
+  }
+
+  // The public release cannot turn the credits off, its license forbids hiding them
+  private void sendPluginInfo(@NotNull Player player) {
+    if (Challenges.getInstance().isFirstInstall()) {
+      HelpListener.sendPluginInfo(player);
+    } else {
+      HelpListener.sendPluginSummary(player);
+    }
   }
 
   // A late joiner still reports a playing game mode here: AutoResetManager applies spectator at

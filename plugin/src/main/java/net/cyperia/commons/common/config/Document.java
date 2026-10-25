@@ -15,7 +15,10 @@ import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -163,19 +166,23 @@ public interface Document extends Config, Json {
   void write(@NotNull Writer writer) throws IOException;
 
   default void saveToFile(@NotNull File file) throws IOException {
-    FileUtils.createFilesIfNecessary(file);
-    Writer writer = FileUtils.newBufferedWriter(file);
-    write(writer);
-    writer.flush();
-    writer.close();
+    saveToFile(file.toPath());
   }
 
+  // Written next to the file and moved over it, so a server killed mid-write keeps the previous file
   default void saveToFile(@NotNull Path file) throws IOException {
-    FileUtils.createFile(file);
-    Writer writer = FileUtils.newBufferedWriter(file);
-    write(writer);
-    writer.flush();
-    writer.close();
+    Path target = file.toAbsolutePath();
+    Files.createDirectories(target.getParent());
+    // Not Files.createTempFile, which creates the file readable by its owner only
+    Path temp = target.resolveSibling(target.getFileName() + "." + UUID.randomUUID() + ".tmp");
+    try {
+      try (Writer writer = Files.newBufferedWriter(temp, StandardCharsets.UTF_8, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
+        write(writer);
+      }
+      Files.move(temp, target, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+    } finally {
+      Files.deleteIfExists(temp);
+    }
   }
 
   @NotNull

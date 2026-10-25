@@ -1,5 +1,7 @@
 package net.cyperia.challenges.plugin.utils.bukkit.misc;
 
+import net.cyperia.challenges.plugin.Challenges;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -15,10 +17,14 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -28,6 +34,11 @@ import java.util.function.ToIntFunction;
  * Replaces matching blocks of whole chunks a few columns per tick. A chunk holds up to ~100k blocks,
  * which is a visible freeze when done in one tick, so callers submit the work and drain it from a
  * one tick task instead.
+ * <p>
+ * Several regions may drain at once. A fill is worked on by whichever thread owns its chunk: a drain
+ * on another thread hands out slices to the chunk's region instead, each limited to a share of the
+ * drain's time. Such a slice, and the fill's {@code done}, run on the chunk's thread. The queues are
+ * only locked to take a fill out or put it back, never while blocks are placed.
  */
 public final class ChunkFillQueue {
 
@@ -37,8 +48,46 @@ public final class ChunkFillQueue {
   private static final int COLUMNS = 16 * 16;
   static final int TIME_CHECK_INTERVAL = 64;
 
+  // Slices a single drain hands to other regions, so one call cannot flood the schedulers
+  private static final int MAX_DISPATCHES = 8;
+  private static final long MIN_SLICE_NANOS = 1_000_000;
+
+  /** Decides which thread works on a chunk. */
+  interface Owner {
+
+    boolean owns(@NotNull Chunk chunk);
+
+    void run(@NotNull Chunk chunk, @NotNull Runnable task);
+
+  }
+
+  private static final Owner SERVER = new Owner() {
+    @Override
+    public boolean owns(@NotNull Chunk chunk) {
+      return Bukkit.isOwnedByCurrentRegion(chunk.getWorld(), chunk.getX(), chunk.getZ());
+    }
+
+    @Override
+    public void run(@NotNull Chunk chunk, @NotNull Runnable task) {
+      Regions.at(Challenges.getInstance(), new Location(chunk.getWorld(), chunk.getX() << 4, 0, chunk.getZ() << 4), task);
+    }
+  };
+
+  private final Owner owner;
+  // All three are guarded by lock. A fill that is being worked on is in none of the queues but in inFlight,
+  // which is how forget() and clear() reach it.
+  private final Object lock = new Object();
   private final Deque<Fill> urgent = new ArrayDeque<>();
-  private final Deque<Fill> queue = new ArrayDeque<>();
+  private final LinkedHashSet<Fill> queue = new LinkedHashSet<>();
+  private final Set<Fill> inFlight = new HashSet<>();
+
+  public ChunkFillQueue() {
+    this(SERVER);
+  }
+
+  ChunkFillQueue(@NotNull Owner owner) {
+    this.owner = owner;
+  }
 
   /**
    * Queues every block between {@code fromY} and {@code toY} (both inclusive) that the filter accepts
@@ -78,9 +127,17 @@ public final class ChunkFillQueue {
   public void submit(@NotNull Chunk chunk, int fromY, int toY, @NotNull Function<Block, @Nullable BlockData> replacement,
                      @NotNull Predicate<Block> physics, @NotNull Supplier<int[]> order, boolean urgent, @NotNull Runnable done) {
     if (fromY > toY) return;
-    Fill fill = new Fill(chunk, fromY, toY, replacement, physics, order, done);
-    if (urgent) this.urgent.addFirst(fill);
-    else queue.add(fill);
+    Fill fill = new Fill(chunk, fromY, toY, replacement, physics, order, done, urgent);
+    synchronized (lock) {
+      if (urgent) this.urgent.addFirst(fill);
+      else queue.add(fill);
+    }
+  }
+
+  public boolean isEmpty() {
+    synchronized (lock) {
+      return urgent.isEmpty() && queue.isEmpty() && inFlight.isEmpty();
+    }
   }
 
   public void drain() {
@@ -107,80 +164,205 @@ public final class ChunkFillQueue {
    * {@code radius} chunk rings of a player runs to completion before a farther one starts.
    */
   public void drainUntil(long deadline, @NotNull ToIntFunction<Chunk> ring, int radius) {
-    if (!drainUrgent(deadline)) return;
-    if (queue.isEmpty() || System.nanoTime() >= deadline) return;
+    Dispatch dispatch = new Dispatch(deadline);
+    if (!drainUrgent(deadline, dispatch)) return;
 
-    List<Fill> ordered = new ArrayList<>(queue);
-    queue.clear();
-    for (Fill fill : ordered) fill.ring = ring.applyAsInt(fill.chunk);
-    ordered.sort((a, b) -> Integer.compare(a.ring, b.ring)); // stable: ties keep the queue order above
-    queue.addAll(ordered);
+    // Sorted near-first on a copy, so no lock is held for it. Taking the fills in that order runs every
+    // fill within radius to completion before a farther one is reached; a farther fill that has not
+    // finished its slice re-enters at the back, never the front, so it never overtakes a nearer one.
+    // Repeated until the queue is empty, so far fills take turns slice by slice within the deadline.
+    while (System.nanoTime() < deadline) {
+      List<Fill> ordered;
+      synchronized (lock) {
+        if (queue.isEmpty()) return;
+        ordered = new ArrayList<>(queue);
+      }
+      Map<Fill, Integer> rings = new HashMap<>();
+      for (Fill fill : ordered) rings.put(fill, ring.applyAsInt(fill.chunk));
+      ordered.sort(Comparator.comparingInt(rings::get)); // stable: ties keep the queue order
 
-    // Sorted near-first, so popping the queue from the front runs every fill within radius to completion
-    // before a farther one is reached; a farther fill that has not finished its slice re-enters at the
-    // back, never the front, so it never overtakes a nearer one. Every fill stays in this queue, so
-    // forget() and clear() reach it regardless of ring.
-    while (!queue.isEmpty() && System.nanoTime() < deadline) {
-      Fill fill = queue.poll();
-      if (!fill.chunk.isLoaded()) continue;
-      if (fill.ring <= radius) {
-        if (!runToCompletion(fill, deadline)) {
-          queue.addFirst(fill);
-          return;
+      for (Fill fill : ordered) {
+        if (System.nanoTime() >= deadline) return;
+        if (!claim(queue, fill)) continue;
+
+        if (!fill.chunk.isLoaded()) {
+          release(fill, Requeue.NO);
+        } else if (!owner.owns(fill.chunk)) {
+          if (!handOff(fill, Integer.MAX_VALUE, dispatch)) {
+            release(fill, Requeue.FRONT);
+            return;
+          }
+        } else if (rings.get(fill) <= radius) {
+          if (!runToCompletion(fill, deadline)) {
+            release(fill, Requeue.FRONT);
+            return;
+          }
+        } else if (advance(fill, TIME_CHECK_INTERVAL)) {
+          release(fill, Requeue.NO);
+          fill.done.run();
+        } else {
+          release(fill, Requeue.BACK);
         }
-      } else if (advance(fill, TIME_CHECK_INTERVAL)) {
-        fill.done.run();
-      } else {
-        queue.addLast(fill);
       }
     }
   }
 
   private void drain(int budget, long deadline) {
+    Dispatch dispatch = new Dispatch(deadline);
+    // Under a deadline the time limits the work, otherwise the block budget does
+    boolean timed = deadline != Long.MAX_VALUE;
     while (budget > 0 && System.nanoTime() < deadline) {
-      Deque<Fill> source = urgent.isEmpty() ? queue : urgent;
-      Fill fill = source.peek();
+      Fill fill = claimNext();
       if (fill == null) return;
       if (!fill.chunk.isLoaded()) {
-        source.poll();
+        release(fill, Requeue.NO);
+        continue;
+      }
+      if (!owner.owns(fill.chunk)) {
+        int slice = timed ? Integer.MAX_VALUE : Math.min(budget, DEFAULT_BUDGET);
+        if (!handOff(fill, slice, dispatch)) {
+          release(fill, Requeue.FRONT);
+          return;
+        }
+        if (!timed) budget -= slice;
         continue;
       }
       int before = fill.cursor;
       boolean done = advance(fill, Math.min(budget, TIME_CHECK_INTERVAL));
       budget -= fill.cursor - before;
-      if (done) {
-        source.poll();
-        fill.done.run();
-      }
+      release(fill, done ? Requeue.NO : Requeue.FRONT);
+      if (done) fill.done.run();
     }
   }
 
   // Drains the urgent deque to completion, newest first, one fill at a time. False means the deadline
   // passed with fills still pending; the head fill, if any, keeps its progress for the next call.
-  private boolean drainUrgent(long deadline) {
-    while (!urgent.isEmpty()) {
-      Fill fill = urgent.poll();
+  private boolean drainUrgent(long deadline, @NotNull Dispatch dispatch) {
+    while (true) {
+      Fill fill;
+      synchronized (lock) {
+        fill = urgent.poll();
+        if (fill != null) inFlight.add(fill);
+      }
+      if (fill == null) return true;
+
+      if (!owner.owns(fill.chunk)) {
+        if (!fill.chunk.isLoaded()) {
+          release(fill, Requeue.NO);
+          continue;
+        }
+        if (!handOff(fill, Integer.MAX_VALUE, dispatch)) {
+          release(fill, Requeue.FRONT);
+          return false;
+        }
+        continue;
+      }
       if (!runToCompletion(fill, deadline)) {
-        urgent.addFirst(fill);
+        release(fill, Requeue.FRONT);
         return false;
       }
     }
-    return true;
   }
 
   // Runs a fill in TIME_CHECK_INTERVAL slices until it finishes or the deadline passes. The fill must
-  // already be polled from its deque: done runs after that removal, so a done that resubmits urgently
-  // never collides with the fill that is finishing. A chunk that unloads is dropped without running
-  // done, same as forget().
+  // already be claimed: done runs after it is released, so a done that resubmits urgently never collides
+  // with the fill that is finishing. A chunk that unloads is dropped without running done, same as forget().
+  // True when the fill is through, and released; false leaves it claimed for the caller to put back.
   private boolean runToCompletion(@NotNull Fill fill, long deadline) {
     while (System.nanoTime() < deadline) {
-      if (!fill.chunk.isLoaded()) return true;
+      if (!fill.chunk.isLoaded()) {
+        release(fill, Requeue.NO);
+        return true;
+      }
       if (advance(fill, TIME_CHECK_INTERVAL)) {
+        release(fill, Requeue.NO);
         fill.done.run();
         return true;
       }
     }
     return false;
+  }
+
+  // Takes the next fill, an urgent one first
+  @Nullable
+  private Fill claimNext() {
+    synchronized (lock) {
+      Fill fill = !urgent.isEmpty() ? urgent.poll() : queue.isEmpty() ? null : queue.removeFirst();
+      if (fill != null) inFlight.add(fill);
+      return fill;
+    }
+  }
+
+  // False when another drain took the fill, or it was forgotten, since the caller looked at the queue
+  private boolean claim(@NotNull Set<Fill> from, @NotNull Fill fill) {
+    synchronized (lock) {
+      if (!from.remove(fill)) return false;
+      inFlight.add(fill);
+      return true;
+    }
+  }
+
+  private enum Requeue {FRONT, BACK, NO}
+
+  private void release(@NotNull Fill fill, @NotNull Requeue requeue) {
+    synchronized (lock) {
+      inFlight.remove(fill);
+      if (requeue == Requeue.NO || fill.cancelled) return;
+      if (fill.urgent) {
+        urgent.addFirst(fill);
+      } else if (requeue == Requeue.FRONT) {
+        queue.addFirst(fill);
+      } else {
+        queue.add(fill);
+      }
+    }
+  }
+
+  // Hands a slice of the fill to the chunk's region, which puts the fill back at the front of its queue
+  // when the slice did not finish it. The slice stops after its share of the drain's remaining time. False
+  // once this drain has handed out as much as it may; the fill stays claimed then.
+  private boolean handOff(@NotNull Fill fill, int blocks, @NotNull Dispatch dispatch) {
+    if (dispatch.count >= MAX_DISPATCHES) return false;
+    dispatch.count++;
+    long timeBox = dispatch.timeBox();
+    owner.run(fill.chunk, () -> work(fill, blocks, timeBox));
+    return true;
+  }
+
+  private void work(@NotNull Fill fill, int blocks, long timeBox) {
+    long end = timeBox == Long.MAX_VALUE ? Long.MAX_VALUE : System.nanoTime() + timeBox;
+    boolean finished = true;
+    if (!fill.cancelled && fill.chunk.isLoaded()) {
+      finished = false;
+      int left = blocks;
+      while (!finished && left > 0 && System.nanoTime() < end && !fill.cancelled && fill.chunk.isLoaded()) {
+        int before = fill.cursor;
+        finished = advance(fill, Math.min(left, TIME_CHECK_INTERVAL));
+        left -= fill.cursor - before;
+      }
+      if (!fill.chunk.isLoaded()) finished = true;
+    }
+
+    boolean runDone = finished && !fill.cancelled && fill.chunk.isLoaded();
+    release(fill, finished ? Requeue.NO : Requeue.FRONT);
+    if (runDone) fill.done.run();
+  }
+
+  // One drain's hand-outs: how many it made, and the time it has left to share between them
+  private static final class Dispatch {
+
+    private final long deadline;
+    private int count;
+
+    private Dispatch(long deadline) {
+      this.deadline = deadline;
+    }
+
+    private long timeBox() {
+      if (deadline == Long.MAX_VALUE) return Long.MAX_VALUE;
+      return Math.max(MIN_SLICE_NANOS, (deadline - System.nanoTime()) / MAX_DISPATCHES);
+    }
+
   }
 
   // Visits up to `blocks` more cells of the fill, continuing from where the last call left off. Returns
@@ -206,7 +388,7 @@ public final class ChunkFillQueue {
   public static ToIntFunction<Chunk> playerRing() {
     Map<World, int[][]> chunksByWorld = new HashMap<>();
     for (World world : Bukkit.getWorlds()) {
-      List<Player> players = world.getPlayers();
+      List<Player> players = Bukkit.getOnlinePlayers().stream().filter(player -> player.getWorld() == world).map(Player.class::cast).toList();
       if (players.isEmpty()) continue;
       int[] xs = new int[players.size()];
       int[] zs = new int[players.size()];
@@ -262,13 +444,21 @@ public final class ChunkFillQueue {
   }
 
   public void forget(@NotNull Chunk chunk) {
-    urgent.removeIf(fill -> chunk.equals(fill.chunk));
-    queue.removeIf(fill -> chunk.equals(fill.chunk));
+    synchronized (lock) {
+      urgent.removeIf(fill -> chunk.equals(fill.chunk));
+      queue.removeIf(fill -> chunk.equals(fill.chunk));
+      for (Fill fill : inFlight) {
+        if (chunk.equals(fill.chunk)) fill.cancelled = true;
+      }
+    }
   }
 
   public void clear() {
-    urgent.clear();
-    queue.clear();
+    synchronized (lock) {
+      urgent.clear();
+      queue.clear();
+      for (Fill fill : inFlight) fill.cancelled = true;
+    }
   }
 
   @NotNull
@@ -299,13 +489,14 @@ public final class ChunkFillQueue {
     private final Predicate<Block> physics;
     private final Supplier<int[]> orderSupplier;
     private final Runnable done;
+    private final boolean urgent;
     private int[] order;
     private int cursor;
-    // Set for every queued fill when a ring-mode drain starts; a fill submitted during one counts as far.
-    private int ring = Integer.MAX_VALUE;
+    private volatile boolean cancelled;
 
     private Fill(Chunk chunk, int fromY, int toY, Function<Block, BlockData> replacement, Predicate<Block> physics,
-                 Supplier<int[]> orderSupplier, Runnable done) {
+                 Supplier<int[]> orderSupplier, Runnable done, boolean urgent) {
+      this.urgent = urgent;
       this.chunk = chunk;
       this.fromY = fromY;
       this.toY = toY;

@@ -1,6 +1,7 @@
 package net.cyperia.challenges.plugin.challenges.implementation.challenge.randomizer;
 
 import net.cyperia.challenges.plugin.Challenges;
+import net.cyperia.challenges.plugin.challenges.type.EntryAccess;
 import net.cyperia.challenges.plugin.challenges.type.IChallenge;
 import net.cyperia.challenges.plugin.challenges.type.ValueUnit;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.AbstractChallenge;
@@ -66,8 +67,10 @@ public class RandomChallengeChallenge extends TimedChallenge {
     challenges.remove(this);
     challenges.removeIf(challenge -> challenge.getMenu() != MenuType.CHALLENGES);
     challenges.removeIf(challenge -> !(challenge instanceof AbstractChallenge));
+    // a pick turns the challenge on for everyone, past the permission of one that names one
     challenges.removeIf(challenge -> challenge instanceof LockedEntry
-      || ((AbstractChallenge) challenge).getCatalogEntry().excludeFromRandom());
+      || ((AbstractChallenge) challenge).getCatalogEntry().excludeFromRandom()
+      || EntryAccess.hasPermission(challenge));
     challenges.removeIf(IChallenge::isEnabled);
     if (challenges.isEmpty()) return;
 

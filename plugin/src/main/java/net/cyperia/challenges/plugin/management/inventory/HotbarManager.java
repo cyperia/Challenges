@@ -2,15 +2,16 @@ package net.cyperia.challenges.plugin.management.inventory;
 
 import net.cyperia.challenges.plugin.ChallengeAPI;
 import net.cyperia.challenges.plugin.Challenges;
-import net.cyperia.challenges.plugin.challenges.type.helper.ChallengeHelper;
 import net.cyperia.challenges.plugin.content.loader.LanguageLoader;
 import net.cyperia.challenges.plugin.management.scheduler.policy.ExtraWorldPolicy;
 import net.cyperia.challenges.plugin.management.scheduler.task.TimerTask;
 import net.cyperia.challenges.plugin.management.scheduler.timer.TimerStatus;
 import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import net.cyperia.challenges.plugin.spigot.events.PlayerIgnoreStatusChangeEvent;
+import net.cyperia.challenges.plugin.spigot.events.PlayerRespawnedEvent;
 import net.cyperia.challenges.plugin.spigot.events.SettingToggleEvent;
 import net.cyperia.commons.bukkit.utils.logging.Logger;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.config.Document;
 import net.cyperia.commons.common.config.FileDocument;
 import org.bukkit.Bukkit;
@@ -123,7 +124,7 @@ public final class HotbarManager implements Listener {
    * language are watched already.
    */
   public void refreshAll() {
-    ChallengeHelper.runSync(() -> Bukkit.getOnlinePlayers().forEach(this::refresh));
+    Challenges.getInstance().getPlayerManager().forEachAudience(this::refresh);
   }
 
   public void refresh(@NotNull Player player) {
@@ -270,7 +271,9 @@ public final class HotbarManager implements Listener {
   }
 
   public void handleDisable() {
-    Bukkit.getOnlinePlayers().forEach(player -> removeItems(player, HotbarItemTag::isTagged));
+    // Nothing can be scheduled once the plugin is disabling. The disabling thread passes every ownership
+    // check, so each player is cleaned inline.
+    Bukkit.getOnlinePlayers().forEach(player -> Regions.entity(Challenges.getInstance(), player, () -> removeItems(player, HotbarItemTag::isTagged)));
   }
 
   // The default world policy would skip a timer change made while an extra world is in use
@@ -283,7 +286,7 @@ public final class HotbarManager implements Listener {
   public void onJoin(@NotNull PlayerJoinEvent event) {
     // Next tick, once join handling elsewhere (game mode, cosmetics) has settled
     Player player = event.getPlayer();
-    Bukkit.getScheduler().runTask(Challenges.getInstance(), () -> refresh(player, true));
+    Regions.nextTick(Challenges.getInstance(), player, () -> refresh(player, true));
   }
 
   @EventHandler
@@ -298,7 +301,7 @@ public final class HotbarManager implements Listener {
   }
 
   @EventHandler(priority = EventPriority.MONITOR)
-  public void onRespawn(@NotNull PlayerRespawnEvent event) {
+  public void onRespawn(@NotNull PlayerRespawnedEvent event) {
     refreshLater(event.getPlayer());
   }
 
@@ -325,7 +328,7 @@ public final class HotbarManager implements Listener {
   }
 
   private void refreshLater(@NotNull Player player) {
-    Bukkit.getScheduler().runTask(Challenges.getInstance(), () -> refresh(player));
+    Regions.nextTick(Challenges.getInstance(), player, () -> refresh(player));
   }
 
   @EventHandler(priority = EventPriority.HIGH)

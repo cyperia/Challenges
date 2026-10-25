@@ -9,8 +9,9 @@ import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.content.i18n.hook.LanguageProvider;
 import net.cyperia.challenges.plugin.content.i18n.impl.format.ComponentArguments;
 import net.cyperia.commons.bukkit.utils.logging.Logger;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Criteria;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -22,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -40,7 +42,9 @@ public final class ChallengeScoreboard {
   }
 
   public void applyHide(@NotNull Player player) {
-    unregister(objectives.remove(player));
+    Objective objective = objectives.remove(player);
+    if (objective == null) return;
+    Regions.global(Challenges.getInstance(), () -> unregister(objective));
   }
 
   public void update() {
@@ -49,10 +53,13 @@ public final class ChallengeScoreboard {
     }
   }
 
-  public synchronized void update(@NotNull Player player) {
-    // synchronized method lock: prevent race condition resulting in client error/crash: by sending the objective
-    // with the same name at the same time twice as the name is constant (1d2b97b)
-    // java.lang.IllegalArgumentException: An objective with the name 'xxx' already exists! (client-side)
+  // Runs on the global region, so two updates of one player never overlap: the objective name is
+  // constant and sending it twice at once crashes the client ("An objective with the name 'xxx' already exists!")
+  public void update(@NotNull Player player) {
+    Regions.global(Challenges.getInstance(), () -> updateOnGlobal(player));
+  }
+
+  private void updateOnGlobal(@NotNull Player player) {
     if (!isShown()) {
       Logger.warn("Tried to update scoreboard which is not shown");
       return;
@@ -73,34 +80,55 @@ public final class ChallengeScoreboard {
       if (lines.isEmpty()) {
         return;
       }
-
-      Scoreboard scoreboard = player.getScoreboard();
-      if (scoreboard == Bukkit.getScoreboardManager().getMainScoreboard()) {
-        player.setScoreboard(scoreboard = Bukkit.getScoreboardManager().getNewScoreboard());
+      Component title = instance.getTitle().asComponent(locale);
+      // Empty unless a server sets it, e.g. to its address
+      Component footer = MessageKey.of("scoreboard.footer").asComponent(locale);
+      if (!isBlank(footer) && lines.size() + 2 <= MAX_LINES) {
+        if (!isBlank(lines.getLast())) lines.add(Component.empty());
+        lines.add(centered(footer, title, lines));
       }
 
-      String name = String.valueOf(player.getUniqueId().hashCode());
-      // Unregister any old objective existing
-      Objective oldObjective = scoreboard.getObjective(name);
-      if (oldObjective != null) {
-        unregister(oldObjective);
-      }
-
-      Objective objective = registerDummyObjective(scoreboard, name, instance.getTitle().asComponent(locale));
-      for (int i = 0; i < lines.size(); i++) {
-        Component line = lines.get(i);
-        Score entry = objective.getScore(String.valueOf(i));
-        entry.customName(line);
-        entry.setScore(MAX_LINES - i);
-        entry.numberFormat(NumberFormat.blank());
-      }
-
-      objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-      objectives.put(player, objective);
+      PlayerScoreboards.use(player, scoreboard -> show(scoreboard, player, title, lines));
 
     } catch (Exception ex) {
       Logger.error("Unable to update scoreboard for player '{}'", player.getName(), ex);
     }
+  }
+
+  private void show(@NotNull Scoreboard scoreboard, @NotNull Player player, @NotNull Component title, @NotNull List<Component> lines) {
+    String name = String.valueOf(player.getUniqueId().hashCode());
+    // Unregister any old objective existing
+    Objective oldObjective = scoreboard.getObjective(name);
+    if (oldObjective != null) {
+      unregister(oldObjective);
+    }
+
+    Objective objective = registerDummyObjective(scoreboard, name, title);
+    for (int i = 0; i < lines.size(); i++) {
+      Component line = lines.get(i);
+      Score entry = objective.getScore(String.valueOf(i));
+      entry.customName(line);
+      entry.setScore(MAX_LINES - i);
+      entry.numberFormat(NumberFormat.blank());
+    }
+
+    objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+    objectives.put(player, objective);
+  }
+
+  private static boolean isBlank(@NotNull Component line) {
+    return PlainTextComponentSerializer.plainText().serialize(line).isBlank();
+  }
+
+  // Pads the line with spaces to the middle of the widest line, the sidebar's width
+  @NotNull
+  static Component centered(@NotNull Component line, @NotNull Component title, @NotNull List<Component> lines) {
+    int widest = MinecraftFont.widthOf(title);
+    for (Component other : lines) {
+      widest = Math.max(widest, MinecraftFont.widthOf(other));
+    }
+    int spaces = (widest - MinecraftFont.widthOf(line)) / 2 / MinecraftFont.SPACE_WIDTH;
+    return spaces <= 0 ? line : Component.text(" ".repeat(spaces)).append(line);
   }
 
   public void show() {

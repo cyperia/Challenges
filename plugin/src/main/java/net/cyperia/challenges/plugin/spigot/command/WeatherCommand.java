@@ -1,12 +1,14 @@
 package net.cyperia.challenges.plugin.spigot.command;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.content.i18n.Prefix;
 import net.cyperia.challenges.plugin.management.command.ChallengeCommand;
 import net.cyperia.challenges.plugin.management.command.CommandInfo;
 import net.cyperia.challenges.plugin.management.command.CommandNodes;
 import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -43,8 +45,10 @@ public class WeatherCommand implements ChallengeCommand {
 
   private static void set(@NotNull Player player, @NotNull Weather weather) {
     World world = player.getWorld();
-    world.setStorm(weather != Weather.CLEAR);
-    world.setThundering(weather == Weather.THUNDER);
+    Regions.global(Challenges.getInstance(), () -> {
+      world.setStorm(weather != Weather.CLEAR);
+      world.setThundering(weather == Weather.THUNDER);
+    });
     MessageKey.of("command.weather." + weather.name().toLowerCase(Locale.ROOT)).send(player, Prefix.CHALLENGES);
   }
 

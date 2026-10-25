@@ -5,36 +5,36 @@ import net.cyperia.challenges.plugin.challenges.type.abstraction.SettingModifier
 import net.cyperia.challenges.plugin.content.i18n.Prefix;
 import net.cyperia.challenges.plugin.management.scheduler.policy.TimerPolicy;
 import net.cyperia.challenges.plugin.management.scheduler.task.ScheduledTask;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.util.AbstractMap.SimpleEntry;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class MoveMouseDamage extends SettingModifier {
 
-  private final Map<UUID, Map.Entry<Float, Float>> lastView = new HashMap<>();
+  private final Map<UUID, Map.Entry<Float, Float>> lastView = new ConcurrentHashMap<>();
 
   public MoveMouseDamage() {
     super(60);
     setValueUnit(ValueUnit.DAMAGE);
   }
 
-  @ScheduledTask(ticks = 1, timerPolicy = TimerPolicy.ALWAYS)
+  @ScheduledTask(ticks = 1, async = false, timerPolicy = TimerPolicy.ALWAYS)
   public void onTick() {
     if (!shouldExecuteEffect()) {
       lastView.clear();
       return;
     }
 
-    for (Player player : Bukkit.getOnlinePlayers()) {
+    plugin.getPlayerManager().forEachOnOwnThread(Bukkit.getOnlinePlayers(), player -> {
       if (ignorePlayer(player)) {
         lastView.remove(player.getUniqueId());
-        continue;
+        return;
       }
-      if (player.getNoDamageTicks() > 0) continue;
+      if (player.getNoDamageTicks() > 0) return;
 
       float yaw = player.getLocation().getYaw();
       float pitch = player.getLocation().getPitch();
@@ -42,15 +42,15 @@ public class MoveMouseDamage extends SettingModifier {
       lastView.put(player.getUniqueId(), pair);
 
       if (yaw != pair.getKey() || pitch != pair.getValue()) {
-        Bukkit.getScheduler().runTask(plugin, () -> {
+        Regions.nextTick(plugin, player, () -> {
           if (player.getNoDamageTicks() > 0) return;
           getChallengeMessageKey("failed").broadcast(Prefix.CHALLENGES, player);
           player.damage(getValue());
           player.setNoDamageTicks(5);
-          Bukkit.getScheduler().runTaskLater(plugin, () -> lastView.remove(player.getUniqueId()), 3);
+          Regions.later(plugin, () -> lastView.remove(player.getUniqueId()), 3);
         });
       }
-    }
+    });
   }
 
 }
