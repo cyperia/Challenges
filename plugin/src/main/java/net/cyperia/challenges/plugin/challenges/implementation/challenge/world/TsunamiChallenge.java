@@ -22,13 +22,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TsunamiChallenge extends TimedChallenge {
 
   public static final int RANGE = 5;
 
   private final ChunkFillQueue fills = new ChunkFillQueue();
-  private final Set<Chunk> floodedChunks = new HashSet<>();
+  private final Set<Chunk> floodedChunks = ConcurrentHashMap.newKeySet();
 
   private int waterHeight = Integer.MAX_VALUE, lavaHeight = 0;
 
@@ -97,9 +98,11 @@ public class TsunamiChallenge extends TimedChallenge {
     Set<Chunk> previouslyFlooded = new HashSet<>(floodedChunks);
     bossbar.update();
     floodedChunks.clear();
-    for (Chunk chunk : getChunksToFlood()) {
-      floodChunk(chunk, !previouslyFlooded.contains(chunk));
-    }
+    broadcastFiltered(player -> {
+      for (Chunk chunk : getChunksAroundChunk(player.getLocation().getChunk())) {
+        floodChunk(chunk, !previouslyFlooded.contains(chunk));
+      }
+    });
 
   }
 
@@ -158,13 +161,6 @@ public class TsunamiChallenge extends TimedChallenge {
     Material type = block.getType();
     if (overworld && type == Material.LAVA) return true;
     return type != Material.WATER && type != Material.LAVA && block.isPassable();
-  }
-
-  @NotNull
-  private Set<Chunk> getChunksToFlood() {
-    Set<Chunk> chunks = new LinkedHashSet<>();
-    broadcastFiltered(player -> chunks.addAll(getChunksAroundChunk(player.getLocation().getChunk())));
-    return chunks;
   }
 
   @NotNull

@@ -10,7 +10,7 @@ import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.management.menu.MenuType;
 import net.cyperia.challenges.plugin.management.menu.format.Interaction;
 import net.cyperia.challenges.plugin.management.menu.format.ItemFormatter;
-import net.cyperia.challenges.plugin.management.menu.generator.UncachedMultiPageSelectMenuGenerator;
+import net.cyperia.challenges.plugin.management.menu.generator.MultiPageSelectMenuGenerator;
 import net.cyperia.commons.bukkit.utils.menu.MenuClickInfo;
 import net.cyperia.commons.bukkit.utils.menu.MenuClickType;
 import org.bukkit.Material;
@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Locale;
 import java.util.Map;
 
-public abstract class CustomChooseOptionMenuGenerator extends UncachedMultiPageSelectMenuGenerator<SelectableKey> {
+public abstract class CustomChooseOptionMenuGenerator extends MultiPageSelectMenuGenerator<SelectableKey> {
 
   public static final int SIZE = 5 * 9;
   public static final int[] SLOTS = calcSlots(3, 7, SIZE);

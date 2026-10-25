@@ -2,6 +2,7 @@ package net.cyperia.challenges.plugin.challenges.implementation.setting;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.cyperia.challenges.plugin.ChallengeAPI;
+import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.challenges.type.ValueUnit;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.Modifier;
 import net.cyperia.challenges.plugin.content.i18n.LocalizableMessage;
@@ -11,6 +12,7 @@ import net.cyperia.challenges.plugin.management.command.CommandInfo;
 import net.cyperia.challenges.plugin.management.command.CommandNodes;
 import net.cyperia.challenges.plugin.management.command.CommandProvider;
 import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.config.Document;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -50,10 +52,12 @@ public class DifficultySetting extends Modifier implements CommandProvider {
   }
 
   private void setDifficulty(Difficulty difficulty) {
-    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "minecraft:difficulty " + difficulty.name().toLowerCase());
-    for (World world : Bukkit.getWorlds()) {
-      world.setDifficulty(difficulty);
-    }
+    Regions.global(Challenges.getInstance(), () -> {
+      Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "minecraft:difficulty " + difficulty.name().toLowerCase());
+      for (World world : Bukkit.getWorlds()) {
+        world.setDifficulty(difficulty);
+      }
+    });
   }
 
   @NotNull

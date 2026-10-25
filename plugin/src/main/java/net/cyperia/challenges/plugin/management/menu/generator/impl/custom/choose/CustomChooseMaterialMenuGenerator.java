@@ -5,7 +5,7 @@ import net.cyperia.challenges.plugin.content.i18n.LocalizableMessage;
 import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.management.menu.MenuType;
 import net.cyperia.challenges.plugin.management.menu.format.ItemFormatter;
-import net.cyperia.challenges.plugin.management.menu.generator.UncachedMultiPageSelectMenuGenerator;
+import net.cyperia.challenges.plugin.management.menu.generator.MultiPageSelectMenuGenerator;
 import net.cyperia.challenges.plugin.management.menu.generator.impl.custom.IParentCustomGenerator;
 import net.cyperia.challenges.plugin.utils.misc.ExperimentalUtils;
 import net.cyperia.challenges.plugin.utils.misc.MapUtils;
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class CustomChooseMaterialMenuGenerator extends UncachedMultiPageSelectMenuGenerator<Material> {
+public class CustomChooseMaterialMenuGenerator extends MultiPageSelectMenuGenerator<Material> {
 
   public static final int SIZE = CustomChooseOptionMenuGenerator.SIZE;
   public static final int[] SLOTS = CustomChooseOptionMenuGenerator.SLOTS;

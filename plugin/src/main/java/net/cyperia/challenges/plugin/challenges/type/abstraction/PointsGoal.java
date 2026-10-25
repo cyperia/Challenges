@@ -4,6 +4,7 @@ import net.cyperia.challenges.plugin.challenges.type.helper.GoalHelper;
 import net.cyperia.challenges.plugin.challenges.type.helper.GoalLeaderboard;
 import net.cyperia.commons.bukkit.utils.logging.Logger;
 import net.cyperia.commons.common.config.Document;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +28,7 @@ public abstract class PointsGoal extends SettingGoal {
   @Override
   protected void onEnable() {
     super.onEnable();
-    scoreboard.setContent(GoalLeaderboard.scoreboardContent(() -> getPoints(new AtomicInteger(), true)));
+    scoreboard.setContent(GoalLeaderboard.scoreboardContent(this::getLeaderboard));
     scoreboard.show();
   }
 
@@ -63,12 +64,17 @@ public abstract class PointsGoal extends SettingGoal {
 
   @Override
   public void getWinnersOnEnd(@NotNull List<Player> winners) {
-    GoalHelper.getWinnersOnEnd(winners, getPoints(new AtomicInteger(), false));
+    GoalHelper.getWinnersOnEnd(winners, getPoints(new AtomicInteger()));
   }
 
   @NotNull
-  protected Map<Player, Integer> getPoints(@NotNull AtomicInteger mostPoints, boolean zeros) {
-    return GoalHelper.createPointsFromValues(mostPoints, points, (uuid, integer) -> integer, zeros);
+  protected Map<Player, Integer> getPoints(@NotNull AtomicInteger mostPoints) {
+    return GoalHelper.createPointsFromValues(mostPoints, points, (uuid, integer) -> integer);
+  }
+
+  @NotNull
+  protected Map<OfflinePlayer, Integer> getLeaderboard() {
+    return GoalHelper.createLeaderboardFromValues(points, (uuid, integer) -> integer);
   }
 
   protected void collect(@NotNull Player player) {

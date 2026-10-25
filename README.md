@@ -167,11 +167,11 @@ Every command has its own permission, `challenges.command.<command>`; operators 
 
 On another Minecraft version the plugin still starts, but it warns in the console and in chat, and we do not support it there. · Auf einer anderen Minecraft-Version startet das Plugin trotzdem, warnt aber in der Konsole und im Chat, und wir geben dafür keinen Support.
 
-Challenges is free of charge and published under the **[Challenges License](https://github.com/cyperia/Challenges/blob/main/LICENSE)**, © [cyperia.net](https://cyperia.net) (anweisen & DomiIRL).
+Challenges is free and open source under the **[GNU AGPL v3](https://github.com/cyperia/Challenges/blob/main/LICENSE)** with **[additional terms](https://github.com/cyperia/Challenges/blob/main/ADDITIONAL-TERMS)**, © [cyperia.net](https://cyperia.net) (anweisen & DomiIRL). Releases up to 3.0 keep the license they were published with.
 
-> 🇬🇧 **Free to play, show and stream.** You may run the plugin on your server and use it in videos and streams, monetized ones included, as long as you credit [cyperia.net](https://cyperia.net).
+> 🇬🇧 **Run it, change it, stream it, keep the credits.** You may run the plugin on any server, change it and show it in monetized videos and streams. The credits to [cyperia.net](https://cyperia.net) in chat and in `/help` have to stay visible to every player, and if you run a modified version, its source has to be available to your players.
 
-> 🇩🇪 **Frei zum Spielen, Zeigen und Streamen.** Du darfst das Plugin auf deinem Server nutzen und in Videos und Streams zeigen, auch monetarisiert, solange du [cyperia.net](https://cyperia.net) nennst.
+> 🇩🇪 **Nutzen, ändern, streamen, Credits behalten.** Du darfst das Plugin auf jedem Server nutzen, verändern und in monetarisierten Videos und Streams zeigen. Die Credits an [cyperia.net](https://cyperia.net) im Chat und in `/help` müssen für jeden Spieler sichtbar bleiben, und wenn du eine veränderte Version betreibst, muss ihr Quellcode für deine Spieler verfügbar sein.
 
 Bug reports and questions belong on Discord or GitHub. Please do not use reviews for support, we cannot reply properly there. · Bug-Meldungen und Fragen gehören auf Discord oder GitHub. Bitte nutze dafür keine Bewertungen, dort können wir nicht richtig antworten.
 

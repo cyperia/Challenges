@@ -40,6 +40,10 @@ relative to.
 - `since`, `updated` mark the entry new or updated in the menu; `beta` leaves its class out of the
   public release, which shows the entry locked instead.
 - `excludeFromRandom` keeps the random challenge from picking it.
+- `permission` locks the entry for a player without that permission: it shows locked and cannot be
+  changed, and the random challenge never picks it. With `"hidden": true` such a player does not see it
+  at all. This keeps an entry in the same build as everything else while only some players can use it,
+  for example an event goal or a challenge of a rank.
 - `featured` puts it among the highlighted entries of a listing outside the plugin, such as the export below.
 - `"registered": false` keeps a challenge out of the plugin without losing its entry, for one that is
   broken or not ready; anything listing challenges should skip it too.

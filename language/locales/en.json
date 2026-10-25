@@ -159,6 +159,10 @@
       "join": "*Play on {0}*",
       "cancel": "*Cancel*"
     },
+    "restricted": {
+      "state": "<red>Locked</red> <gray>for you</gray>",
+      "click": "<gray>This is <red>locked</red> for you</gray>"
+    },
     "generic": {
       "tooltip": {
         "left": "{@format('Left-Click', '{0}')}",
@@ -184,7 +188,7 @@
         "back_menu": "Back to the previous menu",
         "back_main_menu": "Back to the main menu",
         "close_menu": "Close the menu",
-        "next": "Gp to the next page",
+        "next": "Go to the next page",
         "next_shift": "Go on {0} pages",
         "next_last": "Go to the last page",
         "punishment": "Change punishment",
@@ -265,7 +269,41 @@
       "killed-by": "Killed by <yellow>{0}</yellow>",
       "collected-by": "Collected by <yellow>{0}</yellow>",
       "died-by": "Died this way: <yellow>{0}</yellow>",
-      "earned-by": "Earned by <yellow>{0}</yellow>"
+      "earned-by": "Earned by <yellow>{0}</yellow>",
+      "done-by": "Done by <yellow>{0}</yellow>",
+      "found-at": "<gray>Timer:</gray> <yellow>{0}</yellow>",
+      "found-by-at": [
+        "{0}",
+        "<gray>Timer:</gray> <yellow>{1}</yellow>"
+      ],
+      "view": {
+        "sort": {
+          "default": "Sort: Default",
+          "time": "Sort: Time found",
+          "finder": "Sort: Finder"
+        },
+        "sort-name": {
+          "default": "default",
+          "time": "time found",
+          "finder": "finder"
+        },
+        "switch-sort": "Sort by {0}",
+        "ascending": "Order: Ascending",
+        "descending": "Order: Descending",
+        "switch-ascending": "Switch to ascending",
+        "switch-descending": "Switch to descending",
+        "filter": {
+          "all": "Show: All",
+          "missing": "Show: Missing",
+          "found": "Show: Found"
+        },
+        "filter-name": {
+          "all": "all",
+          "missing": "missing",
+          "found": "found"
+        },
+        "switch-filter": "Show {0}"
+      }
     },
     "challenges": {
       "menu": "Challenges",
@@ -1361,13 +1399,6 @@
         "a random *potion effect*"
       ]
     },
-    "biome-effect": {
-      "name": "*Biome = Effect*",
-      "desc": [
-        "Every *biome* gives you",
-        "its own *potion effect*"
-      ]
-    },
     "block-effect": {
       "name": "*New Block = Random Effect*",
       "desc": [
@@ -1644,8 +1675,7 @@
       "name": "*2D World*",
       "desc": [
         "The whole world is just *one block*",
-        "wide. Next to the *line* is the *void*,",
-        "and it runs *through the stronghold*"
+        "wide. Next to the *line* is the *void*"
       ]
     },
     "grid-world": {
@@ -2146,7 +2176,9 @@
         " ",
         "<dark_gray>(</dark_gray>{@goal-ender-dragon.name}, {@goal-wither.name}, {@goal-elder-guardian.name}<dark_gray>)</dark_gray>"
       ],
-      "bossbar": "{@bossbar.format-arg('All Bosses', '<green>{0}</green> <gray>/</gray> <yellow>{1}</yellow>')}"
+      "bossbar": "{@bossbar.format-arg('{@name}', '<green>{0}</green> <dark_gray>/</dark_gray> <yellow>{1}</yellow>')}",
+      "menu": "All Bosses",
+      "bossbar-next": "{@bossbar.format-arg('{@name}', '<yellow>{0}</yellow> <dark_gray>{@symbol.vertical}</dark_gray> <green>{1}</green> <dark_gray>/</dark_gray> <yellow>{2}</yellow>')}"
     },
     "goal-all-bosses-new": {
       "name": "*All Bosses (+ Warden)*",
@@ -2156,7 +2188,9 @@
         " ",
         "<dark_gray>(</dark_gray>{@goal-ender-dragon.name}, {@goal-wither.name}, {@goal-elder-guardian.name}, {@goal-warden.name}<dark_gray>)</dark_gray>"
       ],
-      "bossbar": "{@goal-all-bosses.bossbar}"
+      "bossbar": "{@bossbar.format-arg('{@name}', '<green>{0}</green> <dark_gray>/</dark_gray> <yellow>{1}</yellow>')}",
+      "menu": "All Bosses (+ Warden)",
+      "bossbar-next": "{@bossbar.format-arg('{@name}', '<yellow>{0}</yellow> <dark_gray>{@symbol.vertical}</dark_gray> <green>{1}</green> <dark_gray>/</dark_gray> <yellow>{2}</yellow>')}"
     },
     "iron-golem": {
       "name": "*Iron Golem*",
@@ -2175,14 +2209,18 @@
       "desc": [
         "Each mob has to be killed once to win"
       ],
-      "bossbar": "{@bossbar.format-arg('All Mobs', '<green>{0}</green> <gray>/</gray> <yellow>{1}</yellow>')}"
+      "bossbar": "{@bossbar.format-arg('{@name}', '<green>{0}</green> <dark_gray>/</dark_gray> <yellow>{1}</yellow>')}",
+      "menu": "All Mobs",
+      "bossbar-next": "{@bossbar.format-arg('{@name}', '<yellow>{0}</yellow> <dark_gray>{@symbol.vertical}</dark_gray> <green>{1}</green> <dark_gray>/</dark_gray> <yellow>{2}</yellow>')}"
     },
     "all-monster": {
       "name": "*All Monsters*",
       "desc": [
         "Each monster has to be killed once to win"
       ],
-      "bossbar": "{@bossbar.format-arg('All Monsters', '<green>{0}</green> <gray>/</gray> <yellow>{1}</yellow>')}"
+      "bossbar": "{@bossbar.format-arg('{@name}', '<green>{0}</green> <dark_gray>/</dark_gray> <yellow>{1}</yellow>')}",
+      "menu": "All Monsters",
+      "bossbar-next": "{@bossbar.format-arg('{@name}', '<yellow>{0}</yellow> <dark_gray>{@symbol.vertical}</dark_gray> <green>{1}</green> <dark_gray>/</dark_gray> <yellow>{2}</yellow>')}"
     },
     "most-deaths": {
       "name": "*Most Death Types*",
@@ -2527,11 +2565,26 @@
       "desc": [
         "Find *all items* that are in *Minecraft*"
       ],
-      "bossbar-current": "{@bossbar.format-arg('{0}', '{1} <dark_gray>/</dark_gray> {2}')}",
-      "bossbar-finished": "{@bossbar.format('<green>All items found</green>')}",
-      "skipped": "<gray>Item <yellow>{0} </yellow>skipped</gray>",
-      "already-finished": "<gray>All items has been already found</gray>",
-      "found": "<gray>Item <yellow>{0} </yellow>registered by <yellow>{1}</yellow></gray> {@generic.goal-link}"
+      "bossbar-finished": "{@bossbar.format-arg('{@name}', '<green>All found</green>')}",
+      "bossbar": "{@bossbar.format-arg('{@name}', '<green>{0}</green> <dark_gray>/</dark_gray> <yellow>{1}</yellow>')}",
+      "menu": "All Items",
+      "bossbar-next": "{@bossbar.format-arg('{@name}', '<yellow>{0}</yellow> <dark_gray>{@symbol.vertical}</dark_gray> <green>{1}</green> <dark_gray>/</dark_gray> <yellow>{2}</yellow>')}"
+    },
+    "collect-everything": {
+      "name": "*Collect Everything*",
+      "desc": [
+        "Together, find *every item*,",
+        "kill *every mob* and get",
+        "*every advancement* once"
+      ],
+      "bossbar": "{@bossbar.format-arg('{@name}', '{0} <green>{1}</green> <dark_gray>/</dark_gray> <yellow>{2}</yellow>')}",
+      "menu": "Collect Everything",
+      "bossbar-next": "{@bossbar.format-arg('{@name}', '<yellow>{0}</yellow> <dark_gray>{@symbol.vertical}</dark_gray> <green>{1}</green> <dark_gray>/</dark_gray> <yellow>{2}</yellow>')}",
+      "category": {
+        "items": "Items",
+        "mobs": "Mobs",
+        "advancements": "Advancements"
+      }
     },
     "damage-teleport": {
       "name": "*Damage = Random Teleport*",
@@ -2783,12 +2836,219 @@
       "disabled": "<gray>This challenge is currently <red>deactivated</red></gray>",
       "item-collected": "<gray>Item <yellow>{0} </yellow>registered</gray> {@generic.goal-link}",
       "items-to-collect": "<gray>Items to collect </gray><dark_gray>» </dark_gray><yellow>{0}</yellow>",
-      "mob-killed": "<yellow>{0} </yellow><yellow>has been killed </yellow><dark_gray>(</dark_gray><yellow>{1} </yellow><gray>/ </gray><yellow>{2}</yellow><dark_gray>)</dark_gray> {@generic.goal-link}",
       "goal-link": "<click:run_command:/goal><hover:show_text:'{@menu.generic.tooltip.left('{@menu.generic.interact.show_list}')}'><dark_gray>[</dark_gray><yellow>List</yellow><dark_gray>]</dark_gray></hover></click>",
       "height-reached": "<yellow>{0} </yellow><gray>reached </gray><yellow>Y = {1} </yellow><gray>first!</gray>",
       "points": "<yellow>{0} </yellow><gray>Points</gray>",
       "bossbar-height": "{@bossbar.format-arg('<white>Goal</white>', 'Y: {0}')}",
-      "leaderboard-entry": "{0} <dark_gray>» </dark_gray><yellow>{1} </yellow><dark_gray>┃ </dark_gray><yellow>{2}</yellow>"
+      "leaderboard-entry": "{0} <dark_gray>» </dark_gray><yellow>{1} </yellow><dark_gray>┃ </dark_gray><yellow>{2}</yellow>",
+      "sub": {
+        "ranking": {
+          "name": "*Ranking*",
+          "desc": [
+            "Shows a *scoreboard* of who",
+            "found the *most first*"
+          ]
+        },
+        "random-order": {
+          "name": "*Fixed Order*",
+          "desc": [
+            "Everything has to be found",
+            "*one after another* in",
+            "a *random order*"
+          ]
+        },
+        "item-variants": {
+          "name": "*All Variants*",
+          "desc": [
+            "Every *enchanted book* level",
+            "and every *potion* has to",
+            "be found on its own"
+          ]
+        },
+        "mob-attributes": {
+          "name": "*Mob Attributes*",
+          "desc": [
+            "Every *variant* of a mob,",
+            "like coats, colours or babies,",
+            "has to be killed on its own"
+          ]
+        },
+        "mob-equipment": {
+          "name": "*Mob Equipment*",
+          "desc": [
+            "Every *item, armor and rider*",
+            "of a mob has to be",
+            "killed on its own"
+          ]
+        }
+      },
+      "found": {
+        "item": "<yellow>{0}</yellow> <gray>has been found by <yellow>{1}</yellow></gray> {@generic.goal-link}",
+        "mob": "<yellow>{0}</yellow> <gray>has been killed by <yellow>{1}</yellow></gray> {@generic.goal-link}",
+        "mob-without-finder": "<yellow>{0}</yellow> <gray>has been killed</gray> {@generic.goal-link}",
+        "advancement": "<yellow>{0}</yellow> <gray>has been achieved by <yellow>{1}</yellow></gray> {@generic.goal-link}"
+      },
+      "skipped": "<yellow>{0}</yellow> <gray>has been skipped</gray>",
+      "item-variant": {
+        "enchanted-book": "{0} ({1})",
+        "long": "{0} (Extended)",
+        "strong": "{0} II"
+      },
+      "mob-variant": {
+        "1": "{0} ({1})",
+        "2": "{0} ({1}, {2})",
+        "3": "{0} ({1}, {2}, {3})",
+        "4": "{0} ({1}, {2}, {3}, {4})"
+      },
+      "mob-trait": {
+        "baby": "Baby",
+        "left-handed": "Left-handed",
+        "right-handed": "Right-handed",
+        "charged": "Charged",
+        "raid-captain": "Raid Captain",
+        "sheared": "Sheared",
+        "no-pumpkin": "Without Pumpkin",
+        "screaming": "Screaming",
+        "left-horn-missing": "Left Horn Missing",
+        "right-horn-missing": "Right Horn Missing",
+        "nectar": "With Nectar",
+        "angry": "Angry",
+        "riding": "on {0}",
+        "ridden-by": "ridden by {0}",
+        "ridden-by-captain": "ridden by {0} Raid Captain",
+        "armor": {
+          "leather": "Leather Armor",
+          "copper": "Copper Armor",
+          "iron": "Iron Armor",
+          "chainmail": "Chainmail Armor",
+          "diamond": "Diamond Armor",
+          "golden": "Gold Armor"
+        },
+        "size": {
+          "small": "Small",
+          "medium": "Medium",
+          "large": "Large"
+        },
+        "climate": {
+          "temperate": "Temperate",
+          "warm": "Warm",
+          "cold": "Cold"
+        },
+        "biome": {
+          "plains": "Plains",
+          "desert": "Desert",
+          "jungle": "Jungle",
+          "savanna": "Savanna",
+          "snow": "Snowy",
+          "swamp": "Swamp",
+          "taiga": "Taiga"
+        },
+        "profession": {
+          "none": "Unemployed"
+        },
+        "mooshroom": {
+          "red": "Red",
+          "brown": "Brown"
+        },
+        "wolf": {
+          "ashen": "Ashen",
+          "black": "Black",
+          "chestnut": "Chestnut",
+          "pale": "Pale",
+          "rusty": "Rusty",
+          "snowy": "Snowy",
+          "spotted": "Spotted",
+          "striped": "Striped",
+          "woods": "Woods"
+        },
+        "cat": {
+          "all_black": "All Black",
+          "black": "Tuxedo",
+          "british_shorthair": "British Shorthair",
+          "calico": "Calico",
+          "jellie": "Jellie",
+          "persian": "Persian",
+          "ragdoll": "Ragdoll",
+          "red": "Red",
+          "siamese": "Siamese",
+          "tabby": "Tabby",
+          "white": "White"
+        },
+        "horse-color": {
+          "white": "White",
+          "creamy": "Creamy",
+          "chestnut": "Chestnut",
+          "brown": "Brown",
+          "black": "Black",
+          "gray": "Gray",
+          "dark_brown": "Dark Brown"
+        },
+        "horse-marking": {
+          "none": "No Markings",
+          "white": "White Stockings and Blaze",
+          "whitefield": "White Field",
+          "white_dots": "White Spots",
+          "black_dots": "Black Dots"
+        },
+        "llama": {
+          "creamy": "Creamy",
+          "white": "White",
+          "brown": "Brown",
+          "gray": "Gray"
+        },
+        "parrot": {
+          "red": "Red",
+          "blue": "Blue",
+          "green": "Green",
+          "cyan": "Cyan",
+          "gray": "Gray"
+        },
+        "rabbit": {
+          "brown": "Brown",
+          "white": "White",
+          "black": "Black",
+          "black_and_white": "Black and White",
+          "gold": "Gold",
+          "salt_and_pepper": "Salt and Pepper"
+        },
+        "fox": {
+          "red": "Red",
+          "snow": "Snow"
+        },
+        "panda": {
+          "normal": "Normal",
+          "lazy": "Lazy",
+          "worried": "Worried",
+          "playful": "Playful",
+          "brown": "Brown",
+          "weak": "Weak",
+          "aggressive": "Aggressive"
+        },
+        "axolotl": {
+          "lucy": "Leucistic",
+          "wild": "Brown",
+          "gold": "Gold",
+          "cyan": "Cyan",
+          "blue": "Blue"
+        },
+        "zombie-nautilus": {
+          "temperate": "Temperate",
+          "warm": "Coral"
+        },
+        "copper": {
+          "unaffected": "Unoxidized",
+          "exposed": "Exposed",
+          "weathered": "Weathered",
+          "oxidized": "Oxidized"
+        }
+      }
+    },
+    "biome-effect": {
+      "name": "*Biome = Effect*",
+      "desc": [
+        "Every *biome* gives you",
+        "its own *potion effect*"
+      ]
     },
     "kill-effect": {
       "name": "*Kill = Effect*",
@@ -3599,6 +3859,9 @@
     "goal": {
       "none": "<gray>No goal is <red>enabled</red></gray>",
       "no-checklist": "<gray>The goal {0} has <red>no additional information</red></gray>",
+      "no-skip": "<gray>The goal {0} has <red>nothing to skip</red></gray>",
+      "skip-any-order": "<gray>Only a goal in <yellow>random order</yellow> has a current target to skip</gray>",
+      "skip-finished": "<gray>Everything has <red>already been found</red></gray>",
       "description": "Shows what the current goal still needs and who found what."
     },
     "randomizer": {
@@ -3700,9 +3963,6 @@
     },
     "difficulty": {
       "description": "Shows or changes the difficulty."
-    },
-    "skipitem": {
-      "description": "Skips the item you are looking for."
     },
     "openmissingitems": {
       "description": "Opens the missing items menu again."

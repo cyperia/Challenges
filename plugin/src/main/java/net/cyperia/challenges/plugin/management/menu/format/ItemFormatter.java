@@ -1,5 +1,6 @@
 package net.cyperia.challenges.plugin.management.menu.format;
 
+import org.bukkit.permissions.Permissible;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.cyperia.challenges.plugin.Challenges;
@@ -173,15 +174,31 @@ public class ItemFormatter {
 
   @NotNull
   public ItemFormatter suffixIfNewUpdated(@NotNull Object annotationHolder) {
-    if (annotationHolder instanceof VersionedContentContainer container) {
-      int betaCount = container.getBetaCount();
-      int updatedCount = container.getUpdatedCount();
-      int newCount = container.getNewCount();
-      if (betaCount > 0 || updatedCount > 0 || newCount > 0) {
-        return suffixIfNewUpdated(betaCount, newCount, updatedCount);
-      }
+    if (annotationHolder instanceof VersionedContentContainer container
+      && suffixCounts(container.getBetaCount(), container.getNewCount(), container.getUpdatedCount())) {
+      return this;
     }
+    return suffixOwnRelease(annotationHolder);
+  }
 
+  // A container counts only the entries the viewer sees
+  @NotNull
+  public ItemFormatter suffixIfNewUpdated(@NotNull Object annotationHolder, @NotNull Permissible viewer) {
+    if (annotationHolder instanceof VersionedContentContainer container
+      && suffixCounts(container.getBetaCount(viewer), container.getNewCount(viewer), container.getUpdatedCount(viewer))) {
+      return this;
+    }
+    return suffixOwnRelease(annotationHolder);
+  }
+
+  private boolean suffixCounts(int betaCount, int newCount, int updatedCount) {
+    if (betaCount <= 0 && updatedCount <= 0 && newCount <= 0) return false;
+    suffixIfNewUpdated(betaCount, newCount, updatedCount);
+    return true;
+  }
+
+  @NotNull
+  private ItemFormatter suffixOwnRelease(@NotNull Object annotationHolder) {
     if (ReleaseInfo.isBeta(annotationHolder)) {
       return suffix(MessageKey.of("suffix.beta"));
     }

@@ -2,6 +2,7 @@ package net.cyperia.challenges.plugin.challenges.implementation.goal.forcebattle
 
 import net.cyperia.challenges.plugin.ChallengeAPI;
 import net.cyperia.challenges.plugin.challenges.implementation.goal.forcebattle.targets.*;
+import net.cyperia.challenges.plugin.challenges.type.abstraction.AbstractChallenge;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.ForceBattleDisplayGoal;
 import net.cyperia.challenges.plugin.challenges.type.helper.ChallengeHelper;
 import net.cyperia.challenges.plugin.content.i18n.LocalizableMessage;
@@ -11,6 +12,7 @@ import net.cyperia.challenges.plugin.management.scheduler.policy.TimerPolicy;
 import net.cyperia.challenges.plugin.management.scheduler.task.ScheduledTask;
 import net.cyperia.challenges.plugin.utils.misc.InventoryUtils;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.config.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -31,7 +33,7 @@ import java.util.function.Function;
 
 public class ExtremeForceBattleGoal extends ForceBattleDisplayGoal<ForceTarget<?>> {
 
-  private final BooleanSubSetting giveItemSetting, giveBlockSetting;
+  private final BooleanSubSetting giveItemSetting, giveBlockSetting, itemVariantsSetting;
 
   public ExtremeForceBattleGoal() {
 
@@ -43,6 +45,11 @@ public class ExtremeForceBattleGoal extends ForceBattleDisplayGoal<ForceTarget<?
       new ItemStack(Material.CHEST), MessageKeySpace.of("challenge.force-block-battle.sub.give-block"),
       false
     ));
+    itemVariantsSetting = registerItemVariantsSetting(false, () -> {});
+  }
+
+  private boolean hasItemVariants() {
+    return itemVariantsSetting.getAsBoolean();
   }
 
   @Override
@@ -57,11 +64,14 @@ public class ExtremeForceBattleGoal extends ForceBattleDisplayGoal<ForceTarget<?
       UUID uuid = entry.getKey();
       ForceTarget<?> target = entry.getValue();
       Player player = Bukkit.getPlayer(uuid);
-      if (player == null || ignorePlayer(player)) continue;
+      if (player == null) continue;
 
-      if (target.check(player)) {
-        handleTargetFound(player);
-      }
+      Regions.entity(plugin, player, () -> {
+        if (ignorePlayer(player)) return;
+        if (target.check(player)) {
+          handleTargetFound(player);
+        }
+      });
     }
   }
 
@@ -84,7 +94,8 @@ public class ExtremeForceBattleGoal extends ForceBattleDisplayGoal<ForceTarget<?
       Object value = targetDocument.getObject("value");
 
       TargetType targetType = TargetType.valueOf(targetTypeString);
-      targets.add(targetType.parse().apply(value));
+      ForceTarget<?> target = targetType.parse().apply(value);
+      if (target != null) targets.add(target);
     }
     return targets;
   }
@@ -137,7 +148,7 @@ public class ExtremeForceBattleGoal extends ForceBattleDisplayGoal<ForceTarget<?
   public void handleJokerUse(Player player) {
     ForceTarget<?> target = currentTarget.get(player.getUniqueId());
     if (shouldGiveItemOnSkip() && target instanceof ItemTarget itemTarget) {
-      InventoryUtils.dropOrGiveItem(player.getInventory(), player.getLocation(), itemTarget.getTarget());
+      InventoryUtils.dropOrGiveItem(player.getInventory(), player.getLocation(), itemTarget.getTarget().icon());
     } else if (shouldBlockOnSkip() && target instanceof BlockTarget blockTarget) {
       InventoryUtils.dropOrGiveItem(player.getInventory(), player.getLocation(), blockTarget.getTarget());
     }
@@ -146,9 +157,10 @@ public class ExtremeForceBattleGoal extends ForceBattleDisplayGoal<ForceTarget<?
 
   public enum TargetType {
     ITEM(object -> {
-      return new ItemTarget(Material.valueOf((String) object));
+      return ItemTarget.parse((String) object);
     }, player -> {
-      return new ItemTarget(globalRandom.choose(ItemTarget.getPossibleItems()));
+      boolean variants = AbstractChallenge.getFirstInstance(ExtremeForceBattleGoal.class).hasItemVariants();
+      return new ItemTarget(globalRandom.choose(ItemTarget.getPossibleItems(variants)));
     }),
     BLOCK(object -> {
       return new BlockTarget(Material.valueOf((String) object));

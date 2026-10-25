@@ -8,7 +8,7 @@ import net.cyperia.challenges.plugin.management.scheduler.task.TimerTask;
 import net.cyperia.challenges.plugin.management.scheduler.timer.TimerStatus;
 import net.cyperia.challenges.plugin.utils.misc.ExperimentalUtils;
 import net.cyperia.challenges.plugin.utils.misc.ListBuilder;
-import org.bukkit.Bukkit;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
@@ -35,7 +35,8 @@ public class MobRandomizerChallenge extends RandomizerSetting {
 
   private final Map<EntityType, EntityType> entityRandomizer = new LinkedHashMap<>();
 
-  private boolean inSpawn = false;
+  // spawn events fire synchronously on the spawning thread, and spawns run on several region threads
+  private final ThreadLocal<Boolean> inSpawn = ThreadLocal.withInitial(() -> false);
 
   @Override
   protected void onEnable() {
@@ -71,16 +72,16 @@ public class MobRandomizerChallenge extends RandomizerSetting {
 
     List<Entity> entities = event.getEntities();
     // replacing entities while the chunk is still loading them is not safe
-    Bukkit.getScheduler().runTask(Challenges.getInstance(), () -> {
-      for (Entity entity : entities) {
+    for (Entity entity : entities) {
+      Regions.nextTick(Challenges.getInstance(), entity, () -> {
         if (entity instanceof LivingEntity living && living.isValid()) action.accept(living);
-      }
-    });
+      });
+    }
   }
 
   private void forEachLoadedEntity(@NotNull Consumer<LivingEntity> action) {
     for (World world : ChallengeAPI.getGameWorlds()) {
-      world.getLivingEntities().forEach(action);
+      Regions.forEachRegion(plugin, world, () -> world.getLivingEntities().forEach(action));
     }
   }
 
@@ -106,13 +107,13 @@ public class MobRandomizerChallenge extends RandomizerSetting {
   }
 
   private void spawn(@NotNull Location location, @NotNull EntityType type, @Nullable EntityType original) {
-    inSpawn = true;
+    inSpawn.set(true);
     try {
       Entity spawned = location.getWorld().spawnEntity(location, type);
       if (original != null)
         spawned.getPersistentDataContainer().set(ORIGINAL_TYPE, PersistentDataType.STRING, original.getKey().toString());
     } finally {
-      inSpawn = false;
+      inSpawn.set(false);
     }
   }
 
@@ -153,7 +154,7 @@ public class MobRandomizerChallenge extends RandomizerSetting {
   @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
   public void onEntitySpawn(@NotNull EntitySpawnEvent event) {
     if (!shouldExecuteEffect()) return;
-    if (inSpawn) return;
+    if (inSpawn.get()) return;
     EntityType type = entityRandomizer.get(event.getEntityType());
     if (type == null) return;
 

@@ -13,7 +13,6 @@ import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class ItemCollectionGoal extends CollectionGoal {
 
@@ -34,7 +33,7 @@ public abstract class ItemCollectionGoal extends CollectionGoal {
 
   @Override
   protected void onEnable() {
-    scoreboard.setContent(GoalLeaderboard.scoreboardContent(() -> getPoints(new AtomicInteger(), true),
+    scoreboard.setContent(GoalLeaderboard.scoreboardContent(this::getLeaderboard,
       _ -> Collections.singletonList(MessageKey.of("challenge.generic.items-to-collect").withArgs(target.length))));
     scoreboard.show();
   }
@@ -50,7 +49,6 @@ public abstract class ItemCollectionGoal extends CollectionGoal {
   @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
   public void onPlayerInventoryClick(@NotNull PlayerInventoryClickEvent event) {
     if (!shouldExecuteEffect()) return;
-    if (event.isCancelled()) return;
     if (event.getClickedInventory() == null) return;
     if (event.getClickedInventory().getHolder() != event.getPlayer()) return;
     if (event.getCurrentItem() == null) return;

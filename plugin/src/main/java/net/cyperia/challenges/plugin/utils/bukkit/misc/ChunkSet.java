@@ -6,10 +6,9 @@ import net.cyperia.commons.common.config.document.GsonDocument;
 import org.bukkit.Chunk;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * A set of chunks that can be written into the game state. Keys are kept per world, because a chunk key
@@ -17,7 +16,7 @@ import java.util.Set;
  */
 public final class ChunkSet {
 
-  private final Map<String, Set<Long>> chunks = new HashMap<>();
+  private final Map<String, Set<Long>> chunks = new ConcurrentHashMap<>();
 
   /**
    * Adds the chunk and answers whether it was not in the set yet.
@@ -51,7 +50,7 @@ public final class ChunkSet {
     // Read by the names the document holds, not by the worlds that exist right now: a game world can be
     // created after the game state is loaded, and its chunks would be dropped on the next save.
     for (String world : stored.keys()) {
-      Set<Long> keys = new HashSet<>();
+      Set<Long> keys = ConcurrentHashMap.newKeySet();
 
       for (String chunkKey : stored.getStringList(world)) {
         try {
@@ -67,7 +66,7 @@ public final class ChunkSet {
 
   @NotNull
   private Set<Long> chunksIn(@NotNull String world) {
-    return chunks.computeIfAbsent(world, name -> new HashSet<>());
+    return chunks.computeIfAbsent(world, name -> ConcurrentHashMap.newKeySet());
   }
 
 }

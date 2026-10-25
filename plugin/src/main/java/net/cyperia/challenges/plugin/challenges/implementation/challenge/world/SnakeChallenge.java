@@ -16,12 +16,12 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class SnakeChallenge extends Setting {
 
-  private final ArrayList<Block> blocks = new ArrayList<>();
+  private final List<Block> blocks = new CopyOnWriteArrayList<>();
 
   public SnakeChallenge() {
     setUsesGlobalPunish(true);

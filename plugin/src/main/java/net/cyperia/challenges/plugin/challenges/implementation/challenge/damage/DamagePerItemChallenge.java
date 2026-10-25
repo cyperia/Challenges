@@ -19,7 +19,6 @@ public class DamagePerItemChallenge extends Setting {
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onClick(@NotNull PlayerInventoryClickEvent event) {
-    if (event.isCancelled()) return; // ignoreCancelled not working on own event
     if (!shouldExecuteEffect(event.getPlayer())) return;
     if (event.getAction() == InventoryAction.NOTHING) return;
     if (event.getCurrentItem() == null) return;

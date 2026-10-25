@@ -2,12 +2,14 @@ package net.cyperia.challenges.plugin.spigot.command;
 
 import com.mojang.brigadier.arguments.LongArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.content.i18n.Prefix;
 import net.cyperia.challenges.plugin.management.command.ChallengeCommand;
 import net.cyperia.challenges.plugin.management.command.CommandInfo;
 import net.cyperia.challenges.plugin.management.command.CommandNodes;
 import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.collection.NumberFormatter;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -58,7 +60,7 @@ public class TimeCommand implements ChallengeCommand {
   // World#setTime moves on to the next time it is that time of day, so a negative time or one past the day works too
   private static void set(@NotNull Player player, long time) {
     World world = player.getWorld();
-    world.setTime(time);
+    Regions.global(Challenges.getInstance(), () -> world.setTime(time));
     long timeOfDay = Math.floorMod(time, DAY_LENGTH);
     NAMED_TIMES.entrySet().stream()
       .filter(entry -> entry.getValue() == timeOfDay)

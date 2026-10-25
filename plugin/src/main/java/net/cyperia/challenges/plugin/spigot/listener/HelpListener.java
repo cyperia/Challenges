@@ -53,6 +53,8 @@ public class HelpListener implements Listener {
     send(sender, (german ? "Entwickelt von " : "Made by ") + link(german, "cyperia.net")
       + " <dark_gray>(</dark_gray>" + link(german, "domiirl.svrt.dev", "DomiIRL")
       + " & " + link(german, "github.com/anweisen", "anweisen") + "<dark_gray>)</dark_gray>");
+    send(sender, (german ? "Lizenz: " : "License: ") + link(german, "github.com/cyperia/Challenges/blob/main/LICENSE", "AGPL-3.0")
+      + (german ? ", ohne Gewährleistung" : ", without any warranty"));
   }
 
   public static void sendFirstInstallWelcome(@NotNull CommandSender sender) {

@@ -1,5 +1,6 @@
 package net.cyperia.challenges.plugin.challenges.implementation.challenge.world;
 
+import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.Setting;
 import net.cyperia.challenges.plugin.challenges.type.helper.ChallengeHelper;
 import net.cyperia.challenges.plugin.content.i18n.Prefix;
@@ -10,6 +11,7 @@ import net.cyperia.challenges.plugin.management.scheduler.timer.TimerStatus;
 import net.cyperia.challenges.plugin.utils.misc.InventoryUtils;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
 import net.cyperia.commons.bukkit.utils.item.ItemUtils;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -37,11 +39,12 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.IntStream;
 
 public class LoopChallenge extends Setting {
 
-  private static final Map<Loop, Long> loops = new HashMap<>();
+  private static final Map<Loop, Long> loops = new ConcurrentHashMap<>();
 
   @ScheduledTask(ticks = 1, async = false)
   public void onTick() {
@@ -50,8 +53,9 @@ public class LoopChallenge extends Setting {
     for (Map.Entry<Loop, Long> entry : new ArrayList<>(loops.entrySet())) {
 
       if (entry.getValue() + 1000 <= currentTimeMillis) {
-        entry.getKey().execute();
-        loops.put(entry.getKey(), currentTimeMillis);
+        Loop loop = entry.getKey();
+        loop.schedule(loop::execute);
+        loops.put(loop, currentTimeMillis);
       }
 
     }
@@ -129,6 +133,8 @@ public class LoopChallenge extends Setting {
 
     void execute();
 
+    void schedule(@NotNull Runnable task);
+
     default void cancel() {
       loops.remove(this);
     }
@@ -145,6 +151,11 @@ public class LoopChallenge extends Setting {
       this.launchVelocity = event.getEntity().getVelocity();
       this.launchLocation = event.getLocation();
       this.entityType = event.getEntityType();
+    }
+
+    @Override
+    public void schedule(@NotNull Runnable task) {
+      Regions.at(Challenges.getInstance(), launchLocation, task);
     }
 
     @Override
@@ -170,6 +181,11 @@ public class LoopChallenge extends Setting {
     }
 
     @Override
+    public void schedule(@NotNull Runnable task) {
+      Regions.entity(Challenges.getInstance(), entity, task, this::cancel);
+    }
+
+    @Override
     public void execute() {
       if (entity.isDead()) {
         cancel();
@@ -192,6 +208,11 @@ public class LoopChallenge extends Setting {
       this.player = player;
       this.blockFace = blockFace;
       this.currentBlock = currentBlock;
+    }
+
+    @Override
+    public void schedule(@NotNull Runnable task) {
+      Regions.at(Challenges.getInstance(), currentBlock.getLocation(), task);
     }
 
     @Override
@@ -235,6 +256,11 @@ public class LoopChallenge extends Setting {
       this.player = player;
       this.blockFace = blockFace;
       this.currentBlock = currentBlock;
+    }
+
+    @Override
+    public void schedule(@NotNull Runnable task) {
+      Regions.at(Challenges.getInstance(), currentBlock.getLocation(), task);
     }
 
     @Override
@@ -312,6 +338,11 @@ public class LoopChallenge extends Setting {
       itemStack.setAmount(1);
       this.itemStack = itemStack;
       this.player = player;
+    }
+
+    @Override
+    public void schedule(@NotNull Runnable task) {
+      Regions.entity(Challenges.getInstance(), player, task, this::cancel);
     }
 
     @Override

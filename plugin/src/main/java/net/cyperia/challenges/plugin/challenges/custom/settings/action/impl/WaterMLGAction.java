@@ -1,9 +1,11 @@
 package net.cyperia.challenges.plugin.challenges.custom.settings.action.impl;
 
+import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.challenges.custom.settings.ChallengeExecutionData;
 import net.cyperia.challenges.plugin.challenges.custom.settings.action.ChallengeAction;
 import net.cyperia.challenges.plugin.challenges.implementation.challenge.extraworld.WaterMLGChallenge;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.AbstractChallenge;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 
 import java.util.Map;
 
@@ -17,7 +19,7 @@ public class WaterMLGAction extends ChallengeAction {
   public void execute(
     ChallengeExecutionData executionData,
     Map<String, String[]> subActions) {
-    AbstractChallenge.getFirstInstance(WaterMLGChallenge.class).startWorldChallenge();
+    Regions.global(Challenges.getInstance(), () -> AbstractChallenge.getFirstInstance(WaterMLGChallenge.class).startWorldChallenge());
   }
 
 }

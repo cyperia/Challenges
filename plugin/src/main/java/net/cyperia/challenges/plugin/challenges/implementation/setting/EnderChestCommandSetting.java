@@ -9,6 +9,7 @@ import net.cyperia.challenges.plugin.management.command.CommandInfo;
 import net.cyperia.challenges.plugin.management.command.CommandProvider;
 import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import net.cyperia.challenges.plugin.spigot.command.ShortcutCommand;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,7 +30,7 @@ public class EnderChestCommandSetting extends Setting implements CommandProvider
       return;
     }
 
-    player.openInventory(player.getEnderChest());
+    Regions.entity(plugin, player, () -> player.openInventory(player.getEnderChest()));
     getChallengeMessageKey("opened").send(player, Prefix.CHALLENGES);
   }
 

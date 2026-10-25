@@ -8,15 +8,18 @@ import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.management.server.ChallengeEndCause;
 import net.cyperia.commons.bukkit.utils.logging.Logger;
 import net.cyperia.commons.common.config.Document;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class CollectionGoal extends SettingGoal implements ChecklistGoal {
 
-  private final Map<UUID, List<String>> collections = new HashMap<>();
+  private final Map<UUID, List<String>> collections = new ConcurrentHashMap<>();
   protected Object[] target;
   private Set<String> targetKeys;
 
@@ -31,7 +34,7 @@ public abstract class CollectionGoal extends SettingGoal implements ChecklistGoa
 
   @Override
   protected void onEnable() {
-    scoreboard.setContent(GoalLeaderboard.scoreboardContent(() -> getPoints(new AtomicInteger(), true)));
+    scoreboard.setContent(GoalLeaderboard.scoreboardContent(this::getLeaderboard));
     scoreboard.show();
   }
 
@@ -43,7 +46,7 @@ public abstract class CollectionGoal extends SettingGoal implements ChecklistGoa
   @Override
   public void getWinnersOnEnd(@NotNull List<Player> winners) {
     AtomicInteger mostPoints = new AtomicInteger();
-    Map<Player, Integer> points = getPoints(mostPoints, false);
+    Map<Player, Integer> points = getPoints(mostPoints);
     if (mostPoints.get() == 0) return; // Nobody won, nobody has anything
 
     for (Map.Entry<Player, Integer> entry : points.entrySet()) {
@@ -53,8 +56,13 @@ public abstract class CollectionGoal extends SettingGoal implements ChecklistGoa
   }
 
   @NotNull
-  protected Map<Player, Integer> getPoints(@NotNull AtomicInteger mostPoints, boolean zeros) {
-    return GoalHelper.createPointsFromValues(mostPoints, collections, (uuid, strings) -> getCollectedCount(uuid), zeros);
+  protected Map<Player, Integer> getPoints(@NotNull AtomicInteger mostPoints) {
+    return GoalHelper.createPointsFromValues(mostPoints, collections, (uuid, strings) -> getCollectedCount(uuid));
+  }
+
+  @NotNull
+  protected Map<OfflinePlayer, Integer> getLeaderboard() {
+    return GoalHelper.createLeaderboardFromValues(collections, (uuid, strings) -> getCollectedCount(uuid));
   }
 
   protected void collect(@NotNull Player player, @NotNull Object item, @NotNull Runnable success) {
@@ -76,7 +84,7 @@ public abstract class CollectionGoal extends SettingGoal implements ChecklistGoa
   }
 
   protected List<String> getCollectionRaw(@NotNull UUID uuid) {
-    return collections.computeIfAbsent(uuid, key -> new ArrayList<>());
+    return collections.computeIfAbsent(uuid, key -> new CopyOnWriteArrayList<>());
   }
 
   protected void checkCollects() {
@@ -99,7 +107,7 @@ public abstract class CollectionGoal extends SettingGoal implements ChecklistGoa
       try {
         UUID uuid = UUID.fromString(key);
         List<String> collection = scores.getStringList(key);
-        collections.put(uuid, collection);
+        collections.put(uuid, new CopyOnWriteArrayList<>(collection));
       } catch (Exception ex) {
         Logger.error("Could not load scores for {}", key);
       }

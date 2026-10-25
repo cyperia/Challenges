@@ -1,15 +1,17 @@
 package net.cyperia.challenges.plugin.challenges.implementation.challenge.world;
 
 import com.google.common.collect.Lists;
-import net.cyperia.challenges.plugin.ChallengeAPI;
+import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.Setting;
 import net.cyperia.challenges.plugin.spigot.events.PlayerIgnoreStatusChangeEvent;
 import net.cyperia.commons.bukkit.utils.logging.Logger;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.collection.pair.Triple;
 import net.cyperia.commons.common.config.Document;
 import net.cyperia.commons.common.config.document.GsonDocument;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -27,11 +29,12 @@ import org.bukkit.event.world.ChunkUnloadEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class RepeatInChunkChallenge extends Setting {
 
-  private final Map<String, Map<Triple<Integer, Integer, Integer>, BlockData>> changedBlocks = new HashMap<>();
-  private final Set<Chunk> updatedChunks = new HashSet<>();
+  private final Map<String, Map<Triple<Integer, Integer, Integer>, BlockData>> changedBlocks = new ConcurrentHashMap<>();
+  private final Set<Chunk> updatedChunks = ConcurrentHashMap.newKeySet();
 
   @Override
   public void writeGameState(@NotNull Document document) {
@@ -67,7 +70,7 @@ public class RepeatInChunkChallenge extends Setting {
 
     for (World world : Bukkit.getWorlds()) {
       List<Document> list = changedDocument.getDocumentList(world.getName());
-      Map<Triple<Integer, Integer, Integer>, BlockData> blockMap = changedBlocks.getOrDefault(world.getName(), new HashMap<>());
+      Map<Triple<Integer, Integer, Integer>, BlockData> blockMap = changedBlocks.getOrDefault(world.getName(), new ConcurrentHashMap<>());
       changedBlocks.putIfAbsent(world.getName(), blockMap);
 
       for (Document blockDocument : list) {
@@ -107,31 +110,30 @@ public class RepeatInChunkChallenge extends Setting {
   @Override
   protected void onEnable() {
 
-    for (Player player : ChallengeAPI.getIngamePlayers()) {
-      updateSurroundingChunks(player.getLocation().getChunk(), false);
-    }
+    Challenges.getInstance().getPlayerManager().forEachChallengePlayer(player ->
+      updateSurroundingChunks(player.getLocation().getChunk(), false));
   }
 
   private void changeBlockInEveryChunk(World world, int x, int y, int z, BlockData data, Block exception) {
     updatedChunks.clear();
 
-    Bukkit.getScheduler().runTask(plugin, () -> {
+    Regions.nextTick(plugin, () -> {
 
       Map<Triple<Integer, Integer, Integer>, BlockData> map = changedBlocks
-        .getOrDefault(world.getName(), new HashMap<>());
+        .getOrDefault(world.getName(), new ConcurrentHashMap<>());
       changedBlocks.putIfAbsent(world.getName(), map);
       map.put(new Triple<>(x, y, z), data);
 
-      for (Player player : ChallengeAPI.getIngamePlayers()) {
+      Challenges.getInstance().getPlayerManager().forEachChallengePlayer(player -> {
 
         for (Chunk chunk : getSurroundingChunks(player.getLocation().getChunk(), false)) {
           Block block = chunk.getBlock(x, y, z);
           if (!Objects.equals(exception, block)) {
-            setBlockData(block, data, true);
+            Regions.at(plugin, block.getLocation(), () -> setBlockData(block, data, true));
           }
         }
 
-      }
+      });
 
     });
   }
@@ -179,19 +181,19 @@ public class RepeatInChunkChallenge extends Setting {
   private void updateChunk(Chunk chunk) {
     updatedChunks.add(chunk);
 
-    Map<Triple<Integer, Integer, Integer>, BlockData> dataMap = changedBlocks.getOrDefault(chunk.getWorld().getName(), new HashMap<>());
+    Map<Triple<Integer, Integer, Integer>, BlockData> dataMap = changedBlocks.getOrDefault(chunk.getWorld().getName(), new ConcurrentHashMap<>());
+    Location center = new Location(chunk.getWorld(), chunk.getX() * 16 + 8, 0, chunk.getZ() * 16 + 8);
 
-    for (Map.Entry<Triple<Integer, Integer, Integer>, BlockData> blockEntry : dataMap.entrySet()) {
-      Triple<Integer, Integer, Integer> pos = blockEntry.getKey();
-      BlockData blockData = blockEntry.getValue();
-      Block block = chunk.getBlock(pos.getFirst(), pos.getSecond(), pos.getThird());
-      if (!block.getBlockData().matches(blockData)) {
-        setBlockData(block, blockData, false);
+    Regions.at(plugin, center, () -> {
+      for (Map.Entry<Triple<Integer, Integer, Integer>, BlockData> blockEntry : dataMap.entrySet()) {
+        Triple<Integer, Integer, Integer> pos = blockEntry.getKey();
+        BlockData blockData = blockEntry.getValue();
+        Block block = chunk.getBlock(pos.getFirst(), pos.getSecond(), pos.getThird());
+        if (!block.getBlockData().matches(blockData)) {
+          setBlockData(block, blockData, false);
+        }
       }
-
-    }
-
-
+    });
   }
 
   private void setBlockData(Block block, BlockData blockData, boolean update) {

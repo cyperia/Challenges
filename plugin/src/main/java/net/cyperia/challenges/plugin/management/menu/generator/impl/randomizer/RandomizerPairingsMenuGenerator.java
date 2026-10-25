@@ -6,7 +6,7 @@ import net.cyperia.challenges.plugin.content.i18n.LocalizableMessage;
 import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.management.menu.SettingCategory;
 import net.cyperia.challenges.plugin.management.menu.format.ItemFormatter;
-import net.cyperia.challenges.plugin.management.menu.generator.UncachedMultiPageSelectMenuGenerator;
+import net.cyperia.challenges.plugin.management.menu.generator.MultiPageSelectMenuGenerator;
 import net.cyperia.challenges.plugin.management.menu.generator.impl.randomizer.RandomizerPairingsMenuGenerator.Entry;
 import net.cyperia.commons.bukkit.utils.item.ItemUtils;
 import net.cyperia.commons.bukkit.utils.menu.MenuClickInfo;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
-public class RandomizerPairingsMenuGenerator extends UncachedMultiPageSelectMenuGenerator<Entry> {
+public class RandomizerPairingsMenuGenerator extends MultiPageSelectMenuGenerator<Entry> {
 
   private static final int SIZE = 6 * 9;
   private static final int[] SLOTS = calcSlots(4, 7, SIZE);

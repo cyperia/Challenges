@@ -17,6 +17,7 @@ import net.cyperia.challenges.plugin.management.scheduler.task.ScheduledTask;
 import net.cyperia.challenges.plugin.management.server.ChallengeEndCause;
 import net.cyperia.challenges.plugin.management.server.scoreboard.ChallengeActionBar;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.config.Document;
 import net.cyperia.commons.common.config.FileDocument;
 import net.kyori.adventure.text.Component;
@@ -43,22 +44,23 @@ public final class ChallengeTimer {
   private TimerActionBarUpdateScheduler updateActionbarScheduler;
   private Object pausedParticleScheduler;
 
+  // Changed on the global region, read from every region
   @Getter
-  private boolean playPausedParticled;
+  private volatile boolean playPausedParticled;
   @Getter
-  private long time = 0;
+  private volatile long time = 0;
   @Getter
-  private int countdown;
+  private volatile int countdown;
   @Getter
-  private int initialCountdown;
+  private volatile int initialCountdown;
   @Getter
-  private boolean countdownRunning = false;
+  private volatile boolean countdownRunning = false;
   @Getter
-  private boolean countingUp = true;
+  private volatile boolean countingUp = true;
   @Getter
-  private boolean paused = true;
+  private volatile boolean paused = true;
   @Getter
-  private boolean hidden = false;
+  private volatile boolean hidden = false;
 
   public ChallengeTimer() {
     Document pluginConfig = Challenges.getInstance().getConfigDocument();
@@ -93,9 +95,11 @@ public final class ChallengeTimer {
   }
 
   public void setPlayPausedParticled(boolean play) {
-    if (this.playPausedParticled == play) return;
-    setPlayPausedParticleScheduler(pausedParticleScheduler);
-    this.playPausedParticled = play;
+    onGlobal(() -> {
+      if (this.playPausedParticled == play) return;
+      setPlayPausedParticleScheduler(pausedParticleScheduler);
+      this.playPausedParticled = play;
+    });
   }
 
   public void setPlayPausedParticleScheduler(@Nullable Object pausedParticleScheduler) {
@@ -131,9 +135,15 @@ public final class ChallengeTimer {
 
   // A paused world stands still, so a server waiting in a pool neither turns to night nor starts raining
   public void applyPauseRules(@NotNull World world) {
-    // overhaul post-1.21: DO_DAYLIGHT_CYCLE -> ADVANCE_TIME
-    world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, !paused);
-    world.setGameRule(GameRule.DO_WEATHER_CYCLE, !paused);
+    Regions.global(Challenges.getInstance(), () -> {
+      // overhaul post-1.21: DO_DAYLIGHT_CYCLE -> ADVANCE_TIME
+      world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, !paused);
+      world.setGameRule(GameRule.DO_WEATHER_CYCLE, !paused);
+    });
+  }
+
+  private static void onGlobal(@NotNull Runnable task) {
+    Regions.global(Challenges.getInstance(), task);
   }
 
   private void updatePauseRules() {
@@ -187,64 +197,71 @@ public final class ChallengeTimer {
   }
 
   public void resume() {
-    if (!paused) return;
-    paused = false;
-    countdownRunning = false;
+    onGlobal(() -> {
+      if (!paused) return;
+      paused = false;
+      countdownRunning = false;
 
-    updateActionbar();
-    updatePauseRules();
+      updateActionbar();
+      updatePauseRules();
 
-    MessageKey.of("timer.messages.started").broadcast(Prefix.TIMER);
-    Challenges.getInstance().getScheduler().fireTimerStatusChange();
-    Challenges.getInstance().getTitleManager().sendTimerStatusTitle(MessageKey.of("title.timer-started"));
-    Challenges.getInstance().getServerManager().setNotFresh();
-    Challenges.getInstance().getAutoResetManager().handleTimerStart();
+      MessageKey.of("timer.messages.started").broadcast(Prefix.TIMER);
+      Challenges.getInstance().getScheduler().fireTimerStatusChange();
+      Challenges.getInstance().getTitleManager().sendTimerStatusTitle(MessageKey.of("title.timer-started"));
+      Challenges.getInstance().getServerManager().setNotFresh();
+      Challenges.getInstance().getAutoResetManager().handleTimerStart();
 
-    // Spectators are explicitly included: whoever died in the previous run is a spectator now and has
-    // to be able to play again. Creative is exempt because it is how the server is set up, not how a
-    // run is played, and vanished players are not part of the run at all.
-    for (Player player : Challenges.getInstance().getPlayerManager().getPlayers()) {
-      if (player.getGameMode() == GameMode.CREATIVE) continue;
-      player.setGameMode(GameMode.SURVIVAL);
-    }
+      // Spectators are explicitly included: whoever died in the previous run is a spectator now and has
+      // to be able to play again. Creative is exempt because it is how the server is set up, not how a
+      // run is played, and vanished players are not part of the run at all.
+      Challenges.getInstance().getPlayerManager().forEachOnOwnThread(Challenges.getInstance().getPlayerManager().getPlayers(), player -> {
+        if (player.getGameMode() == GameMode.CREATIVE) return;
+        player.setGameMode(GameMode.SURVIVAL);
+      });
 
-    IGoal currentGoal = Challenges.getInstance().getChallengeManager().getCurrentGoal();
-    if (currentGoal != null && specificStartSounds) {
-      currentGoal.getStartSound().broadcast();
-    } else if (defaultStartSound) {
-      SoundSample.DRAGON_BREATH.broadcast();
-    }
-
+      IGoal currentGoal = Challenges.getInstance().getChallengeManager().getCurrentGoal();
+      if (currentGoal != null && specificStartSounds) {
+        currentGoal.getStartSound().broadcast();
+      } else if (defaultStartSound) {
+        SoundSample.DRAGON_BREATH.broadcast();
+      }
+    });
   }
 
   public void pause(boolean playInGameEffects) {
-    if (paused) return;
-    paused = true;
+    onGlobal(() -> {
+      if (paused) return;
+      paused = true;
 
-    updateActionbar();
-    updatePauseRules();
+      updateActionbar();
+      updatePauseRules();
 
-    Challenges.getInstance().getScheduler().fireTimerStatusChange();
-    if (playInGameEffects) {
-      Challenges.getInstance().getTitleManager().sendTimerStatusTitle(MessageKey.of("title.timer-paused"));
-      MessageKey.of("timer.messages.paused").broadcast(Prefix.TIMER);
-      SoundSample.BASS_OFF.broadcast();
-    }
+      Challenges.getInstance().getScheduler().fireTimerStatusChange();
+      if (playInGameEffects) {
+        Challenges.getInstance().getTitleManager().sendTimerStatusTitle(MessageKey.of("title.timer-paused"));
+        MessageKey.of("timer.messages.paused").broadcast(Prefix.TIMER);
+        SoundSample.BASS_OFF.broadcast();
+      }
+    });
   }
 
   public void toggle() {
-    if (isStarted()) {
-      pause(true);
-    } else {
-      resume();
-    }
+    onGlobal(() -> {
+      if (isStarted()) {
+        pause(true);
+      } else {
+        resume();
+      }
+    });
   }
 
   public void reset() {
-    if (!countingUp) pause(true);
-    time = 0;
-    countingUp = true;
-    updateActionbar();
+    onGlobal(() -> {
+      if (!countingUp) pause(true);
+      time = 0;
+      countingUp = true;
+      updateActionbar();
+    });
   }
 
   @NotNull
@@ -278,62 +295,74 @@ public final class ChallengeTimer {
   }
 
   public void addSeconds(int amount) {
-    setSeconds(time + amount);
+    onGlobal(() -> setSeconds(time + amount));
   }
 
   public void setSeconds(long seconds) {
-    this.time = Math.max(seconds, 0);
-    updateActionbar();
+    onGlobal(() -> {
+      this.time = Math.max(seconds, 0);
+      updateActionbar();
+    });
   }
 
   public void addCountdownSeconds(int amount) {
-    setCountdown(countdown + amount);
+    onGlobal(() -> setCountdown(countdown + amount));
   }
 
   public void setCountdown(int seconds) {
-    this.countdown = Math.max(seconds, 0);
-    this.initialCountdown = this.countdown;
-    updateActionbar();
+    onGlobal(() -> {
+      this.countdown = Math.max(seconds, 0);
+      this.initialCountdown = this.countdown;
+      updateActionbar();
+    });
   }
 
   public void resumeCountdown() {
-    if (!paused || countdownRunning) return;
-    countdownRunning = true;
-    updateActionbar();
+    onGlobal(() -> {
+      if (!paused || countdownRunning) return;
+      countdownRunning = true;
+      updateActionbar();
 
-    Challenges.getInstance().getScheduler().fireTimerStatusChange();
+      Challenges.getInstance().getScheduler().fireTimerStatusChange();
 
-    MessageKey.of("timer.messages.countdown.started").broadcast(Prefix.TIMER, ArgumentFormat.TIME.apply(countdown));
-    SoundSample.PLING.broadcast();
+      MessageKey.of("timer.messages.countdown.started").broadcast(Prefix.TIMER, ArgumentFormat.TIME.apply(countdown));
+      SoundSample.PLING.broadcast();
+    });
   }
 
   public void pauseCountdown() {
-    if (!countdownRunning) return;
-    countdownRunning = false;
+    onGlobal(() -> {
+      if (!countdownRunning) return;
+      countdownRunning = false;
 
-    updateActionbar();
+      updateActionbar();
 
-    Challenges.getInstance().getScheduler().fireTimerStatusChange();
+      Challenges.getInstance().getScheduler().fireTimerStatusChange();
 
-    MessageKey.of("timer.messages.countdown.paused").broadcast(Prefix.TIMER);
-    SoundSample.BASS_OFF.broadcast();
+      MessageKey.of("timer.messages.countdown.paused").broadcast(Prefix.TIMER);
+      SoundSample.BASS_OFF.broadcast();
+    });
   }
 
   public void toggleCountdown() {
-    if (countdownRunning) {
-      pauseCountdown();
-    } else {
-      resumeCountdown();
-    }
+    onGlobal(() -> {
+      if (countdownRunning) {
+        pauseCountdown();
+      } else {
+        resumeCountdown();
+      }
+    });
   }
 
   public void setHidden(boolean hide) {
-    if (this.hidden == hide) return;
+    onGlobal(() -> {
+      if (this.hidden == hide) return;
 
-    this.hidden = hide;
-    updateActionbar();
-    MessageKey.of("timer.messages." + (hide ? "hidden" : "shown")).broadcast(Prefix.TIMER);
-    SoundSample.BASS_ON.broadcast();
+      this.hidden = hide;
+      updateActionbar();
+      MessageKey.of("timer.messages." + (hide ? "hidden" : "shown")).broadcast(Prefix.TIMER);
+      SoundSample.BASS_ON.broadcast();
+    });
   }
 
   @NotNull
@@ -366,29 +395,34 @@ public final class ChallengeTimer {
   }
 
   public void setCountingUp(boolean countingUp) {
-    if (this.countingUp == countingUp) return;
+    onGlobal(() -> {
+      if (this.countingUp == countingUp) return;
 
-    this.countingUp = countingUp;
-    updateActionbar();
-    MessageKey.of("timer.messages.counting-" + (countingUp ? "up" : "down")).broadcast(Prefix.TIMER); // TODO
-    SoundSample.BASS_ON.broadcast();
+      this.countingUp = countingUp;
+      updateActionbar();
+      MessageKey.of("timer.messages.counting-" + (countingUp ? "up" : "down")).broadcast(Prefix.TIMER); // TODO
+      SoundSample.BASS_ON.broadcast();
+    });
   }
 
   public float getCountdownProgress() {
-    if (!countdownRunning || countdown > initialCountdown - 1) return 0;
-    if (initialCountdown <= 0) return 0;
-    return 1f - (float) countdown / initialCountdown;
+    // Both are read once, they change on another thread
+    int remaining = countdown;
+    int initial = initialCountdown;
+    if (!countdownRunning || remaining > initial - 1) return 0;
+    if (initial <= 0) return 0;
+    return 1f - (float) remaining / initial;
   }
 
   public static class PausedParticleScheduler {
 
-    @ScheduledTask(ticks = 20, timerPolicy = TimerPolicy.PAUSED)
+    @ScheduledTask(ticks = 20, async = false, timerPolicy = TimerPolicy.PAUSED)
     public void playPausedParticles() {
-      for (Player player : ChallengeAPI.getIngamePlayers()) {
+      Challenges.getInstance().getPlayerManager().forEachChallengePlayer(player -> {
         Location location = player.getLocation();
-        if (location.getWorld() == null) continue;
+        if (location.getWorld() == null) return;
         location.getWorld().playEffect(location, Effect.ENDER_SIGNAL, 1);
-      }
+      });
     }
 
   }

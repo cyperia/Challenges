@@ -10,7 +10,7 @@ import java.util.List;
 public class KillAllMobsGoal extends KillMobsGoal {
 
   public KillAllMobsGoal() {
-    super(getAllMobsToKill());
+    super(getAllMobsToKill(), true);
   }
 
   static List<EntityType> getAllMobsToKill() {

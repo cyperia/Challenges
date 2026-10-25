@@ -74,13 +74,13 @@ public class SearchDialogMenuGenerator extends DialogMenuGenerator<String> imple
   }
 
   @Override
-  protected void setupDialog(@NotNull DialogRegistryEntry.Builder dialog, @NotNull String query, @NotNull Locale locale) {
+  protected void setupDialog(@NotNull DialogRegistryEntry.Builder dialog, @NotNull String query, @NotNull Player viewer, @NotNull Locale locale) {
     query = query.trim();
     // the state may come from outside the dialog (e.g. /search <query>), where nothing enforces the
     // limit of the input field; an initial value longer than maxLength fails to serialize
     if (query.length() > MAX_INPUT_LENGTH) query = query.substring(0, MAX_INPUT_LENGTH);
 
-    List<SearchFindable> matches = findResults(query, locale);
+    List<SearchFindable> matches = findResults(query, viewer, locale);
     List<SearchFindable> results = matches.stream().limit(RESULT_LIMIT).toList();
 
     // search button first -> it lands in the first grid cell, directly under the input
@@ -204,7 +204,7 @@ public class SearchDialogMenuGenerator extends DialogMenuGenerator<String> imple
         if (!(audience instanceof Player player)) return;
         // results outlive the search that built them, so a findable that hid itself since then is
         // not opened; the query is run again instead, which rebuilds the dialog without it
-        if (!findable.isVisible()) {
+        if (!findable.isVisibleTo(player)) {
           SoundSample.BASS_OFF.play(player);
           openMenu(player, query);
           return;
@@ -220,9 +220,9 @@ public class SearchDialogMenuGenerator extends DialogMenuGenerator<String> imple
    * so a short query never dumps the whole challenge list.
    */
   @NotNull
-  private List<SearchFindable> findResults(@NotNull String query, @NotNull Locale locale) {
+  private List<SearchFindable> findResults(@NotNull String query, @NotNull Player viewer, @NotNull Locale locale) {
     if (query.length() < MIN_QUERY_LENGTH) return List.of();
-    return Challenges.getInstance().getSearchRegistry().search(query, locale);
+    return Challenges.getInstance().getSearchRegistry().search(query, viewer, locale);
   }
 
   @RequiredArgsConstructor

@@ -10,6 +10,7 @@ import net.cyperia.challenges.plugin.management.server.player.PlayerNameProvider
 import net.cyperia.challenges.plugin.management.server.player.PlayerVisibilityProvider;
 import net.cyperia.challenges.plugin.management.server.player.ServerPlayerNameProvider;
 import net.cyperia.challenges.plugin.spigot.events.PlayerIgnoreStatusChangeEvent;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.config.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -127,19 +128,26 @@ public final class PlayerManager {
     return visibilityProvider.isPlayerVanished(player);
   }
 
+  // The action runs on each player's own thread, inline on a server without regions
   public void forEachAudience(@NotNull Consumer<? super Player> action) {
-    getAudience().forEach(action);
+    forEachOnOwnThread(getAudience(), action);
   }
 
   public void forEachChallengePlayer(@NotNull Consumer<? super Player> action) {
-    getChallengePlayers().forEach(action);
+    forEachOnOwnThread(getChallengePlayers(), action);
   }
 
   public void forEachIgnoredPlayer(@NotNull Consumer<? super Player> action) {
     for (Player player : getAudience()) {
       if (isIgnored(player)) {
-        action.accept(player);
+        Regions.entity(Challenges.getInstance(), player, () -> action.accept(player));
       }
+    }
+  }
+
+  public void forEachOnOwnThread(@NotNull Collection<? extends Player> players, @NotNull Consumer<? super Player> action) {
+    for (Player player : players) {
+      Regions.entity(Challenges.getInstance(), player, () -> action.accept(player));
     }
   }
 

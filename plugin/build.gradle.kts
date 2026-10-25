@@ -5,11 +5,25 @@ plugins {
 
 group = "net.cyperia.challenges"
 
+// Canvas-only classes. Compiled against canvas-api, which the plugin never touches unless the server
+// is Canvas (see RespawnPortalAdapters), so the plugin still loads on Paper and Purpur.
+val canvas: SourceSet by sourceSets.creating {
+  compileClasspath += sourceSets.main.get().output
+}
+
+// The Canvas adapter runs against canvas-api only: its classes are a superset of paper-api, which would
+// shadow them if both were on the classpath.
+val canvasTest: SourceSet by sourceSets.creating {
+  compileClasspath += canvas.output + sourceSets.main.get().output
+  runtimeClasspath += canvas.output + sourceSets.main.get().output
+}
+
 dependencies {
   compileOnly(libs.slf4j.api)
 
   compileOnly(libs.paper.api)
   compileOnly(libs.protocol.lib)
+  "canvasCompileOnly"(libs.canvas.api)
 
   compileOnly(libs.jetbrains.annotations)
   compileOnly(libs.lombok)
@@ -35,6 +49,26 @@ dependencies {
   testImplementation(libs.mockito.core)
   testImplementation(libs.paper.api)
   testRuntimeOnly(libs.protocol.lib)
+
+  "canvasTestImplementation"(libs.canvas.api)
+  "canvasTestImplementation"(platform(libs.junit.bom))
+  "canvasTestImplementation"(libs.junit.jupiter)
+  "canvasTestImplementation"(libs.mockito.core)
+  "canvasTestImplementation"(libs.slf4j.api)
+  "canvasTestImplementation"(libs.gson)
+  "canvasTestRuntimeOnly"(libs.junit.platform.launcher)
+}
+
+val canvasTestTask = tasks.register<Test>("canvasTest") {
+  description = "Runs the Canvas adapter tests against canvas-api."
+  group = "verification"
+  testClassesDirs = canvasTest.output.classesDirs
+  classpath = canvasTest.runtimeClasspath
+  useJUnitPlatform()
+}
+
+tasks.check {
+  dependsOn(canvasTestTask)
 }
 
 tasks.test {
@@ -59,6 +93,7 @@ tasks {
       attributes["paperweight-mappings-namespace"] = "mojang"
     }
 
+    from(canvas.output)
     // no explicit dependencies block - bundle "implementation" deps by default
   }
 

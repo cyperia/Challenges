@@ -9,6 +9,7 @@ import net.cyperia.challenges.plugin.management.files.ConfigManager;
 import net.cyperia.challenges.plugin.utils.bukkit.container.PlayerData;
 import net.cyperia.challenges.plugin.utils.misc.BlockUtils;
 import net.cyperia.commons.bukkit.utils.logging.Logger;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.collection.IRandom;
 import net.cyperia.commons.common.config.Document;
 import net.cyperia.commons.common.config.FileDocument;
@@ -24,6 +25,7 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class WorldManager {
 
@@ -34,7 +36,7 @@ public final class WorldManager {
   private final boolean configUseCustomSeed;
   private final String levelName;
   private final String[] worlds;
-  private final Map<UUID, PlayerData> playerData = new HashMap<>();
+  private final Map<UUID, PlayerData> playerData = new ConcurrentHashMap<>();
   @Getter
   private boolean shutdownBecauseOfReset = false;
   private WorldSettings settings = new WorldSettings();
@@ -86,11 +88,9 @@ public final class WorldManager {
 
     Object requester = requestedBy instanceof Player ? requestedBy : MessageKey.of("generic.console");
     MessageKey disconnectKey = MessageKey.of(restartOnReset ? "server.reset.restart" : "server.reset.stop");
-    for (Player player : Bukkit.getOnlinePlayers()) {
-      player.kick(disconnectKey.asComponent(player, requester));
-    }
+    Challenges.getInstance().getPlayerManager().forEachAudience(player -> player.kick(disconnectKey.asComponent(player, requester)));
 
-    Bukkit.getScheduler().runTaskLater(Challenges.getInstance(), this::stopOrRestartServerNow, 3);
+    Regions.later(Challenges.getInstance(), this::stopOrRestartServerNow, 3);
   }
 
   private void resetConfigs(@Nullable Long seed) {
@@ -136,8 +136,8 @@ public final class WorldManager {
   }
 
   private void teleportPlayersOutOfExtraWorld() {
-    for (Player player : Bukkit.getOnlinePlayers()) {
-      if (player.getWorld() != flatWorld) continue;
+    Challenges.getInstance().getPlayerManager().forEachAudience(player -> {
+      if (player.getWorld() != flatWorld) return;
 
       Location location = player.getRespawnLocation();
       if (location == null) {
@@ -148,8 +148,8 @@ public final class WorldManager {
         location = BlockUtils.getCenteredSpawn(world);
       }
 
-      player.teleport(location);
-    }
+      player.teleportAsync(location);
+    });
   }
 
   @SafeVarargs
@@ -323,7 +323,7 @@ public final class WorldManager {
   }
 
   private void cachePlayerData() {
-    Bukkit.getOnlinePlayers().forEach(this::cachePlayerData);
+    Challenges.getInstance().getPlayerManager().forEachAudience(this::cachePlayerData);
   }
 
   public void cachePlayerData(@NotNull Player player) {
@@ -331,7 +331,7 @@ public final class WorldManager {
   }
 
   public void restorePlayerData() {
-    Bukkit.getOnlinePlayers().forEach(this::restorePlayerData);
+    Challenges.getInstance().getPlayerManager().forEachAudience(this::restorePlayerData);
   }
 
   public void restorePlayerData(@NotNull Player player) {

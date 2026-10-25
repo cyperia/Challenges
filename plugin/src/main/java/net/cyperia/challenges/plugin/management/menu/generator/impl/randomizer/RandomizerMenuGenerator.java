@@ -4,7 +4,7 @@ import net.cyperia.challenges.plugin.challenges.type.abstraction.RandomizerSetti
 import net.cyperia.challenges.plugin.content.i18n.LocalizableMessage;
 import net.cyperia.challenges.plugin.management.menu.SettingCategory;
 import net.cyperia.challenges.plugin.management.menu.format.Interaction;
-import net.cyperia.challenges.plugin.management.menu.generator.UncachedMultiPageSelectMenuGenerator;
+import net.cyperia.challenges.plugin.management.menu.generator.MultiPageSelectMenuGenerator;
 import net.cyperia.commons.bukkit.utils.menu.MenuClickInfo;
 import net.cyperia.commons.bukkit.utils.menu.MenuClickType;
 import org.bukkit.inventory.ItemStack;
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
-public class RandomizerMenuGenerator extends UncachedMultiPageSelectMenuGenerator<RandomizerSetting> {
+public class RandomizerMenuGenerator extends MultiPageSelectMenuGenerator<RandomizerSetting> {
 
   private static final int SIZE = 3 * 9;
   private static final int[] SLOTS = calcSlots(1, 7, SIZE);

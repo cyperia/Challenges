@@ -55,9 +55,9 @@ public final class ChallengeLoader extends ModuleChallengeLoader {
     try {
       type = Class.forName(implementation.className(), true, loader);
     } catch (ClassNotFoundException ex) {
-      // The public release ships without beta classes and shows their entries locked
+      // The public release ships without beta classes and shows their entries locked, a hidden one not at all
       if (entry.release().beta()) {
-        register(new LockedChallenge(entry));
+        if (!entry.hidden()) register(new LockedChallenge(entry));
       } else {
         Logger.error("The class {} of challenge {} does not exist", implementation.className(), entry.id());
       }

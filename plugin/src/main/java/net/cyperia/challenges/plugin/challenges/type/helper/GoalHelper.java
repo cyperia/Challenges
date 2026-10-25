@@ -7,6 +7,7 @@ import net.cyperia.challenges.plugin.challenges.type.abstraction.AbstractChallen
 import net.cyperia.challenges.plugin.management.challenges.ChallengeManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,31 +33,48 @@ public final class GoalHelper {
   }
 
   @NotNull
-  public static <V> Map<Player, Integer> createPointsFromValues(@NotNull AtomicInteger mostPoints, @NotNull Map<UUID, V> map, @NotNull ToIntBiFunction<UUID, V> mapper, boolean zeros) {
+  public static <V> Map<Player, Integer> createPointsFromValues(@NotNull AtomicInteger mostPoints, @NotNull Map<UUID, V> map, @NotNull ToIntBiFunction<UUID, V> mapper) {
     Map<Player, Integer> result = new HashMap<>();
-    if (zeros) {
-      for (Player player : ChallengeAPI.getIngamePlayers()) {
-        result.put(player, 0);
-      }
-    }
     for (Entry<UUID, V> entry : map.entrySet()) {
       Player player = Bukkit.getPlayer(entry.getKey());
-      if (player == null)
+      if (player == null || !countsPoints(player))
         continue;
-      // Ignore spectators when playing but show spectators after challenge end
-      boolean isSpectator = player.getGameMode() == GameMode.SPECTATOR;
-      if (!AbstractChallenge.ignorePlayer(player) || (ChallengeAPI.isPaused() && isSpectator)) {
-        int points = mapper.applyAsInt(entry.getKey(), entry.getValue());
-        if (points == 0)
-          continue;
+      int points = mapper.applyAsInt(entry.getKey(), entry.getValue());
+      if (points == 0)
+        continue;
 
+      result.put(player, points);
+
+      if (points >= mostPoints.get())
+        mostPoints.set(points);
+    }
+    return result;
+  }
+
+  /**
+   * Every playing player, with 0 points too, and every player who left with at least one point.
+   */
+  @NotNull
+  public static <V> Map<OfflinePlayer, Integer> createLeaderboardFromValues(@NotNull Map<UUID, V> map, @NotNull ToIntBiFunction<UUID, V> mapper) {
+    Map<OfflinePlayer, Integer> result = new HashMap<>();
+    for (Player player : ChallengeAPI.getIngamePlayers()) {
+      result.put(player, 0);
+    }
+    for (Entry<UUID, V> entry : map.entrySet()) {
+      int points = mapper.applyAsInt(entry.getKey(), entry.getValue());
+      Player player = Bukkit.getPlayer(entry.getKey());
+      if (player == null) {
+        if (points >= 1) result.put(Bukkit.getOfflinePlayer(entry.getKey()), points);
+      } else if (points != 0 && countsPoints(player)) {
         result.put(player, points);
-
-        if (points >= mostPoints.get())
-          mostPoints.set(points);
       }
     }
     return result;
+  }
+
+  // Spectators do not count while playing, but are shown again after the challenge ended
+  private static boolean countsPoints(@NotNull Player player) {
+    return !AbstractChallenge.ignorePlayer(player) || (ChallengeAPI.isPaused() && player.getGameMode() == GameMode.SPECTATOR);
   }
 
   public static void getWinnersOnEnd(@NotNull List<Player> winners, @NotNull Map<Player, Integer> points) {

@@ -20,13 +20,19 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class DeathMessageSetting extends Modifier {
 
   public static final int
     ENABLED = 2,
     VANILLA = 3;
 
-  private boolean hide;
+  // Players whose next death message is not shown; a set, since kills in several regions overlap
+  private final Set<UUID> hidden = ConcurrentHashMap.newKeySet();
 
   public DeathMessageSetting() {
     super(1, 3, VANILLA);
@@ -49,7 +55,7 @@ public class DeathMessageSetting extends Modifier {
 
   @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
   public void onDeath(@NotNull PlayerDeathEvent event) {
-    if (hide) {
+    if (hidden.contains(event.getEntity().getUniqueId())) {
       event.deathMessage(null);
       return;
     }
@@ -77,8 +83,12 @@ public class DeathMessageSetting extends Modifier {
     event.deathMessage(null);
   }
 
-  public void setHideMessagesTemporarily(boolean hide) {
-    this.hide = hide;
+  public void hideMessagesOf(@NotNull Collection<UUID> players) {
+    hidden.addAll(players);
+  }
+
+  public void showMessagesOf(@NotNull Collection<UUID> players) {
+    hidden.removeAll(players);
   }
 
 }

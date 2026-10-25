@@ -9,6 +9,9 @@ allprojects {
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://libraries.minecraft.net/")
     maven("https://jitpack.io")
+    maven("https://maven.canvasmc.io/releases") {
+      content { includeGroup("io.canvasmc.canvas") }
+    }
   }
 }
 
@@ -37,7 +40,7 @@ subprojects {
     filesMatching(listOf("plugin.yml", "config.yml")) {
       expand(tokens)
     }
-    from(rootProject.file("LICENSE"))
+    from(rootProject.file("LICENSE"), rootProject.file("ADDITIONAL-TERMS"))
   }
 
 }

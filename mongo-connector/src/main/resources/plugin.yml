@@ -9,3 +9,4 @@ depend:
   - Challenges
 description: |
   Provides the needed dependencies to the ChallengesPlugin to connect to a MongoDB database
+folia-supported: true

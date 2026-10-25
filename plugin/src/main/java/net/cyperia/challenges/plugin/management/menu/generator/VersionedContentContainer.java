@@ -1,6 +1,7 @@
 package net.cyperia.challenges.plugin.management.menu.generator;
 
 import net.cyperia.challenges.plugin.challenges.type.ReleaseInfo;
+import org.bukkit.permissions.Permissible;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -25,6 +26,19 @@ public interface VersionedContentContainer {
    */
   default int getBetaCount() {
     return 0;
+  }
+
+  // The counts a viewer sees, which leave out entries hidden from them
+  default int getNewCount(@NotNull Permissible viewer) {
+    return getNewCount();
+  }
+
+  default int getUpdatedCount(@NotNull Permissible viewer) {
+    return getUpdatedCount();
+  }
+
+  default int getBetaCount(@NotNull Permissible viewer) {
+    return getBetaCount();
   }
 
   interface FromList extends VersionedContentContainer {

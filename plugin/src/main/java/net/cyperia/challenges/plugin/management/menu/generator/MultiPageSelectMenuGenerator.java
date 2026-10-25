@@ -1,10 +1,7 @@
 package net.cyperia.challenges.plugin.management.menu.generator;
 
-import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
 import net.cyperia.commons.bukkit.utils.menu.MenuClickInfo;
-import net.cyperia.commons.bukkit.utils.menu.MenuPosition;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -12,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
-public abstract class UncachedMultiPageSelectMenuGenerator<T> extends AbstractMenuGenerator {
+public abstract class MultiPageSelectMenuGenerator<T> extends MultiPageMenuGenerator {
 
   public static int[] calcSlots(int rows, int cols, int size) {
     if (rows * cols > size)
@@ -39,63 +36,19 @@ public abstract class UncachedMultiPageSelectMenuGenerator<T> extends AbstractMe
 
   protected final T[] elements;
 
-  public UncachedMultiPageSelectMenuGenerator(@NotNull T[] elements) {
+  public MultiPageSelectMenuGenerator(@NotNull T[] elements) {
     this.elements = elements;
-  }
-
-  @Override
-  public void updateOrGeneratePages(@NotNull Locale locale) {
-    // because pages are not cached, there is noting to update or pregenerate
-  }
-
-  @Override
-  public void updatePages() {
-    // because pages are not cached, there is noting to update
-  }
-
-  @Override
-  public void updatePage(int page) {
-    // because pages are not cached, there is noting to update
   }
 
   @NotNull
   @Override
   public GeneratorMenuPosition createMenuPosition(int page, @NotNull Player player) {
-    return new UncachedMultiPageMenuPosition(page, player);
+    return new MultiPageSelectMenuPosition(page, player);
   }
 
-  @NotNull
   @Override
-  public Inventory getOrInitInventory(@NotNull Locale locale, int page) {
-    Inventory inventory = createEmptyInventory(locale, page);
-    setInventoryDecoration(inventory, page, locale);
-    setNavigationItems(inventory, page, locale);
-    updateInventoryContent(inventory, page, locale);
-    return inventory;
-  }
-
-  public void setInventoryDecoration(@NotNull Inventory inventory, int page, @NotNull Locale locale) {
-    MenuBackground.fill(inventory);
-  }
-
-  @NotNull
-  protected Inventory createEmptyInventory(@NotNull Locale locale, int page) {
-    return Bukkit.createInventory(MenuPosition.HOLDER, getInventorySize(),
-      getMenuTitleKey().asComponent(locale, getMenuName(), getMenuTitlePageArg(page)));
-  }
-
-  @NotNull
-  protected Object getMenuTitlePageArg(int page) {
-    return page + 1;
-  }
-
-  @NotNull
-  private MessageKey getMenuTitleKey() {
-    if (getPageCount() == 1) return MessageKey.of("menu.title-format");
-    return MessageKey.of("menu.title-format-page");
-  }
-
-  public void updateInventoryContent(@NotNull Inventory inventory, int page, @NotNull Locale locale) {
+  public void updateInventoryContent(@NotNull Inventory inventory, int page, @NotNull Player viewer) {
+    Locale locale = localeOf(viewer);
     int startIndex = page * getMaxEntriesPerPage();
     int endIndex = Math.min(startIndex + getMaxEntriesPerPage(), elements.length);
     int[] slots = getSlots();
@@ -118,17 +71,17 @@ public abstract class UncachedMultiPageSelectMenuGenerator<T> extends AbstractMe
   public abstract int[] getSlots();
 
   @Override
-  public int getPageCount() {
-    return Math.ceilDiv(elements.length, getMaxEntriesPerPage());
+  public int getPageCount(@NotNull Player viewer) {
+    return Math.max(1, Math.ceilDiv(elements.length, getMaxEntriesPerPage()));
   }
 
   public int getMaxEntriesPerPage() {
     return getSlots().length;
   }
 
-  public class UncachedMultiPageMenuPosition extends HistoryAwareGeneratorMenuPosition {
+  public class MultiPageSelectMenuPosition extends HistoryAwareGeneratorMenuPosition {
 
-    public UncachedMultiPageMenuPosition(int page, @NotNull Player player) {
+    public MultiPageSelectMenuPosition(int page, @NotNull Player player) {
       super(page, player);
     }
 

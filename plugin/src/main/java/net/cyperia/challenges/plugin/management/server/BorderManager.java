@@ -8,6 +8,8 @@ import net.cyperia.challenges.plugin.management.challenges.entities.GamestateSav
 import net.cyperia.challenges.plugin.management.scheduler.policy.TimerPolicy;
 import net.cyperia.challenges.plugin.management.scheduler.task.ScheduledTask;
 import net.cyperia.challenges.plugin.management.server.scoreboard.ChallengeBossBar;
+import net.cyperia.challenges.plugin.spigot.events.PlayerRespawnedEvent;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.config.Document;
 import net.cyperia.commons.common.config.document.GsonDocument;
 import org.bukkit.Bukkit;
@@ -25,14 +27,14 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 /**
  * The one world border every challenge shares.
@@ -51,17 +53,17 @@ public final class BorderManager implements GamestateSaveable, Listener {
   private static final double MIN_SIZE = 1;
   private static final double START_SIZE = 1;
 
-  private final Map<World, WorldBorder> apiBorders = new HashMap<>();
-  private final Map<World, Location> centers = new HashMap<>();
+  private final Map<World, WorldBorder> apiBorders = new ConcurrentHashMap<>();
+  private final Map<World, Location> centers = new ConcurrentHashMap<>();
 
   // Players a challenge has given a border of their own. The shared border leaves them alone until it
   // is handed back, so a challenge that traps somebody is not undone by one that shrinks the border.
-  private final Map<UUID, WorldBorder> overrides = new HashMap<>();
+  private final Map<UUID, WorldBorder> overrides = new ConcurrentHashMap<>();
 
   // How far each challenge whose border starts small has grown it, by unique challenge name. Not saved:
   // each of them restores its own on load, and a reset loads this manager after the challenges.
-  private final Map<String, Double> growth = new HashMap<>();
-  private double offset;
+  private final Map<String, Double> growth = new ConcurrentHashMap<>();
+  private volatile double offset;
 
   // One bar for every challenge that drives the border, so two of them never stack two bars
   private final ChallengeBossBar bossbar = new ChallengeBossBar();
@@ -174,8 +176,8 @@ public final class BorderManager implements GamestateSaveable, Listener {
     location.setX(Math.clamp(location.getX(), center.getX() - radius + margin, center.getX() + radius - margin));
     location.setZ(Math.clamp(location.getZ(), center.getZ() - radius + margin, center.getZ() + radius - margin));
     Location spot = standingSpot(location);
-    player.teleport(spot != null ? spot : surface(center, player.getWorld()));
     player.setFallDistance(0);
+    player.teleportAsync(spot != null ? spot : surface(center, player.getWorld()));
   }
 
   @NotNull
@@ -275,7 +277,7 @@ public final class BorderManager implements GamestateSaveable, Listener {
   @EventHandler(priority = EventPriority.MONITOR)
   public void onJoin(@NotNull PlayerJoinEvent event) {
     // the server sends the world's own border again after the join event, over whatever was sent during it
-    Bukkit.getScheduler().runTask(Challenges.getInstance(), () -> sendTo(event.getPlayer()));
+    Regions.nextTick(Challenges.getInstance(), event.getPlayer(), () -> sendTo(event.getPlayer()));
     contain(event.getPlayer());
   }
 
@@ -292,9 +294,9 @@ public final class BorderManager implements GamestateSaveable, Listener {
   }
 
   @EventHandler(priority = EventPriority.MONITOR)
-  public void onRespawn(@NotNull PlayerRespawnEvent event) {
+  public void onRespawn(@NotNull PlayerRespawnedEvent event) {
     // the client drops its border on respawn, so it has to be told again
-    Bukkit.getScheduler().runTask(Challenges.getInstance(), () -> {
+    Regions.nextTick(Challenges.getInstance(), event.getPlayer(), () -> {
       sendTo(event.getPlayer());
       // a bed refuses a respawn outside the border, the random spawn around the world spawn does not
       contain(event.getPlayer());
@@ -326,9 +328,7 @@ public final class BorderManager implements GamestateSaveable, Listener {
   // Before the start too: a new player spawns scattered around the world spawn, outside a small border
   @ScheduledTask(ticks = 20, async = false, timerPolicy = TimerPolicy.ALWAYS)
   public void containPlayers() {
-    for (Player player : Bukkit.getOnlinePlayers()) {
-      contain(player);
-    }
+    Challenges.getInstance().getPlayerManager().forEachAudience(this::contain);
   }
 
   private void contain(@NotNull Player player) {
@@ -340,14 +340,20 @@ public final class BorderManager implements GamestateSaveable, Listener {
 
   private void updateBorder(@NotNull World world, boolean animate) {
     if (!isActive()) {
-      world.getPlayers().forEach(this::resetFor);
+      forEachPlayerIn(world, this::resetFor);
       return;
     }
 
     // apply once for the whole world: re-applying per player would overwrite the animated transition
     // with an instant resize before anyone is told about it
     applyTo(world, animate);
-    world.getPlayers().forEach(this::bind);
+    forEachPlayerIn(world, this::bind);
+  }
+
+  private void forEachPlayerIn(@NotNull World world, @NotNull Consumer<Player> action) {
+    Challenges.getInstance().getPlayerManager().forEachAudience(player -> {
+      if (player.getWorld() == world) action.accept(player);
+    });
   }
 
   /**

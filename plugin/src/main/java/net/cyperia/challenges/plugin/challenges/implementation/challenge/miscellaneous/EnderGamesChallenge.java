@@ -4,6 +4,7 @@ import net.cyperia.challenges.plugin.challenges.type.ValueUnit;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.TimedChallenge;
 import net.cyperia.challenges.plugin.content.i18n.Prefix;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -37,9 +38,10 @@ public class EnderGamesChallenge extends TimedChallenge {
     Entity targetEntity = list.get(globalRandom.nextInt(list.size()));
 
     Location playerLocation = player.getLocation().clone();
-    player.teleport(targetEntity.getLocation());
-    getChallengeMessageKey("teleport").send(player, Prefix.CHALLENGES, targetEntity.getType());
-    targetEntity.teleport(playerLocation);
+    player.teleportAsync(targetEntity.getLocation()).thenAccept(success -> {
+      getChallengeMessageKey("teleport").send(player, Prefix.CHALLENGES, targetEntity.getType());
+      Regions.entity(plugin, targetEntity, () -> targetEntity.teleportAsync(playerLocation));
+    });
 
   }
 

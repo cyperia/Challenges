@@ -25,8 +25,11 @@ public class SwapRandomMobAction extends ChallengeAction {
   @Override
   public void execute(ChallengeExecutionData executionData, Map<String, String[]> subActions) {
 
-    List<Entity> targets = IEntityTargetAction.getTargets(executionData.getEntity(), subActions);
-    List<Entity> swapTargets = IEntityTargetAction.getTargets(executionData.getEntity(), subActions, "swap_targets");
+    IEntityTargetAction.getTargets(executionData.getEntity(), subActions)
+      .thenAcceptBoth(IEntityTargetAction.getTargets(executionData.getEntity(), subActions, "swap_targets"), this::swap);
+  }
+
+  private void swap(List<Entity> targets, List<Entity> swapTargets) {
     swapTargets.removeIf(entity -> !(entity instanceof LivingEntity));
     long seed = random.nextLong();
     Collections.shuffle(swapTargets, IRandom.create(seed).asRandom());

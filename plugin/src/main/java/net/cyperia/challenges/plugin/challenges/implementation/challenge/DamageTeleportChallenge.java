@@ -3,6 +3,7 @@ package net.cyperia.challenges.plugin.challenges.implementation.challenge;
 import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.SettingModifier;
 import net.cyperia.challenges.plugin.challenges.type.helper.ChallengeHelper;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -32,17 +33,19 @@ public class DamageTeleportChallenge extends SettingModifier {
   }
 
   private void handleDamage(@NotNull Player player) {
+    World world = player.getWorld();
+    Location random = getRandomLocation(world);
 
-    Location location = player.getWorld().getHighestBlockAt(getRandomLocation(player.getWorld())).getLocation();
-    location.setY(location.getY() + 1);
-    location.getChunk().load(true);
+    world.getChunkAtAsync(random).thenAccept(chunk -> Regions.at(Challenges.getInstance(), random, () -> {
+      Location location = world.getHighestBlockAt(random).getLocation();
+      location.setY(location.getY() + 1);
 
-    if (getValue() == PLAYER) {
-      player.teleport(location);
-    } else {
-      broadcastFiltered(player1 -> player1.teleport(location));
-    }
-
+      if (getValue() == PLAYER) {
+        Regions.entity(Challenges.getInstance(), player, () -> player.teleportAsync(location));
+      } else {
+        broadcastFiltered(player1 -> player1.teleportAsync(location));
+      }
+    }));
   }
 
   public Location getRandomLocation(World world) {

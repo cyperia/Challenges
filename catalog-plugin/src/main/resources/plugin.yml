@@ -6,3 +6,4 @@ authors:
 website: cyperia.net
 api-version: 1.14
 main: net.cyperia.challenges.catalog.plugin.CatalogPlugin
+folia-supported: true

@@ -1,5 +1,6 @@
 package net.cyperia.challenges.plugin.challenges.type.abstraction;
 
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.jetbrains.annotations.Nullable;
 import net.cyperia.challenges.catalog.Challenge;
 import net.cyperia.challenges.plugin.Challenges;
@@ -105,11 +106,13 @@ public abstract class Modifier extends AbstractChallenge implements IModifier {
     if (value < min) throw new IllegalArgumentException("value < min");
     this.value = value;
 
-    try {
-      if (isEnabled()) onValueChange();
-    } catch (Exception exception) {
-      Challenges.getInstance().getILogger().error("Error while modifying value of Setting {}", getClass().getSimpleName(), exception);
-    }
+    Regions.global(Challenges.getInstance(), () -> {
+      try {
+        if (isEnabled()) onValueChange();
+      } catch (Exception exception) {
+        Challenges.getInstance().getILogger().error("Error while modifying value of Setting {}", getClass().getSimpleName(), exception);
+      }
+    });
 
     updateItems();
   }

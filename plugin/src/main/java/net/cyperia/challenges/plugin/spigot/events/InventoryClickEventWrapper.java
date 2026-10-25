@@ -1,6 +1,7 @@
 package net.cyperia.challenges.plugin.spigot.events;
 
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public abstract class InventoryClickEventWrapper extends Event {
+public abstract class InventoryClickEventWrapper extends Event implements Cancellable {
 
   private final InventoryClickEvent event;
 
@@ -102,10 +103,12 @@ public abstract class InventoryClickEventWrapper extends Event {
     return event;
   }
 
+  @Override
   public boolean isCancelled() {
     return event.isCancelled();
   }
 
+  @Override
   public void setCancelled(boolean cancel) {
     event.setCancelled(cancel);
   }

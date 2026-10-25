@@ -5,6 +5,7 @@ import net.cyperia.challenges.plugin.content.i18n.LocalizableMessage;
 import net.cyperia.challenges.plugin.content.loader.ContentLoader;
 import net.cyperia.challenges.plugin.management.scheduler.timer.TimerStatus;
 import net.cyperia.challenges.plugin.management.server.ChallengeEndCause;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
@@ -129,8 +130,8 @@ public final class ChallengeAPI {
   }
 
   public static boolean isPlayerInGameWorld(@NotNull World world) {
-    for (Player player : world.getPlayers()) {
-      if (!AbstractChallenge.ignorePlayer(player)) {
+    for (Player player : Bukkit.getOnlinePlayers()) {
+      if (player.getWorld() == world && !AbstractChallenge.ignorePlayer(player)) {
         return true;
       }
     }

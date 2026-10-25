@@ -1,22 +1,25 @@
 package net.cyperia.challenges.plugin.challenges.type.abstraction;
 
+import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.challenges.implementation.goal.forcebattle.targets.ForceTarget;
 import net.cyperia.challenges.plugin.spigot.events.PlayerIgnoreStatusChangeEvent;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.config.Document;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class ForceBattleDisplayGoal<T extends ForceTarget<?>> extends ForceBattleGoal<T> {
 
@@ -24,7 +27,7 @@ public abstract class ForceBattleDisplayGoal<T extends ForceTarget<?>> extends F
 
   @Override
   protected void onEnable() {
-    displayStands = new HashMap<>();
+    displayStands = new ConcurrentHashMap<>();
     broadcastFiltered(this::updateDisplayStand);
     super.onEnable();
   }
@@ -32,7 +35,7 @@ public abstract class ForceBattleDisplayGoal<T extends ForceTarget<?>> extends F
   @Override
   protected void onDisable() {
     super.onDisable();
-    displayStands.values().forEach(Entity::remove);
+    displayStands.values().forEach(this::removeStand);
     displayStands = null;
   }
 
@@ -49,10 +52,18 @@ public abstract class ForceBattleDisplayGoal<T extends ForceTarget<?>> extends F
       entity.setSmall(true);
       return entity;
     });
-    armorStand.setVelocity(player.getVelocity().clone().multiply(2));
-    armorStand.teleport(player.getLocation().clone().add(0, 2, 0));
+    Vector velocity = player.getVelocity().clone().multiply(2);
+    Location target = player.getLocation().clone().add(0, 2, 0);
+    Regions.entity(Challenges.getInstance(), armorStand, () -> {
+      armorStand.setVelocity(velocity);
+      armorStand.teleportAsync(target);
 
-    handleDisplayStandUpdate(player, armorStand);
+      handleDisplayStandUpdate(player, armorStand);
+    });
+  }
+
+  private void removeStand(@NotNull ArmorStand stand) {
+    Regions.entity(Challenges.getInstance(), stand, stand::remove);
   }
 
   public void handleDisplayStandUpdate(@NotNull Player player, @NotNull ArmorStand armorStand) {
@@ -92,7 +103,7 @@ public abstract class ForceBattleDisplayGoal<T extends ForceTarget<?>> extends F
     } else {
       ArmorStand stand = displayStands.remove(event.getPlayer());
       if (stand != null) {
-        stand.remove();
+        removeStand(stand);
       }
     }
   }
@@ -100,9 +111,7 @@ public abstract class ForceBattleDisplayGoal<T extends ForceTarget<?>> extends F
   @Override
   public void onTick() {
     super.onTick();
-    for (Player player : displayStands.keySet()) {
-      updateDisplayStand(player);
-    }
+    Challenges.getInstance().getPlayerManager().forEachOnOwnThread(displayStands.keySet(), this::updateDisplayStand);
   }
 
   @EventHandler(priority = EventPriority.HIGH)
@@ -110,7 +119,7 @@ public abstract class ForceBattleDisplayGoal<T extends ForceTarget<?>> extends F
     if (!shouldExecuteEffect()) return;
     ArmorStand stand = displayStands.remove(event.getPlayer());
     if (stand != null) {
-      stand.remove();
+      removeStand(stand);
     }
   }
 

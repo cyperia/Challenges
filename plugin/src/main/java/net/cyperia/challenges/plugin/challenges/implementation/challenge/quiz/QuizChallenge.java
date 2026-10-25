@@ -21,6 +21,7 @@ import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import net.cyperia.challenges.plugin.spigot.events.PlayerJumpEvent;
 import net.cyperia.challenges.plugin.utils.misc.BlockUtils;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.cyperia.commons.common.collection.IRandom;
 import net.cyperia.commons.common.config.Document;
 import net.kyori.adventure.bossbar.BossBar;
@@ -211,7 +212,7 @@ public class QuizChallenge extends TimedChallenge implements CommandProvider {
     if (active.getSecondsLeft() <= 1) {
       messageKey("time-up").broadcast(Prefix.QUIZ);
       revealSolution(player, active.getQuestion());
-      punish(player);
+      Regions.entity(plugin, player, () -> punish(player));
       endQuestion();
       return;
     }

@@ -3,6 +3,7 @@ package net.cyperia.challenges.plugin.challenges.implementation.challenge.world;
 import net.cyperia.challenges.plugin.challenges.type.ValueUnit;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.SettingModifier;
 import net.cyperia.challenges.plugin.utils.misc.BlockUtils;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -29,7 +30,7 @@ public class SurfaceHoleChallenge extends SettingModifier {
     if (location == null) return;
     if (BlockUtils.isSameBlockLocationIgnoreHeight(event.getFrom(), location)) return;
 
-    Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, () -> {
+    Regions.asyncLater(plugin, () -> {
       if (!shouldExecuteEffect()) return;
 
       World world = event.getPlayer().getWorld();
@@ -41,7 +42,7 @@ public class SurfaceHoleChallenge extends SettingModifier {
         blocks.add(blockLocation.getBlock());
       }
 
-      Bukkit.getScheduler().runTask(plugin, () -> {
+      Regions.nextTick(plugin, location, () -> {
         for (Block block : blocks) {
           block.setType(Material.AIR, false);
         }

@@ -41,6 +41,23 @@ class LocalesTest {
     assertFalse(resolved.containsKey("challenge.x.*colorize*"));
   }
 
+  @ParameterizedTest
+  @ValueSource(strings = {"en", "de"})
+  void everyAllGoalBossbarStartsWithTheGoalNameInItsColor(String language) {
+    Map<String, String[]> messages = Locales.load(language);
+    Map<String, String> colors = Map.of(
+      "all-mobs", "<aqua>", "all-monster", "<aqua>", "goal-all-bosses", "<aqua>", "goal-all-bosses-new", "<dark_purple>",
+      "collect-all-items", "<dark_green>", "collect-everything", "<gold>"
+    );
+    colors.forEach((goal, color) -> {
+      for (String bar : new String[]{"bossbar", "bossbar-next"}) {
+        String text = String.join("", messages.get("challenge." + goal + "." + bar));
+        assertFalse(text.contains("*"), goal + "." + bar + ": " + text);
+        assertTrue(text.contains(color), goal + "." + bar + ": " + text);
+      }
+    });
+  }
+
   @Test
   void rejectsALanguageThatIsNotBundled() {
     assertThrows(IllegalArgumentException.class, () -> Locales.load("xx"));

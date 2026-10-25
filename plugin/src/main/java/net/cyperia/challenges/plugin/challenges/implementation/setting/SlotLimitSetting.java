@@ -7,8 +7,9 @@ import net.cyperia.challenges.plugin.management.scheduler.task.TimerTask;
 import net.cyperia.challenges.plugin.management.scheduler.timer.TimerStatus;
 import net.cyperia.challenges.plugin.spigot.events.PlayerIgnoreStatusChangeEvent;
 import net.cyperia.challenges.plugin.spigot.events.PlayerInventoryClickEvent;
+import net.cyperia.challenges.plugin.spigot.events.PlayerRespawnedEvent;
 import net.cyperia.challenges.plugin.utils.item.DefaultItems;
-import org.bukkit.Bukkit;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -16,7 +17,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -40,7 +40,7 @@ public class SlotLimitSetting extends Modifier {
 
   @TimerTask(status = {TimerStatus.RUNNING})
   public void updateDelayed() {
-    Bukkit.getScheduler().runTaskLater(plugin, this::update, 1);
+    Regions.later(plugin, this::update, 1);
   }
 
   @TimerTask(status = {TimerStatus.PAUSED}, async = false)
@@ -77,13 +77,7 @@ public class SlotLimitSetting extends Modifier {
   private void blockSlot(@NotNull Player player, int slot) {
     ItemStack item = player.getInventory().getItem(slot);
     if (item != null && !item.isSimilar(DefaultItems.BLOCKED_ITEM)) {
-      if (!Bukkit.isPrimaryThread()) {
-        Bukkit.getScheduler().runTask(plugin, () -> {
-          player.getWorld().dropItemNaturally(player.getLocation(), item);
-        });
-      } else {
-        player.getWorld().dropItemNaturally(player.getLocation(), item);
-      }
+      Regions.entity(plugin, player, () -> player.getWorld().dropItemNaturally(player.getLocation(), item));
     }
     player.getInventory().setItem(slot, DefaultItems.BLOCKED_ITEM);
   }
@@ -136,15 +130,14 @@ public class SlotLimitSetting extends Modifier {
   }
 
   @EventHandler(priority = EventPriority.HIGH)
-  public void onRespawn(PlayerRespawnEvent event) {
+  public void onRespawn(PlayerRespawnedEvent event) {
     updateSlots(event.getPlayer());
   }
 
   @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
   public void onPlayerIgnoreStatusChange(PlayerIgnoreStatusChangeEvent event) {
-    Bukkit.getScheduler().runTask(plugin, () -> {
-      updateSlots(event.getPlayer());
-    });
+    Player player = event.getPlayer();
+    Regions.nextTick(plugin, player, () -> updateSlots(player));
   }
 
 }

@@ -9,6 +9,7 @@ import net.cyperia.commons.bukkit.utils.animation.AnimatedInventory;
 import net.cyperia.commons.bukkit.utils.menu.MenuPosition;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -17,7 +18,7 @@ public abstract class SingleAnimatedMenuGenerator implements IMenuGenerator {
 
   protected final boolean animated;
 
-  private final Map<Locale, AnimatedInventory> inventoryCache = new HashMap<>();
+  private final Map<CacheKey, AnimatedInventory> inventoryCache = new HashMap<>();
   private volatile boolean stale;
 
   @NotNull
@@ -25,7 +26,13 @@ public abstract class SingleAnimatedMenuGenerator implements IMenuGenerator {
 
   // TODO impl dynamic formatting as in Multi-/SinglePageMenuGenerator
   @NotNull
-  public abstract AnimatedInventory createAnimatedInventory(@NotNull Locale locale);
+  public abstract AnimatedInventory createAnimatedInventory(@NotNull Locale locale, @NotNull Player viewer);
+
+  // Viewers of one language share an inventory unless this differs between them
+  @Nullable
+  protected Object variantOf(@NotNull Player viewer) {
+    return null;
+  }
 
   @NotNull
   protected AnimatedInventory createEmptyInventory(@NotNull Locale locale) {
@@ -41,12 +48,13 @@ public abstract class SingleAnimatedMenuGenerator implements IMenuGenerator {
   }
 
   @NotNull
-  public AnimatedInventory getOrCreateInventory(@NotNull Locale locale) {
+  private AnimatedInventory getOrCreateInventory(@NotNull Player viewer) {
     if (stale) {
       stale = false;
       inventoryCache.clear();
     }
-    return inventoryCache.computeIfAbsent(locale, this::createAnimatedInventory);
+    Locale locale = findLanguageProvider().getPlayerLanguage(viewer);
+    return inventoryCache.computeIfAbsent(new CacheKey(locale, variantOf(viewer)), _ -> createAnimatedInventory(locale, viewer));
   }
 
   @Override
@@ -56,31 +64,22 @@ public abstract class SingleAnimatedMenuGenerator implements IMenuGenerator {
       return;
     }
 
-    Locale locale = findLanguageProvider().getPlayerLanguage(player);
-    AnimatedInventory inventory = getOrCreateInventory(locale);
+    AnimatedInventory inventory = getOrCreateInventory(player);
     MenuPosition.set(player, createMenuPosition());
     inventory.open(player);
   }
 
   public void openMenuInstantly(@NotNull Player player, boolean playSound) {
-    Locale locale = findLanguageProvider().getPlayerLanguage(player);
-    AnimatedInventory inventory = getOrCreateInventory(locale);
+    AnimatedInventory inventory = getOrCreateInventory(player);
     MenuPosition.set(player, createMenuPosition());
     inventory.openNotAnimated(player, playSound);
   }
 
-  @Override
-  public void updateOrGeneratePages(@NotNull Locale locale) {
-    inventoryCache.put(locale, createAnimatedInventory(locale));
-  }
-
+  // Updating every frame of the animation is tedious, the next open builds it again
   @Override
   public void updatePages() {
-    // updating every frame of the animation is tedious, just recreate it
     stale = false;
-    List<Locale> locales = new ArrayList<>(inventoryCache.keySet());
     inventoryCache.clear();
-    locales.forEach(locale -> inventoryCache.put(locale, createAnimatedInventory(locale)));
   }
 
   @Override
@@ -89,7 +88,7 @@ public abstract class SingleAnimatedMenuGenerator implements IMenuGenerator {
   }
 
   @Override
-  public final int getPageCount() {
+  public final int getPageCount(@NotNull Player viewer) {
     return 1;
   }
 
@@ -98,5 +97,8 @@ public abstract class SingleAnimatedMenuGenerator implements IMenuGenerator {
   @NotNull
   protected LanguageProvider findLanguageProvider() {
     return Challenges.getInstance().getTranslationManager().getLanguageProvider();
+  }
+
+  private record CacheKey(@NotNull Locale locale, @Nullable Object variant) {
   }
 }

@@ -45,3 +45,4 @@ permissions:
     default: true
   challenges.command.guess:
     default: true
+canvas-supported: true

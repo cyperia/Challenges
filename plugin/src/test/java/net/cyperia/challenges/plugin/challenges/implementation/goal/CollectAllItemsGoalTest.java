@@ -1,5 +1,6 @@
 package net.cyperia.challenges.plugin.challenges.implementation.goal;
 
+import net.cyperia.challenges.plugin.utils.item.CollectableItem;
 import org.bukkit.Material;
 import org.junit.jupiter.api.Test;
 
@@ -11,16 +12,25 @@ class CollectAllItemsGoalTest {
 
   @Test
   void legacyListIsSortedIntoTheSeededOrder() {
-    List<Material> seededOrder = List.of(Material.DIRT, Material.STONE, Material.OAK_LOG, Material.DIAMOND);
+    List<CollectableItem> seededOrder = List.of(CollectableItem.of(Material.DIRT), CollectableItem.of(Material.STONE),
+      CollectableItem.of(Material.OAK_LOG), CollectableItem.of(Material.DIAMOND));
 
-    assertEquals(List.of("DIRT", "STONE", "DIAMOND"),
-      CollectAllItemsGoal.sortBySeededOrder(List.of("DIAMOND", "DIRT", "STONE"), seededOrder));
+    assertEquals(List.of("minecraft:dirt", "minecraft:stone", "minecraft:diamond"),
+      CollectAllItemsGoal.sortBySeededOrder(List.of("minecraft:diamond", "minecraft:dirt", "minecraft:stone"), seededOrder));
   }
 
   @Test
-  void namesMissingFromTheSeededOrderComeFirst() {
-    assertEquals(List.of("REMOVED_ITEM", "DIRT", "STONE"),
-      CollectAllItemsGoal.sortBySeededOrder(List.of("STONE", "REMOVED_ITEM", "DIRT"), List.of(Material.DIRT, Material.STONE)));
+  void idsMissingFromTheSeededOrderComeFirst() {
+    assertEquals(List.of("REMOVED_ITEM", "minecraft:dirt", "minecraft:stone"),
+      CollectAllItemsGoal.sortBySeededOrder(List.of("minecraft:stone", "REMOVED_ITEM", "minecraft:dirt"),
+        List.of(CollectableItem.of(Material.DIRT), CollectableItem.of(Material.STONE))));
+  }
+
+  @Test
+  void legacyMaterialNamesBecomeIds() {
+    assertEquals("minecraft:stone", CollectAllItemsGoal.normalizeId("STONE"));
+    assertEquals("minecraft:stone", CollectAllItemsGoal.normalizeId("minecraft:stone"));
+    assertEquals("REMOVED_ITEM", CollectAllItemsGoal.normalizeId("REMOVED_ITEM"));
   }
 
 }

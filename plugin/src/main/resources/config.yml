@@ -84,9 +84,6 @@ custom-challenge-settings:
 # These can be edited in the corresponding language file
 join-quit-messages: true
 
-# Shows every player the plugin credits when they join - the same lines /help prints
-plugin-info-on-join: true
-
 # Send players a permission info message when they join the server when noone with the permission 'challenges.command.challenges' has joined before
 permission-info: true
 

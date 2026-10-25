@@ -8,7 +8,6 @@ import net.cyperia.challenges.plugin.challenges.type.helper.SubSettingsHelper;
 import net.cyperia.challenges.plugin.management.scheduler.task.ScheduledTask;
 import net.cyperia.challenges.plugin.utils.misc.BlockUtils;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -44,7 +43,7 @@ public class InLiquidTrigger extends ChallengeTrigger {
 
   @ScheduledTask(ticks = 5, async = false)
   public void onFifthTick() {
-    for (Player player : Challenges.getInstance().getPlayerManager().getChallengePlayers()) {
+    Challenges.getInstance().getPlayerManager().forEachChallengePlayer(player -> {
       Material type = player.getLocation().getBlock().getType();
       if (type == Material.WATER ||
         type == Material.LAVA) {
@@ -53,8 +52,7 @@ public class InLiquidTrigger extends ChallengeTrigger {
           .data("liquid", type.name())
           .execute();
       }
-    }
-
+    });
   }
 
 }

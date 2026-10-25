@@ -7,7 +7,7 @@ import org.bukkit.util.Vector;
 
 public class AlwaysRunningChallenge extends Setting {
 
-  @ScheduledTask(ticks = 1)
+  @ScheduledTask(ticks = 1, async = false)
   public void setVelocity() {
     broadcastFiltered(player -> {
       if (player.isSprinting()) return;

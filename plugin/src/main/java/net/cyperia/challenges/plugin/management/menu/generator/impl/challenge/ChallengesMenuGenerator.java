@@ -46,8 +46,8 @@ public abstract class ChallengesMenuGenerator extends MultiPageMenuGenerator imp
   public void showFinable(@NotNull Player player, @NotNull IChallenge challenge) {
     ChallengeListMenuGenerator listGenerator = getChallengeListMenuGenerator(challenge);
     if (listGenerator != null) {
-      int page = listGenerator.getPageOfChallenge(challenge);
-      int slot = listGenerator.getDisplaySlotOfChallenge(challenge);
+      int page = listGenerator.getPageOfChallenge(player, challenge);
+      int slot = listGenerator.getDisplaySlotOfChallenge(player, challenge);
       SearchResultHighlightMenuGenerator viewGenerator = new SearchResultHighlightMenuGenerator(listGenerator, page, slot);
       viewGenerator.openMenu(player);
     } else {

@@ -1,5 +1,6 @@
 package net.cyperia.challenges.plugin.management.menu.generator.impl.timer;
 
+import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.content.i18n.ArgumentFormat;
 import net.cyperia.challenges.plugin.content.i18n.LocalizableMessage;
 import net.cyperia.challenges.plugin.content.i18n.MessageKey;
@@ -11,6 +12,7 @@ import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
 import net.cyperia.commons.bukkit.utils.menu.MenuClickInfo;
 import net.cyperia.commons.bukkit.utils.menu.MenuClickType;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -105,7 +107,10 @@ public class TimerTimeMenuGenerator extends AbstractTimeUnitMenuGenerator {
           SoundSample.PLOP.play(info.getPlayer());
         }
 
-        updatePages(); // the clicker should not have to wait for the periodic refresh
+        // The timer changes on the global region, so the refresh queues up behind that change there,
+        // and the clicker should not have to wait for the periodic refresh
+        Player clicker = info.getPlayer();
+        Regions.global(Challenges.getInstance(), () -> Regions.entity(Challenges.getInstance(), clicker, () -> updatePages()));
         return true;
       }
       return false;

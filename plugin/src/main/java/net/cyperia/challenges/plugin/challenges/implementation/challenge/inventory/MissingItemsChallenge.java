@@ -22,6 +22,7 @@ import net.cyperia.commons.bukkit.utils.item.ItemUtils;
 import net.cyperia.commons.bukkit.utils.menu.MenuClickInfo;
 import net.cyperia.commons.bukkit.utils.menu.MenuClickType;
 import net.cyperia.commons.bukkit.utils.menu.MenuPosition;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.kyori.adventure.bossbar.BossBar;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -77,7 +78,7 @@ public class MissingItemsChallenge extends TimedChallenge implements CommandProv
 
   @Override
   protected void onDisable() {
-    games.values().forEach(Game::end); // hand every hidden item back instead of losing it
+    games.values().forEach(game -> Regions.entity(plugin, game.player, game::end)); // hand every hidden item back instead of losing it
     bossbar.hide();
   }
 
@@ -91,7 +92,7 @@ public class MissingItemsChallenge extends TimedChallenge implements CommandProv
   @ScheduledTask(ticks = 20, async = false, challengePolicy = ChallengeStatusPolicy.ENABLED)
   public void handleGuessSecond() {
     if (games.isEmpty()) return; // the waiting bossbar is refreshed by the scoreboard manager
-    games.values().forEach(Game::tick);
+    games.values().forEach(game -> Regions.entity(plugin, game.player, game::tick));
     bossbar.update();
   }
 

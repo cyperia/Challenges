@@ -1,10 +1,11 @@
 package net.cyperia.challenges.plugin.challenges.implementation.challenge.world;
 
+import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.challenges.type.ValueUnit;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.SettingModifier;
 import net.cyperia.challenges.plugin.management.scheduler.task.ScheduledTask;
 import net.cyperia.challenges.plugin.utils.misc.BlockUtils;
-import org.bukkit.Bukkit;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -16,13 +17,13 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class FloorIsLavaChallenge extends SettingModifier {
 
-  private final Map<UUID, Block> standingOn = new HashMap<>();
+  private final Map<UUID, Block> standingOn = new ConcurrentHashMap<>();
 
   public FloorIsLavaChallenge() {
     super(1, 60, 30);
@@ -39,9 +40,7 @@ public class FloorIsLavaChallenge extends SettingModifier {
   // jumps can last a single tick that the moves of a lagging client arrive around.
   @ScheduledTask(ticks = 1, async = false)
   public void checkGround() {
-    for (Player player : Bukkit.getOnlinePlayers()) {
-      step(player, player.getLocation());
-    }
+    Challenges.getInstance().getPlayerManager().forEachAudience(player -> step(player, player.getLocation()));
   }
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -61,9 +60,10 @@ public class FloorIsLavaChallenge extends SettingModifier {
     Block ground = BlockUtils.getSolidGround(player, at);
     if (ground == null || ground.equals(standingOn.put(player.getUniqueId(), ground))) return;
 
-    Bukkit.getScheduler().runTaskLater(plugin, () -> {
+    Location groundLocation = ground.getLocation();
+    Regions.later(plugin, groundLocation, () -> {
       BlockUtils.setBlockNatural(ground, Material.MAGMA_BLOCK, true);
-      Bukkit.getScheduler().runTaskLater(plugin, () -> BlockUtils.setBlockNatural(ground, Material.LAVA, true), getValue() * 20L);
+      Regions.later(plugin, groundLocation, () -> BlockUtils.setBlockNatural(ground, Material.LAVA, true), getValue() * 20L);
     }, getValue() * 20L);
   }
 

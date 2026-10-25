@@ -1,7 +1,7 @@
 package net.cyperia.challenges.plugin.management.menu.generator.impl.search;
 
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import net.cyperia.challenges.plugin.Challenges;
-import net.cyperia.challenges.plugin.challenges.type.helper.ChallengeHelper;
 import net.cyperia.challenges.plugin.management.menu.generator.AbstractMenuGenerator;
 import net.cyperia.challenges.plugin.management.menu.generator.MultiPageMenuGenerator;
 import net.cyperia.challenges.plugin.management.menu.generator.impl.challenge.ChallengeListMenuGenerator;
@@ -9,17 +9,15 @@ import net.cyperia.challenges.plugin.utils.misc.MaterialCategories;
 import net.cyperia.commons.bukkit.utils.item.ItemBuilder;
 import net.cyperia.commons.bukkit.utils.menu.MenuClickInfo;
 import net.cyperia.commons.bukkit.utils.menu.MenuPosition;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -43,9 +41,10 @@ public class SearchResultHighlightMenuGenerator extends AbstractMenuGenerator {
   private int durationCounter;
   private boolean flashPresent;
 
+  private Player viewer;
   private Inventory parentInventory;
   private Inventory viewInventory;
-  private BukkitTask updateTask;
+  private volatile ScheduledTask updateTask;
 
   /**
    * @param parentPage the page the result is displayed on
@@ -70,15 +69,19 @@ public class SearchResultHighlightMenuGenerator extends AbstractMenuGenerator {
 
   @NotNull
   @Override
-  public Inventory getOrInitInventory(@NotNull Locale locale, int page) {
+  public Inventory createInventory(@NotNull Player viewer, int page) {
     if (viewInventory != null && parentInventory != null) return viewInventory;
-
-    parentInventory = parentGenerator.getOrInitInventory(locale, page);
-    viewInventory = parentGenerator.createEmptyInventory(locale, page); // copied title
+    this.viewer = viewer;
+    parentInventory = parentGenerator.createInventory(viewer, page);
+    viewInventory = parentGenerator.createEmptyInventory(viewer, page); // copied title
     copyContents(parentInventory, viewInventory);
     startUpdateTask();
-
     return viewInventory;
+  }
+
+  @Override
+  public void renderPage(@NotNull Inventory inventory, int page, @NotNull Player viewer) {
+    updateFlashContents();
   }
 
   @Override
@@ -87,29 +90,14 @@ public class SearchResultHighlightMenuGenerator extends AbstractMenuGenerator {
   }
 
   @Override
-  public void updateOrGeneratePages(@NotNull Locale locale) {
-    // noop
-  }
-
-  @Override
-  public void updatePages() {
-    // noop
-  }
-
-  @Override
-  public void updatePage(int page) {
-    // noop
-  }
-
-  @Override
-  public int getPageCount() {
-    return parentGenerator.getPageCount();
+  public int getPageCount(@NotNull Player viewer) {
+    return parentGenerator.getPageCount(viewer);
   }
 
   private void startUpdateTask() {
     if (updateTask != null) return;
     durationCounter = 0;
-    updateTask = Bukkit.getScheduler().runTaskTimerAsynchronously(Challenges.getInstance(), this::updateViewCounter, 1, UPDATE_INTERVAL);
+    updateTask = Regions.timer(Challenges.getInstance(), viewer, _ -> updateViewCounter(), 1, UPDATE_INTERVAL);
   }
 
   private void updateViewCounter() {
@@ -123,7 +111,7 @@ public class SearchResultHighlightMenuGenerator extends AbstractMenuGenerator {
 
     if (durationCounter >= MAX_HIGHLIGHT_DURATION) {
       kill();
-      ChallengeHelper.runSync(this::restoreParentMenu);
+      restoreParentMenu();
       return;
     }
 
@@ -142,8 +130,10 @@ public class SearchResultHighlightMenuGenerator extends AbstractMenuGenerator {
     }
   }
 
+  // The viewer's position is this highlight, so the parent never updates its copy itself; it is drawn again every flash
   private void updateFlashContents() {
     if (parentInventory == null || viewInventory == null) return;
+    parentGenerator.renderPage(parentInventory, parentPage, viewer);
     copyContents(parentInventory, viewInventory);
 
     if (flashPresent) {
@@ -177,6 +167,7 @@ public class SearchResultHighlightMenuGenerator extends AbstractMenuGenerator {
 
     viewInventory = null;
     parentInventory = null;
+    viewer = null;
   }
 
   private void copyContents(@NotNull Inventory parentInventory, @NotNull Inventory viewInventory) {

@@ -2,7 +2,7 @@ package net.cyperia.challenges.plugin.challenges.implementation.challenge.world;
 
 import net.cyperia.challenges.plugin.challenges.type.abstraction.Setting;
 import net.cyperia.challenges.plugin.utils.misc.BlockUtils;
-import org.bukkit.Bukkit;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.FallingBlock;
@@ -22,7 +22,7 @@ public class BlockFlyInAirChallenge extends Setting {
     if (blockBelow == null) return;
     if (!blockBelow.getType().isSolid()) return;
 
-    Bukkit.getScheduler().runTaskLater(plugin, () -> {
+    Regions.later(plugin, blockBelow.getLocation(), () -> {
       boostBlockInAir(blockBelow);
     }, 20);
 

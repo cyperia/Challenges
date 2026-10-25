@@ -91,7 +91,6 @@ public class CollectWoodGoal extends SettingModifierCollectionGoal {
   @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
   public void onPlayerInventoryClick(@NotNull PlayerInventoryClickEvent event) {
     if (!shouldExecuteEffect()) return;
-    if (event.isCancelled()) return;
     if (event.getClickedInventory() == null) return;
     if (event.getClickedInventory().getHolder() != event.getPlayer()) return;
     if (event.getCurrentItem() == null) return;

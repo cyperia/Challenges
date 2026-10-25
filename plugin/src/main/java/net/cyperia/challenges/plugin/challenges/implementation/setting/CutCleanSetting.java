@@ -12,7 +12,7 @@ import net.cyperia.challenges.plugin.utils.misc.InventoryUtils;
 import net.cyperia.challenges.plugin.utils.misc.Utils;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
 import net.cyperia.commons.bukkit.utils.item.ItemUtils;
-import org.bukkit.Bukkit;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -176,7 +176,7 @@ public class CutCleanSetting extends MenuSetting {
       }
 
       AtomicInteger index = new AtomicInteger();
-      Bukkit.getScheduler().runTaskTimer(plugin, timer -> {
+      Regions.timer(plugin, block.getLocation(), timer -> {
 
         SoundSample.LOW_PLOP.play(player);
         for (int i = 0; i < 2; i++) {
@@ -193,7 +193,7 @@ public class CutCleanSetting extends MenuSetting {
 
           index.getAndIncrement();
         }
-      }, 0, 2);
+      }, 1, 2);
 
     }
 

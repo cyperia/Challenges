@@ -13,11 +13,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ForceItemBattleGoal extends ForceBattleDisplayGoal<ItemTarget> {
 
   private final BooleanSubSetting giveItemSetting;
+  private final BooleanSubSetting itemVariantsSetting;
 
   public ForceItemBattleGoal() {
 
@@ -25,28 +27,31 @@ public class ForceItemBattleGoal extends ForceBattleDisplayGoal<ItemTarget> {
       new ItemStack(Material.CHEST), getSubSettingSpace("give-item"),
       false
     ));
+    // Only future targets change, the current ones stay
+    itemVariantsSetting = registerItemVariantsSetting(false, () -> {
+      if (isEnabled()) targetsPossibleToFind = getTargetsPossibleToFind();
+    });
   }
 
   @Override
   protected ItemTarget[] getTargetsPossibleToFind() {
-    List<Material> materials = ItemTarget.getPossibleItems();
-    return materials.stream().map(ItemTarget::new).toArray(ItemTarget[]::new);
+    return ItemTarget.getPossibleItems(itemVariantsSetting.getAsBoolean()).stream().map(ItemTarget::new).toArray(ItemTarget[]::new);
   }
 
   @Override
   public ItemTarget getTargetFromDocument(Document document, String path) {
-    return new ItemTarget(document.getEnum(path, Material.class));
+    return ItemTarget.parse(document.getString(path));
   }
 
   @Override
   public List<ItemTarget> getListFromDocument(Document document, String path) {
-    return document.getEnumList(path, Material.class).stream().map(ItemTarget::new).collect(Collectors.toList());
+    return document.getStringList(path).stream().map(ItemTarget::parse).filter(Objects::nonNull).collect(Collectors.toList());
   }
 
   @Override
   public void handleJokerUse(Player player) {
     if (shouldGiveItemOnSkip()) {
-      InventoryUtils.dropOrGiveItem(player.getInventory(), player.getLocation(), currentTarget.get(player.getUniqueId()).getTarget());
+      InventoryUtils.dropOrGiveItem(player.getInventory(), player.getLocation(), currentTarget.get(player.getUniqueId()).getTarget().icon());
     }
     super.handleJokerUse(player);
   }
@@ -56,9 +61,8 @@ public class ForceItemBattleGoal extends ForceBattleDisplayGoal<ItemTarget> {
     if (!shouldExecuteEffect(event.getPlayer())) return;
     if (event.getClickedInventory() == null) return;
     if (event.getCurrentItem() == null) return;
-    Material material = currentTarget.get(event.getPlayer().getUniqueId()).getTarget();
-    if (material == null) return;
-    if (material == event.getCurrentItem().getType()) {
+    ItemTarget target = currentTarget.get(event.getPlayer().getUniqueId());
+    if (target != null && target.matches(event.getCurrentItem())) {
       handleTargetFound(event.getPlayer());
     }
   }
@@ -66,9 +70,8 @@ public class ForceItemBattleGoal extends ForceBattleDisplayGoal<ItemTarget> {
   @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
   public void onPickup(PlayerPickupItemEvent event) {
     if (!shouldExecuteEffect(event.getPlayer())) return;
-    Material material = currentTarget.get(event.getPlayer().getUniqueId()).getTarget();
-    if (material == null) return;
-    if (material == event.getItem().getItemStack().getType()) {
+    ItemTarget target = currentTarget.get(event.getPlayer().getUniqueId());
+    if (target != null && target.matches(event.getItem().getItemStack())) {
       handleTargetFound(event.getPlayer());
     }
   }

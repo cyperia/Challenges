@@ -8,7 +8,7 @@ import net.cyperia.challenges.plugin.content.i18n.LocalizableMessage;
 import net.cyperia.challenges.plugin.management.menu.generator.impl.custom.IParentCustomGenerator;
 import net.cyperia.challenges.plugin.utils.misc.MapUtils;
 import net.cyperia.commons.bukkit.utils.chat.ChatInputHandler;
-import org.bukkit.Bukkit;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -83,12 +83,12 @@ public class TextInputSubSettingsBuilder extends SubSettingsBuilder {
     @Override
     public void handleChatInput(@NotNull AsyncChatEvent event, @NotNull String input) {
       if (!isValid.test(event.getPlayer(), input)) {
-        Bukkit.getScheduler().runTask(Challenges.getInstance(), () -> {
+        Regions.nextTick(Challenges.getInstance(), event.getPlayer(), () -> {
           parentGenerator.decline(event.getPlayer());
         });
         return;
       }
-      Bukkit.getScheduler().runTask(Challenges.getInstance(), () -> {
+      Regions.nextTick(Challenges.getInstance(), event.getPlayer(), () -> {
         parentGenerator.accept(event.getPlayer(), null, MapUtils.createStringArrayMap(getKey(), input));
       });
     }

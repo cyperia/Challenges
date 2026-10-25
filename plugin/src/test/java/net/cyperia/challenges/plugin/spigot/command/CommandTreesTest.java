@@ -120,6 +120,15 @@ class CommandTreesTest {
   }
 
   @Test
+  void goalSkipNeedsItsOwnPermission() {
+    register(new GoalCommand());
+
+    assertTrue(runs("goal", senderWith(ChallengesPermissions.COMMAND_GOAL)));
+    assertFalse(runs("goal skip", senderWith(ChallengesPermissions.COMMAND_GOAL)));
+    assertTrue(runs("goal skip", senderWith(ChallengesPermissions.COMMAND_GOAL, ChallengesPermissions.COMMAND_GOAL_SKIP)));
+  }
+
+  @Test
   void resetConfirmWorksWithAndWithoutTheConfirmStep() {
     CommandSender sender = senderWith(ChallengesPermissions.COMMAND_RESET);
 

@@ -6,6 +6,8 @@ import net.cyperia.challenges.plugin.challenges.type.IChallenge;
 import net.cyperia.challenges.plugin.challenges.type.IGoal;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.AbstractChallenge;
 import net.cyperia.challenges.plugin.management.challenges.entities.GamestateSaveable;
+import net.cyperia.challenges.plugin.management.scheduler.policy.PlayerCountPolicy;
+import net.cyperia.challenges.plugin.management.scheduler.task.ScheduledTask;
 import net.cyperia.commons.bukkit.utils.logging.Logger;
 import net.cyperia.commons.common.config.Document;
 import net.cyperia.commons.common.config.FileDocument;
@@ -127,6 +129,7 @@ public final class ChallengeManager {
     // After the settings: a generator setting creates its worlds on enable, and a location saved in one
     // deserializes to null while that world does not exist
     loadGamestate(Challenges.getInstance().getConfigManager().getGamestateConfig().readonly());
+    Challenges.getInstance().getScheduler().register(this);
   }
 
   public synchronized void loadSettings(@NotNull Document config) {
@@ -209,6 +212,13 @@ public final class ChallengeManager {
         Logger.error("Could not write gamestate of {}", challenge.getClass().getSimpleName(), ex);
       }
     }
+  }
+
+  // Without it a crash loses everything since the last clean stop. A reset stops the scheduler before it clears the file
+  @ScheduledTask(ticks = 5 * 60 * 20, async = false, playerPolicy = PlayerCountPolicy.ALWAYS)
+  public void autosave() {
+    saveGamestate(false);
+    Challenges.getInstance().getChallengeTimer().saveSession(false);
   }
 
   public synchronized void saveGamestate(boolean async) {

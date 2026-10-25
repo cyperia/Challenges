@@ -1,10 +1,15 @@
 package net.cyperia.challenges.plugin.management.menu.generator.impl.challenge;
 
+import java.util.function.Predicate;
+import org.bukkit.permissions.Permissible;
 import lombok.Getter;
 import net.cyperia.challenges.plugin.Challenges;
+import net.cyperia.challenges.plugin.challenges.type.EntryAccess;
 import net.cyperia.challenges.plugin.challenges.type.IChallenge;
 import net.cyperia.challenges.plugin.challenges.type.ReleaseInfo;
+import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.management.files.ConfigManager;
+import net.cyperia.challenges.plugin.management.menu.MenuManager;
 import net.cyperia.challenges.plugin.management.menu.generator.VersionedContentContainer;
 import net.cyperia.challenges.plugin.management.menu.info.ChallengeMenuClickInfo;
 import net.cyperia.commons.bukkit.utils.item.ItemBuilder;
@@ -34,7 +39,7 @@ public class ChallengeListMenuGenerator extends ChallengesMenuGenerator {
   public static final ItemStack NEW_CHALLENGE_ITEM = new ItemBuilder(Material.LIME_STAINED_GLASS_PANE, Component.empty()).build();
   public static final ItemStack BETA_CHALLENGE_ITEM = new ItemBuilder(Material.PURPLE_STAINED_GLASS_PANE, Component.empty()).build();
 
-  protected final List<IChallenge> assignedChallengesCache = new LinkedList<>();
+  protected final List<IChallenge> assignedChallengesCache = new ArrayList<>();
 
   @Getter
   protected final boolean newSuffix;
@@ -126,42 +131,48 @@ public class ChallengeListMenuGenerator extends ChallengesMenuGenerator {
   }
 
   @Override
-  public void updateInventoryContent(@NotNull Inventory inventory, int page, @NotNull Locale locale) {
-    List<IChallenge> challengesForPage = getChallengesForPage(page);
-    Iterator<IChallenge> iterator = challengesForPage.iterator(); // LinkedList: poor performance for random access
-    for (int i = 0; iterator.hasNext(); i++) {
-      IChallenge challenge = iterator.next();
-      updateChallengeDisplayAt(challenge, inventory, i, page, locale);
+  public void updateInventoryContent(@NotNull Inventory inventory, int page, @NotNull Player viewer) {
+    Locale locale = localeOf(viewer);
+    List<IChallenge> challengesForPage = getChallengesForPage(viewer, page);
+    for (int i = 0; i < challengesForPage.size(); i++) {
+      IChallenge challenge = challengesForPage.get(i);
+      if (EntryAccess.isLocked(challenge, viewer)) {
+        setLockedChallengeItemsAt(challenge, inventory, i, locale);
+      } else {
+        setChallengeItemsAt(challenge, inventory, i, locale);
+      }
+      setChallengeUpdateItemsAt(challenge, inventory, i, page, viewer);
     }
   }
 
+  // Where a challenge sits differs between viewers once some are hidden, so every open page is drawn again
   @Override
   public void updateElementDisplay(@NotNull IChallenge challenge) {
-    int challengeIndex = assignedChallengesCache.indexOf(challenge);
-    if (challengeIndex == -1) return; // not registered here?
-
-    int page = getPageOfChallenge(challengeIndex);
-    int slotIndex = challengeIndex % DISPLAY_SLOTS.length;
-
-    updatePage(page, (inventory, locale) -> setChallengeItemsAt(challenge, inventory, slotIndex, locale));
-  }
-
-  protected void updateChallengeDisplayAt(@NotNull IChallenge challenge, @NotNull Inventory inventory, int slotsIndex, int page, @NotNull Locale locale) {
-    setChallengeItemsAt(challenge, inventory, slotsIndex, locale);
-    setChallengeUpdateItemsAt(challenge, inventory, slotsIndex, page, locale);
-  }
-
-  protected void setChallengeUpdateItemsAt(@NotNull IChallenge challenge, @NotNull Inventory inventory, int slotIndex, int page, @NotNull Locale locale) {
-    if (ReleaseInfo.isBeta(challenge)) {
-      setItemSafely(inventory, DISPLAY_SLOTS[slotIndex] + SLOT_OFFSET_UPPER, BETA_CHALLENGE_ITEM, page);
-      setItemSafely(inventory, DISPLAY_SLOTS[slotIndex] + SLOT_OFFSET_LOWER, BETA_CHALLENGE_ITEM, page);
-    } else if (newSuffix && ReleaseInfo.isNew(challenge)) {
-      setItemSafely(inventory, DISPLAY_SLOTS[slotIndex] + SLOT_OFFSET_UPPER, NEW_CHALLENGE_ITEM, page);
-      setItemSafely(inventory, DISPLAY_SLOTS[slotIndex] + SLOT_OFFSET_LOWER, NEW_CHALLENGE_ITEM, page);
-    } else if (updatedSuffix && ReleaseInfo.isUpdated(challenge)) {
-      setItemSafely(inventory, DISPLAY_SLOTS[slotIndex] + SLOT_OFFSET_UPPER, UPDATED_CHALLENGE_ITEM, page);
-      setItemSafely(inventory, DISPLAY_SLOTS[slotIndex] + SLOT_OFFSET_LOWER, UPDATED_CHALLENGE_ITEM, page);
+    if (assignedChallengesCache.contains(challenge)) {
+      updatePages();
     }
+  }
+
+  protected void setChallengeUpdateItemsAt(@NotNull IChallenge challenge, @NotNull Inventory inventory, int slotIndex, int page, @NotNull Player viewer) {
+    ItemStack pane = releasePane(challenge, newSuffix, updatedSuffix);
+    if (pane == null) return;
+    setItemSafely(inventory, DISPLAY_SLOTS[slotIndex] + SLOT_OFFSET_UPPER, pane, page, viewer);
+    setItemSafely(inventory, DISPLAY_SLOTS[slotIndex] + SLOT_OFFSET_LOWER, pane, page, viewer);
+  }
+
+  // The pane above and below an entry that marks it beta, new or updated
+  @Nullable
+  public static ItemStack releasePane(@NotNull Object entry, boolean newSuffix, boolean updatedSuffix) {
+    if (ReleaseInfo.isBeta(entry)) return BETA_CHALLENGE_ITEM;
+    if (newSuffix && ReleaseInfo.isNew(entry)) return NEW_CHALLENGE_ITEM;
+    if (updatedSuffix && ReleaseInfo.isUpdated(entry)) return UPDATED_CHALLENGE_ITEM;
+    return null;
+  }
+
+  protected void setLockedChallengeItemsAt(@NotNull IChallenge challenge, @NotNull Inventory inventory, int slotsIndex, @NotNull Locale locale) {
+    MessageKey locked = MessageKey.of("menu.restricted.state");
+    inventory.setItem(DISPLAY_SLOTS[slotsIndex] + SLOT_OFFSET_DISPLAY, challenge.getDisplayItem().state(locked).build(locale));
+    inventory.setItem(DISPLAY_SLOTS[slotsIndex] + SLOT_OFFSET_SETTINGS, challenge.getSettingsItem().state(locked).build(locale));
   }
 
   protected void setChallengeItemsAt(@NotNull IChallenge challenge, @NotNull Inventory inventory, int slotsIndex, @NotNull Locale locale) {
@@ -179,32 +190,35 @@ public class ChallengeListMenuGenerator extends ChallengesMenuGenerator {
     return challenge.getSettingsItem().build(locale);
   }
 
+  // Every challenge of this menu the viewer may see, in menu order
   @NotNull
-  protected List<IChallenge> getChallengesForPage(int page) {
-    int startIndex = page * DISPLAY_SLOTS.length;
-    int endIndex = Math.min(startIndex + DISPLAY_SLOTS.length, assignedChallengesCache.size());
-    return assignedChallengesCache.subList(startIndex, endIndex);
+  public List<IChallenge> getListedChallenges(@NotNull Player viewer) {
+    return assignedChallengesCache.stream().filter(challenge -> challenge.isVisibleTo(viewer)).toList();
   }
 
-  public int getDisplaySlotOfChallenge(IChallenge challenge) {
-    int index = assignedChallengesCache.indexOf(challenge);
+  @NotNull
+  protected List<IChallenge> getChallengesForPage(@NotNull Player viewer, int page) {
+    List<IChallenge> listed = getListedChallenges(viewer);
+    int startIndex = page * DISPLAY_SLOTS.length;
+    int endIndex = Math.min(startIndex + DISPLAY_SLOTS.length, listed.size());
+    return startIndex >= endIndex ? List.of() : listed.subList(startIndex, endIndex);
+  }
+
+  public int getDisplaySlotOfChallenge(@NotNull Player viewer, @NotNull IChallenge challenge) {
+    int index = getListedChallenges(viewer).indexOf(challenge);
     if (index == -1) return -1; // challenge not registered here?
     return DISPLAY_SLOTS[index % DISPLAY_SLOTS.length];
   }
 
-  public int getPageOfChallenge(IChallenge challenge) {
-    int index = assignedChallengesCache.indexOf(challenge);
-    return getPageOfChallenge(index);
-  }
-
-  protected int getPageOfChallenge(int indexOfChallenge) {
-    if (indexOfChallenge == -1) return -1; // challenge not registered here?
-    return (indexOfChallenge / DISPLAY_SLOTS.length);
+  public int getPageOfChallenge(@NotNull Player viewer, @NotNull IChallenge challenge) {
+    int index = getListedChallenges(viewer).indexOf(challenge);
+    if (index == -1) return -1; // challenge not registered here?
+    return index / DISPLAY_SLOTS.length;
   }
 
   @Override
   public void openPageOf(@NotNull Player player, @NotNull IChallenge challenge) {
-    int page = getPageOfChallenge(challenge);
+    int page = getPageOfChallenge(player, challenge);
     if (page == -1) return; // challenge not registered here?
     openMenu(player, page);
   }
@@ -217,9 +231,30 @@ public class ChallengeListMenuGenerator extends ChallengesMenuGenerator {
   }
 
   @Override
-  public int getPageCount() {
+  public int getPageCount(@NotNull Player viewer) {
     // must have at least one page!
-    return Math.max(1, Math.ceilDiv(assignedChallengesCache.size(), DISPLAY_SLOTS.length));
+    return Math.max(1, Math.ceilDiv(getListedChallenges(viewer).size(), DISPLAY_SLOTS.length));
+  }
+
+  @Override
+  public int getNewCount(@NotNull Permissible viewer) {
+    return countListed(viewer, ReleaseInfo::isNew);
+  }
+
+  @Override
+  public int getUpdatedCount(@NotNull Permissible viewer) {
+    return countListed(viewer, ReleaseInfo::isUpdated);
+  }
+
+  @Override
+  public int getBetaCount(@NotNull Permissible viewer) {
+    return countListed(viewer, ReleaseInfo::isBeta);
+  }
+
+  private int countListed(@NotNull Permissible viewer, @NotNull Predicate<IChallenge> filter) {
+    return (int) assignedChallengesCache.stream()
+      .filter(challenge -> filter.test(challenge) && EntryAccess.isListed(challenge, viewer))
+      .count();
   }
 
   @Override
@@ -265,11 +300,12 @@ public class ChallengeListMenuGenerator extends ChallengesMenuGenerator {
         int offset = findSlotOffset(info.getSlot(), slot);
         if (offset == -1) continue;
 
-        int challengeIndex = page * DISPLAY_SLOTS.length + i;
-        if (challengeIndex >= assignedChallengesCache.size()) return false; // page not full
+        List<IChallenge> challengesForPage = getChallengesForPage(info.getPlayer(), page);
+        if (i >= challengesForPage.size()) return false; // page not full
 
-        IChallenge challenge = assignedChallengesCache.get(challengeIndex); // TODO slow LinkedList random access
-        if (Challenges.getInstance().getMenuManager().denySettingsChange(info.getPlayer())) return true;
+        IChallenge challenge = challengesForPage.get(i);
+        MenuManager menuManager = Challenges.getInstance().getMenuManager();
+        if (menuManager.denySettingsChange(info.getPlayer()) || menuManager.denyLockedChange(info.getPlayer(), challenge)) return true;
         return executeChallengeClickAction(challenge, offset, info);
       }
 

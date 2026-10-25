@@ -10,6 +10,7 @@ import net.cyperia.challenges.plugin.management.menu.info.ChallengeMenuClickInfo
 import net.cyperia.challenges.plugin.management.menu.search.SearchFindable;
 import net.cyperia.challenges.plugin.management.menu.generator.types.IChallengesMenuGenerator;
 import net.cyperia.commons.common.config.Document;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public interface IChallenge extends GamestateSaveable, SearchFindable {
@@ -78,6 +79,15 @@ public interface IChallenge extends GamestateSaveable, SearchFindable {
    */
   default boolean isVisible() {
     return true;
+  }
+
+  /**
+   * @return whether this challenge is {@link #isVisible() visible} and not hidden from this player by its permission
+   * @see EntryAccess
+   */
+  @Override
+  default boolean isVisibleTo(@NotNull Player viewer) {
+    return isVisible() && EntryAccess.isListed(this, viewer);
   }
 
   /**

@@ -113,6 +113,30 @@ class ChallengeCatalogTest {
   }
 
   @Test
+  void readsThePermissionOfAnEntry(@TempDir Path dir) throws IOException {
+    Challenge gated = load(dir, """
+      {"challenges": [{"id": "a", "key": "a", "category": "c", "icon": "STONE", "class": "A",
+        "permission": "challenges.play.a", "hidden": true}]}
+      """).challenge("a").orElseThrow();
+    assertEquals("challenges.play.a", gated.permission());
+    assertTrue(gated.hidden());
+  }
+
+  @Test
+  void anEntryWithoutPermissionIsOpenToEveryone() {
+    Challenge cutClean = bundled.challenge("cutclean").orElseThrow();
+    assertNull(cutClean.permission());
+    assertFalse(cutClean.hidden());
+  }
+
+  @Test
+  void rejectsHiddenWithoutPermission(@TempDir Path dir) throws IOException {
+    assertRejected(dir, """
+      {"challenges": [{"id": "a", "key": "a", "category": "c", "icon": "STONE", "class": "A", "hidden": true}]}
+      """, "hidden only applies");
+  }
+
+  @Test
   void rejectsAnEntryWithTwoDefinitions(@TempDir Path dir) throws IOException {
     assertRejected(dir, """
       {"challenges": [{"id": "a", "key": "a", "category": "c", "icon": "STONE", "class": "A", "materialRule": ["STONE"]}]}
