@@ -42,6 +42,7 @@ public class WaterMLGChallenge extends WorldDependentChallenge {
   @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
   public void onPlayerBucketEmpty(@NotNull PlayerBucketEmptyEvent event) {
     if (!isInExtraWorld()) return;
+    if (event.getBlock().getWorld() != getExtraWorld()) return;
 
     Regions.later(plugin, event.getBlock().getLocation(), () -> {
       event.getBlock().setType(Material.AIR);
@@ -56,6 +57,8 @@ public class WaterMLGChallenge extends WorldDependentChallenge {
   public void onEntityDamage(@NotNull EntityDamageEvent event) {
     if (!(event.getEntity() instanceof Player player)) return;
     if (!isInExtraWorld()) return;
+    // The teleport into the extra world completes later, damage before the arrival is not the landing
+    if (player.getWorld() != getExtraWorld()) return;
 
     if (AbstractChallenge.getFirstInstance(OneTeamLifeSetting.class).isEnabled()) {
       teleportBack();

@@ -199,6 +199,8 @@ public class JumpAndRunChallenge extends WorldDependentChallenge {
     if (!isInExtraWorld()) return;
     if (targetBlock == null) return;
     if (event.getTo() == null) return;
+    // The teleport into the extra world completes later, until then the player still moves in the game world
+    if (event.getTo().getWorld() != getExtraWorld()) return;
 
     if (BlockUtils.isSameBlockLocation(event.getTo(), targetBlock.getLocation().add(0, 1, 0))) {
       if (++currentJump >= jumps) {
