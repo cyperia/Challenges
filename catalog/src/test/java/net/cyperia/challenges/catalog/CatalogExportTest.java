@@ -33,12 +33,12 @@ class CatalogExportTest {
   }
 
   @Test
-  void leavesOutUnregisteredChallenges() {
+  void leavesOutUnregisteredAndHiddenChallenges() {
     ChallengeCatalog catalog = ChallengeCatalog.load();
     JsonObject export = JsonParser.parseString(CatalogExport.render(catalog)).getAsJsonObject();
     Set<String> exported = export.getAsJsonArray("challenges").asList().stream()
       .map(entry -> entry.getAsJsonObject().get("id").getAsString()).collect(Collectors.toSet());
-    catalog.challenges().forEach(challenge -> assertEquals(challenge.registered(), exported.contains(challenge.id()), challenge.id()));
+    catalog.challenges().forEach(challenge -> assertEquals(challenge.registered() && !challenge.hidden(), exported.contains(challenge.id()), challenge.id()));
   }
 
   @Test

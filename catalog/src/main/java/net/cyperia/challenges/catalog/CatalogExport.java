@@ -32,7 +32,7 @@ import java.util.StringJoiner;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
-// The registered challenges and their categories with their texts in every bundled language, plain and as
+// The registered challenges that are not hidden, and their categories with their texts in every bundled language, plain and as
 // coloured runs the way the menu shows them, for readers without the plugin such as a website. The file is
 // committed, so it can be read at a stable URL.
 public final class CatalogExport {
@@ -74,7 +74,7 @@ public final class CatalogExport {
 
     JsonArray challenges = new JsonArray();
     for (Challenge challenge : catalog.challenges()) {
-      if (!challenge.registered()) continue;
+      if (!challenge.registered() || challenge.hidden()) continue;
       JsonObject json = new JsonObject();
       json.addProperty("id", challenge.id());
       if (!challenge.fallbackIds().isEmpty()) {
