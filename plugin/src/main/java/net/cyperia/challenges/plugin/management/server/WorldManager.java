@@ -1,5 +1,6 @@
 package net.cyperia.challenges.plugin.management.server;
 
+import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.Setter;
 import net.cyperia.challenges.plugin.ChallengeAPI;
@@ -25,7 +26,10 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 
 public final class WorldManager {
 
@@ -41,6 +45,8 @@ public final class WorldManager {
   private boolean shutdownBecauseOfReset = false;
   private WorldSettings settings = new WorldSettings();
   private World flatWorld;
+  private final AtomicBoolean prefetchFailureLogged = new AtomicBoolean();
+  private TerrainPrefetcher terrainPrefetcher = at -> CompletableFuture.completedFuture(null);
   @Getter
   private boolean worldInUse;
 
@@ -59,6 +65,66 @@ public final class WorldManager {
       levelName + "_nether", // TODO
       levelName + "_the_end"
     };
+  }
+
+  public void setTerrainPrefetcher(@NotNull TerrainPrefetcher terrainPrefetcher) {
+    Preconditions.checkNotNull(terrainPrefetcher, "Cannot set TerrainPrefetcher to null");
+    this.terrainPrefetcher = terrainPrefetcher;
+  }
+
+  /**
+   * Completes once the terrain at {@code at} is ready to be loaded, possibly on another thread. A
+   * prefetcher that fails only costs the head start, so the returned future never completes exceptionally.
+   */
+  @NotNull
+  public CompletableFuture<Void> prefetchTerrain(@NotNull Location at) {
+    CompletableFuture<Void> prefetch;
+    try {
+      prefetch = terrainPrefetcher.prefetch(at);
+    } catch (Exception | LinkageError ex) {
+      logPrefetchFailure(ex);
+      return CompletableFuture.completedFuture(null);
+    }
+    if (prefetch == null) return CompletableFuture.completedFuture(null);
+    return prefetch.exceptionally(ex -> {
+      logPrefetchFailure(ex);
+      return null;
+    });
+  }
+
+  /**
+   * Loads the chunk at {@code at} after its terrain was prefetched and passes it to {@code action} on
+   * the region owning the location. The future completes after {@code action} ran, or exceptionally if
+   * a step failed.
+   */
+  @NotNull
+  public CompletableFuture<Void> loadChunkAfterPrefetch(@NotNull Location at, @NotNull Consumer<Chunk> action) {
+    Challenges plugin = Challenges.getInstance();
+    World world = at.getWorld();
+    CompletableFuture<Void> done = new CompletableFuture<>();
+    // the prefetch completes off the region thread and has to precede the first chunk load at the target
+    prefetchTerrain(at).thenRun(() -> Regions.at(plugin, at, () ->
+      world.getChunkAtAsync(at).thenAccept(chunk -> Regions.at(plugin, at, () -> {
+        try {
+          action.accept(chunk);
+          done.complete(null);
+        } catch (Throwable ex) {
+          done.completeExceptionally(ex);
+        }
+      })).exceptionally(ex -> {
+        done.completeExceptionally(ex);
+        return null;
+      }))).exceptionally(ex -> {
+      done.completeExceptionally(ex);
+      return null;
+    });
+    return done;
+  }
+
+  private void logPrefetchFailure(@NotNull Throwable ex) {
+    if (prefetchFailureLogged.compareAndSet(false, true)) {
+      Logger.warn("Terrain prefetch failed, loading chunks without it", ex);
+    }
   }
 
   public void load() {
@@ -167,9 +233,13 @@ public final class WorldManager {
   public void executeWorldReset() {
     Logger.info("Deleting worlds..");
 
+    File levelFolder = new File(Bukkit.getWorldContainer(), levelName);
+    List<File> playerFolders = listPlayerFolders(levelFolder);
     for (String world : worlds) {
       deleteWorld(world);
     }
+    // Paper creates these before plugins load and never again, so without them every player save fails until the next restart
+    playerFolders.forEach(File::mkdirs);
 
     long newSeed = getCustomSeedOrRandom();
     String newSeedString = String.valueOf(newSeed);
@@ -295,6 +365,12 @@ public final class WorldManager {
       }
       clazz = clazz.getSuperclass();
     }
+  }
+
+  @NotNull
+  static List<File> listPlayerFolders(@NotNull File levelFolder) {
+    File[] folders = new File(levelFolder, "players").listFiles(File::isDirectory);
+    return folders == null ? List.of() : List.of(folders);
   }
 
   private void deleteWorld(@NotNull String name) {

@@ -1,8 +1,10 @@
 package net.cyperia.challenges.plugin.challenges.type.abstraction;
 
+import net.cyperia.challenges.plugin.ChallengeAPI;
 import net.cyperia.challenges.plugin.challenges.type.helper.GoalLeaderboard;
 import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.content.i18n.Prefix;
+import net.cyperia.challenges.plugin.management.scheduler.task.ScheduledTask;
 import net.cyperia.challenges.plugin.spigot.events.PlayerInventoryClickEvent;
 import net.cyperia.challenges.plugin.spigot.events.PlayerPickupItemEvent;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
@@ -10,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -55,6 +58,19 @@ public abstract class ItemCollectionGoal extends CollectionGoal {
     Player player = event.getPlayer();
     Material material = event.getCurrentItem().getType();
     handleCollect(player, material);
+  }
+
+  // An item shift-clicked out of a chest or smithing table and equipped by right-click never passes
+  // a pickup or a click in the player's own inventory, so the inventory is scanned as well.
+  @ScheduledTask(ticks = 20, async = false)
+  public void scanInventories() {
+    for (Player player : ChallengeAPI.getIngamePlayers()) {
+      if (!shouldExecuteEffect()) return;
+      for (ItemStack item : player.getInventory().getContents()) {
+        if (item == null) continue;
+        handleCollect(player, item.getType());
+      }
+    }
   }
 
 }

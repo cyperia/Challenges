@@ -303,6 +303,11 @@
           "found": "Gefundene"
         },
         "switch-filter": "{0} anzeigen"
+      },
+      "category": {
+        "progress": "<gray>Gefunden:</gray> <yellow>{0}</yellow> <dark_gray>/</dark_gray> <yellow>{1}</yellow>",
+        "show": "Nur diese anzeigen",
+        "show-all": "Alles anzeigen"
       }
     },
     "challenges": {
@@ -2349,6 +2354,34 @@
         "eine *Elytra findet*, gewinnt"
       ]
     },
+    "find-sniffer-egg": {
+      "name": "*Schnüffler-Ei Finden*",
+      "desc": [
+        "Der Spieler, der als *erstes*",
+        "ein *Schnüffler-Ei findet*, gewinnt"
+      ]
+    },
+    "find-totem": {
+      "name": "*Totem Finden*",
+      "desc": [
+        "Der Spieler, der als *erstes*",
+        "ein *Totem findet*, gewinnt"
+      ]
+    },
+    "find-enchanted-golden-apple": {
+      "name": "*Verzauberten Apfel Finden*",
+      "desc": [
+        "Der Spieler, der als *erstes* einen",
+        "*verzauberten Apfel findet*, gewinnt"
+      ]
+    },
+    "find-heart-of-the-sea": {
+      "name": "*Herz des Meeres Finden*",
+      "desc": [
+        "Der Spieler, der als *erstes*",
+        "ein *Herz des Meeres findet*, gewinnt"
+      ]
+    },
     "eat-cake": {
       "name": "*Kuchen Essen*",
       "desc": [
@@ -2368,6 +2401,13 @@
       "desc": [
         "Der Spieler, der als *erstes*",
         "*alle Eisblöcke* und Schnee hat, gewinnt"
+      ]
+    },
+    "collect-netherite-armor": {
+      "name": "*Volle Netheritrüstung*",
+      "desc": [
+        "Der Spieler, der als *erstes* die",
+        "*ganze Netheritrüstung* hat, gewinnt"
       ]
     },
     "collect-swords": {
@@ -2600,10 +2640,12 @@
       "menu": "Alles sammeln",
       "bossbar-next": "{@bossbar.format-arg('{@name}', '<yellow>{0}</yellow> <dark_gray>{@symbol.vertical}</dark_gray> <green>{1}</green> <dark_gray>/</dark_gray> <yellow>{2}</yellow>')}",
       "category": {
-        "items": "Items",
-        "mobs": "Mobs",
-        "advancements": "Fortschritte"
-      }
+        "items": "*Items*",
+        "mobs": "*Mobs*",
+        "advancements": "*Fortschritte*",
+        "overall": "*Gesamt*"
+      },
+      "ranking": "<gray>Am meisten gefunden:</gray> {0}"
     },
     "damage-teleport": {
       "name": "*Schaden = Zufälliger Teleport*",
@@ -3822,6 +3864,20 @@
       "thunder": "<gray>Wetter zu <yellow>stürmisch </yellow>geändert</gray>",
       "description": "Ändert das Wetter."
     },
+    "worldborder": {
+      "set": "<gray>Die Weltgrenze ist jetzt <yellow>{0} </yellow>Blöcke breit</gray>",
+      "set-over": "<gray>Die Weltgrenze ist in <yellow>{1} </yellow>Sekunden <yellow>{0} </yellow>Blöcke breit</gray>",
+      "center": "<gray>Die Weltgrenze liegt jetzt um <yellow>{0}</yellow><dark_gray>, </dark_gray><yellow>{1}</yellow></gray>",
+      "get": "<gray>Die Weltgrenze ist <yellow>{0} </yellow>Blöcke breit und liegt um <yellow>{1}</yellow><dark_gray>, </dark_gray><yellow>{2}</yellow></gray>",
+      "damage-buffer": "<gray>Spieler außerhalb der Weltgrenze bekommen nach <yellow>{0} </yellow>Blöcken Schaden</gray>",
+      "damage-amount": "<gray>Spieler außerhalb der Weltgrenze bekommen <yellow>{0} </yellow>Schaden pro Block</gray>",
+      "mode": {
+        "damage": "<gray>Die Weltgrenze <yellow>verletzt </yellow>jetzt Spieler außerhalb</gray>",
+        "push": "<gray>Die Weltgrenze <yellow>setzt </yellow>Spieler außerhalb jetzt zurück nach innen</gray>"
+      },
+      "reset": "<gray>Die Weltgrenze ist wieder <yellow>normal</yellow></gray>",
+      "description": "Setzt, verschiebt oder zeigt die Weltgrenze der Challenge."
+    },
     "invsee": {
       "open": "<gray>Inventar von <yellow>{0} </yellow>geöffnet</gray>",
       "description": "Öffnet das Inventar eines anderen Spielers."
@@ -4097,7 +4153,7 @@
   "translatable": {
     "damage-cause": {
       "kill": "Kill",
-      "world_border": "Weltbarriere",
+      "world_border": "Weltgrenze",
       "contact": "Kontakt",
       "entity_attack": "Angriff",
       "entity_sweep_attack": "Schwungangriff",

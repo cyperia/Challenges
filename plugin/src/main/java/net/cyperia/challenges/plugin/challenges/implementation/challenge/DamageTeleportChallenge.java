@@ -10,13 +10,21 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class DamageTeleportChallenge extends SettingModifier {
 
   private static final int PLAYER = 1, EVERYONE = 2;
+  // A world without a border is 60 million blocks wide, which would put the target out of reach.
+  private static final double MAX_RADIUS = 2000;
+
+  private final Set<UUID> teleportPending = ConcurrentHashMap.newKeySet();
 
   public DamageTeleportChallenge() {
     super(1, 2);
@@ -32,25 +40,34 @@ public class DamageTeleportChallenge extends SettingModifier {
     handleDamage(((Player) event.getEntity()));
   }
 
-  private void handleDamage(@NotNull Player player) {
+  @EventHandler
+  public void onQuit(@NotNull PlayerQuitEvent event) {
+    teleportPending.remove(event.getPlayer().getUniqueId());
+  }
+
+  void handleDamage(@NotNull Player player) {
+    // damage over time would otherwise queue teleports that land in a burst
+    if (!teleportPending.add(player.getUniqueId())) return;
+
     World world = player.getWorld();
     Location random = getRandomLocation(world);
 
-    world.getChunkAtAsync(random).thenAccept(chunk -> Regions.at(Challenges.getInstance(), random, () -> {
+    Challenges.getInstance().getWorldManager().loadChunkAfterPrefetch(random, chunk -> {
+      if (!shouldExecuteEffect() || !player.isValid() || player.isDead()) return;
+
       Location location = world.getHighestBlockAt(random).getLocation();
       location.setY(location.getY() + 1);
 
       if (getValue() == PLAYER) {
         Regions.entity(Challenges.getInstance(), player, () -> player.teleportAsync(location));
       } else {
-        broadcastFiltered(player1 -> player1.teleportAsync(location));
+        broadcastFiltered(target -> Regions.entity(Challenges.getInstance(), target, () -> target.teleportAsync(location)));
       }
-    }));
+    }).whenComplete((result, ex) -> teleportPending.remove(player.getUniqueId()));
   }
 
   public Location getRandomLocation(World world) {
-    double size = Challenges.getInstance().getBorderManager().getSize(world) / 2;
-    size--;
+    double size = Math.min(Challenges.getInstance().getBorderManager().getSize(world) / 2 - 1, MAX_RADIUS);
 
     final double randomX = ThreadLocalRandom.current().nextDouble(-size, size);
     final double randomY = ThreadLocalRandom.current().nextDouble(-size, size);

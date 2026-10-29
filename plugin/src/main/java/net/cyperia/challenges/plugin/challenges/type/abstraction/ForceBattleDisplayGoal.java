@@ -63,7 +63,7 @@ public abstract class ForceBattleDisplayGoal<T extends ForceTarget<?>> extends F
   }
 
   private void removeStand(@NotNull ArmorStand stand) {
-    Regions.entity(Challenges.getInstance(), stand, stand::remove);
+    Regions.remove(Challenges.getInstance(), stand);
   }
 
   public void handleDisplayStandUpdate(@NotNull Player player, @NotNull ArmorStand armorStand) {

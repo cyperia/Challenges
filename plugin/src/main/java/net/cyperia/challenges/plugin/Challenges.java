@@ -216,6 +216,7 @@ public final class Challenges extends BukkitModule {
       TimeCommand.shortcut("night"),
       TimeCommand.shortcut("noon"),
       TimeCommand.shortcut("midnight"),
+      new WorldborderCommand(),
       new ResultCommand(),
       new SkipTimerCommand(),
       new CancelChatInputCommand(),

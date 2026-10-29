@@ -1005,6 +1005,18 @@
     "find-elytra": {
       "*colorize*": "<white>{0}</white>"
     },
+    "find-sniffer-egg": {
+      "*colorize*": "<red>{0}</red>"
+    },
+    "find-totem": {
+      "*colorize*": "<gold>{0}</gold>"
+    },
+    "find-enchanted-golden-apple": {
+      "*colorize*": "<light_purple>{0}</light_purple>"
+    },
+    "find-heart-of-the-sea": {
+      "*colorize*": "<dark_aqua>{0}</dark_aqua>"
+    },
     "eat-cake": {
       "*colorize*": "<white>{0}</white>"
     },
@@ -1013,6 +1025,9 @@
     },
     "collect-ice": {
       "*colorize*": "<aqua>{0}</aqua>"
+    },
+    "collect-netherite-armor": {
+      "*colorize*": "<color:#8f7c7c>{0}</color>"
     },
     "collect-swords": {
       "*colorize*": "<blue>{0}</blue>"
@@ -1080,7 +1095,13 @@
       "*colorize*": "<dark_green>{0}</dark_green>"
     },
     "collect-everything": {
-      "*colorize*": "<gold>{0}</gold>"
+      "*colorize*": "<gold>{0}</gold>",
+      "category": {
+        "items.*colorize*": "<green>{0}</green>",
+        "mobs.*colorize*": "<yellow>{0}</yellow>",
+        "advancements.*colorize*": "<color:#A855F7>{0}</color>",
+        "overall.*colorize*": "<aqua>{0}</aqua>"
+      }
     },
     "damage-teleport": {
       "*colorize*": "<red>{0}</red>"

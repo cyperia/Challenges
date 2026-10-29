@@ -101,10 +101,19 @@ public final class GoalLeaderboard {
     return content(points, null, additionalLines, true);
   }
 
-  // Everyone plays together, so there is no own placement to show above the ranking
+  // Everyone plays together, so there is no own placement above the ranking, only an optional heading (null for none)
   @NotNull
-  public static BiConsumer<ScoreboardInstance, Player> sharedScoreboardContent(@NotNull Supplier<Map<OfflinePlayer, Integer>> points) {
-    return content(points, null, null, false);
+  public static BiConsumer<ScoreboardInstance, Player> sharedScoreboardContent(@NotNull Supplier<Map<OfflinePlayer, Integer>> points,
+                                                                               @NotNull Supplier<LocalizableMessage> heading) {
+    BiConsumer<ScoreboardInstance, Player> ranking = content(points, null, null, false);
+    return (board, viewer) -> {
+      LocalizableMessage line = heading.get();
+      if (line != null) {
+        board.addEmptyLine();
+        board.addLine(line);
+      }
+      ranking.accept(board, viewer);
+    };
   }
 
   /**
