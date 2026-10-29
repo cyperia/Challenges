@@ -18,6 +18,8 @@ import org.bukkit.World;
 import org.bukkit.WorldBorder;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.damage.DamageSource;
+import org.bukkit.damage.DamageType;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,29 +30,34 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 /**
- * The one world border every challenge shares.
+ * The one world border of a challenge round, the one /worldborder sets and every border challenge changes.
  * <p>
  * Challenges never touch {@link World#getWorldBorder()}: a challenge whose border starts small and
  * grows with the game state sets how far it has {@link #setGrowth(AbstractChallenge, double, boolean)
  * grown} it, one that only makes it bigger or smaller {@link #changeSize(double) changes} it, and all of
- * them add up. Going through the world border instead would mean the last writer wins, so enabling a
- * second border challenge would silently turn the first one into a no-op.
+ * them add up on top of the size /worldborder {@link #setSize(double, long) set}. Going through the world
+ * border instead would mean the last writer wins, so enabling a second border challenge would silently
+ * turn the first one into a no-op.
  * <p>
- * What the players see is a border of this manager's own, sent per player, so the world keeps the
- * border it was created with and a reset needs nothing but forgetting the numbers here.
+ * What the players see is a border of this manager's own, sent per player. The world keeps its vanilla
+ * border, because the server spawns no mobs in chunks outside the world's border.
  */
 public final class BorderManager implements GamestateSaveable, Listener {
 
-  private static final double MIN_SIZE = 1;
+  public static final double MIN_SIZE = 1;
+  public static final double MAX_SIZE = 59_999_968;
   private static final double START_SIZE = 1;
 
   private final Map<World, WorldBorder> apiBorders = new ConcurrentHashMap<>();
@@ -58,12 +65,29 @@ public final class BorderManager implements GamestateSaveable, Listener {
 
   // Players a challenge has given a border of their own. The shared border leaves them alone until it
   // is handed back, so a challenge that traps somebody is not undone by one that shrinks the border.
+  private final Set<UUID> teleporting = ConcurrentHashMap.newKeySet();
   private final Map<UUID, WorldBorder> overrides = new ConcurrentHashMap<>();
 
   // How far each challenge whose border starts small has grown it, by unique challenge name. Not saved:
   // each of them restores its own on load, and a reset loads this manager after the challenges.
   private final Map<String, Double> growth = new ConcurrentHashMap<>();
   private volatile double offset;
+
+  // The size the border is sliding from and to, so players are held to the line they see moving
+  // rather than to where it ends up. NaN while there is no border.
+  private volatile double drawnTarget = Double.NaN;
+  private volatile double slideFrom;
+  private volatile long slideStart;
+  private volatile long slideEnd;
+
+  // The size /worldborder set, null while nobody did
+  private volatile Double size;
+
+  // Unlike vanilla's 5 blocks, no buffer: a border that shrinks by a block has to hurt whoever it passes
+  private static final double DAMAGE_PER_BLOCK = 0.2;
+  private volatile double damageBuffer = 0;
+  private volatile double damagePerBlock = DAMAGE_PER_BLOCK;
+  private volatile Containment containment = Containment.DAMAGE;
 
   // One bar for every challenge that drives the border, so two of them never stack two bars
   private final ChallengeBossBar bossbar = new ChallengeBossBar();
@@ -76,62 +100,148 @@ public final class BorderManager implements GamestateSaveable, Listener {
   }
 
   /**
-   * Whether any challenge is currently driving the border. While nothing is, players keep the border
-   * their world came with.
+   * Whether there is a border at all: one set with /worldborder or one a challenge grows. While there is
+   * none, players keep the border their world came with.
    */
   public boolean isActive() {
-    return !growth.isEmpty() || offset != 0;
+    return isGrowing() || size != null;
+  }
+
+  private boolean isGrowing() {
+    return !growth.isEmpty();
   }
 
   /**
    * Shrinks the border down to a single block while any challenge has set a growth, and grows it by the
-   * sum of all of them. Passing the same growth twice is free.
+   * sum of all of them. A border /worldborder set is grown from its own size instead.
+   * Passing the same growth twice is free.
    */
   public void setGrowth(@NotNull AbstractChallenge challenge, double blocks, boolean animate) {
     Double previous = growth.put(challenge.getUniqueName(), blocks);
     if (previous != null && previous == blocks) return;
-    update(animate);
+    update(animate ? 1 : 0);
   }
 
   public void clearGrowth(@NotNull AbstractChallenge challenge) {
     if (growth.remove(challenge.getUniqueName()) == null) return;
-    update(false);
+    update(0);
   }
 
   /**
    * Grows or shrinks the border by {@code delta}, on top of whatever size it has otherwise.
    * The border slides to the new size rather than jumping to it, the way it does when the level border
-   * follows a level.
+   * follows a level. Without a border there is nothing to see, but the change is kept for when there is.
    */
   public void changeSize(double delta) {
     offset += delta;
-    update(true);
+    update(1);
   }
 
   /**
-   * The size players are actually held to in this world.
+   * Makes the border {@code target} blocks wide over {@code seconds}, the way /worldborder set does.
+   * Challenges that change the border go on from there.
+   */
+  public void setSize(double target, long seconds) {
+    double clamped = Math.clamp(target, MIN_SIZE, MAX_SIZE);
+    size = clamped - (isGrowing() ? grown() : 0) - offset;
+    update(seconds);
+  }
+
+  /**
+   * Takes back what /worldborder set, so without a challenge that grows one there is no border any more.
+   */
+  public void reset() {
+    size = null;
+    centers.clear();
+    update(0);
+  }
+
+  public void setCenter(@NotNull World world, @NotNull Location center) {
+    centers.put(world, center.clone());
+    if (isActive()) updateBorder(world);
+  }
+
+  public void setDamage(double buffer, double perBlock) {
+    damageBuffer = Math.max(0, buffer);
+    damagePerBlock = Math.max(0, perBlock);
+  }
+
+  public void setContainment(@NotNull Containment containment) {
+    this.containment = containment;
+  }
+
+  @NotNull
+  public Containment getContainment() {
+    return containment;
+  }
+
+  public double getDamageBuffer() {
+    return damageBuffer;
+  }
+
+  public double getDamagePerBlock() {
+    return damagePerBlock;
+  }
+
+  /**
+   * The size the border has in this world once it stops sliding.
    */
   public double getSize(@NotNull World world) {
-    double base = growth.isEmpty()
-      ? world.getWorldBorder().getSize()
-      : START_SIZE + growth.values().stream().mapToDouble(Double::doubleValue).sum();
-    return Math.max(MIN_SIZE, base + offset);
+    if (!isActive()) return world.getWorldBorder().getSize();
+    return targetSize();
+  }
+
+  private double targetSize() {
+    double base = size != null ? size : START_SIZE;
+    return Math.clamp(base + (isGrowing() ? grown() : 0) + offset, MIN_SIZE, MAX_SIZE);
+  }
+
+  /**
+   * The size the border is drawn at right now, somewhere between where a slide started and
+   * {@link #getSize(World)}.
+   */
+  public double getDrawnSize(@NotNull World world) {
+    if (!isActive()) return getSize(world);
+    return drawnSize(System.currentTimeMillis());
+  }
+
+  private double drawnSize(long now) {
+    if (now >= slideEnd) return drawnTarget;
+    double progress = (now - slideStart) / (double) (slideEnd - slideStart);
+    return slideFrom + (drawnTarget - slideFrom) * progress;
+  }
+
+  private void startSlide(long seconds) {
+    long now = System.currentTimeMillis();
+    double from = Double.isNaN(drawnTarget) ? Double.NaN : drawnSize(now);
+    double target = isActive() ? targetSize() : Double.NaN;
+    if (seconds > 0 && !Double.isNaN(from) && !Double.isNaN(target)) {
+      slideFrom = from;
+      slideStart = now;
+      slideEnd = now + seconds * 1000;
+    } else {
+      slideEnd = 0;
+    }
+    drawnTarget = target;
+  }
+
+  private double grown() {
+    return growth.values().stream().mapToDouble(Double::doubleValue).sum();
   }
 
   @NotNull
   public Location getCenter(@NotNull World world) {
+    if (!isActive()) return world.getWorldBorder().getCenter();
+
     Location center = centers.get(world);
     if (center != null) return center.clone();
+    // a border that starts small opens where players spawn, one /worldborder set where vanilla's would be
+    if (!isGrowing()) return new Location(world, 0, 0, 0);
 
     Location spawn = world.getSpawnLocation();
     spawn.setX(spawn.getBlockX() + 0.5);
     spawn.setZ(spawn.getBlockZ() + 0.5);
     return spawn;
-  }
-
-  public void setCenter(@NotNull World world, @NotNull Location center) {
-    centers.put(world, center.clone());
-    if (isActive()) updateBorder(world, false);
   }
 
   /**
@@ -155,7 +265,7 @@ public final class BorderManager implements GamestateSaveable, Listener {
     if (world == null || !isActive()) return false;
 
     Location center = getCenter(world);
-    double radius = getSize(world) / 2;
+    double radius = getDrawnSize(world) / 2;
     return isOutside(location.getBlockX(), center.getX(), radius)
       || isOutside(location.getBlockZ(), center.getZ(), radius);
   }
@@ -165,19 +275,60 @@ public final class BorderManager implements GamestateSaveable, Listener {
   }
 
   /**
+   * How far this location lies past the area the client lets a player walk in, 0 inside it. Measured
+   * from the same whole-block bounds as {@link #isOutside(Location)}, so standing where the border let
+   * a player walk never hurts.
+   */
+  public double distanceOutside(@NotNull Location location) {
+    World world = location.getWorld();
+    if (world == null || !isActive()) return 0;
+
+    Location center = getCenter(world);
+    double radius = getDrawnSize(world) / 2;
+    return Math.max(0, Math.max(
+      distanceOutside(location.getX(), center.getX(), radius),
+      distanceOutside(location.getZ(), center.getZ(), radius)));
+  }
+
+  private static double distanceOutside(double position, double center, double radius) {
+    return Math.max(Math.floor(center - radius) - position, position - Math.ceil(center + radius));
+  }
+
+  /**
    * Moves a player to the spot inside the drawn border closest to where they are.
    */
   public void teleportInside(@NotNull Player player) {
     Location location = player.getLocation();
     Location center = getCenter(player.getWorld());
-    double radius = getSize(player.getWorld()) / 2;
+    double radius = getDrawnSize(player.getWorld()) / 2;
     double margin = Math.min(player.getWidth() / 2, radius);
 
     location.setX(Math.clamp(location.getX(), center.getX() - radius + margin, center.getX() + radius - margin));
     location.setZ(Math.clamp(location.getZ(), center.getZ() - radius + margin, center.getZ() + radius - margin));
-    Location spot = standingSpot(location);
+    if (!teleporting.add(player.getUniqueId())) return;
     player.setFallDistance(0);
-    player.teleportAsync(spot != null ? spot : surface(center, player.getWorld()));
+
+    // The ground at the target belongs to another region than the player's, so it is read there.
+    Plugin plugin = Challenges.getInstance();
+    Regions.at(plugin, location, () -> {
+      try {
+        Location spot = standingSpot(location);
+        if (spot != null) {
+          teleportTo(player, spot);
+        } else {
+          Regions.at(plugin, center, () -> teleportTo(player, surface(center, player.getWorld())));
+        }
+      } catch (RuntimeException e) {
+        teleporting.remove(player.getUniqueId());
+        throw e;
+      }
+    });
+  }
+
+  // One teleport per player at a time, so a player who stays outside until it lands does not queue another every tick.
+  private void teleportTo(@NotNull Player player, @NotNull Location spot) {
+    CompletableFuture<Boolean> teleport = player.teleportAsync(spot);
+    teleport.whenComplete((done, error) -> teleporting.remove(player.getUniqueId()));
   }
 
   @NotNull
@@ -207,12 +358,12 @@ public final class BorderManager implements GamestateSaveable, Listener {
   }
 
   /**
-   * Gives a player the border of the world they are in, or the world's own border while no challenge is
-   * driving one or the player left the game worlds behind.
+   * Gives a player the border of the world they are in, or the world's own border while there is none
+   * or the player left the game worlds behind.
    * <p>
    * Sending must not rewrite a border somebody else is already watching, or a join would cut short an
    * animated resize for the whole world. It only writes one it has never written before: a world can
-   * join the game worlds long after the border went active - {@code /world void} creates one on demand -
+   * join the game worlds long after the border went active - a world generator challenge swaps them -
    * and would otherwise hand out the untouched 59,999,968 block default.
    */
   public void sendTo(@NotNull Player player) {
@@ -227,7 +378,7 @@ public final class BorderManager implements GamestateSaveable, Listener {
       return;
     }
 
-    if (!hasBorder(world)) applyTo(world, false);
+    if (!hasBorder(world)) applyTo(world);
     bind(player);
   }
 
@@ -239,11 +390,9 @@ public final class BorderManager implements GamestateSaveable, Listener {
   public void override(@NotNull Player player, @NotNull Location center, double size) {
     WorldBorder border = Bukkit.createWorldBorder();
     // The world of the center, not of the player: a teleport hands this its destination while the
-    // player still stands in the world they came from. The client places a nether border at an eighth
-    // of the coordinates it is given.
+    // player still stands in the world they came from.
     World world = center.getWorld() == null ? player.getWorld() : center.getWorld();
-    double factor = world.getEnvironment() == World.Environment.NETHER ? 8 : 1;
-    border.setCenter(center.getX() * factor, center.getZ() * factor);
+    setCenter(border, world, center);
     border.setSize(size);
     border.setWarningDistance(0);
     border.setWarningTime(0);
@@ -257,15 +406,19 @@ public final class BorderManager implements GamestateSaveable, Listener {
     if (player.isOnline()) sendTo(player);
   }
 
-  public void update(boolean animate) {
+  /**
+   * Writes the border onto every game world over {@code seconds}, 0 for at once.
+   */
+  public void update(long seconds) {
+    startSlide(seconds);
     for (World world : ChallengeAPI.getGameWorlds()) {
-      updateBorder(world, animate);
+      updateBorder(world);
     }
     updateBossBar();
   }
 
   private void updateBossBar() {
-    if (growth.isEmpty()) {
+    if (!isGrowing()) {
       if (bossbar.isShown()) bossbar.hide();
     } else if (bossbar.isShown()) {
       bossbar.update();
@@ -307,7 +460,7 @@ public final class BorderManager implements GamestateSaveable, Listener {
   // not around that world's spawn.
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   public void onPortal(@NotNull PlayerTeleportEvent event) {
-    if (!isActive() || !ChallengeAPI.isStarted() || ChallengeAPI.isWorldInUse() || event.getTo() == null) return;
+    if (!isGrowing() || !ChallengeAPI.isStarted() || ChallengeAPI.isWorldInUse() || event.getTo() == null) return;
     if (event.getCause() != PlayerTeleportEvent.TeleportCause.NETHER_PORTAL
       && event.getCause() != PlayerTeleportEvent.TeleportCause.END_PORTAL) return;
     if (AbstractChallenge.ignorePlayer(event.getPlayer())) return;
@@ -325,20 +478,45 @@ public final class BorderManager implements GamestateSaveable, Listener {
     }
   }
 
-  // Before the start too: a new player spawns scattered around the world spawn, outside a small border
-  @ScheduledTask(ticks = 20, async = false, timerPolicy = TimerPolicy.ALWAYS)
+  /**
+   * Puts every player who stands outside the border inside it, for a border that appears around players
+   * who never crossed it.
+   */
   public void containPlayers() {
     Challenges.getInstance().getPlayerManager().forEachAudience(this::contain);
   }
 
+  // Before the start, a new player spawns scattered around the world spawn, outside a small border, and
+  // is put inside whatever the containment says.
+  @ScheduledTask(ticks = 10, async = false, timerPolicy = TimerPolicy.ALWAYS)
+  public void holdPlayers() {
+    if (!ChallengeAPI.isStarted() || containment == Containment.PUSH) {
+      containPlayers();
+      return;
+    }
+    Challenges.getInstance().getPlayerManager().forEachAudience(this::hurtOutside);
+  }
+
   private void contain(@NotNull Player player) {
-    if (!isActive() || ChallengeAPI.isWorldInUse()) return;
-    if (overrides.containsKey(player.getUniqueId())) return;
-    if (player.isDead() || AbstractChallenge.ignorePlayer(player)) return;
+    if (!isHeld(player)) return;
     if (isOutside(player.getLocation())) teleportInside(player);
   }
 
-  private void updateBorder(@NotNull World world, boolean animate) {
+  private void hurtOutside(@NotNull Player player) {
+    if (!isHeld(player) || damagePerBlock <= 0) return;
+    double beyond = distanceOutside(player.getLocation()) - damageBuffer;
+    if (beyond <= 0) return;
+    // vanilla's own formula, at least half a heart per hit
+    player.damage(Math.max(1, Math.floor(beyond * damagePerBlock)), DamageSource.builder(DamageType.OUTSIDE_BORDER).build());
+  }
+
+  private boolean isHeld(@NotNull Player player) {
+    if (!isActive() || ChallengeAPI.isWorldInUse()) return false;
+    if (overrides.containsKey(player.getUniqueId())) return false;
+    return !player.isDead() && !AbstractChallenge.ignorePlayer(player);
+  }
+
+  private void updateBorder(@NotNull World world) {
     if (!isActive()) {
       forEachPlayerIn(world, this::resetFor);
       return;
@@ -346,7 +524,7 @@ public final class BorderManager implements GamestateSaveable, Listener {
 
     // apply once for the whole world: re-applying per player would overwrite the animated transition
     // with an instant resize before anyone is told about it
-    applyTo(world, animate);
+    applyTo(world);
     forEachPlayerIn(world, this::bind);
   }
 
@@ -373,18 +551,23 @@ public final class BorderManager implements GamestateSaveable, Listener {
   /**
    * Writes the current size and center onto the world's border object, without sending it anywhere.
    */
-  private void applyTo(@NotNull World world, boolean animate) {
-    Location center = getCenter(world);
-    double size = getSize(world);
-
+  private void applyTo(@NotNull World world) {
     WorldBorder border = apiBorder(world);
-    // the client places a nether border at an eighth of the coordinates it is given
-    double factor = world.getEnvironment() == World.Environment.NETHER ? 8 : 1;
-    border.setCenter(center.getX() * factor, center.getZ() * factor);
-    if (animate) border.setSize(size, 1);
-    else border.setSize(size);
+    setCenter(border, world, getCenter(world));
+    // Written from where the slide is now, never from what the border object held before: a border
+    // that is new or was last used before a reset holds a size nobody is shown any more.
+    long now = System.currentTimeMillis();
+    long remaining = slideEnd - now;
+    border.setSize(drawnSize(now));
+    if (remaining > 0) border.changeSize(getSize(world), Math.max(1, remaining / 50));
     border.setWarningDistance(0);
     border.setWarningTime(0);
+  }
+
+  // the client places a nether border at an eighth of the coordinates it is given
+  private static void setCenter(@NotNull WorldBorder border, @NotNull World world, @NotNull Location center) {
+    double factor = world.getEnvironment() == World.Environment.NETHER ? 8 : 1;
+    border.setCenter(center.getX() * factor, center.getZ() * factor);
   }
 
   private void resetFor(@NotNull Player player) {
@@ -402,6 +585,14 @@ public final class BorderManager implements GamestateSaveable, Listener {
     return apiBorders.computeIfAbsent(world, _ -> Bukkit.createWorldBorder());
   }
 
+  /**
+   * What happens to a player the border moves over: vanilla border damage, or being put back inside.
+   */
+  public enum Containment {
+    DAMAGE,
+    PUSH
+  }
+
   @Override
   public String getUniqueGamestateName() {
     return "world-border";
@@ -410,6 +601,10 @@ public final class BorderManager implements GamestateSaveable, Listener {
   @Override
   public void writeGameState(@NotNull Document document) {
     document.set("offset", offset);
+    if (size != null) document.set("size", size);
+    document.set("damage-buffer", damageBuffer);
+    document.set("damage-per-block", damagePerBlock);
+    document.set("containment", containment.name());
 
     GsonDocument worlds = new GsonDocument();
     centers.forEach((world, center) -> worlds.set(world.getName(), center));
@@ -419,6 +614,13 @@ public final class BorderManager implements GamestateSaveable, Listener {
   @Override
   public void loadGameState(@NotNull Document document) {
     offset = document.getDouble("offset");
+    damageBuffer = 0;
+    damagePerBlock = DAMAGE_PER_BLOCK;
+    containment = Containment.DAMAGE;
+    size = document.contains("size") ? document.getDouble("size") : null;
+    if (document.contains("damage-buffer")) damageBuffer = document.getDouble("damage-buffer");
+    if (document.contains("damage-per-block")) damagePerBlock = document.getDouble("damage-per-block");
+    if (document.contains("containment")) containment = Containment.valueOf(document.getString("containment"));
 
     centers.clear();
     Document worlds = document.getDocument("centers");
@@ -428,7 +630,7 @@ public final class BorderManager implements GamestateSaveable, Listener {
       centers.put(world, worlds.getInstance(worldName, Location.class));
     }
 
-    update(false);
+    update(0);
   }
 
 }

@@ -58,6 +58,7 @@ class RegionsTest {
   @AfterEach
   void closeServer() {
     bukkit.close();
+    Regions.regionized = () -> false;
   }
 
   @Test
@@ -281,4 +282,49 @@ class RegionsTest {
     assertTrue(done.isDone());
   }
 
+
+  @Test
+  void remove_onlyMarksNonPersistentWhileARegionisedServerStops() {
+    Regions.regionized = () -> true;
+    bukkit.when(Bukkit::isStopping).thenReturn(true);
+    bukkit.when(() -> Bukkit.isOwnedByCurrentRegion(entity)).thenReturn(true);
+
+    Regions.remove(plugin, entity);
+
+    verify(entity).setPersistent(false);
+    verify(entity, never()).remove();
+  }
+
+  @Test
+  void remove_removesInlineWhileANonRegionisedServerStops() {
+    bukkit.when(Bukkit::isStopping).thenReturn(true);
+    bukkit.when(() -> Bukkit.isOwnedByCurrentRegion(entity)).thenReturn(true);
+    when(entity.isValid()).thenReturn(true);
+
+    Regions.remove(plugin, entity);
+
+    verify(entity).remove();
+  }
+
+  @Test
+  void remove_skipsAnEntityThatIsAlreadyGone() {
+    bukkit.when(() -> Bukkit.isOwnedByCurrentRegion(entity)).thenReturn(true);
+    when(entity.isValid()).thenReturn(false);
+
+    Regions.remove(plugin, entity);
+
+    verify(entity, never()).remove();
+  }
+
+  @Test
+  void remove_isScheduledOnTheEntityFromAnotherThread() {
+    Regions.regionized = () -> true;
+    bukkit.when(() -> Bukkit.isOwnedByCurrentRegion(entity)).thenReturn(false);
+    when(entityScheduler.execute(any(), any(), any(), anyLong())).thenReturn(true);
+
+    Regions.remove(plugin, entity);
+
+    verify(entityScheduler).execute(eq(plugin), any(), eq(null), eq(1L));
+    verify(entity, never()).remove();
+  }
 }

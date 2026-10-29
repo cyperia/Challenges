@@ -59,6 +59,7 @@ public final class ChallengesPermissions {
 
   public static final String COMMAND_TIME = COMMAND + "time";
   public static final String COMMAND_WEATHER = COMMAND + "weather";
+  public static final String COMMAND_WORLDBORDER = COMMAND + "worldborder";
   public static final String COMMAND_DIFFICULTY = COMMAND + "difficulty";
   public static final String COMMAND_INVSEE = COMMAND + "invsee";
   public static final String COMMAND_VILLAGE = COMMAND + "village";

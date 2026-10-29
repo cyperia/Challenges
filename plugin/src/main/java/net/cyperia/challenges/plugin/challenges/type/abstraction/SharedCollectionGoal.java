@@ -3,6 +3,7 @@ package net.cyperia.challenges.plugin.challenges.type.abstraction;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.menu.MenuGoal;
 import net.cyperia.challenges.plugin.challenges.type.helper.GoalHelper;
 import net.cyperia.challenges.plugin.challenges.type.helper.GoalLeaderboard;
+import net.cyperia.challenges.plugin.content.i18n.LocalizableMessage;
 import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.content.i18n.MessageKeySpace;
 import net.cyperia.challenges.plugin.content.i18n.Prefix;
@@ -104,6 +105,12 @@ public abstract class SharedCollectionGoal extends MenuGoal {
   @NotNull
   protected abstract Collection<UUID> getFinders();
 
+  // A line above the ranking saying what it counts, null for none
+  @Nullable
+  protected LocalizableMessage getRankingHeading() {
+    return null;
+  }
+
   protected abstract void enableGoal();
 
   protected abstract void disableGoal();
@@ -111,7 +118,7 @@ public abstract class SharedCollectionGoal extends MenuGoal {
   @Override
   protected final void onEnable() {
     enableGoal();
-    scoreboard.setContent(GoalLeaderboard.sharedScoreboardContent(this::getRanking));
+    scoreboard.setContent(GoalLeaderboard.sharedScoreboardContent(this::getRanking, this::getRankingHeading));
     updateRankingVisibility();
   }
 

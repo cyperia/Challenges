@@ -1516,8 +1516,7 @@
       "category": "misc_challenge",
       "icon": "SHULKER_SHELL",
       "class": "challenge.DamageTeleportChallenge",
-      "since": "2.0.2",
-      "registered": false
+      "since": "2.0.2"
     },
     {
       "id": "zerohearts",
@@ -1725,6 +1724,14 @@
       "since": "2.1.2"
     },
     {
+      "id": "collectnetheritearmor",
+      "key": "collect-netherite-armor",
+      "category": "fastest_time",
+      "icon": "NETHERITE_CHESTPLATE",
+      "class": "goal.CollectNetheriteArmorGoal",
+      "since": "3.1"
+    },
+    {
       "id": "collectworkstations",
       "key": "collect-workstations",
       "category": "fastest_time",
@@ -1739,6 +1746,38 @@
       "icon": "ELYTRA",
       "class": "goal.FindElytraGoal",
       "since": "2.1.1"
+    },
+    {
+      "id": "findsnifferegg",
+      "key": "find-sniffer-egg",
+      "category": "fastest_time",
+      "icon": "SNIFFER_EGG",
+      "class": "goal.FindSnifferEggGoal",
+      "since": "3.1"
+    },
+    {
+      "id": "findtotem",
+      "key": "find-totem",
+      "category": "fastest_time",
+      "icon": "TOTEM_OF_UNDYING",
+      "class": "goal.FindTotemGoal",
+      "since": "3.1"
+    },
+    {
+      "id": "findenchantedgoldenapple",
+      "key": "find-enchanted-golden-apple",
+      "category": "fastest_time",
+      "icon": "ENCHANTED_GOLDEN_APPLE",
+      "class": "goal.FindEnchantedGoldenAppleGoal",
+      "since": "3.1"
+    },
+    {
+      "id": "findheartofthesea",
+      "key": "find-heart-of-the-sea",
+      "category": "fastest_time",
+      "icon": "HEART_OF_THE_SEA",
+      "class": "goal.FindHeartOfTheSeaGoal",
+      "since": "3.1"
     },
     {
       "id": "eatcake",

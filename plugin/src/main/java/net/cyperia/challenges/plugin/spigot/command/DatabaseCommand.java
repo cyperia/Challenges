@@ -11,10 +11,17 @@ import net.cyperia.challenges.plugin.management.command.CommandNodes;
 import net.cyperia.challenges.plugin.management.files.ConfigManager;
 import net.cyperia.challenges.plugin.permission.ChallengesPermissions;
 import net.cyperia.commons.bukkit.utils.animation.SoundSample;
+import net.cyperia.commons.bukkit.utils.logging.Logger;
+import net.cyperia.commons.bukkit.utils.misc.Regions;
+import net.cyperia.commons.common.config.Document;
+import net.cyperia.commons.common.config.document.GsonDocument;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executor;
+import java.util.function.Consumer;
 
 public class DatabaseCommand implements ChallengeCommand {
 
@@ -30,51 +37,69 @@ public class DatabaseCommand implements ChallengeCommand {
       @Override
       public void save(Player player) throws Exception {
         if (checkFeatureDisabled(savePlayerConfigs, player)) return;
-        Challenges.getInstance().getChallengeManager().saveSettings(player);
-        MessageKey.of("command.database.config-saved").send(player, Prefix.CHALLENGES);
+        ChallengeManager manager = Challenges.getInstance().getChallengeManager();
+        Document settings = new GsonDocument();
+        manager.saveSettingsInto(settings);
+        offThread(player, () -> {
+          manager.saveSettings(player.getUniqueId(), settings);
+          return null;
+        }, none -> MessageKey.of("command.database.config-saved").send(player, Prefix.CHALLENGES));
       }
 
       @Override
       public void load(Player player) throws Exception {
         if (checkFeatureDisabled(savePlayerConfigs, player)) return;
         ChallengeManager manager = Challenges.getInstance().getChallengeManager();
-        manager.loadSettings(manager.getSavedSettings(player.getUniqueId()));
-        MessageKey.of("command.database.config-loaded").send(player, Prefix.CHALLENGES);
+        offThread(player, () -> manager.getSavedSettings(player.getUniqueId()), settings -> {
+          manager.loadSettings(settings);
+          MessageKey.of("command.database.config-loaded").send(player, Prefix.CHALLENGES);
+        });
       }
 
       @Override
       public void reset(Player player) throws Exception {
         if (checkFeatureDisabled(savePlayerConfigs, player)) return;
-        Challenges.getInstance().getDatabaseManager().getDatabase().update("challenges")
-          .where("uuid", player.getUniqueId())
-          .set("config", null)
-          .execute();
-        MessageKey.of("command.database.config-reset").send(player, Prefix.CHALLENGES);
+        offThread(player, () -> {
+          Challenges.getInstance().getDatabaseManager().getDatabase().update("challenges")
+            .where("uuid", player.getUniqueId())
+            .set("config", null)
+            .execute();
+          return null;
+        }, none -> MessageKey.of("command.database.config-reset").send(player, Prefix.CHALLENGES));
       }
     }, "customs", new DatabaseCommandExecutor() {
       @Override
       public void save(Player player) throws Exception {
         if (checkFeatureDisabled(savePlayerChallenges, player)) return;
-        Challenges.getInstance().getChallengeManager().saveCustomChallenges(player);
-        MessageKey.of("command.database.customs-saved").send(player, Prefix.CHALLENGES);
+        ChallengeManager manager = Challenges.getInstance().getChallengeManager();
+        Document customChallenges = new GsonDocument();
+        manager.saveCustomChallengesInto(customChallenges);
+        offThread(player, () -> {
+          manager.saveCustomChallenges(player.getUniqueId(), customChallenges);
+          return null;
+        }, none -> MessageKey.of("command.database.customs-saved").send(player, Prefix.CHALLENGES));
       }
 
       @Override
       public void load(Player player) throws Exception {
         if (checkFeatureDisabled(savePlayerChallenges, player)) return;
         ChallengeManager manager = Challenges.getInstance().getChallengeManager();
-        manager.loadCustomChallenges(manager.getSavedCustomChallenges(player.getUniqueId()));
-        MessageKey.of("command.database.customs-loaded").send(player, Prefix.CHALLENGES);
+        offThread(player, () -> manager.getSavedCustomChallenges(player.getUniqueId()), customChallenges -> {
+          manager.loadCustomChallenges(customChallenges);
+          MessageKey.of("command.database.customs-loaded").send(player, Prefix.CHALLENGES);
+        });
       }
 
       @Override
       public void reset(Player player) throws Exception {
         if (checkFeatureDisabled(savePlayerChallenges, player)) return;
-        Challenges.getInstance().getDatabaseManager().getDatabase().update("challenges")
-          .where("uuid", player.getUniqueId())
-          .set("custom_challenges", null)
-          .execute();
-        MessageKey.of("command.database.customs-reset").send(player, Prefix.CHALLENGES);
+        offThread(player, () -> {
+          Challenges.getInstance().getDatabaseManager().getDatabase().update("challenges")
+            .where("uuid", player.getUniqueId())
+            .set("custom_challenges", null)
+            .execute();
+          return null;
+        }, none -> MessageKey.of("command.database.customs-reset").send(player, Prefix.CHALLENGES));
       }
     });
   }
@@ -101,6 +126,28 @@ public class DatabaseCommand implements ChallengeCommand {
       action.run(executor, player);
     }))));
     return node;
+  }
+
+  private static <T> void offThread(@NotNull Player player, @NotNull Callable<T> database, @NotNull Consumer<T> onGlobalThread) {
+    offThread(Challenges.getInstance().getExecutor(), task -> Regions.global(Challenges.getInstance(), task), database, onGlobalThread,
+      ex -> {
+        player.sendMessage(Prefix.FALLBACK + "§cSomething went wrong while executing the command");
+        Logger.error("Something went wrong while accessing the database for {}", player.getName(), ex);
+      });
+  }
+
+  static <T> void offThread(@NotNull Executor async, @NotNull Executor global, @NotNull Callable<T> database,
+                            @NotNull Consumer<T> onGlobalThread, @NotNull Consumer<Exception> onError) {
+    async.execute(() -> {
+      T result;
+      try {
+        result = database.call();
+      } catch (Exception ex) {
+        onError.accept(ex);
+        return;
+      }
+      global.execute(() -> onGlobalThread.accept(result));
+    });
   }
 
   /**

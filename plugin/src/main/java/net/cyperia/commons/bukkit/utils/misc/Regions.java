@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
+import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
 /**
@@ -30,6 +31,9 @@ public final class Regions {
 
   // Only Folia based servers have a regionised server
   private static final boolean REGIONIZED = isClassPresent("io.papermc.paper.threadedregions.RegionizedServer");
+
+  // Tests replace this to simulate a regionised server.
+  static BooleanSupplier regionized = () -> REGIONIZED;
 
   private Regions() {
   }
@@ -60,6 +64,20 @@ public final class Regions {
     }
   }
 
+  /**
+   * Removes the entity on its owning thread. While a regionised server stops, region data is gone
+   * and {@code remove} throws, so the entity is only marked non-persistent and is not saved.
+   */
+  public static void remove(@NotNull Plugin plugin, @NotNull Entity entity) {
+    if (regionized.getAsBoolean() && Bukkit.isStopping()) {
+      entity.setPersistent(false);
+      return;
+    }
+    entity(plugin, entity, () -> {
+      if (entity.isValid()) entity.remove();
+    });
+  }
+
   public static void at(@NotNull Plugin plugin, @NotNull Location location, @NotNull Runnable task) {
     if (Bukkit.isOwnedByCurrentRegion(location)) task.run();
     else if (plugin.isEnabled()) Bukkit.getRegionScheduler().execute(plugin, location, task);
@@ -83,7 +101,7 @@ public final class Regions {
 
       List<Player> players = Bukkit.getOnlinePlayers().stream().filter(player -> player.getWorld() == world).collect(Collectors.toList());
       if (players.isEmpty()) {
-        if (!REGIONIZED) runScan(plugin, world, scan);
+        if (!regionized.getAsBoolean()) runScan(plugin, world, scan);
         done.complete(null);
         return;
       }

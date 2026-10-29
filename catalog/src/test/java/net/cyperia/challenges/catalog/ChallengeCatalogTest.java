@@ -41,7 +41,7 @@ class ChallengeCatalogTest {
   @Test
   void anEntryIsRegisteredUnlessItSaysOtherwise() {
     assertTrue(bundled.challenge("cutclean").orElseThrow().registered());
-    assertFalse(bundled.challenge("damageteleport").orElseThrow().registered());
+    assertFalse(bundled.challenge("zerohearts").orElseThrow().registered());
   }
 
   // Enabling one moves every player to the spawn of a new world, so a random pick would reset the run

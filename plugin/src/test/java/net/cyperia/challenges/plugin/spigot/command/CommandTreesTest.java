@@ -110,6 +110,26 @@ class CommandTreesTest {
   }
 
   @Test
+  void worldborderTakesTheVanillaSubcommandsAndAMode() {
+    register(new WorldborderCommand());
+    CommandSender sender = senderWith(ChallengesPermissions.COMMAND_WORLDBORDER);
+
+    assertTrue(runs("worldborder set 10", sender));
+    assertTrue(runs("worldborder set 10.5 30", sender));
+    assertTrue(runs("worldborder add -4 5", sender));
+    assertTrue(runs("worldborder center 300.5 -20", sender));
+    assertTrue(runs("worldborder damage buffer 0", sender));
+    assertTrue(runs("worldborder damage amount 0.2", sender));
+    assertTrue(runs("worldborder mode push", sender));
+    assertTrue(runs("worldborder mode damage", sender));
+    assertTrue(runs("worldborder get", sender));
+    assertTrue(runs("worldborder reset", sender));
+    assertFalse(runs("worldborder set 0", sender));
+    assertFalse(runs("worldborder mode bounce", sender));
+    assertFalse(runs("worldborder set 10", senderWith()));
+  }
+
+  @Test
   void genericCommandsAreTheOnesANetworkToolboxProvides() {
     assertTrue(new HealCommand().info().isGeneric());
     assertTrue(new GamemodeCommand().info().isGeneric());
@@ -117,6 +137,7 @@ class CommandTreesTest {
     assertTrue(HelpCommand.INFO.isGeneric());
     assertFalse(new TimerCommand().info().isGeneric());
     assertFalse(new BackCommand().info().isGeneric());
+    assertFalse(new WorldborderCommand().info().isGeneric());
   }
 
   @Test

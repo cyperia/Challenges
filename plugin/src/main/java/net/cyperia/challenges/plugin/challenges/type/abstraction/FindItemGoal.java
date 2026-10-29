@@ -1,6 +1,7 @@
 package net.cyperia.challenges.plugin.challenges.type.abstraction;
 
 import net.cyperia.challenges.plugin.ChallengeAPI;
+import net.cyperia.challenges.plugin.management.scheduler.task.ScheduledTask;
 import net.cyperia.challenges.plugin.management.server.ChallengeEndCause;
 import net.cyperia.challenges.plugin.spigot.events.PlayerInventoryClickEvent;
 import net.cyperia.challenges.plugin.spigot.events.PlayerPickupItemEvent;
@@ -27,10 +28,11 @@ public abstract class FindItemGoal extends SettingGoal {
 
   }
 
-  private void checkItem(ItemStack itemStack, @NotNull Player player) {
-    if (itemStack == null) return;
-    if (itemStack.getType() != searchedItem) return;
+  private boolean checkItem(ItemStack itemStack, @NotNull Player player) {
+    if (itemStack == null) return false;
+    if (itemStack.getType() != searchedItem) return false;
     ChallengeAPI.endChallenge(ChallengeEndCause.GOAL_REACHED, () -> Collections.singletonList(player));
+    return true;
   }
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -45,6 +47,18 @@ public abstract class FindItemGoal extends SettingGoal {
     if (event.getClickedInventory() == null) return;
     if (event.getClickedInventory().getHolder() != event.getPlayer()) return;
     checkItem(event.getCurrentItem(), event.getPlayer());
+  }
+
+  // An item shift-clicked out of a chest never passes a pickup or a click in the player's own
+  // inventory, so the inventory is scanned as well.
+  @ScheduledTask(ticks = 20, async = false)
+  public void scanInventories() {
+    for (Player player : ChallengeAPI.getIngamePlayers()) {
+      if (!shouldExecuteEffect(player)) continue;
+      for (ItemStack item : player.getInventory().getContents()) {
+        if (checkItem(item, player)) return;
+      }
+    }
   }
 
 }

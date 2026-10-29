@@ -1,6 +1,7 @@
 package net.cyperia.challenges.plugin.challenges.implementation.setting;
 
 import net.cyperia.challenges.plugin.ChallengeAPI;
+import net.cyperia.challenges.plugin.Challenges;
 import net.cyperia.challenges.plugin.challenges.type.abstraction.Setting;
 import net.cyperia.challenges.plugin.content.i18n.MessageKey;
 import net.cyperia.challenges.plugin.content.i18n.Prefix;
@@ -55,8 +56,8 @@ public class TopCommandSetting extends Setting implements CommandProvider {
         World overworld = ChallengeAPI.getGameWorld(Environment.NORMAL);
         target.setWorld(overworld);
         target.multiply(8);
-        overworld.getChunkAtAsync(target).thenAccept(chunk -> Regions.at(plugin, target, () ->
-          teleport(player, overworld.getHighestBlockAt(target).getLocation().add(0.5, 1, 0.5))));
+        Challenges.getInstance().getWorldManager().loadChunkAfterPrefetch(target, chunk ->
+          teleport(player, overworld.getHighestBlockAt(target).getLocation().add(0.5, 1, 0.5)));
       } else {
         Location location = player.getBedSpawnLocation();
         if (location == null) location = BlockUtils.getCenteredSpawn(ChallengeAPI.getGameWorld(Environment.NORMAL));

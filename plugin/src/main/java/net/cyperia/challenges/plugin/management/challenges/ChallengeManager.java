@@ -14,7 +14,6 @@ import net.cyperia.commons.common.config.FileDocument;
 import net.cyperia.commons.common.config.document.GsonDocument;
 import net.cyperia.commons.common.config.document.wrapper.FileDocumentWrapper;
 import net.cyperia.commons.database.exceptions.DatabaseException;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -74,18 +73,6 @@ public final class ChallengeManager {
         Logger.error("Could not restore defaults for {}", challenge.getClass().getSimpleName(), ex);
       }
     }
-  }
-
-  public void saveSettings(@NotNull Player player) throws DatabaseException {
-    Document document = new GsonDocument();
-    saveSettingsInto(document);
-    savePlayerDocument(player.getUniqueId(), "config", document);
-  }
-
-  public void saveCustomChallenges(@NotNull Player player) throws DatabaseException {
-    Document document = new GsonDocument();
-    saveCustomChallengesInto(document);
-    savePlayerDocument(player.getUniqueId(), "custom_challenges", document);
   }
 
   public void saveSettings(@NotNull UUID player, @NotNull Document settings) throws DatabaseException {

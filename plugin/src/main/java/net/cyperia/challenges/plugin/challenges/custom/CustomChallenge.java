@@ -155,6 +155,13 @@ public class CustomChallenge extends Setting implements TriggerActionChallenge {
     return uuid.toString();
   }
 
+  // Custom challenges are not in the catalog and were never renamed
+  @NotNull
+  @Override
+  public List<String> getFallbackNames() {
+    return List.of();
+  }
+
   @NotNull
   public static Component formatChallengeName(@NotNull String rawName) {
     try {

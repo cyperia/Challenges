@@ -3,6 +3,7 @@ package net.cyperia.challenges.plugin.management.menu.generator.impl.goal;
 import org.jetbrains.annotations.Nullable;
 import net.cyperia.challenges.plugin.ChallengeAPI;
 import net.cyperia.challenges.plugin.challenges.type.ChecklistGoal;
+import net.cyperia.challenges.plugin.challenges.type.ChecklistGoal.ChecklistCategory;
 import net.cyperia.challenges.plugin.challenges.type.ChecklistGoal.ChecklistEntry;
 import net.cyperia.challenges.plugin.challenges.type.helper.GoalLeaderboard;
 import net.cyperia.challenges.plugin.content.i18n.LocalizableMessage;
@@ -26,6 +27,7 @@ import net.cyperia.commons.bukkit.utils.menu.MenuClickType;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
@@ -51,6 +53,7 @@ public class GoalChecklistMenuGenerator extends MultiPageSelectMenuGenerator<Che
   private final ChecklistGoal goal;
   private final Player viewer;
   private final GoalChecklistView view;
+  private final List<ChecklistCategory> categories;
   private final int size;
   private final int[] slots;
 
@@ -59,11 +62,17 @@ public class GoalChecklistMenuGenerator extends MultiPageSelectMenuGenerator<Che
   }
 
   private GoalChecklistMenuGenerator(@NotNull ChecklistGoal goal, @NotNull Player viewer, @NotNull GoalChecklistView view) {
-    super(view.apply(goal.getChecklist(viewer), uuid -> Bukkit.getOfflinePlayer(uuid).getName())
+    this(goal, viewer, view, goal.getChecklistCategories(viewer));
+  }
+
+  private GoalChecklistMenuGenerator(@NotNull ChecklistGoal goal, @NotNull Player viewer, @NotNull GoalChecklistView view,
+                                     @NotNull List<ChecklistCategory> categories) {
+    super(view.apply(view.select(goal.getChecklist(viewer), categories), uuid -> Bukkit.getOfflinePlayer(uuid).getName())
       .toArray(ChecklistEntry[]::new));
     this.goal = goal;
     this.viewer = viewer;
     this.view = view;
+    this.categories = categories;
     int rows = Math.clamp(Math.ceilDiv(elements.length, COLUMNS), 1, MAX_ROWS);
     this.size = (rows + 2) * 9;
     this.slots = calcSlots(rows, COLUMNS, size);
@@ -134,6 +143,32 @@ public class GoalChecklistMenuGenerator extends MultiPageSelectMenuGenerator<Che
       .tooltip(MenuClickType.LEFT, MessageKey.of("menu.goal.view.switch-filter").withArgs(
         MessageKey.of("menu.goal.view.filter-name." + view.filter().next().name().toLowerCase(Locale.ROOT))))
       .build(locale));
+    for (int i = 0; i < categories.size(); i++) {
+      inventory.setItem(getCategorySlot(i), createCategoryItem(categories.get(i), i == view.category(), locale));
+    }
+  }
+
+  @NotNull
+  private ItemStack createCategoryItem(@NotNull ChecklistCategory category, boolean shown, @NotNull Locale locale) {
+    ItemStack icon = category.icon().clone();
+    icon.editMeta(meta -> meta.setEnchantmentGlintOverride(shown));
+    return new ItemFormatter(icon)
+      .name(category.name())
+      .description(MessageKey.of("menu.goal.category.progress").withArgs(category.doneCount(), category.entries().size()))
+      .tooltip(MenuClickType.LEFT, MessageKey.of(shown ? "menu.goal.category.show-all" : "menu.goal.category.show"))
+      .build(locale);
+  }
+
+  // Centered in the top row
+  private int getCategorySlot(int index) {
+    return 4 - categories.size() / 2 + index;
+  }
+
+  private int getCategoryAt(int slot) {
+    for (int i = 0; i < categories.size(); i++) {
+      if (getCategorySlot(i) == slot) return i;
+    }
+    return -1;
   }
 
   private int getSortSlot() {
@@ -173,12 +208,15 @@ public class GoalChecklistMenuGenerator extends MultiPageSelectMenuGenerator<Che
       public void handleClick(@NotNull MenuClickInfo info) {
         Player player = info.getPlayer();
         int slot = info.getSlot();
-        if (slot == getSortSlot()) {
-          changeView(player, new GoalChecklistView(view.filter(), view.sort().next(), view.descending()));
+        int category = getCategoryAt(slot);
+        if (category >= 0) {
+          changeView(player, view.toggleCategory(category));
+        } else if (slot == getSortSlot()) {
+          changeView(player, view.withSort(view.sort().next(), view.descending()));
         } else if (slot == getDirectionSlot()) {
-          changeView(player, new GoalChecklistView(view.filter(), view.sort(), !view.descending()));
+          changeView(player, view.withSort(view.sort(), !view.descending()));
         } else if (slot == getFilterSlot()) {
-          changeView(player, new GoalChecklistView(view.filter().next(), view.sort(), view.descending()));
+          changeView(player, view.withFilter(view.filter().next()));
         } else if (slot == getNavigateHomeSlot()) {
           SoundSample.OPEN.play(player);
           player.closeInventory();

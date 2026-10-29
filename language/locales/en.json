@@ -303,6 +303,11 @@
           "found": "found"
         },
         "switch-filter": "Show {0}"
+      },
+      "category": {
+        "progress": "<gray>Found:</gray> <yellow>{0}</yellow> <dark_gray>/</dark_gray> <yellow>{1}</yellow>",
+        "show": "Show only these",
+        "show-all": "Show everything"
       }
     },
     "challenges": {
@@ -2331,6 +2336,34 @@
         "The *player* that finds an elytra *wins*"
       ]
     },
+    "find-sniffer-egg": {
+      "name": "*Find Sniffer Egg*",
+      "desc": [
+        "The *player* that finds a",
+        "sniffer egg first *wins*"
+      ]
+    },
+    "find-totem": {
+      "name": "*Find Totem*",
+      "desc": [
+        "The *player* that finds a totem",
+        "of undying first *wins*"
+      ]
+    },
+    "find-enchanted-golden-apple": {
+      "name": "*Find Enchanted Apple*",
+      "desc": [
+        "The *player* that finds an",
+        "enchanted golden apple first *wins*"
+      ]
+    },
+    "find-heart-of-the-sea": {
+      "name": "*Find Heart of the Sea*",
+      "desc": [
+        "The *player* that finds a",
+        "heart of the sea first *wins*"
+      ]
+    },
     "eat-cake": {
       "name": "*Eat Cake*",
       "desc": [
@@ -2349,6 +2382,13 @@
       "desc": [
         "The player that *collects* every",
         "ice blocks and snow first *wins*"
+      ]
+    },
+    "collect-netherite-armor": {
+      "name": "*Full Netherite Armor*",
+      "desc": [
+        "The player that *collects* every",
+        "netherite armor piece first *wins*"
       ]
     },
     "collect-swords": {
@@ -2581,10 +2621,12 @@
       "menu": "Collect Everything",
       "bossbar-next": "{@bossbar.format-arg('{@name}', '<yellow>{0}</yellow> <dark_gray>{@symbol.vertical}</dark_gray> <green>{1}</green> <dark_gray>/</dark_gray> <yellow>{2}</yellow>')}",
       "category": {
-        "items": "Items",
-        "mobs": "Mobs",
-        "advancements": "Advancements"
-      }
+        "items": "*Items*",
+        "mobs": "*Mobs*",
+        "advancements": "*Advancements*",
+        "overall": "*Overall*"
+      },
+      "ranking": "<gray>Most found:</gray> {0}"
     },
     "damage-teleport": {
       "name": "*Damage = Random Teleport*",
@@ -3801,6 +3843,20 @@
       "rain": "<gray>Weather was changed to <yellow>rainy</yellow></gray>",
       "thunder": "<gray>Weather was changed to <yellow>thundery</yellow></gray>",
       "description": "Changes the weather."
+    },
+    "worldborder": {
+      "set": "<gray>The world border is now <yellow>{0} </yellow>blocks wide</gray>",
+      "set-over": "<gray>The world border will be <yellow>{0} </yellow>blocks wide in <yellow>{1} </yellow>seconds</gray>",
+      "center": "<gray>The world border is now centered on <yellow>{0}</yellow><dark_gray>, </dark_gray><yellow>{1}</yellow></gray>",
+      "get": "<gray>The world border is <yellow>{0} </yellow>blocks wide around <yellow>{1}</yellow><dark_gray>, </dark_gray><yellow>{2}</yellow></gray>",
+      "damage-buffer": "<gray>Players outside the world border take damage after <yellow>{0} </yellow>blocks</gray>",
+      "damage-amount": "<gray>Players outside the world border take <yellow>{0} </yellow>damage per block</gray>",
+      "mode": {
+        "damage": "<gray>The world border now <yellow>damages </yellow>players outside it</gray>",
+        "push": "<gray>The world border now <yellow>puts </yellow>players outside it back inside</gray>"
+      },
+      "reset": "<gray>The world border is back to <yellow>vanilla</yellow></gray>",
+      "description": "Sets, moves or shows the world border of the challenge."
     },
     "invsee": {
       "open": "<gray>Inventory of <yellow>{0} </yellow>opened</gray>",

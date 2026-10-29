@@ -31598,6 +31598,161 @@
       }
     },
     {
+      "id": "damageteleport",
+      "category": "misc_challenge",
+      "icon": {
+        "material": "SHULKER_SHELL"
+      },
+      "name": {
+        "en": "Damage = Random Teleport",
+        "de": "Schaden = Zufälliger Teleport"
+      },
+      "description": {
+        "en": [
+          "You'll be teleported randomly when you take damage"
+        ],
+        "de": [
+          "Du wirst zufällig teleportiert, wenn du Schaden erleidest"
+        ]
+      },
+      "styled": {
+        "en": {
+          "name": [
+            {
+              "text": "Damage = Random Teleport",
+              "color": "#FF5555"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "You'll be teleported randomly"
+              }
+            ],
+            [
+              {
+                "text": "when you take damage"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Damage = Random Teleport",
+                "color": "#FF5555"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "You'll be teleported randomly",
+                "color": "#AAAAAA"
+              }
+            ],
+            [
+              {
+                "text": "when you take damage",
+                "color": "#AAAAAA"
+              }
+            ]
+          ]
+        },
+        "de": {
+          "name": [
+            {
+              "text": "Schaden = Zufälliger Teleport",
+              "color": "#FF5555"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "Du wirst "
+              },
+              {
+                "text": "zufällig teleportiert",
+                "color": "#FF5555"
+              },
+              {
+                "text": ","
+              }
+            ],
+            [
+              {
+                "text": "wenn du "
+              },
+              {
+                "text": "Schaden",
+                "color": "#FF5555"
+              },
+              {
+                "text": " erleidest"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Schaden = Zufälliger Teleport",
+                "color": "#FF5555"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "Du wirst ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "zufällig teleportiert",
+                "color": "#FF5555"
+              },
+              {
+                "text": ",",
+                "color": "#AAAAAA"
+              }
+            ],
+            [
+              {
+                "text": "wenn du ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "Schaden",
+                "color": "#FF5555"
+              },
+              {
+                "text": " erleidest",
+                "color": "#AAAAAA"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    {
       "id": "neverfullhearts",
       "category": "misc_challenge",
       "icon": {
@@ -38214,6 +38369,177 @@
       }
     },
     {
+      "id": "collectnetheritearmor",
+      "category": "fastest_time",
+      "icon": {
+        "material": "NETHERITE_CHESTPLATE"
+      },
+      "name": {
+        "en": "Full Netherite Armor",
+        "de": "Volle Netheritrüstung"
+      },
+      "description": {
+        "en": [
+          "The player that collects every netherite armor piece first wins"
+        ],
+        "de": [
+          "Der Spieler, der als erstes die ganze Netheritrüstung hat, gewinnt"
+        ]
+      },
+      "styled": {
+        "en": {
+          "name": [
+            {
+              "text": "Full Netherite Armor",
+              "color": "#8F7C7C"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "The player that "
+              },
+              {
+                "text": "collects",
+                "color": "#8F7C7C"
+              },
+              {
+                "text": " every"
+              }
+            ],
+            [
+              {
+                "text": "netherite armor piece first "
+              },
+              {
+                "text": "wins",
+                "color": "#8F7C7C"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Full Netherite Armor",
+                "color": "#8F7C7C"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "The player that ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "collects",
+                "color": "#8F7C7C"
+              },
+              {
+                "text": " every",
+                "color": "#AAAAAA"
+              }
+            ],
+            [
+              {
+                "text": "netherite armor piece first ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "wins",
+                "color": "#8F7C7C"
+              }
+            ]
+          ]
+        },
+        "de": {
+          "name": [
+            {
+              "text": "Volle Netheritrüstung",
+              "color": "#8F7C7C"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "Der Spieler, der als "
+              },
+              {
+                "text": "erstes",
+                "color": "#8F7C7C"
+              },
+              {
+                "text": " die"
+              }
+            ],
+            [
+              {
+                "text": "ganze Netheritrüstung",
+                "color": "#8F7C7C"
+              },
+              {
+                "text": " hat, gewinnt"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Volle Netheritrüstung",
+                "color": "#8F7C7C"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "Der Spieler, der als ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "erstes",
+                "color": "#8F7C7C"
+              },
+              {
+                "text": " die",
+                "color": "#AAAAAA"
+              }
+            ],
+            [
+              {
+                "text": "ganze Netheritrüstung",
+                "color": "#8F7C7C"
+              },
+              {
+                "text": " hat, gewinnt",
+                "color": "#AAAAAA"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    {
       "id": "collectworkstations",
       "category": "fastest_time",
       "icon": {
@@ -38527,6 +38853,690 @@
               {
                 "text": "Elytra findet",
                 "color": "#FFFFFF"
+              },
+              {
+                "text": ", gewinnt",
+                "color": "#AAAAAA"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "findsnifferegg",
+      "category": "fastest_time",
+      "icon": {
+        "material": "SNIFFER_EGG"
+      },
+      "name": {
+        "en": "Find Sniffer Egg",
+        "de": "Schnüffler-Ei Finden"
+      },
+      "description": {
+        "en": [
+          "The player that finds a sniffer egg first wins"
+        ],
+        "de": [
+          "Der Spieler, der als erstes ein Schnüffler-Ei findet, gewinnt"
+        ]
+      },
+      "styled": {
+        "en": {
+          "name": [
+            {
+              "text": "Find Sniffer Egg",
+              "color": "#FF5555"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "The "
+              },
+              {
+                "text": "player",
+                "color": "#FF5555"
+              },
+              {
+                "text": " that finds a"
+              }
+            ],
+            [
+              {
+                "text": "sniffer egg first "
+              },
+              {
+                "text": "wins",
+                "color": "#FF5555"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Find Sniffer Egg",
+                "color": "#FF5555"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "The ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "player",
+                "color": "#FF5555"
+              },
+              {
+                "text": " that finds a",
+                "color": "#AAAAAA"
+              }
+            ],
+            [
+              {
+                "text": "sniffer egg first ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "wins",
+                "color": "#FF5555"
+              }
+            ]
+          ]
+        },
+        "de": {
+          "name": [
+            {
+              "text": "Schnüffler-Ei Finden",
+              "color": "#FF5555"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "Der Spieler, der als "
+              },
+              {
+                "text": "erstes",
+                "color": "#FF5555"
+              }
+            ],
+            [
+              {
+                "text": "ein "
+              },
+              {
+                "text": "Schnüffler-Ei findet",
+                "color": "#FF5555"
+              },
+              {
+                "text": ", gewinnt"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Schnüffler-Ei Finden",
+                "color": "#FF5555"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "Der Spieler, der als ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "erstes",
+                "color": "#FF5555"
+              }
+            ],
+            [
+              {
+                "text": "ein ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "Schnüffler-Ei findet",
+                "color": "#FF5555"
+              },
+              {
+                "text": ", gewinnt",
+                "color": "#AAAAAA"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "findtotem",
+      "category": "fastest_time",
+      "icon": {
+        "material": "TOTEM_OF_UNDYING"
+      },
+      "name": {
+        "en": "Find Totem",
+        "de": "Totem Finden"
+      },
+      "description": {
+        "en": [
+          "The player that finds a totem of undying first wins"
+        ],
+        "de": [
+          "Der Spieler, der als erstes ein Totem findet, gewinnt"
+        ]
+      },
+      "styled": {
+        "en": {
+          "name": [
+            {
+              "text": "Find Totem",
+              "color": "#FFAA00"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "The "
+              },
+              {
+                "text": "player",
+                "color": "#FFAA00"
+              },
+              {
+                "text": " that finds a totem"
+              }
+            ],
+            [
+              {
+                "text": "of undying first "
+              },
+              {
+                "text": "wins",
+                "color": "#FFAA00"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Find Totem",
+                "color": "#FFAA00"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "The ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "player",
+                "color": "#FFAA00"
+              },
+              {
+                "text": " that finds a totem",
+                "color": "#AAAAAA"
+              }
+            ],
+            [
+              {
+                "text": "of undying first ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "wins",
+                "color": "#FFAA00"
+              }
+            ]
+          ]
+        },
+        "de": {
+          "name": [
+            {
+              "text": "Totem Finden",
+              "color": "#FFAA00"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "Der Spieler, der als "
+              },
+              {
+                "text": "erstes",
+                "color": "#FFAA00"
+              }
+            ],
+            [
+              {
+                "text": "ein "
+              },
+              {
+                "text": "Totem findet",
+                "color": "#FFAA00"
+              },
+              {
+                "text": ", gewinnt"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Totem Finden",
+                "color": "#FFAA00"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "Der Spieler, der als ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "erstes",
+                "color": "#FFAA00"
+              }
+            ],
+            [
+              {
+                "text": "ein ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "Totem findet",
+                "color": "#FFAA00"
+              },
+              {
+                "text": ", gewinnt",
+                "color": "#AAAAAA"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "findenchantedgoldenapple",
+      "category": "fastest_time",
+      "icon": {
+        "material": "ENCHANTED_GOLDEN_APPLE"
+      },
+      "name": {
+        "en": "Find Enchanted Apple",
+        "de": "Verzauberten Apfel Finden"
+      },
+      "description": {
+        "en": [
+          "The player that finds an enchanted golden apple first wins"
+        ],
+        "de": [
+          "Der Spieler, der als erstes einen verzauberten Apfel findet, gewinnt"
+        ]
+      },
+      "styled": {
+        "en": {
+          "name": [
+            {
+              "text": "Find Enchanted Apple",
+              "color": "#FF55FF"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "The "
+              },
+              {
+                "text": "player",
+                "color": "#FF55FF"
+              },
+              {
+                "text": " that finds an"
+              }
+            ],
+            [
+              {
+                "text": "enchanted golden apple first "
+              },
+              {
+                "text": "wins",
+                "color": "#FF55FF"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Find Enchanted Apple",
+                "color": "#FF55FF"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "The ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "player",
+                "color": "#FF55FF"
+              },
+              {
+                "text": " that finds an",
+                "color": "#AAAAAA"
+              }
+            ],
+            [
+              {
+                "text": "enchanted golden apple first ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "wins",
+                "color": "#FF55FF"
+              }
+            ]
+          ]
+        },
+        "de": {
+          "name": [
+            {
+              "text": "Verzauberten Apfel Finden",
+              "color": "#FF55FF"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "Der Spieler, der als "
+              },
+              {
+                "text": "erstes",
+                "color": "#FF55FF"
+              },
+              {
+                "text": " einen"
+              }
+            ],
+            [
+              {
+                "text": "verzauberten Apfel findet",
+                "color": "#FF55FF"
+              },
+              {
+                "text": ", gewinnt"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Verzauberten Apfel Finden",
+                "color": "#FF55FF"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "Der Spieler, der als ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "erstes",
+                "color": "#FF55FF"
+              },
+              {
+                "text": " einen",
+                "color": "#AAAAAA"
+              }
+            ],
+            [
+              {
+                "text": "verzauberten Apfel findet",
+                "color": "#FF55FF"
+              },
+              {
+                "text": ", gewinnt",
+                "color": "#AAAAAA"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "findheartofthesea",
+      "category": "fastest_time",
+      "icon": {
+        "material": "HEART_OF_THE_SEA"
+      },
+      "name": {
+        "en": "Find Heart of the Sea",
+        "de": "Herz des Meeres Finden"
+      },
+      "description": {
+        "en": [
+          "The player that finds a heart of the sea first wins"
+        ],
+        "de": [
+          "Der Spieler, der als erstes ein Herz des Meeres findet, gewinnt"
+        ]
+      },
+      "styled": {
+        "en": {
+          "name": [
+            {
+              "text": "Find Heart of the Sea",
+              "color": "#00AAAA"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "The "
+              },
+              {
+                "text": "player",
+                "color": "#00AAAA"
+              },
+              {
+                "text": " that finds a"
+              }
+            ],
+            [
+              {
+                "text": "heart of the sea first "
+              },
+              {
+                "text": "wins",
+                "color": "#00AAAA"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Find Heart of the Sea",
+                "color": "#00AAAA"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "The ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "player",
+                "color": "#00AAAA"
+              },
+              {
+                "text": " that finds a",
+                "color": "#AAAAAA"
+              }
+            ],
+            [
+              {
+                "text": "heart of the sea first ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "wins",
+                "color": "#00AAAA"
+              }
+            ]
+          ]
+        },
+        "de": {
+          "name": [
+            {
+              "text": "Herz des Meeres Finden",
+              "color": "#00AAAA"
+            }
+          ],
+          "description": [
+            [
+              {
+                "text": "Der Spieler, der als "
+              },
+              {
+                "text": "erstes",
+                "color": "#00AAAA"
+              }
+            ],
+            [
+              {
+                "text": "ein "
+              },
+              {
+                "text": "Herz des Meeres findet",
+                "color": "#00AAAA"
+              },
+              {
+                "text": ", gewinnt"
+              }
+            ]
+          ],
+          "tooltip": [
+            [
+              {
+                "text": "»",
+                "color": "#555555"
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "Herz des Meeres Finden",
+                "color": "#00AAAA"
+              }
+            ],
+            [
+              {
+                "text": " "
+              }
+            ],
+            [
+              {
+                "text": "Der Spieler, der als ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "erstes",
+                "color": "#00AAAA"
+              }
+            ],
+            [
+              {
+                "text": "ein ",
+                "color": "#AAAAAA"
+              },
+              {
+                "text": "Herz des Meeres findet",
+                "color": "#00AAAA"
               },
               {
                 "text": ", gewinnt",
