@@ -65,8 +65,7 @@ public final class ReleaseInfo {
   }
 
   public static boolean isVersionNew(@NotNull Version challengeVersion) {
-    Version pluginVersion = Challenges.getInstance().getVersion();
-    return challengeVersion.isNewerOrEqualThan(pluginVersion);
+    return Release.reached(challengeVersion.toString(), Challenges.getInstance().getVersion().toString());
   }
 
   @NotNull
