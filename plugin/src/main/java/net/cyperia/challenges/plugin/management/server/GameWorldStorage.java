@@ -139,7 +139,7 @@ public class GameWorldStorage {
     return generated != null ? generated : getServerWorld(environment);
   }
 
-  private World getServerWorld(@NotNull Environment environment) {
+  public World getServerWorld(@NotNull Environment environment) {
     switch (environment) {
       case NORMAL:
         return overworld;

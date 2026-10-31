@@ -23,11 +23,12 @@ public record Release(@Nullable String since, @Nullable String updated, boolean 
     return !beta && reached(updated, CURRENT);
   }
 
-  static boolean reached(@Nullable String version, @NotNull String release) {
+  // Only major and minor count, so a patch release keeps showing its minor release's entries as new
+  public static boolean reached(@Nullable String version, @NotNull String release) {
     if (version == null) return false;
     String[] own = version.split("\\.");
     String[] other = release.split("\\.");
-    for (int i = 0; i < Math.max(own.length, other.length); i++) {
+    for (int i = 0; i < 2; i++) {
       int compared = Integer.compare(number(own, i), number(other, i));
       if (compared != 0) return compared > 0;
     }

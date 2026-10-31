@@ -17,7 +17,8 @@ class ReleaseTest {
     assertTrue(Release.reached("3.0", "3.0.0-SNAPSHOT"));
     assertTrue(Release.reached("3.1", "3.0.9"));
     assertFalse(Release.reached("2.3.2", "3.0"));
-    assertFalse(Release.reached("3.0", "3.0.1"));
+    assertTrue(Release.reached("3.1", "3.1.1"));
+    assertFalse(Release.reached("3.0", "3.1.1"));
     assertFalse(Release.reached(null, "3.0"));
   }
 

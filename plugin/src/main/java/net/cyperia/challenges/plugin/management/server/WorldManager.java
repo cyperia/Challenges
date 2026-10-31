@@ -168,7 +168,8 @@ public final class WorldManager {
       sessionConfig.set("custom-seed", seed);
     }
 
-    World world = ChallengeAPI.getGameWorld(Environment.NORMAL);
+    // Not the game world: a generator challenge replaces that with its own world, which is not the level
+    World world = Challenges.getInstance().getGameWorldStorage().getServerWorld(Environment.NORMAL);
     if (world != null) {
       sessionConfig.set("level-name", world.getName());
       sessionConfig.set("old-seed", world.getSeed());
@@ -254,8 +255,9 @@ public final class WorldManager {
       Logger.warn("Could not find old level-seed in session config for reflection injection!");
     }
 
-    for (String world : Challenges.getInstance().getGameWorldStorage().getCustomGeneratedGameWorlds()) {
-      deleteWorld(world);
+    for (File world : listGeneratedWorldFolders(Bukkit.getWorldContainer())) {
+      FileUtils.deleteWorldFolder(world);
+      Logger.info("Deleted world {}", world);
     }
 
     sessionConfig.set("reset", false);
@@ -370,6 +372,12 @@ public final class WorldManager {
   @NotNull
   static List<File> listPlayerFolders(@NotNull File levelFolder) {
     File[] folders = new File(levelFolder, "players").listFiles(File::isDirectory);
+    return folders == null ? List.of() : List.of(folders);
+  }
+
+  // Before 26.x, WorldCreator worlds live next to the level folder instead of inside it, so deleting the level misses them
+  static List<File> listGeneratedWorldFolders(@NotNull File worldContainer) {
+    File[] folders = worldContainer.listFiles(file -> file.isDirectory() && (file.getName().equals("void") || file.getName().startsWith("challenges-")));
     return folders == null ? List.of() : List.of(folders);
   }
 
