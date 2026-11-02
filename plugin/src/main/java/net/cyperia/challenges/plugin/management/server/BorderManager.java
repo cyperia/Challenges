@@ -30,6 +30,7 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.world.SpawnChangeEvent;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -389,10 +390,7 @@ public final class BorderManager implements GamestateSaveable, Listener {
    */
   public void override(@NotNull Player player, @NotNull Location center, double size) {
     WorldBorder border = Bukkit.createWorldBorder();
-    // The world of the center, not of the player: a teleport hands this its destination while the
-    // player still stands in the world they came from.
-    World world = center.getWorld() == null ? player.getWorld() : center.getWorld();
-    setCenter(border, world, center);
+    border.setCenter(center.getX(), center.getZ());
     border.setSize(size);
     border.setWarningDistance(0);
     border.setWarningTime(0);
@@ -439,6 +437,14 @@ public final class BorderManager implements GamestateSaveable, Listener {
   @EventHandler(priority = EventPriority.MONITOR)
   public void onQuit(@NotNull PlayerQuitEvent event) {
     overrides.remove(event.getPlayer().getUniqueId());
+  }
+
+  // A growing border without a center of its own sits on the world spawn, and the border players were
+  // sent keeps the spawn it was written with.
+  @EventHandler(priority = EventPriority.MONITOR)
+  public void onSpawnChange(@NotNull SpawnChangeEvent event) {
+    if (!isGrowing() || centers.containsKey(event.getWorld()) || !hasBorder(event.getWorld())) return;
+    updateBorder(event.getWorld());
   }
 
   @EventHandler(priority = EventPriority.MONITOR)
@@ -553,7 +559,8 @@ public final class BorderManager implements GamestateSaveable, Listener {
    */
   private void applyTo(@NotNull World world) {
     WorldBorder border = apiBorder(world);
-    setCenter(border, world, getCenter(world));
+    Location center = getCenter(world);
+    border.setCenter(center.getX(), center.getZ());
     // Written from where the slide is now, never from what the border object held before: a border
     // that is new or was last used before a reset holds a size nobody is shown any more.
     long now = System.currentTimeMillis();
@@ -562,12 +569,6 @@ public final class BorderManager implements GamestateSaveable, Listener {
     if (remaining > 0) border.changeSize(getSize(world), Math.max(1, remaining / 50));
     border.setWarningDistance(0);
     border.setWarningTime(0);
-  }
-
-  // the client places a nether border at an eighth of the coordinates it is given
-  private static void setCenter(@NotNull WorldBorder border, @NotNull World world, @NotNull Location center) {
-    double factor = world.getEnvironment() == World.Environment.NETHER ? 8 : 1;
-    border.setCenter(center.getX() * factor, center.getZ() * factor);
   }
 
   private void resetFor(@NotNull Player player) {

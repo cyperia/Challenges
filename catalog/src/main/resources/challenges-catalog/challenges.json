@@ -641,7 +641,7 @@
       "category": "entities",
       "icon": "SCULK_SHRIEKER",
       "class": "challenge.entities.IntervalWardenChallenge",
-      "beta": true
+      "since": "3.1.2"
     },
     {
       "id": "dupedspawning",
