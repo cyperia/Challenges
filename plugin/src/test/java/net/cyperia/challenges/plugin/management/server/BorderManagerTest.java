@@ -12,6 +12,7 @@ import org.bukkit.WorldBorder;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.event.world.SpawnChangeEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
@@ -75,6 +76,30 @@ class BorderManagerTest {
     assertFalse(border.isActive());
     assertTrue(drawn.isEmpty());
     assertEquals(VANILLA, border.getSize(world));
+  }
+
+  @Test
+  void aGrowingBorderFollowsAMovedSpawn() {
+    border.setGrowth(level, 4, false);
+    when(world.getSpawnLocation()).thenAnswer(_ -> new Location(world, 2000, 63, -500));
+
+    border.onSpawnChange(new SpawnChangeEvent(world, new Location(world, 12, 64, 7)));
+
+    assertEquals(2000.5, drawn().centerX);
+    assertEquals(-499.5, drawn().centerZ);
+    assertEquals(5, drawn().size);
+  }
+
+  @Test
+  void aBorderWithItsOwnCenterStaysWhenTheSpawnMoves() {
+    border.setCenter(world, new Location(world, 300.5, 0, 300.5));
+    border.setGrowth(level, 4, false);
+    when(world.getSpawnLocation()).thenAnswer(_ -> new Location(world, 2000, 63, -500));
+
+    border.onSpawnChange(new SpawnChangeEvent(world, new Location(world, 12, 64, 7)));
+
+    assertEquals(300.5, drawn().centerX);
+    assertEquals(300.5, drawn().centerZ);
   }
 
   @Test
@@ -230,7 +255,7 @@ class BorderManagerTest {
   }
 
   @Test
-  void aNetherBorderIsCenteredAtEightTimesItsCoordinates() {
+  void aNetherBorderIsCenteredAtItsOwnCoordinates() {
     World nether = mock(World.class, RETURNS_DEEP_STUBS);
     when(nether.getEnvironment()).thenReturn(World.Environment.NETHER);
     when(Challenges.getInstance().getGameWorldStorage().getGameWorlds()).thenReturn(List.of(nether));
@@ -238,8 +263,8 @@ class BorderManagerTest {
     border.setCenter(nether, new Location(nether, 10, 70, -3));
     border.setSize(10, 0);
 
-    assertEquals(80, drawn().centerX);
-    assertEquals(-24, drawn().centerZ);
+    assertEquals(10, drawn().centerX);
+    assertEquals(-3, drawn().centerZ);
   }
 
   @Test
